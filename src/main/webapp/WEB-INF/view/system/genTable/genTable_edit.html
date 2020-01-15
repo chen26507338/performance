@@ -1,0 +1,144 @@
+@layout("/common/_container.html"){
+<div class="ibox float-e-margins">
+    <div class="ibox-content">
+        <div class="form-horizontal">
+
+
+            <form action="/genTable/update" method="post" id="genTableAddForm" class="form-inline">
+                <input type="hidden" name="id" value="${tableInfo.id}">
+                <#NameCon id="author" name="作者" value="${tableInfo.author}"/>
+                <#NameCon id="bizName" name="业务名称" value="${tableInfo.bizName}"/>
+                <#NameCon id="moduleName" name="模块名称" value="${tableInfo.moduleName}"/>
+                <#NameCon id="parentMenuName" name="父级菜单名称" underline="false" value="${tableInfo.parentMenuName}"
+                hidden="pid" readonly="readonly"
+                clickFun="GenTableInfoDlg.showMenuSelectTree(); return false;"
+                style="background-color: #ffffff !important;"
+                selectFlag="true" selectId="pcodeTreeDiv" selectTreeId="pcodeTree" selectStyle=""/>
+                <table class="table">
+                    <thead>
+                    <tr>
+                        <th>列名</th>
+                        <th>说明</th>
+                        <th>Java类型</th>
+                        <th>Java属性名称</th>
+                        <th>可空</th>
+                        <th>插入</th>
+                        <th>编辑</th>
+                        <th>列表</th>
+                        <th>查询</th>
+                        <th>查询匹配方式</th>
+                        <th>显示表单类型</th>
+                        <th>字典类型</th>
+                        <th>排序</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    @for(item in tableInfo.genTableColumns){
+                    <input type="hidden" name="genTableColumns[${itemLP.index-1}].id" value="${item.id}">
+                    <input type="hidden" name="genTableColumns[${itemLP.index-1}].isPk"  value="${item.isPk}"/>
+                    <input type="hidden" name="genTableColumns[${itemLP.index-1}].genTableId"
+                           value="${item.genTableId}">
+                    <tr>
+                        <td><input name="genTableColumns[${itemLP.index-1}].name" type="hidden" value="${item.name}"/>${item.name}
+                        </td>
+                        <td><input name="genTableColumns[${itemLP.index-1}].comments" type="text"
+                                   value="${item.comments}" class="form-control"/></td>
+                        <td>
+                            <select name="genTableColumns[${itemLP.index-1}].javaType" class="form-control">
+                                <option value="String" ${
+                                "String"==item.javaType?'selected':''}>String</option>
+                                <option value="Long" ${
+                                "Long"==item.javaType?'selected':''}>Long</option>
+                                <option value="Integer" ${
+                                "Integer"==item.javaType?'selected':''}>Integer</option>
+                                <option value="Float" ${
+                                "Float"==item.javaType?'selected':''}>Float</option>
+                                <option value="Double" ${
+                                "Double"==item.javaType?'selected':''}>Double</option>
+                                <option value="Boolean" ${
+                                "Boolean"==item.javaType?'selected':''}>Boolean</option>
+                                <option value="byte[]" ${
+                                "byte[]"==item.javaType?'selected':''}>byte[]</option>
+                                <option value="Character" ${
+                                "Character"==item.javaType?'selected':''}>Character</option>
+                                <option value="Date" ${
+                                "Date"==item.javaType?'selected':''}>Date</option>
+                            </select>
+                        </td>
+                        <td><input name="genTableColumns[${itemLP.index-1}].javaField" type="text"
+                                   value="${item.javaField}" class="form-control"/></td>
+                        <!--<input class="form-control" type="checkbox" name="">-->
+                        <th><input type="checkbox" name="genTableColumns[${itemLP.index-1}].isNull" value="1" ${"1"==item.isNull?'checked':''}>
+                        </th>
+                        <th><input type="checkbox" name="genTableColumns[${itemLP.index-1}].isInsert" value="1" ${"1"==item.isInsert?'checked':''}>
+                        </th>
+                        <th><input type="checkbox" name="genTableColumns[${itemLP.index-1}].isEdit" value="1" ${"1"==item.isEdit?'checked':''}>
+                        </th>
+                        <th><input type="checkbox" name="genTableColumns[${itemLP.index-1}].isList" value="1" ${"1"==item.isList?'checked':''}>
+                        </th>
+                        <th><input type="checkbox" name="genTableColumns[${itemLP.index-1}].isQuery" value="1" ${"1"==item.isQuery?'checked':''}>
+                        </th>
+                        <th>
+                            <select name="genTableColumns[${itemLP.index-1}].queryType" class="form-control">
+                                <option ${
+                                "="==item.queryType?'selected':''}>=</option>
+                                <option ${
+                                "!="==item.queryType?'selected':''}>!=</option>
+                                <option ${
+                                "& gt;"==item.queryType?'selected':''}>&gt;</option>
+                                <option ${
+                                "& gt;="==item.queryType?'selected':''}>&gt;=</option>
+                                <option ${
+                                "& lt;"==item.queryType?'selected':''}>&lt;</option>
+                                <option ${
+                                "& lt;="==item.queryType?'selected':''}>&lt;=</option>
+                                <option ${
+                                "Between"==item.queryType?'selected':''}>Between</option>
+                                <option ${
+                                "Like"==item.queryType?'selected':''}>Like</option>
+                            </select>
+                        </th>
+                        <th>
+                            <select name="genTableColumns[${itemLP.index-1}].showType" class="form-control">
+                                <option value="input" ${
+                                'input'==item.showType?'selected':''}>单行文本</option>
+                                <option value="textarea" ${
+                                "textarea"==item.showType?'selected':''}>多行文本</option>
+                                <option value="select" ${
+                                "select"==item.showType?'selected':''}>下拉选项</option>
+                                <option value="radioBox" ${
+                                "radioBox"==item.showType?'selected':''}>单选按钮</option>
+                                <option value="checkBox" ${
+                                "checkBox"==item.showType?'selected':''}>复选框</option>
+                                <option value="dateSelect" ${
+                                "dateSelect"==item.showType?'selected':''}>日期选择</option>
+                                <option value="fileUpload" ${
+                                "fileUpload"==item.showType?'selected':''}>文件上传</option>
+                                <option value="picUpload" ${
+                                "picUpload"==item.showType?'selected':''}>图片上传</option>
+                                <option value="richText" ${
+                                "richText"==item.showType?'selected':''}>富文本</option>
+                            </select>
+                        </th>
+                        <th><input name="genTableColumns[${itemLP.index-1}].dictType" type="text" class="form-control"
+                                   value="${item.dictType}"/></th>
+                        <th><input name="genTableColumns[${itemLP.index-1}].sort" type="text" class="form-control"
+                                   value="${item.sort! (itemLP.index*10)}"/></th>
+                    </tr>
+                    @}
+                    </tbody>
+                </table>
+            </form>
+            <div class="row btn-group-m-t">
+                <div class="col-sm-10">
+                    <#button btnCss="info" name="提交" id="ensure" icon="fa-check"
+                    clickFun="GenTableInfoDlg.editSubmit()"/>
+                    <#button btnCss="danger" name="取消" id="cancel" icon="fa-eraser" clickFun="GenTableInfoDlg.close()"/>
+                </div>
+            </div>
+        </div>
+
+    </div>
+</div>
+<script src="${ctxPath}/static/modular/system/genTable/genTable_info.js"></script>
+@}

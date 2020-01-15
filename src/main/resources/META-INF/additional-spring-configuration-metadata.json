@@ -1,0 +1,85 @@
+{
+  "properties": [
+    {
+      "name": "im.url",
+      "type": "java.lang.String",
+      "description": "im通信请求地址"
+    },
+    {
+      "name": "guns.session-open",
+      "type": "java.lang.String",
+      "defaultValue": "false",
+      "description": "是否开启session超时验证（受影响的类SessionTimeoutInterceptor） (true/false)"
+    },
+    {
+      "name": "guns.muti-datasource-open",
+      "type": "java.lang.String",
+      "description": "是否开启多数据源(true/false)"
+    },
+    {
+      "name": "spring.datasource.db-name",
+      "type": "java.lang.String",
+      "description": "Description for spring.datasource.db-name."
+    },
+    {
+      "name": "im.app_client_id",
+      "type": "java.lang.String",
+      "description": "Description for im.app_client_id."
+    },
+    {
+      "name": "im.app-key",
+      "type": "java.lang.String",
+      "description": "Description for im.app-key."
+    },
+    {
+      "name": "im.app_client_secret",
+      "type": "java.lang.String",
+      "description": "Description for im.app_client_secret."
+    },
+    {
+      "name": "im.service",
+      "type": "java.lang.String",
+      "description": "Description for im.service."
+    },
+    {
+      "name": "sms.prod",
+      "type": "java.lang.String",
+      "description": "Description for sms.prod."
+    },
+    {
+      "name": "sms.app-id",
+      "type": "java.lang.String",
+      "description": "Description for sms.app-id."
+    },
+    {
+      "name": "sms.module-id",
+      "type": "java.lang.String",
+      "description": "Description for sms.module-id."
+    },
+    {
+      "name": "sms.account-sid",
+      "type": "java.lang.String",
+      "description": "Description for sms.account-sid."
+    },
+    {
+      "name": "sms.auth-token",
+      "type": "java.lang.String",
+      "description": "Description for sms.auth-token."
+    },
+    {
+      "name": "token.encryption",
+      "type": "java.lang.String",
+      "description": "Description for token.encryption."
+    },
+    {
+      "name": "im.is-send",
+      "type": "java.lang.String",
+      "description": "Description for token.is-send."
+    },
+    {
+      "name": "spring.datasource.filters",
+      "type": "java.lang.String",
+      "description": "Description for spring.datasource.filters."
+    }
+  ]
+}

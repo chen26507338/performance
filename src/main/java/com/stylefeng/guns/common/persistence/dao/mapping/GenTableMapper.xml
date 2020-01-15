@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.stylefeng.guns.common.persistence.dao.GenTableMapper">
+
+	<!-- 通用查询映射结果 -->
+	<resultMap id="BaseResultMap" type="com.stylefeng.guns.generator.action.model.GenTable">
+		<id column="id" property="id" />
+		<result column="name" property="name" />
+		<result column="comments" property="comments" />
+		<result column="class_name" property="className" />
+		<result column="parent_table" property="parentTable" />
+		<result column="parent_table_fk" property="parentTableFk" />
+		<result column="author" property="author" />
+		<result column="module_name" property="moduleName" />
+		<result column="biz_name" property="bizName" />
+		<result column="parent_menu_name" property="parentMenuName" />
+		<result column="remarks" property="remarks" />
+		<result column="del_flag" property="delFlag" />
+	</resultMap>
+
+    <!-- 通用查询结果列 -->
+    <sql id="Base_Column_List">
+        id, name, comments, class_name AS className, parent_table AS parentTable, parent_table_fk AS parentTableFk, create_by AS createBy, create_date AS createDate, update_by AS updateBy, update_date AS updateDate, remarks, del_flag AS delFlag
+    </sql>
+
+</mapper>

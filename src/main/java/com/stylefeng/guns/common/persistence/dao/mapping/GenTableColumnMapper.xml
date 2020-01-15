@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.stylefeng.guns.common.persistence.dao.GenTableColumnMapper">
+
+	<!-- 通用查询映射结果 -->
+	<resultMap id="BaseResultMap" type="com.stylefeng.guns.generator.action.model.GenTableColumn">
+		<id column="id" property="id" />
+		<result column="gen_table_id" property="genTableId" />
+		<result column="name" property="name" />
+		<result column="comments" property="comments" />
+		<result column="jdbc_type" property="jdbcType" />
+		<result column="java_type" property="javaType" />
+		<result column="java_field" property="javaField" />
+		<result column="is_pk" property="isPk" />
+		<result column="is_null" property="isNull" />
+		<result column="is_insert" property="isInsert" />
+		<result column="is_edit" property="isEdit" />
+		<result column="is_list" property="isList" />
+		<result column="is_query" property="isQuery" />
+		<result column="query_type" property="queryType" />
+		<result column="show_type" property="showType" />
+		<result column="dict_type" property="dictType" />
+		<result column="settings" property="settings" />
+		<result column="sort" property="sort" />
+		<result column="create_by" property="createBy" />
+		<result column="create_date" property="createDate" />
+		<result column="update_by" property="updateBy" />
+		<result column="update_date" property="updateDate" />
+		<result column="remarks" property="remarks" />
+		<result column="del_flag" property="delFlag" />
+	</resultMap>
+
+    <!-- 通用查询结果列 -->
+    <sql id="Base_Column_List">
+        id, gen_table_id AS genTableId, name, comments, jdbc_type AS jdbcType, java_type AS javaType, java_field AS javaField, is_pk AS isPk, is_null AS isNull, is_insert AS isInsert, is_edit AS isEdit, is_list AS isList, is_query AS isQuery, query_type AS queryType, show_type AS showType, dict_type AS dictType, settings, sort, create_by AS createBy, create_date AS createDate, update_by AS updateBy, update_date AS updateDate, remarks, del_flag AS delFlag
+    </sql>
+
+</mapper>

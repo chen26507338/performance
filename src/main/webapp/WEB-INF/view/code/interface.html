@@ -1,0 +1,95 @@
+@layout("/common/_container.html"){
+<div class="ibox float-e-margins">
+    <div class="ibox-content">
+        <div class="form-horizontal">
+
+            <input type="hidden" id="id" value="">
+            <form action="/code/interface/gen" method="post" id="interfaceGenForm">
+            <div class="row">
+                <div class="col-sm-12" id="itemsArea">
+                    <div class="form-group">
+                        <label class="col-sm-2 control-label">接口名称</label>
+                        <div class="col-sm-2">
+                            <input class="form-control" id="interfaceName" name="interfaceName" type="text">
+                        </div>
+                        <div class="col-sm-2">
+                            <#button btnCss="info" name="增加参数" icon="fa-plus" clickFun="DictInfoDlg.addItem()"/>
+                        </div>
+                        <label class="col-sm-2 control-label" style="width: 8%;">登录权限</label>
+                        <div class="col-sm-1">
+                            <input class="form-control" type="checkbox" name="token" id="token">
+                        </div>
+                    </div>
+                    <div class="hr-line-dashed"></div>
+                    <div class="form-group">
+                        <label class="col-sm-2 control-label">接口地址</label>
+                        <div class="col-sm-2">
+                            <input class="form-control" id="interfaceLink" name="interfaceLink" type="text">
+                        </div>
+                        <label class="col-sm-2 control-label" style="width: 8%;">是否分页</label>
+                        <div class="col-sm-1">
+                            <input class="form-control" type="checkbox" name="page" id="page">
+                        </div>
+                    </div>
+                    <div class="hr-line-dashed"></div>
+                    <div class="form-group">
+                        <label class="col-sm-2 control-label">方法名</label>
+                        <div class="col-sm-2">
+                            <input class="form-control" id="funcName" name="funcName" type="text">
+                        </div>
+                    </div>
+                    <div class="hr-line-dashed"></div>
+                    <div class="form-group">
+                        <label class="col-sm-2 control-label">接收参数类名</label>
+                        <div class="col-sm-2">
+                            <input class="form-control" id="className" name="className" type="text">
+                        </div>
+                    </div>
+                    <div class="hr-line-dashed"></div>
+                    <div class="form-group">
+                        <label class="col-sm-2 control-label">返回类名</label>
+                        <div class="col-sm-2">
+                            <input class="form-control" id="returnName" name="returnName" type="text">
+                        </div>
+                    </div>
+                </div>
+            </div>
+            </form>
+            <div class="row btn-group-m-t">
+                <div class="col-sm-10">
+                    <#button btnCss="info" name="生成" id="ensure" icon="fa-check" clickFun="DictInfoDlg.addSubmit()"/>
+                    <#button btnCss="danger" name="重新生成" id="cancel" icon="fa-eraser" clickFun="DictInfoDlg.close()"/>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script type="text/template" id="itemTemplate">
+        <div class="form-group" name="dictItem" >
+            <label class="col-sm-1 control-label">类型</label>
+            <div class="col-sm-1">
+                <select class="form-control" name="itemType" id="itemType">
+                    <option>String</option>
+                    <option>Integer</option>
+                </select>
+            </div>
+            <label class="col-sm-1 control-label" style="width: 8%;">名称</label>
+            <div class="col-sm-2">
+                <input class="form-control" type="text" name="itemName" id="itemName">
+            </div>
+            <label class="col-sm-1 control-label" style="width: 8%;">属性名</label>
+            <div class="col-sm-2">
+                <input class="form-control" type="text" name="parameterName" id="parameterName">
+            </div>
+            <label class="col-sm-1 control-label" style="width: 8%;">必填</label>
+            <div class="col-sm-1">
+                <input class="form-control" type="checkbox" name="required" id="required" checked>
+            </div>
+            <div class="col-sm-2">
+                <#button btnCss="danger" name="删除" id="cancel" icon="fa-remove" clickFun="DictInfoDlg.deleteItem(event)"/>
+            </div>
+        </div>
+    </script>
+
+    <script src="${ctxPath}/static/modular/code/interface.js"></script>
+@}

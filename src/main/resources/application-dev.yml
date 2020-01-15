@@ -1,0 +1,31 @@
+##########################################################
+###################  开发环境的profile  ###################
+##########################################################
+
+###################  项目启动端口  ###################
+server:
+  port: 8081
+token:
+  encryption: false
+  key:
+  iv:
+spring:
+  datasource:
+    url: jdbc:mysql://localhost:3306/performance?autoReconnect=true&useUnicode=true&characterEncoding=utf8&zeroDateTimeBehavior=convertToNull
+    username: root
+    password:
+    db-name: script_config
+    filters: log4j,wall,mergeStat
+guns:
+ file-upload-path: d:/tmp
+ img-url-prefix: http://localhost:8080/kaptcha/
+ admin-prefix:
+ #是否允许多人同时登录
+ multiAccountLogin: true
+beetl:
+  resource-auto-check: true #是否检测文件变化,开发用true合适，但线上要改为false
+logging:
+  level.root: info
+  level.com.stylefeng: debug
+  path: logs/
+  file: guns.log
