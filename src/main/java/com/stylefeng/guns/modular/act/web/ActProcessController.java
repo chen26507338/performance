@@ -6,6 +6,7 @@ package com.stylefeng.guns.modular.act.web;
 import com.baomidou.mybatisplus.plugins.Page;
 import com.stylefeng.guns.common.constant.factory.PageFactory;
 import com.stylefeng.guns.core.base.controller.BaseController;
+import com.stylefeng.guns.core.base.tips.SuccessTip;
 import com.stylefeng.guns.modular.act.service.ActProcessService;
 import org.activiti.engine.runtime.ProcessInstance;
 import org.apache.shiro.authz.annotation.RequiresPermissions;
@@ -139,12 +140,12 @@ public class ActProcessController extends BaseController {
 	 * 挂起、激活流程实例
 	 */
 //	@RequiresPermissions("act:process:edit")
-//	@RequestMapping(value = "update/{state}")
-//	public String updateState(@PathVariable("state") String state, String procDefId, RedirectAttributes redirectAttributes) {
-//		String message = actProcessService.updateState(state, procDefId);
-//		redirectAttributes.addFlashAttribute("message", message);
-//		return "redirect:" + adminPath + "/act/process";
-//	}
+	@RequestMapping(value = "update/{state}")
+    @ResponseBody
+	public Object updateState(@PathVariable("state") String state, String procDefId) {
+		String message = actProcessService.updateState(state, procDefId);
+		return new SuccessTip(message);
+	}
 	
 	/**
 	 * 将部署的流程转换为模型
@@ -178,11 +179,12 @@ public class ActProcessController extends BaseController {
 	 * @param deploymentId 流程部署ID
 	 */
 //	@RequiresPermissions("act:process:edit")
-//	@RequestMapping(value = "delete")
-//	public String delete(String deploymentId) {
-//		actProcessService.deleteDeployment(deploymentId);
-//		return "redirect:" + adminPath + "/act/process";
-//	}
+	@RequestMapping(value = "delete")
+    @ResponseBody
+	public Object delete(String deploymentId) {
+		actProcessService.deleteDeployment(deploymentId);
+		return SUCCESS_TIP;
+	}
 	
 	/**
 	 * 删除流程实例

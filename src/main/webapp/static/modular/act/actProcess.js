@@ -16,15 +16,18 @@ ActProcess.initColumn = function () {
     return [
         {field: 'selectItem', radio: true},
         {title: 'id', field: 'process.id', visible: true, align: 'center', valign: 'middle'},
-        {title: '标识', field: 'process.key', align: 'center', valign: 'middle', sortable: true},
-        {title: '名称', field: 'process.name', align: 'center', valign: 'middle', sortable: true},
-        {title: '版本号', field: 'process.version', align: 'center', valign: 'middle', sortable: true},
-        {title: '部署时间', field: 'deployment.deploymentTime', align: 'center', valign: 'middle', sortable: true}
-        ,{title: '流程XML', field: 'process.resourceName', align: 'center', valign: 'middle', sortable: true,formatter: function (value, row, index) {
+        {title: '标识', field: 'process.key', align: 'center', valign: 'middle', sortable: false},
+        {title: '名称', field: 'process.name', align: 'center', valign: 'middle', sortable: false},
+        {title: '版本号', field: 'process.version', align: 'center', valign: 'middle', sortable: false},
+        {title: '部署时间', field: 'deployment.deploymentTime', align: 'center', valign: 'middle', sortable: false}
+        ,{title: '流程XML', field: 'process.resourceName', align: 'center', valign: 'middle', sortable: false,formatter: function (value, row, index) {
                 return '<a target="_blank" href="'+Feng.ctxPath+'/act/process/resource/read?procDefId='+row.process.id+'&resType=xml">' + value + '</a>';
             }}
-        ,{title: '流程图片', field: 'process.diagramResourceName', align: 'center', valign: 'middle', sortable: true,formatter: function (value, row, index) {
+        ,{title: '流程图片', field: 'process.diagramResourceName', align: 'center', valign: 'middle', sortable: false,formatter: function (value, row, index) {
                 return '<a target="_blank" href="'+Feng.ctxPath+'/act/process/resource/read?procDefId='+row.process.id+'&resType=image">' + value + '</a>';
+            }}
+        ,{title: '状态', field: 'process.suspensionState', align: 'center', valign: 'middle', sortable: false,formatter: function (value, row, index) {
+                return value == 1 ? '激活' : '挂起';
             }}
         ]
 };
@@ -84,18 +87,49 @@ ActProcess.delActProcess = function () {
     if (this.check()) {
 
         var operation = function(){
-            var modelId = ActProcess.seItem.id;
-            var ajax = new $ax(Feng.ctxPath + "/act/model/delete", function () {
+            var modelId = ActProcess.seItem.process.deploymentId;
+            var ajax = new $ax(Feng.ctxPath + "/act/process/delete", function () {
                 Feng.success("删除成功!");
                 ActProcess.table.refresh();
             }, function (data) {
                 Feng.error("删除失败!" + data.responseJSON.message + "!");
             });
-            ajax.set("id", modelId);
+            ajax.set("deploymentId", modelId);
             ajax.start();
         };
 
-        Feng.confirm("是否删除模型" + ActProcess.seItem.name + "?",operation);
+        Feng.confirm("是否删除模型" + ActProcess.seItem.process.deploymentId + "?",operation);
+    }
+};
+
+/**
+ * 激活/挂起
+ */
+ActProcess.pending = function () {
+    if (this.check()) {
+        var state;
+        var message;
+        if (ActProcess.seItem.process.suspensionState == 1) {
+            state = "suspend";
+            message = "挂起";
+        } else {
+            state = "active";
+            message = "激活";
+        }
+        var operation = function(){
+
+            var modelId = ActProcess.seItem.process.id;
+            var ajax = new $ax(Feng.ctxPath + "/act/process/update/" + state, function () {
+                Feng.success("删除成功!");
+                ActProcess.table.refresh();
+            }, function (data) {
+                Feng.error("删除失败!" + data.responseJSON.message + "!");
+            });
+            ajax.set("procDefId", modelId);
+            ajax.start();
+        };
+
+        Feng.confirm("是否" + message + "模型" + ActProcess.seItem.process.id + "?", operation);
     }
 };
 

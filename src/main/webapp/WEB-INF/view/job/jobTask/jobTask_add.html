@@ -1,0 +1,65 @@
+@layout("/common/_container.html"){
+<div class="ibox float-e-margins">
+    <div class="ibox-content">
+        <div class="form-horizontal" id="JobTaskForm">
+
+            <input type="hidden" id="id" value="">
+
+            <div class="row">
+
+                <div class="col-sm-6 b-r">
+                    <#input id="id" name="" underline="true"/>
+                </div>
+                <div class="col-sm-6 b-r">
+                    <#input id="dutiesId" name="职责ID" underline="true"/>
+                </div>
+                <div class="col-sm-6 b-r">
+                    <#input id="deptId" name="部门ID" underline="true"/>
+                </div>
+                <div class="col-sm-6 b-r">
+                    <#input id="userId" name="经办人ID" underline="true"/>
+                </div>
+                <div class="col-sm-6 b-r">
+                    <#input id="appointUserId" name="委派协助人ID" underline="true"/>
+                </div>
+                <div class="col-sm-6 b-r">
+                    <#input id="applyUserId" name="经办协作人" underline="true"/>
+                </div>
+                <div class="col-sm-6 b-r">
+                    <#input id="point" name="任务分" underline="true"/>
+                </div>
+                <div class="col-sm-6 b-r">
+                    <#input id="des" name="任务描述" underline="true"/>
+                </div>
+                <div class="col-sm-6 b-r">
+                    <#input id="userDes" name="经办人处理结果" underline="true"/>
+                </div>
+                <div class="col-sm-6 b-r">
+                    <#input id="appointUserDes" name="委派协助人办理结果" underline="true"/>
+                </div>
+                <div class="col-sm-6 b-r">
+                    <#input id="applyUserDes" name="经办协作人办理结果" underline="true"/>
+                </div>
+                <div class="col-sm-6 b-r">
+                    <#input id="createTime" name="提交时间" underline="true"
+                    type="text" dateType="date" format="yyyy-MM-dd"/>
+                </div>
+                <div class="col-sm-6 b-r">
+                    <#input id="endTime" name="处理结束时间" underline="true"
+                    type="text" dateType="date" format="yyyy-MM-dd"/>
+                </div>
+
+            </div>
+
+            <div class="row btn-group-m-t">
+                <div class="col-sm-10">
+                    <#button btnCss="info" name="提交" id="ensure" icon="fa-check" clickFun="JobTaskInfoDlg.addSubmit()"/>
+                    <#button btnCss="danger" name="取消" id="cancel" icon="fa-eraser" clickFun="JobTaskInfoDlg.close()"/>
+                </div>
+            </div>
+        </div>
+
+    </div>
+</div>
+<script src="${ctxPath}/static/modular/job/jobTask/jobTask_info.js"></script>
+@}

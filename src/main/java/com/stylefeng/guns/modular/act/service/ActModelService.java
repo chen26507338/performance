@@ -74,7 +74,7 @@ public class ActModelService{
 		editorNode.put("id", "canvas");
 		editorNode.put("resourceId", "canvas");
 		ObjectNode properties = objectMapper.createObjectNode();
-		properties.put("process_author", "jeesite");
+		properties.put("process_author", "");
 		editorNode.set("properties", properties);
 		ObjectNode stencilset = objectMapper.createObjectNode();
 		stencilset.put("namespace", "http://b3mn.org/stencilset/bpmn2.0#");

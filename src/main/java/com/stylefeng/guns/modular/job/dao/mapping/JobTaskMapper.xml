@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.stylefeng.guns.modular.job.dao.JobTaskMapper">
+
+	<!-- 通用查询映射结果 -->
+	<resultMap id="BaseResultMap" type="com.stylefeng.guns.modular.job.model.JobTask">
+            <result column="id" property="id" />
+            <result column="duties_id" property="dutiesId" />
+            <result column="dept_id" property="deptId" />
+            <result column="user_id" property="userId" />
+            <result column="appoint_user_id" property="appointUserId" />
+            <result column="apply_user_id" property="applyUserId" />
+            <result column="point" property="point" />
+            <result column="des" property="des" />
+            <result column="user_des" property="userDes" />
+            <result column="appoint_user_des" property="appointUserDes" />
+            <result column="apply_user_des" property="applyUserDes" />
+            <result column="create_time" property="createTime" />
+            <result column="end_time" property="endTime" />
+	</resultMap>
+
+    <!-- 通用查询结果列 -->
+    <sql id="Base_Column_List">
+	    id AS id,
+	    duties_id AS dutiesId,
+	    dept_id AS deptId,
+	    user_id AS userId,
+	    appoint_user_id AS appointUserId,
+	    apply_user_id AS applyUserId,
+	    point AS point,
+	    des AS des,
+	    user_des AS userDes,
+	    appoint_user_des AS appointUserDes,
+	    apply_user_des AS applyUserDes,
+	    create_time AS createTime,
+	    end_time AS endTime
+    </sql>
+
+</mapper>

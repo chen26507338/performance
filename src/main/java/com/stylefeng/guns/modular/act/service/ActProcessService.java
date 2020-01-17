@@ -190,7 +190,7 @@ public class ActProcessService  {
 	/**
 	 * 挂起、激活流程实例
 	 */
-	@Transactional(readOnly = false)
+	@Transactional
 	public String updateState(String state, String procDefId) {
 		if ("active".equals(state)) {
 			repositoryService.activateProcessDefinitionById(procDefId, true, null);
