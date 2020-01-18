@@ -3,6 +3,7 @@ package com.stylefeng.guns.modular.job.controller;
 import com.stylefeng.guns.core.base.controller.BaseController;
 import com.baomidou.mybatisplus.plugins.Page;
 import com.stylefeng.guns.common.constant.factory.PageFactory;
+import com.stylefeng.guns.modular.job.service.IJobService;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.stereotype.Controller;
 import org.apache.shiro.authz.annotation.RequiresPermissions;;
@@ -34,13 +35,16 @@ public class JobDutiesController extends BaseController {
 
     @Autowired
     private IJobDutiesService jobDutiesService;
-
+    @Autowired
+    private IJobService jobService;
     /**
      * 跳转到岗位职责管理首页
      */
     @RequestMapping("")
     @RequiresPermissions(value = {"/jobDuties/list"})
-    public String index() {
+    public String index(Long jobId,Model model) {
+        model.addAttribute("jobId", jobId);
+        model.addAttribute("jobList", jobService.selectAllOn());
         return PREFIX + "jobDuties.html";
     }
 
@@ -49,7 +53,9 @@ public class JobDutiesController extends BaseController {
      */
     @RequestMapping("/jobDuties_add")
     @RequiresPermissions(value = {"/jobDuties/add"})
-    public String jobDutiesAdd() {
+    public String jobDutiesAdd(Long jobId,Model model) {
+        model.addAttribute("jobId", jobId);
+        model.addAttribute("jobList", jobService.selectAllOn());
         return PREFIX + "jobDuties_add.html";
     }
 
@@ -60,6 +66,7 @@ public class JobDutiesController extends BaseController {
     @RequiresPermissions(value = {"/jobDuties/update"})
     public String jobDutiesUpdate(@PathVariable String jobDutiesId, Model model) {
         JobDuties jobDuties = jobDutiesService.selectById(jobDutiesId);
+        model.addAttribute("jobList", jobService.selectAllOn());
         model.addAttribute("item",jobDuties);
         LogObjectHolder.me().set(jobDuties);
         return PREFIX + "jobDuties_edit.html";
@@ -74,6 +81,9 @@ public class JobDutiesController extends BaseController {
     public Object list(JobDuties jobDuties) {
         Page<JobDuties> page = new PageFactory<JobDuties>().defaultPage();
         EntityWrapper< JobDuties> wrapper = new EntityWrapper<>();
+        if (jobDuties.getJobId() != null) {
+            wrapper.eq("job_id", jobDuties.getJobId());
+        }
         jobDutiesService.selectPage(page,wrapper);
         page.setRecords(new JobDutiesDecorator(page.getRecords()).decorate());
         return packForBT(page);

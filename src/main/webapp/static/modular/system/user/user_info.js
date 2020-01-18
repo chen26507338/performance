@@ -29,22 +29,7 @@ var UserInfoDlg = {
             validators: {
                 notEmpty: {
                     message: '密码不能为空'
-                },
-                identical: {
-                    field: 'rePassword',
-                    message: '两次密码不一致'
-                },
-            }
-        },
-        rePassword: {
-            validators: {
-                notEmpty: {
-                    message: '密码不能为空'
-                },
-                identical: {
-                    field: 'password',
-                    message: '两次密码不一致'
-                },
+                }
             }
         }
     }
@@ -143,7 +128,7 @@ UserInfoDlg.hideDeptSelectTree = function () {
  */
 UserInfoDlg.collectData = function () {
     this.set('id').set('account').set('sex').set('password').set('avatar')
-        .set('email').set('name').set('birthday').set('rePassword').set('deptid').set('phone');
+        .set('email').set('name').set('birthday').set('rePassword').set('deptId').set('jobId').set('phone');
 };
 
 /**
@@ -177,11 +162,6 @@ UserInfoDlg.addSubmit = function () {
     this.collectData();
 
     if (!this.validate()) {
-        return;
-    }
-
-    if (!this.validatePwd()) {
-        Feng.error("两次密码输入不一致");
         return;
     }
 
@@ -257,5 +237,17 @@ $(function () {
     avatarUp.setUploadBarId("progressBar");
     avatarUp.init();
 
-
+    $('#deptId').change(function(){
+        //此处写状态改变要实现的功能
+        // var s=$('#deptId').children('option:selected').val();
+        var s=$('#deptId').val();
+        $.post(Feng.ctxPath + "/job/list/noPage", {deptId: s}, function (data) {
+            var record = data;
+            var options = '';
+            for (var item in record) {
+                options += '<option value="'+record[item].id+'">'+record[item].name+'</option>'
+            }
+            $('#jobId').html(options);
+        });
+    });
 });

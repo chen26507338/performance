@@ -6,18 +6,16 @@
             <input type="hidden" id="id" value="${item.id}">
 
             <div class="row">
-
-                <div class="col-sm-6 b-r">
-                    <#input id="id" name="" value="${item.id}" underline="true"/>
-                </div>
                 <div class="col-sm-6 b-r">
                     <#input id="name" name="名称" value="${item.name}" underline="true"/>
                 </div>
                 <div class="col-sm-6 b-r">
-                    <#input id="deptId" name="部门ID" value="${item.deptId}" underline="true"/>
+                    <#select id="deptId" name="部门" value="${item.deptId}" items="${deptList}"
+                    itemLabel="name" itemValue="id" underline="true"/>
                 </div>
                 <div class="col-sm-6 b-r">
-                    <#input id="status" name="状态" value="${item.status}" underline="true"/>
+                    <#select id="status" name="状态" items="${constant.getDictsByName('通用状态')}"
+                    itemLabel="name" itemValue="num" value="${item.status}" underline="true"/>
                 </div>
             </div>
 

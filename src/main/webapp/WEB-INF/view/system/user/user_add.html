@@ -11,21 +11,19 @@
 
 					<#input id="password" name="密码" underline="true" type="password"/>
 
+                    <#select id="deptId" name="部门" items="${deptList}"
+                    itemLabel="name" itemValue="id" underline="true"/>
 				</div>
 				<div class="col-sm-6">
 					<div id="driverInfoContent">
 						<#input id="name" name="姓名" underline="true"/>
 
-						<#input id="rePassword" name="确认密码" type="password" underline="true"/>
+                        <#select id="sex" name="性别" items="${constant.getDictsByName('性别')}"
+                        itemLabel="name" itemValue="num" underline="true"/>
 
-					</div>
+                        <#select id="jobId" name="岗位"  underline="true"/>
+                    </div>
 				</div>
-			</div>
-
-			<!-- 这是部门选择的下拉框 -->
-			<div id="menuContent" class="menuContent"
-				style="display: none; position: absolute; z-index: 200;">
-				<ul id="treeDemo" class="ztree tree-box" style="width: 249px !important;"></ul>
 			</div>
 
 			<div class="row btn-group-m-t">

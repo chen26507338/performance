@@ -77,6 +77,10 @@ public class User extends BaseModel<User> {
      */
 	private Long deptId;
     /**
+     * 岗位id
+     */
+	private Long jobId;
+    /**
      * 状态(1：启用  2：冻结  3：删除）
      */
 	private Integer status;

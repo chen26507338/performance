@@ -7,9 +7,7 @@
 
             <div class="row">
 
-                <div class="col-sm-6 b-r">
-                    <#input id="id" name="" underline="true"/>
-                </div>
+
                 <div class="col-sm-6 b-r">
                     <#input id="des" name="描述" underline="true"/>
                 </div>
@@ -17,7 +15,8 @@
                     <#input id="point" name="得分" underline="true"/>
                 </div>
                 <div class="col-sm-6 b-r">
-                    <#input id="jobId" name="岗位ID" underline="true"/>
+                    <#select id="jobId" name="岗位" value="${jobId!}" items="${jobList}"
+                    itemLabel="name" itemValue="id" underline="true"/>
                 </div>
 
             </div>

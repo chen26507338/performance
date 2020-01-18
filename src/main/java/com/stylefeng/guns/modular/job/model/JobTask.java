@@ -4,6 +4,7 @@ import java.util.Date;
 import com.baomidou.mybatisplus.annotations.TableId;
 import com.baomidou.mybatisplus.annotations.TableField;
 import com.baomidou.mybatisplus.annotations.TableName;
+import com.stylefeng.guns.common.persistence.model.BaseActEntity;
 import com.stylefeng.guns.core.base.BaseModel;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
@@ -19,7 +20,7 @@ import java.io.Serializable;
 @Data
 @EqualsAndHashCode(callSuper = true)
 @TableName("job_task")
-public class JobTask extends BaseModel<JobTask> {
+public class JobTask extends BaseActEntity<JobTask> {
 
     /**
     * 
@@ -80,6 +81,12 @@ public class JobTask extends BaseModel<JobTask> {
     */
     @TableField("appoint_user_des")
     private String appointUserDes;
+
+    /**
+    * 汇总工作
+    */
+    @TableField("summary")
+    private String summary;
 
     /**
     * 经办协作人办理结果

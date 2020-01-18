@@ -1,5 +1,6 @@
 package com.stylefeng.guns.modular.system.dao;
 
+import com.baomidou.mybatisplus.plugins.Page;
 import com.stylefeng.guns.common.persistence.model.User;
 import com.stylefeng.guns.core.datascope.DataScope;
 import org.apache.ibatis.annotations.Param;
@@ -38,6 +39,8 @@ public interface UserMgrDao {
      * @date 2017年2月12日 下午9:14:34
      */
     List<Map<String, Object>> selectUsers(@Param("dataScope") DataScope dataScope, @Param("name") String name, @Param("beginTime") String beginTime, @Param("endTime") String endTime, @Param("deptid") Integer deptid);
+
+    List<Map<String, Object>> selectUsers(Page<User> page, @Param("dataScope") DataScope dataScope, @Param("name") String name, @Param("beginTime") String beginTime, @Param("endTime") String endTime, @Param("deptid") Integer deptid);
 
     /**
      * 设置用户的角色

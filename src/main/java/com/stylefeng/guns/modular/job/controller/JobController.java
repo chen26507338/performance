@@ -3,6 +3,7 @@ package com.stylefeng.guns.modular.job.controller;
 import com.stylefeng.guns.core.base.controller.BaseController;
 import com.baomidou.mybatisplus.plugins.Page;
 import com.stylefeng.guns.common.constant.factory.PageFactory;
+import com.stylefeng.guns.modular.job.service.IDeptService;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.stereotype.Controller;
 import org.apache.shiro.authz.annotation.RequiresPermissions;;
@@ -34,6 +35,8 @@ public class JobController extends BaseController {
 
     @Autowired
     private IJobService jobService;
+    @Autowired
+    private IDeptService deptService;
 
     /**
      * 跳转到岗位管理首页
@@ -49,7 +52,8 @@ public class JobController extends BaseController {
      */
     @RequestMapping("/job_add")
     @RequiresPermissions(value = {"/job/add"})
-    public String jobAdd() {
+    public String jobAdd(Model model) {
+        model.addAttribute("deptList", deptService.selectAllOn());
         return PREFIX + "job_add.html";
     }
 
@@ -61,6 +65,7 @@ public class JobController extends BaseController {
     public String jobUpdate(@PathVariable String jobId, Model model) {
         Job job = jobService.selectById(jobId);
         model.addAttribute("item",job);
+        model.addAttribute("deptList", deptService.selectAllOn());
         LogObjectHolder.me().set(job);
         return PREFIX + "job_edit.html";
     }
@@ -74,9 +79,26 @@ public class JobController extends BaseController {
     public Object list(Job job) {
         Page<Job> page = new PageFactory<Job>().defaultPage();
         EntityWrapper< Job> wrapper = new EntityWrapper<>();
+        if (job.getDeptId() != null) {
+            wrapper.eq("dept_id", job.getDeptId());
+        }
         jobService.selectPage(page,wrapper);
         page.setRecords(new JobDecorator(page.getRecords()).decorate());
         return packForBT(page);
+    }
+
+    /**
+     * 获取岗位管理列表
+     */
+    @RequestMapping(value = "/list/noPage")
+    @RequiresPermissions(value = {"/job/list"})
+    @ResponseBody
+    public Object listNoPage(Job job) {
+        EntityWrapper< Job> wrapper = new EntityWrapper<>();
+        if (job.getDeptId() != null) {
+            wrapper.eq("dept_id", job.getDeptId());
+        }
+        return jobService.selectList(wrapper);
     }
 
     /**

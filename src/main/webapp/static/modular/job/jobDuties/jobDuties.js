@@ -16,7 +16,7 @@ JobDuties.initColumn = function () {
         {field: 'selectItem', radio: true}
        ,{title: '描述', field:'des', visible: true, align: 'center', valign: 'middle'}
        ,{title: '得分', field:'point', visible: true, align: 'center', valign: 'middle'}
-       ,{title: '岗位ID', field:'jobId', visible: true, align: 'center', valign: 'middle',formatter:function(value, row, index){return row.expand.jobIdDict;}}
+       ,{title: '岗位', field:'jobId', visible: true, align: 'center', valign: 'middle',formatter:function(value, row, index){return row.expand.jobIdDict;}}
     ];
 };
 
@@ -40,6 +40,7 @@ JobDuties.check = function () {
  */
 JobDuties.formParams = function() {
     var queryData = {};
+    queryData['jobId'] = $("#jobId").val();
     return queryData;
 };
 
@@ -54,7 +55,7 @@ JobDuties.openAddJobDuties = function () {
         area: ['800px', '420px'], //宽高
         fix: false, //不固定
         maxmin: true,
-        content: Feng.ctxPath + '/jobDuties/jobDuties_add'
+        content: Feng.ctxPath + '/jobDuties/jobDuties_add?jobId=' + jobId
     });
 };
 

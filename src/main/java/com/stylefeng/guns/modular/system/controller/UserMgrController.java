@@ -1,10 +1,14 @@
 package com.stylefeng.guns.modular.system.controller;
 
+import cn.hutool.core.util.StrUtil;
+import com.baomidou.mybatisplus.mapper.EntityWrapper;
+import com.baomidou.mybatisplus.plugins.Page;
 import com.stylefeng.guns.common.annotion.BussinessLog;
 import com.stylefeng.guns.common.annotion.Permission;
 import com.stylefeng.guns.common.constant.Const;
 import com.stylefeng.guns.common.constant.dictmap.UserDict;
 import com.stylefeng.guns.common.constant.factory.ConstantFactory;
+import com.stylefeng.guns.common.constant.factory.PageFactory;
 import com.stylefeng.guns.common.constant.state.ManagerStatus;
 import com.stylefeng.guns.common.exception.BizExceptionEnum;
 import com.stylefeng.guns.common.persistence.dao.UserMapper;
@@ -20,10 +24,16 @@ import com.stylefeng.guns.core.shiro.ShiroKit;
 import com.stylefeng.guns.core.shiro.ShiroUser;
 import com.stylefeng.guns.core.util.DateUtils;
 import com.stylefeng.guns.core.util.ToolUtil;
+import com.stylefeng.guns.modular.job.model.Job;
+import com.stylefeng.guns.modular.job.service.IDeptService;
+import com.stylefeng.guns.modular.job.service.IJobService;
 import com.stylefeng.guns.modular.system.dao.UserMgrDao;
+import com.stylefeng.guns.modular.system.decorator.UserDecorator;
 import com.stylefeng.guns.modular.system.factory.UserFactory;
+import com.stylefeng.guns.modular.system.service.IUserService;
 import com.stylefeng.guns.modular.system.transfer.UserDto;
 import com.stylefeng.guns.modular.system.warpper.UserWarpper;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
@@ -59,20 +69,28 @@ public class UserMgrController extends BaseController {
 
     @Resource
     private UserMapper userMapper;
+    @Autowired
+    private IDeptService deptService;
+    @Autowired
+    private IJobService jobService;
+    @Autowired
+    private IUserService userService;
 
     /**
      * 跳转到查看管理员列表的页面
      */
     @RequestMapping("")
-    public String index() {
-        return PREFIX + "actModel.html";
+    public String index(Model model) {
+        model.addAttribute("deptList", deptService.selectAllOn());
+        return PREFIX + "user.html";
     }
 
     /**
      * 跳转到查看管理员列表的页面
      */
     @RequestMapping("/user_add")
-    public String addView() {
+    public String addView(Model model) {
+        model.addAttribute("deptList", deptService.selectAllOn());
         return PREFIX + "user_add.html";
     }
 
@@ -102,6 +120,10 @@ public class UserMgrController extends BaseController {
             throw new GunsException(BizExceptionEnum.REQUEST_NULL);
         }
         User user = this.userMapper.selectById(userId);
+        model.addAttribute("deptList", deptService.selectAllOn());
+        Job param = new Job();
+        param.setDeptId(user.getDeptId());
+        model.addAttribute("jobList", jobService.selectList(new EntityWrapper<>(param)));
         model.addAttribute(user);
 //        model.addAttribute("roleName", ConstantFactory.me().getRoleName(user.getRoleId()));
         LogObjectHolder.me().set(user);
@@ -160,8 +182,16 @@ public class UserMgrController extends BaseController {
     @RequestMapping("/list")
     @ResponseBody
     public Object list(@RequestParam(required = false) String name, @RequestParam(required = false) String beginTime, @RequestParam(required = false) String endTime, @RequestParam(required = false) Integer deptid) {
-        List<Map<String, Object>> users = managerDao.selectUsers(null, name, beginTime, endTime, deptid);
-        return new UserWarpper(users).warp();
+        Page<User> page = new PageFactory<User>().defaultPage();
+        EntityWrapper<User> wrapper = new EntityWrapper<>();
+        if (StrUtil.isNotBlank(name)) {
+            wrapper.andNew("phone like CONCAT('%',{0},'%')" +
+                    " or account like CONCAT('%',{0},'%')" +
+                    " or name like CONCAT('%',{0},'%')", name);
+        }
+        userService.selectPage(page, wrapper);
+        page.setRecords(new UserDecorator(page.getRecords()).decorate());
+        return packForBT(page);
     }
 
     /**
@@ -169,12 +199,8 @@ public class UserMgrController extends BaseController {
      */
     @RequestMapping("/add")
     @BussinessLog(value = "添加管理员", key = "account", dict = UserDict.class)
-    @Permission(Const.ADMIN_NAME)
     @ResponseBody
-    public Tip add(@Valid UserDto user, BindingResult result) {
-        if (result.hasErrors()) {
-            throw new GunsException(BizExceptionEnum.REQUEST_NULL);
-        }
+    public Tip add(User user) {
 
         // 判断账号是否重复
         User theUser = managerDao.getByAccount(user.getAccount());
@@ -186,9 +212,9 @@ public class UserMgrController extends BaseController {
         user.setSalt(ShiroKit.getRandomSalt(5));
         user.setPassword(ShiroKit.md5(user.getPassword(), user.getSalt()));
         user.setStatus(ManagerStatus.OK.getCode());
-        user.setCreatetime(new Date());
+        user.setCreateTime(new Date());
 
-        this.userMapper.insert(UserFactory.createUser(user));
+        this.userMapper.insert(user);
         return SUCCESS_TIP;
     }
 

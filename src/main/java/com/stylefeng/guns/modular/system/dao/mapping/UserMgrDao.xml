@@ -11,7 +11,7 @@
 	<sql id="Base_Column_List_With_Pwd">
 		id, account, name, birthday,password, sex, email, avatar,
 		phone, role_id as roleId,salt, status,
-		create_time as createTime, version
+		create_time as createTime, version,dept_id as deptId,job_id as jobId
 	</sql>
 
 	<select id="selectUsers" resultType="java.util.Map">

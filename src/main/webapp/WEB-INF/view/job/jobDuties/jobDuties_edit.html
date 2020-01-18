@@ -6,10 +6,6 @@
             <input type="hidden" id="id" value="${item.id}">
 
             <div class="row">
-
-                <div class="col-sm-6 b-r">
-                    <#input id="id" name="" value="${item.id}" underline="true"/>
-                </div>
                 <div class="col-sm-6 b-r">
                     <#input id="des" name="描述" value="${item.des}" underline="true"/>
                 </div>
@@ -17,7 +13,8 @@
                     <#input id="point" name="得分" value="${item.point}" underline="true"/>
                 </div>
                 <div class="col-sm-6 b-r">
-                    <#input id="jobId" name="岗位ID" value="${item.jobId}" underline="true"/>
+                    <#select id="jobId" name="岗位" value="${item.jobId}" items="${jobList}"
+                    itemLabel="name" itemValue="id" underline="true"/>
                 </div>
             </div>
 

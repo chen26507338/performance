@@ -2,6 +2,10 @@ package com.stylefeng.guns.modular.system.warpper;
 
 import com.stylefeng.guns.common.constant.factory.ConstantFactory;
 import com.stylefeng.guns.core.base.warpper.BaseControllerWarpper;
+import com.stylefeng.guns.core.util.SpringContextHolder;
+import com.stylefeng.guns.modular.job.model.Dept;
+import com.stylefeng.guns.modular.job.service.IDeptService;
+import com.stylefeng.guns.modular.job.service.IJobService;
 
 import java.util.List;
 import java.util.Map;
@@ -14,8 +18,10 @@ import java.util.Map;
  */
 public class UserWarpper extends BaseControllerWarpper {
 
+
     public UserWarpper(Object list) {
         super(list);
+
     }
 
     @Override

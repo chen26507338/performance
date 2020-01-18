@@ -15,7 +15,7 @@ Job.initColumn = function () {
     return [
         {field: 'selectItem', radio: true}
        ,{title: '名称', field:'name', visible: true, align: 'center', valign: 'middle'}
-       ,{title: '部门ID', field:'deptId', visible: true, align: 'center', valign: 'middle',formatter:function(value, row, index){return row.expand.deptIdDict;}}
+       ,{title: '部门', field:'deptId', visible: true, align: 'center', valign: 'middle',formatter:function(value, row, index){return row.expand.deptIdDict;}}
        ,{title: '状态', field:'status', visible: true, align: 'center', valign: 'middle',formatter:function(value, row, index){return row.expand.statusDict;}}
     ];
 };
@@ -56,6 +56,22 @@ Job.openAddJob = function () {
         maxmin: true,
         content: Feng.ctxPath + '/job/job_add'
     });
+};
+/**
+ * 点击添加岗位管理
+ */
+Job.openAddJobDuties = function () {
+    if (this.check()) {
+        this.layerIndex = layer.open({
+            type: 2,
+            title: this.seItem.name + '职责管理',
+            area: ['800px', '420px'], //宽高
+            fix: false, //不固定
+            maxmin: true,
+            content: Feng.ctxPath + '/jobDuties?jobId=' + this.seItem.id
+        });
+        layer.full(this.layerIndex);
+    }
 };
 
 /**
