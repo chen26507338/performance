@@ -4,6 +4,7 @@
 package com.stylefeng.guns.modular.act.entity;
 
 import cn.hutool.core.util.StrUtil;
+import com.alibaba.fastjson.annotation.JSONField;
 import com.stylefeng.guns.core.base.BaseModel;
 import com.stylefeng.guns.modular.act.TimeUtils;
 import com.stylefeng.guns.modular.act.utils.Variable;
@@ -50,12 +51,17 @@ public class Act extends BaseModel<Act> {
 //	private String procExecUrl; 	// 流程执行（办理）RUL
 	private String comment; 	// 任务意见
 	private String flag; 		// 意见状态
-	
-	private Task task; 			// 任务对象
+
+    @JSONField(serialize = false)
+    private Task task; 			// 任务对象
+    @JSONField(serialize = false)
 	private ProcessDefinition procDef; 	// 流程定义对象
-	private ProcessInstance procIns;	// 流程实例对象
-	private HistoricTaskInstance histTask; // 历史任务
-	private HistoricActivityInstance histIns;	//历史活动任务
+    @JSONField(serialize = false)
+    private ProcessInstance procIns;	// 流程实例对象
+    @JSONField(serialize = false)
+    private HistoricTaskInstance histTask; // 历史任务
+    @JSONField(serialize = false)
+    private HistoricActivityInstance histIns;	//历史活动任务
 
 	private String assignee; // 任务执行人编号
 	private String assigneeName; // 任务执行人名称
@@ -129,12 +135,12 @@ public class Act extends BaseModel<Act> {
 	public void setProcDef(ProcessDefinition procDef) {
 		this.procDef = procDef;
 	}
-	
+
 	public String getProcDefName() {
 		return procDef.getName();
 	}
 
-	@JsonIgnore
+    @JSONField(serialize = false)
 	public ProcessInstance getProcIns() {
 		return procIns;
 	}

@@ -30,6 +30,13 @@ public interface IUserService extends IService<User>{
     User selectIgnorePointById(Serializable id);
 
     /**
+     * 搜索部门下用户，排除某个用户
+     * @param user
+     * @return
+     */
+    List<User> selectByDeptWithOutUser(User user);
+
+    /**
      * 通过账号获取用户
      * @param account
      * @return

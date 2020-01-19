@@ -90,7 +90,7 @@ public class ActProcessService  {
 	/**
 	 * 流程定义列表
 	 */
-	public Page<ProcessInstance> runningList(Page<ProcessInstance> page, String procInsId, String procDefKey) {
+	public Page<Map<String, Object>> runningList(Page<Map<String, Object>> page, String procInsId, String procDefKey) {
 
 	    ProcessInstanceQuery processInstanceQuery = runtimeService.createProcessInstanceQuery();
 
@@ -103,7 +103,14 @@ public class ActProcessService  {
 	    }
 	    
 	    page.setTotal(processInstanceQuery.count());
-	    page.setRecords(processInstanceQuery.listPage((int)page.getCurrent(), (int)page.getSize()));
+        List<ProcessInstance> list = processInstanceQuery.listPage(page.getCurrent() - 1, page.getSize());
+        List<Map<String, Object>> result = new ArrayList<>();
+
+        for (ProcessInstance processInstance : list) {
+            Map<String, Object> temp = BeanUtil.beanToMap(processInstance);
+            result.add(temp);
+        }
+        page.setRecords(result);
 		return page;
 	}
 	

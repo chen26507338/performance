@@ -4,6 +4,63 @@
 var JobTaskInfoDlg = {
     jobTaskInfoData : {},
     validateFields:{
+        appointUserId:{
+            validators:{
+                different:{
+                    field:'userId',
+                    message:'不能与经办人相同'
+                }
+            }
+        }
+        ,userId:{
+            validators:{
+                notEmpty:{
+                    message: "经办人不能为空"
+                }
+            }
+        }
+        ,userDes:{
+            validators:{
+                notEmpty:{
+                    message: "办理结果不能为空"
+                }
+            }
+        }
+        ,applyUserDes:{
+            validators:{
+                notEmpty:{
+                    message: "办理结果不能为空"
+                }
+            }
+        }
+        ,summary:{
+            validators:{
+                notEmpty:{
+                    message: "汇总结果不能为空"
+                }
+            }
+        }
+        ,userPoint:{
+            validators:{
+                notEmpty:{
+                    message: "得分不能为空"
+                }
+            }
+        }
+        ,applyUserPoint:{
+            validators:{
+                notEmpty:{
+                    message: "得分不能为空"
+                }
+            }
+        }
+        ,appointUserPoint:{
+            validators:{
+                notEmpty:{
+                    message: "得分不能为空"
+                }
+            }
+        }
     }
 };
 
@@ -38,7 +95,8 @@ JobTaskInfoDlg.get = function(key) {
  * 关闭此对话框
  */
 JobTaskInfoDlg.close = function() {
-    parent.layer.close(window.parent.JobTask.layerIndex);
+    var index = parent.layer.getFrameIndex(window.name);
+    parent.layer.close(index);
 };
 
 /**
@@ -53,6 +111,7 @@ JobTaskInfoDlg.collectData = function() {
     .set('appointUserId')
     .set('applyUserId')
     .set('point')
+    .set('summary')
     .set('des')
     .set('userDes')
     .set('appointUserDes')
@@ -74,7 +133,7 @@ JobTaskInfoDlg.validate = function () {
 /**
  * 提交添加
  */
-JobTaskInfoDlg.addSubmit = function() {
+JobTaskInfoDlg.addSubmit = function(pass) {
 
     this.clearData();
     this.collectData();
@@ -98,7 +157,7 @@ JobTaskInfoDlg.addSubmit = function() {
 /**
  * 提交修改
  */
-JobTaskInfoDlg.editSubmit = function() {
+JobTaskInfoDlg.editSubmit = function(pass) {
 
     this.clearData();
     this.collectData();
@@ -109,17 +168,52 @@ JobTaskInfoDlg.editSubmit = function() {
 
     //提交信息
     var ajax = new $ax(Feng.ctxPath + "/jobTask/update", function(data){
-        Feng.success("修改成功!");
-        window.parent.JobTask.table.refresh();
+        Feng.success("办理成功!");
+        window.parent.ActTodoTask.table.refresh();
         JobTaskInfoDlg.close();
     },function(data){
-        Feng.error("修改失败!" + data.responseJSON.message + "!");
+        Feng.error("办理失败!" + data.responseJSON.message + "!");
     });
+
+    this.jobTaskInfoData['expand["pass"]'] = pass;
+    this.jobTaskInfoData['act.taskId'] = $("#taskId").val();
+    this.jobTaskInfoData['act.procInsId'] = $("#procInsId").val();
+    this.jobTaskInfoData['act.taskDefKey'] = $("#taskDefKey").val();
+    var userPoint = $("#userPoint").val();
+    this.jobTaskInfoData['expand["userPoint"]'] = userPoint ? userPoint : 0;
+    var applyUserPoint = $("#applyUserPoint").val();
+    this.jobTaskInfoData['expand["applyUserPoint"]'] = applyUserPoint ? applyUserPoint : 0;
+    var appointUserPoint = $("#appointUserPoint").val();
+    this.jobTaskInfoData['expand["appointUserPoint"]'] = appointUserPoint ? appointUserPoint : 0;
     ajax.set(this.jobTaskInfoData);
     ajax.start();
 };
-
+var duties;
 $(function() {
     Feng.initValidator("JobTaskForm", JobTaskInfoDlg.validateFields);
 
+    $('#userId').change(function(){
+        var s=$('#userId').val();
+        $.post(Feng.ctxPath + "/jobDuties/list/noPage", {id: s}, function (data) {
+            duties = data;
+            var options = '';
+            for (var item in duties) {
+                options += '<option value="'+duties[item].id+'">'+duties[item].des+'</option>'
+            }
+            $("#point").val(duties[0].point);
+            $("#des").val(duties[0].des);
+            $('#dutiesId').html(options);
+        });
+    });
+
+    $('#dutiesId').change(function(){
+        var s=$('#dutiesId').val();
+        for (var item in duties) {
+            if (duties[item].id == s) {
+                $("#point").val(duties[item].point);
+                $("#des").val(duties[item].des);
+                break;
+            }
+        }
+    });
 });

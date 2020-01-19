@@ -40,7 +40,7 @@
 	</update>
 
 	<update id="setRoles">
-		update sys_user set roleid = #{roleIds} where id =
+		update sys_user set role_id = #{roleIds} where id =
 		#{userId}
 	</update>
 

@@ -3,10 +3,12 @@
  */
 package com.stylefeng.guns.modular.act.service;
 
+import cn.hutool.core.bean.BeanUtil;
 import cn.hutool.core.util.StrUtil;
 import com.baomidou.mybatisplus.plugins.Page;
 import com.stylefeng.guns.common.persistence.model.User;
 import com.stylefeng.guns.core.shiro.ShiroKit;
+import com.stylefeng.guns.core.util.JsonMapper;
 import com.stylefeng.guns.modular.act.dao.ActMapper;
 import com.stylefeng.guns.modular.act.entity.Act;
 import com.stylefeng.guns.modular.act.service.cmd.CreateAndTakeTransitionCmd;
@@ -21,6 +23,7 @@ import com.stylefeng.guns.modular.system.service.IUserService;
 import com.google.common.collect.Lists;
 import com.google.common.collect.Maps;
 import com.stylefeng.guns.modular.act.utils.ProcessDefUtils;
+import lombok.Data;
 import org.activiti.bpmn.model.BpmnModel;
 import org.activiti.engine.*;
 import org.activiti.engine.delegate.Expression;
@@ -68,6 +71,7 @@ import java.util.*;
  */
 @Service
 @Transactional(readOnly = true)
+@Data
 public class ActTaskService  {
 
 	@Resource
@@ -131,6 +135,11 @@ public class ActTaskService  {
 //			e.setProcIns(runtimeService.createProcessInstanceQuery().processInstanceId(task.getProcessInstanceId()).singleResult());
 //			e.setProcExecUrl(ActUtils.getProcExeUrl(task.getProcessDefinitionId()));
 			e.setStatus("todo");
+            Map<String, Object> procDef = BeanUtil.beanToMap(e.getProcDef());
+            Map<String, Object> taskMap = BeanUtil.beanToMap(e.getTask());
+            procDef.remove("processDefinition");
+            e.putExpand("proDef", procDef);
+            e.putExpand("task", taskMap);
 			result.add(e);
 		}
 		

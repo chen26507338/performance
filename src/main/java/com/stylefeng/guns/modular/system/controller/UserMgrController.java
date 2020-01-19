@@ -100,7 +100,7 @@ public class UserMgrController extends BaseController {
     //@RequiresPermissions("/mgr/role_assign")  //利用shiro自带的权限检查
     @Permission
     @RequestMapping("/role_assign/{userId}")
-    public String roleAssign(@PathVariable Integer userId, Model model) {
+    public String roleAssign(@PathVariable Long userId, Model model) {
         if (ToolUtil.isEmpty(userId)) {
             throw new GunsException(BizExceptionEnum.REQUEST_NULL);
         }
@@ -225,23 +225,9 @@ public class UserMgrController extends BaseController {
     @RequestMapping("/edit")
     @BussinessLog(value = "修改管理员", key = "account", dict = UserDict.class)
     @ResponseBody
-    public Tip edit(@Valid UserDto user, BindingResult result) {
-        if (result.hasErrors()) {
-            throw new GunsException(BizExceptionEnum.REQUEST_NULL);
-        }
-        if (ShiroKit.hasRole(Const.ADMIN_NAME)) {
-            this.userMapper.updateById(UserFactory.createUser(user));
-            return SUCCESS_TIP;
-        } else {
-//            assertAuth(user.getId());
-            ShiroUser shiroUser = ShiroKit.getUser();
-            if (shiroUser.getId().equals(user.getId())) {
-                this.userMapper.updateById(UserFactory.createUser(user));
-                return SUCCESS_TIP;
-            } else {
-                throw new GunsException(BizExceptionEnum.NO_PERMITION);
-            }
-        }
+    public Tip edit(User user) {
+        userService.updateById(user);
+        return SUCCESS_TIP;
     }
 
     /**
@@ -339,7 +325,7 @@ public class UserMgrController extends BaseController {
     @BussinessLog(value = "分配角色", key = "userId,roleIds", dict = UserDict.class)
     @Permission(Const.ADMIN_NAME)
     @ResponseBody
-    public Tip setRole(@RequestParam("userId") Integer userId, @RequestParam("roleIds") String roleIds) {
+    public Tip setRole(@RequestParam("userId") Long userId, @RequestParam("roleIds") String roleIds) {
         if (ToolUtil.isOneEmpty(userId, roleIds)) {
             throw new GunsException(BizExceptionEnum.REQUEST_NULL);
         }

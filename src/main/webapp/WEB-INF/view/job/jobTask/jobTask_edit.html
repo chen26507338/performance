@@ -4,56 +4,111 @@
         <div class="form-horizontal" id="JobTaskForm">
 
             <input type="hidden" id="id" value="${item.id}">
+            <input type="hidden" id="taskId" value="${act.taskId}">
+            <input type="hidden" id="procInsId" value="${act.procInsId}">
+            <input type="hidden" id="taskDefKey" value="${act.taskDefKey}">
 
             <div class="row">
+                <div class="col-sm-6 b-r">
+                    <#input id="dd" value="${duties}" name="职责" underline="true" readonly="true"/>
+                </div>
+                <div class="col-sm-6 b-r">
+                    <#input id="point" name="任务分" value="${item.point}" underline="true" readonly="true"/>
+                </div>
+                <div class="col-sm-6 b-r">
+                    <#input id="des" name="任务描述" value="${item.des}" underline="true" readonly="true"/>
+                </div>
+                @select(act.taskDefKey){
+                @   case "user_confirm","re_nominate_apply":
+                <div class="col-sm-6 b-r">
+                    <#select id="applyUserId" name="申请协助人" items="${userList}"
+                    itemLabel="name" itemValue="id" underline="true"/>
+                </div>
+                @   case "re_nominate_appoint":
+                <div class="col-sm-6 b-r">
+                    <#select id="appointUserId" name="委派协助人" items="${userList}"
+                    itemLabel="name" itemValue="id" underline="true"/>
+                </div>
+                @case "user_handle":
+                <div class="col-sm-6 b-r">
+                    <#input id="userDes" type="textarea" name="经办办理结果" underline="true"/>
+                </div>
+                @case "appoint_handle":
+                <div class="col-sm-6 b-r">
+                    <#input id="appointUserDes" value="${item.appointUserDes}" type="textarea"  name="委派办理结果" underline="true"/>
+                </div>
+                @case "apply_handle":
+                <div class="col-sm-6 b-r">
+                    <#input id="applyUserDes" type="textarea"  name="经办协助人办理结果" underline="true"/>
+                </div>
+                @case "user_summary":
+                <div class="col-sm-6 b-r">
+                    <#input id="d" type="textarea" value="${item.applyUserDes}"  name="经办协助人办理结果" underline="true" readonly="true"/>
+                </div>
+                <div class="col-sm-6 b-r">
+                    <#input id="summary" type="textarea" value="${item.summary!}" name="经办汇总结果" underline="true"/>
+                </div>
+                @case "summary_confirm":
+                <div class="col-sm-6 b-r">
+                    <#input id="d" type="textarea" value="${item.summary}"  name="经办汇总结果" underline="true" readonly="true"/>
+                </div>
+                @case "appoint_handle_confirm":
+                <div class="col-sm-6 b-r">
+                    <#input id="d" type="textarea" value="${item.appointUserDes}"  name="委派办理结果" underline="true" readonly="true"/>
+                </div>
+                @case "score":
+                <div class="col-sm-6 b-r">
+                    <#input id="dd" type="textarea" value="${item.userDes}" name="经办办理结果" underline="true" readonly="true"/>
+                </div>
+                <div class="col-sm-6 b-r">
+                    <#input id="da" type="textarea" value="${item.summary}"  name="经办汇总结果" underline="true" readonly="true"/>
+                </div>
+                <div class="col-sm-6 b-r">
+                    <#input id="userPoint" value="${userPoint}" name="经办人得分" underline="true"/>
+                </div>
+                @if(item.applyUserId != null){
+                <div class="col-sm-6 b-r">
+                    <#input id="applyUserPoint" value="${applyPoint}" name="经办协助人得分" underline="true"/>
+                </div>
+                <div class="col-sm-6 b-r">
+                    <#input id="d" type="textarea" value="${item.applyUserDes}"  name="经办协助人办理结果" underline="true" readonly="true"/>
+                </div>
+                @}
+                @if(item.appointUserId != null){
+                <div class="col-sm-6 b-r">
+                    <#input id="appointUserPoint" value="${appointPoint}" name="委派协助人得分" underline="true"/>
+                </div>
+                <div class="col-sm-6 b-r">
+                    <#input id="db" type="textarea" value="${item.appointUserDes}"  name="委派协助人办理结果" underline="true" readonly="true"/>
+                </div>
+                @}
 
+                @case "re_nominate_user":
                 <div class="col-sm-6 b-r">
-                    <#input id="id" name="" value="${item.id}" underline="true"/>
+                    <#select id="userId" name="经办人" items="${userList}"
+                    itemLabel="name" itemValue="id" underline="true"/>
                 </div>
-                <div class="col-sm-6 b-r">
-                    <#input id="dutiesId" name="职责ID" value="${item.dutiesId}" underline="true"/>
-                </div>
-                <div class="col-sm-6 b-r">
-                    <#input id="deptId" name="部门ID" value="${item.deptId}" underline="true"/>
-                </div>
-                <div class="col-sm-6 b-r">
-                    <#input id="userId" name="经办人ID" value="${item.userId}" underline="true"/>
-                </div>
-                <div class="col-sm-6 b-r">
-                    <#input id="appointUserId" name="委派协助人ID" value="${item.appointUserId}" underline="true"/>
-                </div>
-                <div class="col-sm-6 b-r">
-                    <#input id="applyUserId" name="经办协作人" value="${item.applyUserId}" underline="true"/>
-                </div>
-                <div class="col-sm-6 b-r">
-                    <#input id="point" name="任务分" value="${item.point}" underline="true"/>
-                </div>
-                <div class="col-sm-6 b-r">
-                    <#input id="des" name="任务描述" value="${item.des}" underline="true"/>
-                </div>
-                <div class="col-sm-6 b-r">
-                    <#input id="userDes" name="经办人处理结果" value="${item.userDes}" underline="true"/>
-                </div>
-                <div class="col-sm-6 b-r">
-                    <#input id="appointUserDes" name="委派协助人办理结果" value="${item.appointUserDes}" underline="true"/>
-                </div>
-                <div class="col-sm-6 b-r">
-                    <#input id="applyUserDes" name="经办协作人办理结果" value="${item.applyUserDes}" underline="true"/>
-                </div>
-                <div class="col-sm-6 b-r">
-                        <#input id="createTime" name="提交时间" underline="true" value="${item.createTime}"
-                        type="text" dateType="date" format="yyyy-MM-dd"/>
-                </div>
-                <div class="col-sm-6 b-r">
-                        <#input id="endTime" name="处理结束时间" underline="true" value="${item.endTime}"
-                        type="text" dateType="date" format="yyyy-MM-dd"/>
-                </div>
+                @}
+
             </div>
 
             <div class="row btn-group-m-t">
                 <div class="col-sm-10">
-                    <#button btnCss="info" name="提交" id="ensure" icon="fa-check" clickFun="JobTaskInfoDlg.editSubmit()"/>
-                    <#button btnCss="danger" name="取消" id="cancel" icon="fa-eraser" clickFun="JobTaskInfoDlg.close()"/>
+                    @select(act.taskDefKey){
+                    @   case "user_confirm","apply_user_confirm","appoint_handle_confirm","appoint_user_confirm","summary_confirm":
+                    <#button btnCss="info" name="通过" id="ensure" icon="fa-check" clickFun="JobTaskInfoDlg.editSubmit(1)"/>
+                    <#button btnCss="danger" name="拒绝" id="cancel" icon="fa-eraser" clickFun="JobTaskInfoDlg.editSubmit(0)"/>
+                    @   case "re_nominate_apply":
+                    <#button btnCss="info" name="重新申请" id="ensure" icon="fa-check" clickFun="JobTaskInfoDlg.editSubmit(1)"/>
+                    <#button btnCss="danger" name="不申请" id="cancel" icon="fa-eraser" clickFun="JobTaskInfoDlg.editSubmit(0)"/>
+                    @   case "re_nominate_appoint":
+                    <#button btnCss="info" name="重新指派" id="ensure" icon="fa-check" clickFun="JobTaskInfoDlg.editSubmit(1)"/>
+                    <#button btnCss="danger" name="不指派" id="cancel" icon="fa-eraser" clickFun="JobTaskInfoDlg.editSubmit(0)"/>
+                    @   case "re_nominate_user","appoint_handle","user_handle","apply_handle","user_summary","score":
+                    <#button btnCss="info" name="确认" id="ensure" icon="fa-check" clickFun="JobTaskInfoDlg.editSubmit(1)"/>
+                    @}
+
+                    <#button btnCss="danger" name="关闭" id="cancel" icon="fa-eraser" clickFun="JobTaskInfoDlg.close()"/>
                 </div>
             </div>
         </div>

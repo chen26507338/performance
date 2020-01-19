@@ -6,24 +6,16 @@
             <input type="hidden" id="id" value="">
 
             <div class="row">
-
                 <div class="col-sm-6 b-r">
-                    <#input id="id" name="" underline="true"/>
+                    <#select id="userId" name="经办人" items="${userList}"
+                    itemLabel="name" itemValue="id" underline="true"/>
                 </div>
                 <div class="col-sm-6 b-r">
-                    <#input id="dutiesId" name="职责ID" underline="true"/>
+                    <#select id="dutiesId" name="职责" underline="true"/>
                 </div>
                 <div class="col-sm-6 b-r">
-                    <#input id="deptId" name="部门ID" underline="true"/>
-                </div>
-                <div class="col-sm-6 b-r">
-                    <#input id="userId" name="经办人ID" underline="true"/>
-                </div>
-                <div class="col-sm-6 b-r">
-                    <#input id="appointUserId" name="委派协助人ID" underline="true"/>
-                </div>
-                <div class="col-sm-6 b-r">
-                    <#input id="applyUserId" name="经办协作人" underline="true"/>
+                    <#select id="appointUserId" name="委派协助人" items="${userList}"
+                    itemLabel="name" itemValue="id" underline="true"/>
                 </div>
                 <div class="col-sm-6 b-r">
                     <#input id="point" name="任务分" underline="true"/>
@@ -31,6 +23,7 @@
                 <div class="col-sm-6 b-r">
                     <#input id="des" name="任务描述" underline="true"/>
                 </div>
+                @/*
                 <div class="col-sm-6 b-r">
                     <#input id="userDes" name="经办人处理结果" underline="true"/>
                 </div>
@@ -48,7 +41,7 @@
                     <#input id="endTime" name="处理结束时间" underline="true"
                     type="text" dateType="date" format="yyyy-MM-dd"/>
                 </div>
-
+                @*/
             </div>
 
             <div class="row btn-group-m-t">

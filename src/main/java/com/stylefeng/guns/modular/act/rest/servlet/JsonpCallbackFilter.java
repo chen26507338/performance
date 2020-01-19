@@ -2,8 +2,10 @@ package com.stylefeng.guns.modular.act.rest.servlet;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.stereotype.Component;
 
 import javax.servlet.*;
+import javax.servlet.annotation.WebFilter;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.ByteArrayOutputStream;
@@ -11,13 +13,17 @@ import java.io.IOException;
 import java.io.OutputStream;
 import java.util.Map;
 
+@Component
+@WebFilter(urlPatterns="/act/service/*",filterName="JSONPFilter")
 public class JsonpCallbackFilter implements Filter {
 
 	private static Logger log = LoggerFactory.getLogger(JsonpCallbackFilter.class);
 
-	public void init(FilterConfig fConfig) throws ServletException {}
+	@Override
+    public void init(FilterConfig fConfig) throws ServletException {}
 
-	public void doFilter(ServletRequest request, ServletResponse response, FilterChain chain) throws IOException, ServletException {
+	@Override
+    public void doFilter(ServletRequest request, ServletResponse response, FilterChain chain) throws IOException, ServletException {
 		
 		HttpServletRequest httpRequest = (HttpServletRequest) request;
 		HttpServletResponse httpResponse = (HttpServletResponse) response;
@@ -26,8 +32,9 @@ public class JsonpCallbackFilter implements Filter {
 		Map<String, String[]> parms = httpRequest.getParameterMap();
 
 		if (parms.containsKey("callback")) {
-			if (log.isDebugEnabled())
-				log.debug("Wrapping response with JSONP callback '" + parms.get("callback")[0] + "'");
+			if (log.isDebugEnabled()) {
+                log.debug("Wrapping response with JSONP callback '" + parms.get("callback")[0] + "'");
+            }
 
 			OutputStream out = httpResponse.getOutputStream();
 
@@ -37,10 +44,10 @@ public class JsonpCallbackFilter implements Filter {
 
 			//handles the content-size truncation
 			ByteArrayOutputStream outputStream = new ByteArrayOutputStream();
-			outputStream.write(new String(parms.get("callback")[0] + "(").getBytes());
+			outputStream.write((parms.get("callback")[0] + "(").getBytes());
 			outputStream.write(wrapper.getData());
-			outputStream.write(new String(");").getBytes());
-			byte jsonpResponse[] = outputStream.toByteArray();
+			outputStream.write(");".getBytes());
+			byte[] jsonpResponse = outputStream.toByteArray();
 
 			wrapper.setContentType("text/javascript;charset=UTF-8");
 			wrapper.setContentLength(jsonpResponse.length);
@@ -54,5 +61,6 @@ public class JsonpCallbackFilter implements Filter {
 		}
 	}
 
-	public void destroy() {}
+	@Override
+    public void destroy() {}
 }

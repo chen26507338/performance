@@ -4,6 +4,7 @@ import com.baomidou.mybatisplus.activerecord.Model;
 import com.baomidou.mybatisplus.annotations.TableId;
 import com.baomidou.mybatisplus.annotations.TableName;
 import com.baomidou.mybatisplus.enums.IdType;
+import lombok.Data;
 
 import java.io.Serializable;
 import java.util.Date;
@@ -17,6 +18,7 @@ import java.util.Date;
  * @since 2017-07-11
  */
 @TableName("sys_login_log")
+@Data
 public class LoginLog extends Model<LoginLog> {
 
     private static final long serialVersionUID = 1L;
@@ -37,7 +39,7 @@ public class LoginLog extends Model<LoginLog> {
     /**
      * 创建时间
      */
-	private Date createtime;
+	private Date createTime;
     /**
      * 是否执行成功
      */
@@ -51,78 +53,8 @@ public class LoginLog extends Model<LoginLog> {
      */
 	private String ip;
 
-
-	public Long getId() {
-		return id;
-	}
-
-	public void setId(Long id) {
-		this.id = id;
-	}
-
-	public String getLogname() {
-		return logname;
-	}
-
-	public void setLogname(String logname) {
-		this.logname = logname;
-	}
-
-	public Long getUserid() {
-		return userid;
-	}
-
-	public void setUserid(Long userid) {
-		this.userid = userid;
-	}
-
-	public Date getCreatetime() {
-		return createtime;
-	}
-
-	public void setCreatetime(Date createtime) {
-		this.createtime = createtime;
-	}
-
-	public String getSucceed() {
-		return succeed;
-	}
-
-	public void setSucceed(String succeed) {
-		this.succeed = succeed;
-	}
-
-	public String getMessage() {
-		return message;
-	}
-
-	public void setMessage(String message) {
-		this.message = message;
-	}
-
-	public String getIp() {
-		return ip;
-	}
-
-	public void setIp(String ip) {
-		this.ip = ip;
-	}
-
 	@Override
 	protected Serializable pkVal() {
 		return this.id;
-	}
-
-	@Override
-	public String toString() {
-		return "LoginLog{" +
-			"id=" + id +
-			", logname=" + logname +
-			", userid=" + userid +
-			", createtime=" + createtime +
-			", succeed=" + succeed +
-			", message=" + message +
-			", ip=" + ip +
-			"}";
 	}
 }

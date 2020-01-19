@@ -48,7 +48,7 @@ public interface UserMgrDao {
      * @return
      * @date 2017年2月13日 下午7:31:30
      */
-    int setRoles(@Param("userId") Integer userId, @Param("roleIds") String roleIds);
+    int setRoles(@Param("userId") Long userId, @Param("roleIds") String roleIds);
 
     /**
      * 通过账号获取用户

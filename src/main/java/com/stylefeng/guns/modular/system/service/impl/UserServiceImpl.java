@@ -60,6 +60,14 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements IU
     }
 
     @Override
+    public List<User> selectByDeptWithOutUser(User user) {
+        EntityWrapper<User> wrapper = new EntityWrapper<>();
+        wrapper.eq("dept_id", user.getDeptId());
+        wrapper.ne("id", user.getId());
+        return this.selectList(wrapper);
+    }
+
+    @Override
     @Cacheable(value = Cache.USER_IGNORE_POINT, key = "'" + CACHE_ACCOUNT + "'+#account")
     public User getByAccount(String account) {
         User params = new User();

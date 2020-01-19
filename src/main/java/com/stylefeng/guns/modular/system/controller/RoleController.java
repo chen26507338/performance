@@ -80,7 +80,7 @@ public class RoleController extends BaseController {
      */
     @Permission
     @RequestMapping(value = "/role_edit/{roleId}")
-    public String roleEdit(@PathVariable Integer roleId, Model model) {
+    public String roleEdit(@PathVariable Long roleId, Model model) {
         if (ToolUtil.isEmpty(roleId)) {
             throw new GunsException(BizExceptionEnum.REQUEST_NULL);
         }
@@ -221,7 +221,7 @@ public class RoleController extends BaseController {
      */
     @RequestMapping(value = "/roleTreeListByUserId/{userId}")
     @ResponseBody
-    public List<ZTreeNode> roleTreeListByUserId(@PathVariable Integer userId) {
+    public List<ZTreeNode> roleTreeListByUserId(@PathVariable Long userId) {
         User theUser = this.userMapper.selectById(userId);
         String roleid = theUser.getRoleId();
         if (ToolUtil.isEmpty(roleid)) {

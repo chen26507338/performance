@@ -7,6 +7,7 @@ import com.baomidou.mybatisplus.plugins.Page;
 import com.stylefeng.guns.common.constant.factory.PageFactory;
 import com.stylefeng.guns.core.base.controller.BaseController;
 import com.stylefeng.guns.core.base.tips.SuccessTip;
+import com.stylefeng.guns.core.util.JsonMapper;
 import com.stylefeng.guns.modular.act.service.ActProcessService;
 import org.activiti.engine.runtime.ProcessInstance;
 import org.apache.shiro.authz.annotation.RequiresPermissions;
@@ -69,15 +70,23 @@ public class ActProcessController extends BaseController {
 	/**
 	 * 运行中的实例列表
 	 */
-//	@RequiresPermissions("act:process:edit")
-//	@RequestMapping(value = "running")
-//	public String runningList(String procInsId, String procDefKey, HttpServletRequest request, HttpServletResponse response, Model model) {
-//	    Page<ProcessInstance> page = actProcessService.runningList(new Page<ProcessInstance>(request, response), procInsId, procDefKey);
-//		model.addAttribute("page", page);
-//		model.addAttribute("procInsId", procInsId);
-//		model.addAttribute("procDefKey", procDefKey);
-//		return "modules/act/actProcessRunningList";
-//	}
+	@RequiresPermissions("/act/process/running")
+	@RequestMapping(value = "running")
+	public String running() {
+		return "act/actProcessRunningList";
+	}
+
+	/**
+	 * 运行中的实例列表
+	 */
+	@RequiresPermissions("/act/process/running")
+	@RequestMapping(value = "running/list")
+    @ResponseBody
+	public Object runningList(String procInsId, String procDefKey) {
+        Page<Map<String,Object>> page = new PageFactory<Map<String,Object>>().defaultPage();
+        actProcessService.runningList(page, procInsId, procDefKey);
+        return packForBT(page);
+	}
 
 	/**
 	 * 读取资源，通过部署ID
@@ -123,16 +132,6 @@ public class ActProcessController extends BaseController {
 //			redirectAttributes.addFlashAttribute("message", message);
 //		}
 //
-//		return "redirect:" + adminPath + "/act/process";
-//	}
-	
-	/**
-	 * 设置流程分类
-	 */
-//	@RequiresPermissions("act:process:edit")
-//	@RequestMapping(value = "updateCategory")
-//	public String updateCategory(String procDefId, String category, RedirectAttributes redirectAttributes) {
-//		actProcessService.updateCategory(procDefId, category);
 //		return "redirect:" + adminPath + "/act/process";
 //	}
 
@@ -192,15 +191,11 @@ public class ActProcessController extends BaseController {
 	 * @param reason 删除原因
 	 */
 //	@RequiresPermissions("act:process:edit")
-//	@RequestMapping(value = "deleteProcIns")
-//	public String deleteProcIns(String procInsId, String reason, RedirectAttributes redirectAttributes) {
-//		if (StringUtils.isBlank(reason)){
-//			addMessage(redirectAttributes, "请填写删除原因");
-//		}else{
-//			actProcessService.deleteProcIns(procInsId, reason);
-//			addMessage(redirectAttributes, "删除流程实例成功，实例ID=" + procInsId);
-//		}
-//		return "redirect:" + adminPath + "/act/process/running/";
-//	}
+	@RequestMapping(value = "deleteProcIns")
+    @ResponseBody
+	public Object deleteProcIns(String procInsId, String reason) {
+        actProcessService.deleteProcIns(procInsId, "reason");
+		return SUCCESS_TIP;
+	}
 	
 }

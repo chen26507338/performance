@@ -16,6 +16,7 @@ package com.stylefeng.guns.modular.act.rest.diagram.services;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.node.ArrayNode;
 import com.fasterxml.jackson.databind.node.ObjectNode;
+import com.stylefeng.guns.core.util.JsonMapper;
 import org.activiti.engine.HistoryService;
 import org.activiti.engine.RepositoryService;
 import org.activiti.engine.RuntimeService;
@@ -49,7 +50,7 @@ public class ProcessInstanceHighlightsResource {
 
 	@RequiresUser
 	@RequestMapping(value = "/act/service/process-instance/{processInstanceId}/highlights", method = RequestMethod.GET, produces = "application/json")
-	public ObjectNode getHighlighted(@PathVariable String processInstanceId) {
+	public Object getHighlighted(@PathVariable String processInstanceId) {
 
 		ObjectNode responseJSON = objectMapper.createObjectNode();
 
@@ -80,10 +81,10 @@ public class ProcessInstanceHighlightsResource {
 			e.printStackTrace();
 		}
 
-		responseJSON.put("activities", activitiesArray);
-		responseJSON.put("flows", flowsArray);
+		responseJSON.set("activities", activitiesArray);
+		responseJSON.set("flows", flowsArray);
 
-		return responseJSON;
+        return JsonMapper.fromJsonString(responseJSON.toString(), Map.class);
 	}
 
 	/**

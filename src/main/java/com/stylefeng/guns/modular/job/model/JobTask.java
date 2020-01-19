@@ -22,6 +22,11 @@ import java.io.Serializable;
 @TableName("job_task")
 public class JobTask extends BaseActEntity<JobTask> {
 
+    @Override
+    protected Serializable pkVal() {
+        return this.id;
+    }
+
     /**
     * 
     */
@@ -51,6 +56,12 @@ public class JobTask extends BaseActEntity<JobTask> {
     */
     @TableField("appoint_user_id")
     private Long appointUserId;
+
+    /**
+    * 任务发起人ID
+    */
+    @TableField("start_user_id")
+    private Long startUserId;
 
     /**
     * 经办协作人

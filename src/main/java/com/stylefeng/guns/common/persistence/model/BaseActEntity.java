@@ -3,7 +3,9 @@
  */
 package com.stylefeng.guns.common.persistence.model;
 
+import com.alibaba.fastjson.annotation.JSONField;
 import com.baomidou.mybatisplus.activerecord.Model;
+import com.baomidou.mybatisplus.annotations.TableField;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.stylefeng.guns.core.base.BaseModel;
 import com.stylefeng.guns.modular.act.entity.Act;
@@ -23,20 +25,22 @@ public abstract class BaseActEntity<T extends Model> extends BaseModel<T>{
 
 	private static final long serialVersionUID = 1L;
 
-	protected Act act; 		// 流程任务对象
+    // 流程任务对象
+    @TableField(exist = false)
+    protected Act act = new Act();
 
 	public BaseActEntity() {
 		super();
 	}
 
-	
-	@JsonIgnore
-	public Act getAct() {
-		if (act == null){
-			act = new Act();
-		}
-		return act;
-	}
+
+    @JSONField(serialize = false)
+    public Act getAct() {
+        if (act == null) {
+            act = new Act();
+        }
+        return act;
+    }
 
 	public void setAct(Act act) {
 		this.act = act;

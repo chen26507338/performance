@@ -10,5 +10,15 @@ import com.stylefeng.guns.modular.job.model.JobTaskPoint;
  * @Date 2020-01-17 09:44:27
  */
 public interface IJobTaskPointService extends IService<JobTaskPoint> {
+    /**
+     * 类型：经办得分
+     */
+    int TYPE_MAIN_HANDLE = 1;
+    /**
+     * 类型：协助得分
+     */
+    int TYPE_ASSIST_HANDLE = 2;
+
+
 
 }

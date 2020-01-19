@@ -1,8 +1,14 @@
 package com.stylefeng.guns.modular.job.controller;
 
+import com.stylefeng.guns.common.persistence.model.User;
 import com.stylefeng.guns.core.base.controller.BaseController;
 import com.baomidou.mybatisplus.plugins.Page;
 import com.stylefeng.guns.common.constant.factory.PageFactory;
+import com.stylefeng.guns.core.shiro.ShiroKit;
+import com.stylefeng.guns.core.shiro.ShiroUser;
+import com.stylefeng.guns.modular.job.model.JobDuties;
+import com.stylefeng.guns.modular.job.service.IJobDutiesService;
+import com.stylefeng.guns.modular.system.service.IUserService;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.stereotype.Controller;
 import org.apache.shiro.authz.annotation.RequiresPermissions;;
@@ -20,6 +26,8 @@ import com.stylefeng.guns.modular.job.model.JobTask;
 import com.stylefeng.guns.modular.job.service.IJobTaskService;
 import com.stylefeng.guns.modular.job.decorator.JobTaskDecorator;
 
+import javax.jws.soap.SOAPBinding;
+
 /**
  * 工作任务控制器
  *
@@ -34,6 +42,10 @@ public class JobTaskController extends BaseController {
 
     @Autowired
     private IJobTaskService jobTaskService;
+    @Autowired
+    private IJobDutiesService jobDutiesService;
+    @Autowired
+    private IUserService userService;
 
     /**
      * 跳转到工作任务首页
@@ -49,18 +61,65 @@ public class JobTaskController extends BaseController {
      */
     @RequestMapping("/jobTask_add")
     @RequiresPermissions(value = {"/jobTask/add"})
-    public String jobTaskAdd() {
+    public String jobTaskAdd(Model model) {
+        User user = (User) ShiroKit.getUser().getUser();
+        List<User> users = userService.selectByDeptWithOutUser(user);
+        model.addAttribute("userList", users);
         return PREFIX + "jobTask_add.html";
     }
 
     /**
      * 跳转到修改工作任务
      */
-    @RequestMapping("/jobTask_update/{jobTaskId}")
+    @RequestMapping("/jobTask_update")
     @RequiresPermissions(value = {"/jobTask/update"})
-    public String jobTaskUpdate(@PathVariable String jobTaskId, Model model) {
-        JobTask jobTask = jobTaskService.selectById(jobTaskId);
-        model.addAttribute("item",jobTask);
+    public String jobTaskUpdate(JobTask jobTask, Model model) {
+        JobTask temp = jobTaskService.selectById(jobTask.getId());
+        User user = (User) ShiroKit.getUser().getUser();
+        List<User> userList = userService.selectByDeptWithOutUser(user);
+
+        switch (jobTask.getAct().getTaskDefKey()) {
+            case "re_nominate_appoint":
+                //去除经办人和经办协助人
+                userList.removeIf(tempUser -> tempUser.getId().equals(temp.getUserId())
+                        ||tempUser.getId().equals(temp.getApplyUserId()));
+                model.addAttribute("userList", userList);
+                break;
+            case "re_nominate_apply":
+            case "user_confirm":
+                //去除发起人和委派协助人
+                userList.removeIf(tempUser -> tempUser.getId().equals(temp.getAppointUserId()) ||
+                        tempUser.getId().equals(temp.getStartUserId()));
+                model.addAttribute("userList", userList);
+                break;
+            case "score":
+                double userPoint;
+                double applyPoint = 0;
+                double appointPoint = 0;
+                if (temp.getApplyUserId() == null && temp.getAppointUserId() == null) {
+                    userPoint = temp.getPoint();
+                } else {
+                    userPoint = temp.getPoint() * 0.7;
+                    double leftPoint = temp.getPoint() - userPoint;
+                    if (temp.getAppointUserId() == null && temp.getApplyUserId() != null) {
+                        applyPoint = leftPoint;
+                    } else if (temp.getAppointUserId() != null && temp.getApplyUserId() == null) {
+                        appointPoint = leftPoint;
+                    } else {
+                        applyPoint = leftPoint / 2;
+                        appointPoint = applyPoint;
+                    }
+                }
+                model.addAttribute("userPoint", userPoint);
+                model.addAttribute("applyPoint", applyPoint);
+                model.addAttribute("appointPoint", appointPoint);
+                break;
+            default:
+        }
+        JobDuties jobDuties = jobDutiesService.selectById(temp.getDutiesId());
+        model.addAttribute("duties", jobDuties.getDes());
+        model.addAttribute("item",temp);
+        model.addAttribute("act",jobTask.getAct());
         LogObjectHolder.me().set(jobTask);
         return PREFIX + "jobTask_edit.html";
     }
@@ -95,6 +154,9 @@ public class JobTaskController extends BaseController {
     @ResponseBody
     public Object add(JobTask jobTask) {
         jobTask.setCreateTime(new Date());
+        User user = (User) ShiroKit.getUser().getUser();
+        jobTask.setStartUserId(user.getId());
+        jobTask.setDeptId(user.getDeptId());
         jobTaskService.insert(jobTask);
         return SUCCESS_TIP;
     }

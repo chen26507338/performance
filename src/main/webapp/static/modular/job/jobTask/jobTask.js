@@ -14,11 +14,11 @@ var JobTask = {
 JobTask.initColumn = function () {
     return [
         {field: 'selectItem', radio: true}
-       ,{title: '职责ID', field:'dutiesId', visible: true, align: 'center', valign: 'middle'}
-       ,{title: '部门ID', field:'deptId', visible: true, align: 'center', valign: 'middle'}
-       ,{title: '经办人ID', field:'userId', visible: true, align: 'center', valign: 'middle'}
-       ,{title: '委派协助人ID', field:'appointUserId', visible: true, align: 'center', valign: 'middle'}
-       ,{title: '经办协作人', field:'applyUserId', visible: true, align: 'center', valign: 'middle'}
+       ,{title: '职责', field:'dutiesId', visible: true, align: 'center', valign: 'middle',formatter:function(value, row, index){return row.expand.jobDutiesDes;}}
+       ,{title: '部门', field:'deptId', visible: true, align: 'center', valign: 'middle',formatter:function(value, row, index){return row.expand.deptName;}}
+       ,{title: '经办人', field:'userId', visible: true, align: 'center', valign: 'middle',formatter:function(value, row, index){return row.expand.userName;}}
+       ,{title: '委派协助人', field:'appointUserId', visible: true, align: 'center', valign: 'middle',formatter:function(value, row, index){return row.expand.appointUserName;}}
+       ,{title: '经办协作人', field:'applyUserId', visible: true, align: 'center', valign: 'middle',formatter:function(value, row, index){return row.expand.applyUserName;}}
        ,{title: '任务分', field:'point', visible: true, align: 'center', valign: 'middle'}
        ,{title: '任务描述', field:'des', visible: true, align: 'center', valign: 'middle'}
        ,{title: '经办人处理结果', field:'userDes', visible: true, align: 'center', valign: 'middle'}

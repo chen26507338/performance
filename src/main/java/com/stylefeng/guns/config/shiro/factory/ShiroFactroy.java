@@ -60,13 +60,16 @@ public class ShiroFactroy implements IShiro {
 
     @Override
     public ShiroUser shiroUser(User user) {
-        ShiroUser shiroUser = new ShiroUser();
+        ShiroUser<User> shiroUser = new ShiroUser<>();
         // 账号id
         shiroUser.setId(user.getId());
         // 账号
         shiroUser.setAccount(user.getAccount());
         // 用户名称
         shiroUser.setName(user.getName());
+        shiroUser.setDeptId(user.getDeptId());
+        shiroUser.setUser(user);
+
         // 角色集合
         Integer[] roleArray = Convert.toIntArray(user.getRoleId());
         List<Long> roleList = new ArrayList<>();

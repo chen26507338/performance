@@ -1,9 +1,11 @@
 package com.stylefeng.guns.modular.job.controller;
 
+import com.stylefeng.guns.common.persistence.model.User;
 import com.stylefeng.guns.core.base.controller.BaseController;
 import com.baomidou.mybatisplus.plugins.Page;
 import com.stylefeng.guns.common.constant.factory.PageFactory;
 import com.stylefeng.guns.modular.job.service.IJobService;
+import com.stylefeng.guns.modular.system.service.IUserService;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.stereotype.Controller;
 import org.apache.shiro.authz.annotation.RequiresPermissions;;
@@ -21,6 +23,8 @@ import com.stylefeng.guns.modular.job.model.JobDuties;
 import com.stylefeng.guns.modular.job.service.IJobDutiesService;
 import com.stylefeng.guns.modular.job.decorator.JobDutiesDecorator;
 
+import javax.swing.plaf.IconUIResource;
+
 /**
  * 岗位职责管理控制器
  *
@@ -37,6 +41,8 @@ public class JobDutiesController extends BaseController {
     private IJobDutiesService jobDutiesService;
     @Autowired
     private IJobService jobService;
+    @Autowired
+    private IUserService userService;
     /**
      * 跳转到岗位职责管理首页
      */
@@ -87,6 +93,19 @@ public class JobDutiesController extends BaseController {
         jobDutiesService.selectPage(page,wrapper);
         page.setRecords(new JobDutiesDecorator(page.getRecords()).decorate());
         return packForBT(page);
+    }
+
+    /**
+     * 获取岗位职责管理列表
+     */
+    @RequestMapping(value = "/list/noPage")
+    @RequiresPermissions(value = {"/jobDuties/list"})
+    @ResponseBody
+    public Object listNoPage(JobDuties jobDuties) {
+        User user = userService.selectById(jobDuties.getId());
+        EntityWrapper< JobDuties> wrapper = new EntityWrapper<>();
+        wrapper.eq("job_id", user.getJobId());
+        return jobDutiesService.selectList(wrapper);
     }
 
     /**

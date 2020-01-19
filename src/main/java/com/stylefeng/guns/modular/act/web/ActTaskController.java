@@ -37,18 +37,24 @@ public class ActTaskController extends BaseController {
 	
 	/**
 	 * 获取待办列表
-	 * @param procDefKey 流程定义标识
 	 * @return
 	 */
-//	@RequestMapping(value = {"todo", ""})
-//	public String todoList(Act act, HttpServletResponse response, Model model) throws Exception {
-//		List<Act> list = actTaskService.todoList(act);
-//		model.addAttribute("list", list);
-//		if (UserUtils.getPrincipal().isMobileLogin()){
-//			return renderString(response, list);
-//		}
-//		return "modules/act/actTaskTodoList";
-//	}
+	@RequestMapping(value = {"todo", ""})
+	public String todo() {
+		return "/act/actTaskTodoList";
+	}
+
+	/**
+	 * 获取待办列表
+	 * @return
+	 */
+	@RequestMapping(value = "todoList")
+    @ResponseBody
+	public Object todoList(Act act) {
+        return actTaskService.todoList(act);
+	}
+
+
 	
 	/**
 	 * 获取已办任务
@@ -99,7 +105,7 @@ public class ActTaskController extends BaseController {
 	 * 获取流程表单
 	 */
 	@RequestMapping(value = "form")
-	public String form(Act act, HttpServletRequest request, Model model){
+	public String form(Act act){
 		
 		// 获取流程XML上的表单KEY
 		String formKey = actTaskService.getFormKey(act.getProcDefId(), act.getTaskDefKey());
@@ -108,8 +114,8 @@ public class ActTaskController extends BaseController {
 		if (act.getProcInsId() != null){
 			act.setProcIns(actTaskService.getProcIns(act.getProcInsId()));
 		}
-		
-		return "redirect:" + ActUtils.getFormUrl(formKey, act);
+        String redirect = ActUtils.getFormUrl(formKey, act);
+		return "redirect:" + redirect;
 		
 //		// 传递参数到视图
 //		model.addAttribute("act", act);
