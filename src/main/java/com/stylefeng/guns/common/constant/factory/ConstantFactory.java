@@ -213,6 +213,12 @@ public class ConstantFactory implements IConstantFactory {
     @Override
     @Cacheable(value = Cache.DICT, key = "#name+'_'+#val")
     public String getDictsByName(String name, Integer val) {
+        return getDictsByName(name, val + "");
+    }
+
+    @Override
+    @Cacheable(value = Cache.DICT, key = "#name+'_'+#val")
+    public String getDictsByName(String name, String val) {
         Dict temp = new Dict();
         temp.setName(name);
         Dict dict = dictMapper.selectOne(temp);
@@ -225,6 +231,27 @@ public class ConstantFactory implements IConstantFactory {
             for (Dict item : dicts) {
                 if (item.getNum() != null && item.getNum().equals(val)) {
                     return item.getName();
+                }
+            }
+            return "";
+        }
+    }
+
+    @Override
+    @Cacheable(value = Cache.DICT, key = "#name+'_'+#dictName")
+    public String getDictValueByName(String name, String dictName) {
+        Dict temp = new Dict();
+        temp.setName(name);
+        Dict dict = dictMapper.selectOne(temp);
+        if (dict == null) {
+            return "";
+        } else {
+            Wrapper<Dict> wrapper = new EntityWrapper<>();
+            wrapper = wrapper.eq("pid", dict.getId());
+            List<Dict> dicts = dictMapper.selectList(wrapper);
+            for (Dict item : dicts) {
+                if (item.getName() != null && item.getName().equals(dictName)) {
+                    return item.getNum();
                 }
             }
             return "";

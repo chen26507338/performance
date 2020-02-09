@@ -41,7 +41,7 @@ public class ActTaskController extends BaseController {
 	 */
 	@RequestMapping(value = {"todo", ""})
 	public String todo() {
-		return "/act/actTaskTodoList";
+		return "/act/actTaskTodoList.html";
 	}
 
 	/**
@@ -75,18 +75,20 @@ public class ActTaskController extends BaseController {
 
 	/**
 	 * 获取流转历史列表
-	 * @param procInsId 流程实例
 	 * @param startAct 开始活动节点名称
 	 * @param endAct 结束活动节点名称
 	 */
-//	@RequestMapping(value = "histoicFlow")
-//	public String histoicFlow(Act act, String startAct, String endAct, Model model){
-//		if (StringUtils.isNotBlank(act.getProcInsId())){
-//			List<Act> histoicFlowList = actTaskService.histoicFlowList(act.getProcInsId(), startAct, endAct);
-//			model.addAttribute("histoicFlowList", histoicFlowList);
-//		}
-//		return "modules/act/actTaskHistoricFlow";
-//	}
+	@RequestMapping(value = "histoicFlow")
+	public String histoicFlow(Act act, String startAct, String endAct, Model model){
+		if (StringUtils.isNotBlank(act.getProcInsId())){
+			List<Act> histoicFlowList = actTaskService.histoicFlowList(act.getProcInsId(), startAct, endAct);
+            for (Act act1 : histoicFlowList) {
+                act1.putExpand("durationTime", act1.getDurationTime());
+            }
+			model.addAttribute("histoicFlowList", histoicFlowList);
+		}
+		return "/act/actHistoicFlow.html";
+	}
 	
 	/**
 	 * 获取流程列表

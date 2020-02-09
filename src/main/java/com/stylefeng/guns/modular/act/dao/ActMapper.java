@@ -14,5 +14,11 @@ import com.stylefeng.guns.modular.act.entity.Act;
 public interface ActMapper extends BaseMapper<Act> {
 
 	int updateProcInsIdByBusinessId(Act act);
-	
+
+    /**
+     * 通过流程ID删除相关业务数据
+     * @param act
+     * @return
+     */
+    int deleteBusinessDataByProInsId(Act act);
 }

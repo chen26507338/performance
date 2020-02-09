@@ -16,6 +16,11 @@ public interface IDeptService extends IService<Dept> {
     String CACHE_ENTITY = "dept_entity_";
 
     /**
+     * 部门ID：人事处
+     */
+    long HR = 1224197239301328897L;
+
+    /**
      * 获取所有启用部门
      * @return
      */

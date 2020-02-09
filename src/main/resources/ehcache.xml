@@ -63,7 +63,7 @@
            memoryStoreEvictionPolicy="LFU"
            transactionalMode="off">
     </cache>
-    <cache name="game_config"
+    <cache name="normal_config"
     	   maxElementsInMemory="50000"
            eternal="true"
     	   clearOnFlush="false"

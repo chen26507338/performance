@@ -27,6 +27,7 @@ public abstract class BaseActEntity<T extends Model> extends BaseModel<T>{
 
     // 流程任务对象
     @TableField(exist = false)
+    @JSONField(serialize = false)
     protected Act act = new Act();
 
 	public BaseActEntity() {

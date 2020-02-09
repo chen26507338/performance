@@ -41,7 +41,7 @@ public class DictServiceImpl implements IDictService {
         //添加字典
         Dict dict = new Dict();
         dict.setName(dictName);
-        dict.setNum(0);
+        dict.setNum("0");
         dict.setPid(0L);
         this.dictMapper.insert(dict);
 
@@ -53,7 +53,7 @@ public class DictServiceImpl implements IDictService {
             itemDict.setPid(dict.getId());
             itemDict.setName(name);
             try {
-                itemDict.setNum(Integer.valueOf(num));
+                itemDict.setNum(num);
             }catch (NumberFormatException e){
                 throw new GunsException(BizExceptionEnum.DICT_MUST_BE_NUMBER);
             }

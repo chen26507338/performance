@@ -11,6 +11,24 @@ import com.stylefeng.guns.common.persistence.model.Role;
  */
 public interface IRoleService extends IService<Role> {
 
+    String CACHE_ENTITY = "role_entity_";
+
+    String CACHE_LIST = "role_list_";
+    /**
+     * 角色类型：校级指标编辑者
+     */
+    long TYPE_MAIN_ASSESS_HANDLE = 10;
+
+    /**
+     * 角色类型：部门领导
+     */
+    long TYPE_DEPT_LEADER = 12;
+
+    /**
+     * 角色类型：人事经办
+     */
+    long TYPE_HR_HANDLER = 13;
+
     /**
      * 设置某个角色的权限
      *

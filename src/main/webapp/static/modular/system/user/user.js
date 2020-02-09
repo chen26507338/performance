@@ -16,15 +16,15 @@ MgrUser.initColumn = function () {
     return [
         {field: 'selectItem', radio: true},
         {title: 'id', field: 'id', visible: false, align: 'center', valign: 'middle'},
-        {title: '账号', field: 'account', align: 'center', valign: 'middle', sortable: true},
+        {title: '职工编号', field: 'account', align: 'center', valign: 'middle', sortable: true},
         {title: '姓名', field: 'name', align: 'center', valign: 'middle', sortable: true},
         {title: '性别', field: 'sex', align: 'center', valign: 'middle', sortable: true,formatter:function(value, row, index){return row.expand.sexName;}},
-        // {title: '角色', field: 'roleName', align: 'center', valign: 'middle', sortable: true},
         {title: '部门', field: 'deptId', align: 'center', valign: 'middle', sortable: true,formatter:function(value, row, index){return row.expand.deptName;}},
         {title: '岗位', field: 'jobId', align: 'center', valign: 'middle', sortable: true,formatter:function(value, row, index){return row.expand.jobName;}},
-        {title: '邮箱', field: 'email', align: 'center', valign: 'middle', sortable: true},
+        {title: '权限', field: 'expand.userType', align: 'center', valign: 'middle',formatter: function (value, row, index) {
+                return value;
+            }},
         {title: '电话', field: 'phone', align: 'center', valign: 'middle', sortable: true},
-        {title: '创建时间', field: 'createTime', align: 'center', valign: 'middle', sortable: true},
         {title: '状态', field: 'statusName', align: 'center', valign: 'middle', sortable: true}];
 };
 

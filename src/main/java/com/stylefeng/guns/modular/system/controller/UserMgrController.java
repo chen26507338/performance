@@ -270,11 +270,10 @@ public class UserMgrController extends BaseController {
     @BussinessLog(value = "重置管理员密码", key = "userId", dict = UserDict.class)
     @Permission(Const.ADMIN_NAME)
     @ResponseBody
-    public Tip reset(@RequestParam Integer userId) {
+    public Tip reset(@RequestParam Long userId) {
         if (ToolUtil.isEmpty(userId)) {
             throw new GunsException(BizExceptionEnum.REQUEST_NULL);
         }
-        assertAuth(userId);
         User user = this.userMapper.selectById(userId);
         user.setSalt(ShiroKit.getRandomSalt(5));
         user.setPassword(ShiroKit.md5(Const.DEFAULT_PWD, user.getSalt()));
@@ -339,12 +338,13 @@ public class UserMgrController extends BaseController {
     }
 
     /**
-     * 上传图片(上传到项目的webapp/static/img)
+     * 上传图片
      */
     @RequestMapping(method = RequestMethod.POST, path = "/upload")
     @ResponseBody
     public String upload(@RequestPart("file") MultipartFile picture) {
-        String pictureName = DateUtils.getAllTime()+UUID.randomUUID().toString() + ".jpg";
+        String fileName = picture.getOriginalFilename();
+        String pictureName = DateUtils.getDays() + UUID.randomUUID().toString() + fileName.substring(fileName.lastIndexOf("."));
         try {
             String fileSavePath = gunsProperties.getFileUploadPath();
             picture.transferTo(new File(fileSavePath + pictureName));

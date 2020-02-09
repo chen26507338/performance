@@ -438,6 +438,36 @@ public class ActTaskService  {
 	}
 
 	/**
+	 * 启动流程
+	 * @param procDefKey 流程定义KEY
+	 * @param title			流程标题，显示在待办任务标题
+	 * @param vars			流程变量
+	 * @return 流程实例ID
+	 */
+	@Transactional(readOnly = false)
+	public String startProcessOnly(String procDefKey,String businessTable, String title, Map<String, Object> vars) {
+		String userId = String.valueOf(ShiroKit.getUser().getId());
+
+		// 用来设置启动流程的人员ID，引擎会自动把用户ID保存到activiti:initiator中
+		identityService.setAuthenticatedUserId(userId);
+
+		// 设置流程变量
+		if (vars == null){
+			vars = Maps.newHashMap();
+		}
+
+		// 设置流程标题
+		if (StrUtil.isNotBlank(title)){
+			vars.put("title", title);
+		}
+
+		// 启动流程
+		ProcessInstance procIns = runtimeService.startProcessInstanceByKey(procDefKey, businessTable+":null", vars);
+
+		return procIns.getId();
+	}
+
+	/**
 	 * 获取任务
 	 * @param taskId 任务ID
 	 */

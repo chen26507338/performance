@@ -12,7 +12,7 @@ public interface Cache {
      * 常量缓存
      */
     String CONSTANT = "CONSTANT";
-    String GAME_CONFIG = "game_config";
+    String NORMAL_CONFIG = "normal_config";
 
     String DICT = "sys_dict";
 

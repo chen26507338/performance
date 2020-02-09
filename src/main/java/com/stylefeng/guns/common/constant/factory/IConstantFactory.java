@@ -74,6 +74,16 @@ public interface IConstantFactory {
      */
     String getDictsByName(String name, Integer val);
 
+    /**
+     * 根据字典名称和字典中的值获取对应的名称
+     */
+    String getDictsByName(String name, String val);
+
+    /**
+     * 根据字典名称和字典中的名称获取对应的值
+     */
+    String getDictValueByName(String name, String dictName);
+
     List<Dict> getDictsByName(String name);
 
     /**

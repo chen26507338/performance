@@ -3,6 +3,7 @@
  */
 package com.stylefeng.guns.modular.act.utils;
 
+import cn.hutool.core.util.StrUtil;
 import cn.hutool.core.util.URLUtil;
 import com.stylefeng.guns.common.persistence.model.Role;
 import com.stylefeng.guns.common.persistence.model.User;
@@ -30,7 +31,8 @@ public class ActUtils {
 	 * 组成结构：string[]{"流程标识","业务主表表名"}
 	 */
 	public static final String[] PD_JOB_TASK = new String[]{"task_appoint", "job_task"};
-	
+	public static final String[] PD_NORMAL_ASSESS = new String[]{"normal_assess", "normal_assess"};
+
 //	/**
 //	 * 流程定义Map（自动初始化）
 //	 */
@@ -124,9 +126,12 @@ public class ActUtils {
 		formUrl.append("&act.taskDefKey=").append(act.getTaskDefKey() != null ? act.getTaskDefKey() : "");
 		formUrl.append("&act.procInsId=").append(act.getProcInsId() != null ? act.getProcInsId() : "");
 		formUrl.append("&act.procDefId=").append(act.getProcDefId() != null ? act.getProcDefId() : "");
-		formUrl.append("&act.status=").append(act.getStatus() != null ? act.getStatus() : "");
-		formUrl.append("&id=").append(act.getBusinessId() != null ? act.getBusinessId() : "");
-
+        if (act.getStatus() != null) {
+            formUrl.append("&act.status=").append(act.getStatus() != null ? act.getStatus() : "");
+        }
+        if (StrUtil.isNotBlank(act.getBusinessId()) && !"null".equals(act.getBusinessId())) {
+            formUrl.append("&id=").append(act.getBusinessId() != null ? act.getBusinessId() : "");
+        }
 		return formUrl.toString();
 	}
 

@@ -136,9 +136,10 @@ public class Act extends BaseModel<Act> {
 		this.procDef = procDef;
 	}
 
-	public String getProcDefName() {
-		return procDef.getName();
-	}
+    @JSONField(serialize = false)
+    public String getProcDefName() {
+        return procDef.getName();
+    }
 
     @JSONField(serialize = false)
 	public ProcessInstance getProcIns() {

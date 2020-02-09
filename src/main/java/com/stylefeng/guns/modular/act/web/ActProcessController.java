@@ -73,7 +73,7 @@ public class ActProcessController extends BaseController {
 	@RequiresPermissions("/act/process/running")
 	@RequestMapping(value = "running")
 	public String running() {
-		return "act/actProcessRunningList";
+		return "/act/actProcessRunningList.html";
 	}
 
 	/**

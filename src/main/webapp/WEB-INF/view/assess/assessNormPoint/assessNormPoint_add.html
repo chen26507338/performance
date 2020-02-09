@@ -1,0 +1,76 @@
+@layout("/common/_container.html"){
+<div class="ibox float-e-margins">
+    <div class="ibox-content">
+        <div class="form-horizontal" id="AssessNormPointForm">
+
+            <input type="hidden" id="id" value="">
+
+            <div class="row">
+
+                <div class="col-sm-6 b-r">
+                    <#input id="userId" name="用户ID" underline="true"/>
+                </div>
+                <div class="col-sm-6 b-r">
+                    <#input id="year" name="年度" underline="true"/>
+                </div>
+                <div class="col-sm-6 b-r">
+                    <#input id="jxddMain" name="教学督导校级分" underline="true"/>
+                </div>
+                <div class="col-sm-6 b-r">
+                    <#input id="jxddCollege" name="教学督导院级分" underline="true"/>
+                </div>
+                <div class="col-sm-6 b-r">
+                    <#input id="zzpaMain" name="综治平安校级分" underline="true"/>
+                </div>
+                <div class="col-sm-6 b-r">
+                    <#input id="zzpaColleage" name="综治平安院级分" underline="true"/>
+                </div>
+                <div class="col-sm-6 b-r">
+                    <#input id="sdsfMain" name="师德师风校级分" underline="true"/>
+                </div>
+                <div class="col-sm-6 b-r">
+                    <#input id="sdsfCollege" name="师德师风院级分" underline="true"/>
+                </div>
+                <div class="col-sm-6 b-r">
+                    <#input id="zzjlMain" name="组织纪律校级分" underline="true"/>
+                </div>
+                <div class="col-sm-6 b-r">
+                    <#input id="zzjlColleage" name="组织纪律院级分" underline="true"/>
+                </div>
+                <div class="col-sm-6 b-r">
+                    <#input id="dfdjMain" name="党风党纪校级分" underline="true"/>
+                </div>
+                <div class="col-sm-6 b-r">
+                    <#input id="dfdjCollege" name="党风党纪院级分" underline="true"/>
+                </div>
+                <div class="col-sm-6 b-r">
+                    <#input id="ysxtMain" name="意识形态校级分" underline="true"/>
+                </div>
+                <div class="col-sm-6 b-r">
+                    <#input id="ysxtCollege" name="意识形态院级分" underline="true"/>
+                </div>
+                <div class="col-sm-6 b-r">
+                    <#input id="ldjlMain" name="劳动纪律校级分" underline="true"/>
+                </div>
+                <div class="col-sm-6 b-r">
+                    <#input id="ldjlCollege" name="劳动纪律院级分" underline="true"/>
+                </div>
+                <div class="col-sm-6 b-r">
+                    <#select id="deptId" name="部门ID" items="${constant.getDictsByName('')}"
+                    itemLabel="name" itemValue="num" underline="true"/>
+                </div>
+
+            </div>
+
+            <div class="row btn-group-m-t">
+                <div class="col-sm-10">
+                    <#button btnCss="info" name="提交" id="ensure" icon="fa-check" clickFun="AssessNormPointInfoDlg.addSubmit()"/>
+                    <#button btnCss="danger" name="取消" id="cancel" icon="fa-eraser" clickFun="AssessNormPointInfoDlg.close()"/>
+                </div>
+            </div>
+        </div>
+
+    </div>
+</div>
+<script src="${ctxPath}/static/modular/assess/assessNormPoint/assessNormPoint_info.js"></script>
+@}

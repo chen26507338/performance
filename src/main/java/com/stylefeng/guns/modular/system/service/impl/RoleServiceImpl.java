@@ -1,6 +1,7 @@
 package com.stylefeng.guns.modular.system.service.impl;
 
 import com.baomidou.mybatisplus.service.impl.ServiceImpl;
+import com.stylefeng.guns.common.constant.cache.Cache;
 import com.stylefeng.guns.common.persistence.dao.RelationMapper;
 import com.stylefeng.guns.common.persistence.dao.RoleMapper;
 import com.stylefeng.guns.common.persistence.model.Relation;
@@ -8,10 +9,14 @@ import com.stylefeng.guns.common.persistence.model.Role;
 import com.stylefeng.guns.core.util.Convert;
 import com.stylefeng.guns.modular.system.dao.RoleDao;
 import com.stylefeng.guns.modular.system.service.IRoleService;
+import org.springframework.cache.annotation.CacheEvict;
+import org.springframework.cache.annotation.Cacheable;
+import org.springframework.cache.annotation.Caching;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import javax.annotation.Resource;
+import java.io.Serializable;
 
 @Service
 public class RoleServiceImpl extends ServiceImpl<RoleMapper, Role> implements IRoleService {
@@ -49,6 +54,19 @@ public class RoleServiceImpl extends ServiceImpl<RoleMapper, Role> implements IR
 
         // 删除该角色所有的权限
         this.roleDao.deleteRolesById(roleId);
+    }
+
+    @Override
+    @Cacheable(value = Cache.CONSTANT,key = "'"+CACHE_ENTITY+"'+#id")
+    public Role selectById(Serializable id) {
+        return super.selectById(id);
+    }
+
+    @Override
+    @Caching(evict = {@CacheEvict( value = Cache.CONSTANT,key = "'"+CACHE_ENTITY+"'+#entity.id"),
+            @CacheEvict(value = Cache.CONSTANT,key = "'"+CACHE_LIST+"'")})
+    public boolean updateById(Role entity) {
+        return super.updateById(entity);
     }
 
 }

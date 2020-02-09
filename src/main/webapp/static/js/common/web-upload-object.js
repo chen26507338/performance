@@ -1,14 +1,14 @@
 /**
  * web-upload 工具类
- * 
+ *
  * 约定：
  * 上传按钮的id = 图片隐藏域id + 'BtnId'
  * 图片预览框的id = 图片隐藏域id + 'PreId'
- * 
+ *
  * @author fengshuonan
  */
 (function() {
-	
+
 	var $WebUpload = function(pictureId) {
 		this.pictureId = pictureId;
 		this.uploadBtnId = pictureId + "BtnId";
@@ -18,6 +18,9 @@
 		this.picWidth = 800;
 		this.picHeight = 800;
         this.uploadBarId = null;
+        this.title = "Images";
+        this.extensions = "gif,jpg,jpeg,bmp,png";
+        this.mimeTypes = "image/gif,image/jpg,image/jpeg,image/bmp,image/png";
 	};
 
 	$WebUpload.prototype = {
@@ -29,7 +32,7 @@
 			this.bindEvent(uploader);
 			return uploader;
 		},
-		
+
 		/**
 		 * 创建webuploader对象
 		 */
@@ -42,8 +45,8 @@
 				},
 				accept : {
 					title : 'Images',
-					extensions : 'gif,jpg,jpeg,bmp,png',
-                    mimeTypes : 'image/gif,image/jpg,image/jpeg,image/bmp,image/png'
+					extensions : this.extensions,
+                    mimeTypes : this.mimeTypes
 				},
 				swf : Feng.ctxPath
 						+ '/static/js/plugins/webuploader/Uploader.swf',
@@ -52,7 +55,7 @@
 				server : this.uploadUrl,
 				fileSingleSizeLimit : this.fileSizeLimit
 			});
-			
+
 			return webUploader;
 		},
 
@@ -118,6 +121,15 @@
          */
         setUploadBarId: function (id) {
             this.uploadBarId = id;
+        },
+        setTitle: function (title) {
+            this.title = title;
+        },
+        setExts: function (exts) {
+            this.extensions = exts;
+        },
+        setMineType: function (mineType) {
+            this.mimeTypes = mineType;
         }
 	};
 

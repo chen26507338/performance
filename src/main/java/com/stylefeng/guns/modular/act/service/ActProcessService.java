@@ -9,6 +9,9 @@ import com.baomidou.mybatisplus.plugins.Page;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.node.ObjectNode;
 import com.stylefeng.guns.core.util.JsonMapper;
+import com.stylefeng.guns.modular.act.dao.ActMapper;
+import com.stylefeng.guns.modular.act.entity.Act;
+import com.stylefeng.guns.modular.act.utils.ActUtils;
 import org.activiti.bpmn.converter.BpmnXMLConverter;
 import org.activiti.bpmn.model.BpmnModel;
 import org.activiti.editor.constants.ModelDataJsonConstants;
@@ -30,6 +33,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
 
+import javax.annotation.Resource;
 import javax.xml.stream.XMLInputFactory;
 import javax.xml.stream.XMLStreamException;
 import javax.xml.stream.XMLStreamReader;
@@ -54,6 +58,10 @@ public class ActProcessService  {
 	private RepositoryService repositoryService;
 	@Autowired
 	private RuntimeService runtimeService;
+    @Autowired
+    private ActTaskService actTaskService;
+    @Resource
+    private ActMapper actMapper;
 
     private Logger logger = LoggerFactory.getLogger(ActProcessService.class);
 
@@ -315,6 +323,12 @@ public class ActProcessService  {
 	 */
 	@Transactional(readOnly = false)
 	public void deleteProcIns(String procInsId, String deleteReason) {
+        ProcessInstance processInstance = actTaskService.getProcIns(procInsId);
+        String[] businessKey = processInstance.getBusinessKey().split(":");
+        Act act = new Act();
+        act.setBusinessTable(businessKey[0]);
+        act.setProcInsId(procInsId);
+        actMapper.deleteBusinessDataByProInsId(act);
 		runtimeService.deleteProcessInstance(procInsId, deleteReason);
 	}
 	
