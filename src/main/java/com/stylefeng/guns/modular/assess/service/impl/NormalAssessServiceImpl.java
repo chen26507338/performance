@@ -101,8 +101,15 @@ public class NormalAssessServiceImpl extends ServiceImpl<NormalAssessMapper, Nor
         List<NormalAssess> datas = new ArrayList<>();
         for (Map excelMap : normalAssesses) {
             NormalAssess assess = new NormalAssess();
+
+            String no = String.valueOf(excelMap.get("account"));
+            User employee = userService.getByAccount(no);
+            if (employee == null) {
+                throw new GunsException("职工" + no + "不存在");
+            }
+
             if (isImport) {
-                assess.setDeptId(ShiroKit.getUser().deptId);
+                assess.setDeptId(employee.getDeptId());
                 assess.setHrHandleId(hrHandle.getId());
                 assess.setHrLeaderId(hrLeader.getId());
                 assess.setDeptLeaderId(deptLeader.getId());
@@ -110,11 +117,6 @@ public class NormalAssessServiceImpl extends ServiceImpl<NormalAssessMapper, Nor
                 assess.setCreateTime(new Date());
             }
 
-            String no = String.valueOf(excelMap.get("account"));
-            User employee = userService.getByAccount(no);
-            if (employee == null) {
-                throw new GunsException("职工" + no + "不存在");
-            }
             assess.setUserId(employee.getId());
             assess.setResult(Integer.parseInt(String.valueOf(excelMap.get("result"))));
 
@@ -130,7 +132,7 @@ public class NormalAssessServiceImpl extends ServiceImpl<NormalAssessMapper, Nor
                 assess.setNormId(mainNorm.getId());
                 //院级浮动值
                 AssessNorm collegeNorm = new AssessNorm();
-                collegeNorm.setDeptId(ShiroKit.getUser().deptId);
+                collegeNorm.setDeptId(employee.getDeptId());
                 collegeNorm.setCode(normCode);
                 collegeNorm.setType(type);
                 collegeNorm = assessNormService.getByCode(collegeNorm);
@@ -169,10 +171,12 @@ public class NormalAssessServiceImpl extends ServiceImpl<NormalAssessMapper, Nor
             wrapper.eq("proc_ins_id", normalAssess.getAct().getProcInsId());
             NormalAssess update = new NormalAssess();
             switch (normalAssess.getAct().getTaskDefKey()) {
+                //人事经办
                 case "hr_handle_audit":
                     update.setYear(normalAssess.getYear());
                     this.update(update, wrapper);
                     break;
+                //人事领导审核
                 case "hr_leader_audit":
                     //计算考核分入库
                     NormalAssess assessParams = new NormalAssess();
@@ -196,6 +200,9 @@ public class NormalAssessServiceImpl extends ServiceImpl<NormalAssessMapper, Nor
                             ReflectUtil.setFieldValue(assessNormPoint, normalAssess.getType() + "Main", mainPoint);
                             ReflectUtil.setFieldValue(assessNormPoint, normalAssess.getType() + "College", mainPoint * (1 + assess.getCollegeNormPoint()));
                         }
+                        assessNormPoint.setYear(assess.getYear());
+                        assessNormPoint.setDeptId(assess.getDeptId());
+                        assessNormPoint.setUserId(assess.getUserId());
                         assessNormPointService.insertOrUpdate(assessNormPoint);
                     }
                     update.setStatus(YesNo.YES.getCode());

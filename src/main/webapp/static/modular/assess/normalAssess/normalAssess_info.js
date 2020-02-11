@@ -155,7 +155,7 @@ $(function() {
             elem: '#assessTable' //指定原始表格元素选择器（推荐id选择器）
             ,height: 315 //容器高度
             ,url: Feng.ctxPath+'/normalAssess/normalAssessProcData/'
-            ,where: {proInsId: proInsId}
+            ,where: {procInsId: proInsId}
             ,cols: [[ //表头
                 {field: 'id', title: 'ID',hide:true, fixed: 'left'}
                 ,{field: 'account', title: '职工编号'}
@@ -163,6 +163,10 @@ $(function() {
                 ,{field: 'deptName', title: '部门名'}
                 ,{field: 'normCode', title: '指标代码',edit:'text'}
                 ,{field: 'normName', title: '指标名'}
+                ,{field: 'mainNormPoint', title: '校级指标分'}
+                ,{field: 'collegeNormPoint', title: '院级浮动值'}
+                ,{field: 'mainPoint', title: '校级分'}
+                ,{field: 'collegePoint', title: '院级分'}
                 ,{field: 'result', title: '考核结果',edit:'text'}
                 ,{field: 'year', title: '年度'}
                 ,{field: 'createTime', title: '提交时间'}
