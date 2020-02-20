@@ -10,5 +10,8 @@ import com.stylefeng.guns.modular.assess.model.NormalAssess;
  * @Date 2020-02-02 13:18:03
  */
 public interface INormalAssessService extends IService<NormalAssess> {
+    /**
+     * 审核
+     */
     void audit(NormalAssess normalAssess);
 }

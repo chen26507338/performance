@@ -17,15 +17,29 @@
 
     <!-- 通用查询结果列 -->
     <sql id="Base_Column_List">
-	    id AS id,
-	    dept_id AS deptId,
+	    na.id AS id,
+	    na.dept_id AS deptId,
 	    user_id AS userId,
 	    norm_id AS normId,
 	    result AS result,
-	    year AS year,
+	    main_norm_point AS mainNormPoint,
+	    college_norm_point AS collegeNormPoint,
+	    na.year AS year,
 	    create_time AS createTime,
 	    status AS status,
 	    proc_ins_id AS procInsId
     </sql>
+    <select id="selectPage" resultType="com.stylefeng.guns.modular.assess.model.NormalAssess">
+        select <include refid="Base_Column_List" /> from normal_assess na
+        left join assess_norm an on na.norm_id = an.id
+        <where>
+            <if test="type != null and type != ''">
+                an.type = #{type}
+            </if>
+            <if test="createTime != null">
+                na.create_time = #{createTime}
+            </if>
+        </where>
+    </select>
 
 </mapper>

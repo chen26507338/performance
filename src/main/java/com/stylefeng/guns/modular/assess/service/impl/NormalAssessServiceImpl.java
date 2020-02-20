@@ -8,6 +8,8 @@ import cn.hutool.poi.excel.ExcelReader;
 import cn.hutool.poi.excel.ExcelUtil;
 import com.alibaba.fastjson.JSON;
 import com.baomidou.mybatisplus.mapper.EntityWrapper;
+import com.baomidou.mybatisplus.mapper.Wrapper;
+import com.baomidou.mybatisplus.plugins.Page;
 import com.stylefeng.guns.common.constant.state.YesNo;
 import com.stylefeng.guns.common.persistence.model.User;
 import com.stylefeng.guns.config.properties.GunsProperties;
@@ -211,5 +213,11 @@ public class NormalAssessServiceImpl extends ServiceImpl<NormalAssessMapper, Nor
             }
         }
         actTaskService.complete(normalAssess.getAct().getTaskId(), normalAssess.getAct().getProcInsId(), comment.toString(), vars);
+    }
+
+    @Override
+    public Page<NormalAssess> selectPage(Page<NormalAssess> page, Wrapper<NormalAssess> wrapper) {
+        page.setRecords(baseMapper.selectPage(page, wrapper.getEntity()));
+        return page;
     }
 }

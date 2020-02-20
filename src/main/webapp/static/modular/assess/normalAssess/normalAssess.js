@@ -14,10 +14,15 @@ var NormalAssess = {
 NormalAssess.initColumn = function () {
     return [
         {field: 'selectItem', radio: true}
-       ,{title: '部门ID', field:'deptId', visible: true, align: 'center', valign: 'middle'}
-       ,{title: '用户ID', field:'userId', visible: true, align: 'center', valign: 'middle'}
-       ,{title: '指标ID', field:'normId', visible: true, align: 'center', valign: 'middle'}
+        ,{title: '职工编号', field:'expand.account', visible: true, align: 'center', valign: 'middle'}
+        ,{title: '职工姓名', field:'expand.userName', visible: true, align: 'center', valign: 'middle'}
+       ,{title: '部门', field:'expand.deptName', visible: true, align: 'center', valign: 'middle'}
+       ,{title: '指标', field:'expand.normName', visible: true, align: 'center', valign: 'middle'}
+       ,{title: '校级标准分', field:'mainNormPoint', visible: true, align: 'center', valign: 'middle'}
+       ,{title: '院级浮动值', field:'collegeNormPoint', visible: true, align: 'center', valign: 'middle'}
        ,{title: '考核结果', field:'result', visible: true, align: 'center', valign: 'middle'}
+       ,{title: '校级分', field:'expand.mainPoint', visible: true, align: 'center', valign: 'middle'}
+       ,{title: '院级分', field:'expand.collegePoint', visible: true, align: 'center', valign: 'middle'}
        ,{title: '年度', field:'year', visible: true, align: 'center', valign: 'middle'}
        ,{title: '创建时间', field:'createTime', visible: true, align: 'center', valign: 'middle'}
        ,{title: '状态', field:'status', visible: true, align: 'center', valign: 'middle',formatter:function(value, row, index){return row.expand.statusDict;}}
@@ -45,6 +50,7 @@ NormalAssess.check = function () {
 NormalAssess.formParams = function() {
     var queryData = {};
     queryData['createTime'] = $("#createTime").val();
+    queryData['type'] = type;
     return queryData;
 };
 

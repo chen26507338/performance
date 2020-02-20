@@ -107,10 +107,7 @@ public class NormalAssessController extends BaseController {
     @ResponseBody
     public Object list(NormalAssess normalAssess) {
         Page<NormalAssess> page = new PageFactory<NormalAssess>().defaultPage();
-        EntityWrapper< NormalAssess> wrapper = new EntityWrapper<>();
-         if(normalAssess.getCreateTime() != null) {
-             wrapper.eq("create_time",normalAssess.getCreateTime());
-         }
+        EntityWrapper< NormalAssess> wrapper = new EntityWrapper<>(normalAssess);
         normalAssessService.selectPage(page,wrapper);
         page.setRecords(new NormalAssessDecorator(page.getRecords()).decorate());
         return packForBT(page);
