@@ -43,6 +43,9 @@ AssessNorm.check = function () {
  */
 AssessNorm.formParams = function() {
     var queryData = {};
+    queryData['content'] = $("#content").val();
+    queryData['code'] = $("#code").val();
+    queryData['type'] = $("#type").val();
     return queryData;
 };
 

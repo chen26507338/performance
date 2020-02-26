@@ -14,8 +14,8 @@
                     <#input id="code" name="代码" value="${item.code}" underline="true"/>
                 </div>
                 <div class="col-sm-6 b-r">
-                    <#select id="type" name="考核项目" items="${constant.getDictsByName('考核项目')}"
-                    itemLabel="name" itemValue="num" value="${item.type}" underline="true"/>
+                    <#select id="type" name="考核项目" items="${typeList}"
+                    itemLabel="name" itemValue="type" value="${item.type}" underline="true"/>
                 </div>
                 <div class="col-sm-6 b-r">
                     <#input id="point" name="校级指标/院级浮动值" value="${item.point}" underline="true"/>

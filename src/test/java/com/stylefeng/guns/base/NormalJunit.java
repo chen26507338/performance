@@ -25,4 +25,9 @@ public class NormalJunit {
             e.printStackTrace();
         }
     }
+
+    @Test
+    public void test() {
+        System.out.println(6*1.2);
+    }
 }

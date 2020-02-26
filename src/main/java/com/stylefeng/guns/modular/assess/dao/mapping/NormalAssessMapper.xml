@@ -22,22 +22,39 @@
 	    user_id AS userId,
 	    norm_id AS normId,
 	    result AS result,
+	    coe_point AS coePoint,
 	    main_norm_point AS mainNormPoint,
 	    college_norm_point AS collegeNormPoint,
 	    na.year AS year,
-	    create_time AS createTime,
-	    status AS status,
+	    na.create_time AS createTime,
+	    na.status AS status,
 	    proc_ins_id AS procInsId
     </sql>
     <select id="selectPage" resultType="com.stylefeng.guns.modular.assess.model.NormalAssess">
         select <include refid="Base_Column_List" /> from normal_assess na
         left join assess_norm an on na.norm_id = an.id
+        left join sys_user su on na.user_id = su.id
         <where>
             <if test="type != null and type != ''">
-                an.type = #{type}
+                and an.type = #{type}
+            </if>
+            <if test="expand.name != null and expand.name != ''">
+                and su.name = #{expand.name}
+            </if>
+            <if test="expand.account != null and expand.account != ''">
+                and su.account = #{expand.account}
+            </if>
+            <if test="year != null and year != ''">
+                and na.year = #{year}
+            </if>
+            <if test="deptId != null">
+                and an.dept_id = #{deptId}
+            </if>
+            <if test="status != null">
+                and an.status = #{status}
             </if>
             <if test="createTime != null">
-                na.create_time = #{createTime}
+                and na.create_time = #{createTime}
             </if>
         </where>
     </select>

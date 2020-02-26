@@ -5,6 +5,7 @@ import com.baomidou.mybatisplus.plugins.Page;
 import com.stylefeng.guns.common.constant.factory.PageFactory;
 import com.stylefeng.guns.modular.assess.model.AssessNorm;
 import com.stylefeng.guns.modular.assess.service.IAssessNormService;
+import com.stylefeng.guns.modular.job.service.IDeptService;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.stereotype.Controller;
 import org.apache.shiro.authz.annotation.RequiresPermissions;;
@@ -38,14 +39,19 @@ public class NormalAssessController extends BaseController {
     private INormalAssessService normalAssessService;
     @Autowired
     private IAssessNormService assessNormService;
+    @Autowired
+    private IDeptService deptService;
 
     /**
      * 跳转到考核指标库首页
      */
     @RequestMapping("")
 //    @RequiresPermissions(value = {"/normalAssess/list"})
-    public String index(String type,Model model) {
-        model.addAttribute("type", type);
+    public String index(NormalAssess normalAssess,Model model) {
+        model.addAttribute("type", normalAssess.getType());
+        model.addAttribute("account", normalAssess.getExpand().get("account"));
+        model.addAttribute("year", normalAssess.getYear());
+        model.addAttribute("deptList", deptService.selectAllOn());
         return PREFIX + "normalAssess.html";
     }
 

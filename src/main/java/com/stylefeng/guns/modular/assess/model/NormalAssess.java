@@ -51,6 +51,13 @@ public class NormalAssess extends BaseActEntity<NormalAssess> {
     @TableField("main_norm_point")
     private Double mainNormPoint;
 
+
+    /**
+    * 考核系数
+    */
+    @TableField("coe_point")
+    private Double coePoint;
+
     /**
     * 院级浮动值
     */

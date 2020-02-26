@@ -1,9 +1,11 @@
 package com.stylefeng.guns.modular.assess.controller;
 
+import cn.hutool.core.util.StrUtil;
 import com.stylefeng.guns.core.base.controller.BaseController;
 import com.baomidou.mybatisplus.plugins.Page;
 import com.stylefeng.guns.common.constant.factory.PageFactory;
 import com.stylefeng.guns.core.shiro.ShiroKit;
+import com.stylefeng.guns.modular.assess.service.IAssessCoefficientService;
 import com.stylefeng.guns.modular.system.service.IRoleService;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.stereotype.Controller;
@@ -36,13 +38,17 @@ public class AssessNormController extends BaseController {
 
     @Autowired
     private IAssessNormService assessNormService;
+    @Autowired
+    private IAssessCoefficientService assessCoefficientService;
+
 
     /**
      * 跳转到 考核指标库首页
      */
     @RequestMapping("")
     @RequiresPermissions(value = {"/assessNorm/list"})
-    public String index() {
+    public String index(Model model) {
+        model.addAttribute("typeList", assessCoefficientService.selectAll());
         return PREFIX + "assessNorm.html";
     }
 
@@ -51,7 +57,8 @@ public class AssessNormController extends BaseController {
      */
     @RequestMapping("/assessNorm_add")
     @RequiresPermissions(value = {"/assessNorm/add"})
-    public String assessNormAdd() {
+    public String assessNormAdd(Model model) {
+        model.addAttribute("typeList", assessCoefficientService.selectAll());
         return PREFIX + "assessNorm_add.html";
     }
 
@@ -63,6 +70,7 @@ public class AssessNormController extends BaseController {
     public String assessNormUpdate(@PathVariable String assessNormId, Model model) {
         AssessNorm assessNorm = assessNormService.selectById(assessNormId);
         model.addAttribute("item",assessNorm);
+        model.addAttribute("typeList", assessCoefficientService.selectAll());
         LogObjectHolder.me().set(assessNorm);
         return PREFIX + "assessNorm_edit.html";
     }
@@ -76,6 +84,15 @@ public class AssessNormController extends BaseController {
     public Object list(AssessNorm assessNorm) {
         Page<AssessNorm> page = new PageFactory<AssessNorm>().defaultPage();
         EntityWrapper< AssessNorm> wrapper = new EntityWrapper<>();
+        if (StrUtil.isNotBlank(assessNorm.getCode())) {
+            wrapper.eq("code", assessNorm.getCode());
+        }
+        if (StrUtil.isNotBlank(assessNorm.getContent())) {
+            wrapper.like("content", assessNorm.getContent());
+        }
+        if (StrUtil.isNotBlank(assessNorm.getType())) {
+            wrapper.eq("type", assessNorm.getType());
+        }
         assessNormService.selectPage(page,wrapper);
         page.setRecords(new AssessNormDecorator(page.getRecords()).decorate());
         return packForBT(page);

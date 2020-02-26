@@ -14,23 +14,26 @@ var AssessNormPoint = {
 AssessNormPoint.initColumn = function () {
     return [
         {field: 'selectItem', radio: true}
-       ,{title: '用户ID', field:'userId', visible: true, align: 'center', valign: 'middle'}
+       ,{title: '职工编号', field:'expand.account', visible: true, align: 'center', valign: 'middle'}
+       ,{title: '职工姓名', field:'expand.name', visible: true, align: 'center', valign: 'middle'}
+       ,{title: '部门', field:'expand.deptName', visible: true, align: 'center', valign: 'middle'}
        ,{title: '年度', field:'year', visible: true, align: 'center', valign: 'middle'}
-       ,{title: '教学督导校级分', field:'jxddMain', visible: true, align: 'center', valign: 'middle'}
-       ,{title: '教学督导院级分', field:'jxddCollege', visible: true, align: 'center', valign: 'middle'}
-       ,{title: '综治平安校级分', field:'zzpaMain', visible: true, align: 'center', valign: 'middle'}
-       ,{title: '综治平安院级分', field:'zzpaColleage', visible: true, align: 'center', valign: 'middle'}
-       ,{title: '师德师风校级分', field:'sdsfMain', visible: true, align: 'center', valign: 'middle'}
-       ,{title: '师德师风院级分', field:'sdsfCollege', visible: true, align: 'center', valign: 'middle'}
-       ,{title: '组织纪律校级分', field:'zzjlMain', visible: true, align: 'center', valign: 'middle'}
-       ,{title: '组织纪律院级分', field:'zzjlColleage', visible: true, align: 'center', valign: 'middle'}
-       ,{title: '党风党纪校级分', field:'dfdjMain', visible: true, align: 'center', valign: 'middle'}
-       ,{title: '党风党纪院级分', field:'dfdjCollege', visible: true, align: 'center', valign: 'middle'}
-       ,{title: '意识形态校级分', field:'ysxtMain', visible: true, align: 'center', valign: 'middle'}
-       ,{title: '意识形态院级分', field:'ysxtCollege', visible: true, align: 'center', valign: 'middle'}
-       ,{title: '劳动纪律校级分', field:'ldjlMain', visible: true, align: 'center', valign: 'middle'}
-       ,{title: '劳动纪律院级分', field:'ldjlCollege', visible: true, align: 'center', valign: 'middle'}
-       ,{title: '部门ID', field:'deptId', visible: true, align: 'center', valign: 'middle'}
+       ,{title: '校级分', field:'expand.main', visible: true, align: 'center', valign: 'middle'}
+       ,{title: '院级分', field:'expand.college', visible: true, align: 'center', valign: 'middle'}
+       // ,{title: '教学督导校级分', field:'jxddMain', visible: true, align: 'center', valign: 'middle'}
+       // ,{title: '教学督导院级分', field:'jxddCollege', visible: true, align: 'center', valign: 'middle'}
+       // ,{title: '综治平安校级分', field:'zzpaMain', visible: true, align: 'center', valign: 'middle'}
+       // ,{title: '综治平安院级分', field:'zzpaColleage', visible: true, align: 'center', valign: 'middle'}
+       // ,{title: '师德师风校级分', field:'sdsfMain', visible: true, align: 'center', valign: 'middle'}
+       // ,{title: '师德师风院级分', field:'sdsfCollege', visible: true, align: 'center', valign: 'middle'}
+       // ,{title: '组织纪律校级分', field:'zzjlMain', visible: true, align: 'center', valign: 'middle'}
+       // ,{title: '组织纪律院级分', field:'zzjlColleage', visible: true, align: 'center', valign: 'middle'}
+       // ,{title: '党风党纪校级分', field:'dfdjMain', visible: true, align: 'center', valign: 'middle'}
+       // ,{title: '党风党纪院级分', field:'dfdjCollege', visible: true, align: 'center', valign: 'middle'}
+       // ,{title: '意识形态校级分', field:'ysxtMain', visible: true, align: 'center', valign: 'middle'}
+       // ,{title: '意识形态院级分', field:'ysxtCollege', visible: true, align: 'center', valign: 'middle'}
+       // ,{title: '劳动纪律校级分', field:'ldjlMain', visible: true, align: 'center', valign: 'middle'}
+       // ,{title: '劳动纪律院级分', field:'ldjlCollege', visible: true, align: 'center', valign: 'middle'}
     ];
 };
 
@@ -57,6 +60,9 @@ AssessNormPoint.formParams = function() {
     queryData['userId'] = $("#userId").val();
     queryData['year'] = $("#year").val();
     queryData['deptId'] = $("#deptId").val();
+    queryData["expand['account']"] = $("#account").val();
+    queryData["expand['name']"] = $("#name").val();
+    queryData["expand['type']"] = $("#type").val();
     return queryData;
 };
 
@@ -88,6 +94,24 @@ AssessNormPoint.openAssessNormPointDetail = function () {
             maxmin: true,
             content: Feng.ctxPath + '/assessNormPoint/assessNormPoint_update/' + AssessNormPoint.seItem.id
         });
+    }
+};
+
+/**
+ * 打开查看考核分详情
+ */
+AssessNormPoint.openDetail = function () {
+    if (this.check()) {
+        this.layerIndex = layer.open({
+            type: 2,
+            title: '考核项详情',
+            area: ['800px', '420px'], //宽高
+            fix: false, //不固定
+            maxmin: true,
+            content: Feng.ctxPath + '/normalAssess/?type=' + $("#type").val()+"&year="+this.seItem.year+
+                "&expand['account']="+this.seItem.expand.account
+        });
+        layer.full(this.layerIndex);
     }
 };
 

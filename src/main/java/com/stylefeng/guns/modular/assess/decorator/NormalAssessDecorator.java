@@ -1,13 +1,16 @@
 package com.stylefeng.guns.modular.assess.decorator;
 
+import cn.hutool.core.util.NumberUtil;
 import cn.hutool.core.util.ReflectUtil;
 import com.stylefeng.guns.common.constant.factory.ConstantFactory;
 import com.stylefeng.guns.common.persistence.model.User;
 import com.stylefeng.guns.core.base.BaseListDecorator;
 import com.stylefeng.guns.core.util.SpringContextHolder;
+import com.stylefeng.guns.modular.assess.model.AssessCoefficient;
 import com.stylefeng.guns.modular.assess.model.AssessNorm;
 import com.stylefeng.guns.modular.assess.model.AssessNormPoint;
 import com.stylefeng.guns.modular.assess.model.NormalAssess;
+import com.stylefeng.guns.modular.assess.service.IAssessCoefficientService;
 import com.stylefeng.guns.modular.assess.service.IAssessNormService;
 import com.stylefeng.guns.modular.job.model.Dept;
 import com.stylefeng.guns.modular.job.service.IDeptService;
@@ -45,8 +48,8 @@ public class NormalAssessDecorator extends BaseListDecorator<NormalAssess> {
             normalAssess.putExpand("normCode", assessNorm.getCode());
             normalAssess.putExpand("normName", assessNorm.getContent());
         }
-        Double mainPoint = normalAssess.getMainNormPoint() * normalAssess.getResult();
+        Double mainPoint = normalAssess.getMainNormPoint() * normalAssess.getResult() * normalAssess.getCoePoint();
         normalAssess.putExpand("mainPoint", mainPoint);
-        normalAssess.putExpand("collegePoint", mainPoint * (1 + normalAssess.getCollegeNormPoint()));
+        normalAssess.putExpand("collegePoint", NumberUtil.roundStr(mainPoint * (1 + normalAssess.getCollegeNormPoint()),2));
     }
 }

@@ -163,6 +163,7 @@ $(function() {
                 ,{field: 'deptName', title: '部门名'}
                 ,{field: 'normCode', title: '指标代码',edit:'text'}
                 ,{field: 'normName', title: '指标名'}
+                ,{field: 'coePoint', title: '考核系数'}
                 ,{field: 'mainNormPoint', title: '校级指标分'}
                 ,{field: 'collegeNormPoint', title: '院级浮动值'}
                 ,{field: 'mainPoint', title: '校级分'}

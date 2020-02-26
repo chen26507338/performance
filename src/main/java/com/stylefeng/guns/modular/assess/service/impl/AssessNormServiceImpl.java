@@ -40,4 +40,10 @@ public class AssessNormServiceImpl extends ServiceImpl<AssessNormMapper, AssessN
     public boolean updateById(AssessNorm entity) {
         return super.updateById(entity);
     }
+
+    @Override
+    @CacheEvict(value = Cache.NORMAL_CONFIG, allEntries = true)
+    public boolean deleteById(Serializable id) {
+        return super.deleteById(id);
+    }
 }

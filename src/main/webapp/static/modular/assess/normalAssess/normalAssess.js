@@ -18,6 +18,7 @@ NormalAssess.initColumn = function () {
         ,{title: '职工姓名', field:'expand.userName', visible: true, align: 'center', valign: 'middle'}
        ,{title: '部门', field:'expand.deptName', visible: true, align: 'center', valign: 'middle'}
        ,{title: '指标', field:'expand.normName', visible: true, align: 'center', valign: 'middle'}
+       ,{title: '考核系数', field:'coePoint', visible: true, align: 'center', valign: 'middle'}
        ,{title: '校级标准分', field:'mainNormPoint', visible: true, align: 'center', valign: 'middle'}
        ,{title: '院级浮动值', field:'collegeNormPoint', visible: true, align: 'center', valign: 'middle'}
        ,{title: '考核结果', field:'result', visible: true, align: 'center', valign: 'middle'}
@@ -50,6 +51,11 @@ NormalAssess.check = function () {
 NormalAssess.formParams = function() {
     var queryData = {};
     queryData['createTime'] = $("#createTime").val();
+    queryData['year'] = $("#year").val();
+    queryData['deptId'] = $("#deptId").val();
+    queryData['status'] = $("#status").val();
+    queryData["expand['name']"] = $("#name").val();
+    queryData["expand['account']"] = $("#account").val();
     queryData['type'] = type;
     return queryData;
 };

@@ -3,6 +3,9 @@ package com.stylefeng.guns.modular.assess.controller;
 import com.stylefeng.guns.core.base.controller.BaseController;
 import com.baomidou.mybatisplus.plugins.Page;
 import com.stylefeng.guns.common.constant.factory.PageFactory;
+import com.stylefeng.guns.modular.assess.service.IAssessCoefficientService;
+import com.stylefeng.guns.modular.job.service.IDeptService;
+import net.bytebuddy.asm.Advice;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.stereotype.Controller;
 import org.apache.shiro.authz.annotation.RequiresPermissions;;
@@ -34,13 +37,20 @@ public class AssessNormPointController extends BaseController {
 
     @Autowired
     private IAssessNormPointService assessNormPointService;
+    @Autowired
+    private IDeptService deptService;
+    @Autowired
+    private IAssessCoefficientService assessCoefficientService;
 
     /**
      * 跳转到考核分首页
      */
     @RequestMapping("")
     @RequiresPermissions(value = {"/assessNormPoint/list"})
-    public String index() {
+    public String index(String type,Model model) {
+        model.addAttribute("type", type);
+        model.addAttribute("deptList", deptService.selectAllOn());
+        model.addAttribute("typeList", assessCoefficientService.selectAll());
         return PREFIX + "assessNormPoint.html";
     }
 
@@ -73,15 +83,9 @@ public class AssessNormPointController extends BaseController {
     @ResponseBody
     public Object list(AssessNormPoint assessNormPoint) {
         Page<AssessNormPoint> page = new PageFactory<AssessNormPoint>().defaultPage();
-        EntityWrapper< AssessNormPoint> wrapper = new EntityWrapper<>();
-         if(assessNormPoint.getUserId() != null)
-            wrapper.eq("user_id",assessNormPoint.getUserId());
-         if(StringUtils.isNotBlank(assessNormPoint.getYear()))
-            wrapper.eq("year",assessNormPoint.getYear());
-         if(assessNormPoint.getDeptId() != null)
-            wrapper.eq("dept_id",assessNormPoint.getDeptId());
+        EntityWrapper< AssessNormPoint> wrapper = new EntityWrapper<>(assessNormPoint);
         assessNormPointService.selectPage(page,wrapper);
-        page.setRecords(new AssessNormPointDecorator(page.getRecords()).decorate());
+        page.setRecords(new AssessNormPointDecorator(page.getRecords(),(String)assessNormPoint.getExpand().get("type")).decorate());
         return packForBT(page);
     }
 

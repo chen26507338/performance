@@ -26,7 +26,7 @@
 
     <!-- 通用查询结果列 -->
     <sql id="Base_Column_List">
-	    id AS id,
+	    anp.id AS id,
 	    user_id AS userId,
 	    year AS year,
 	    jxdd_main AS jxddMain,
@@ -43,7 +43,27 @@
 	    ysxt_college AS ysxtCollege,
 	    ldjl_main AS ldjlMain,
 	    ldjl_college AS ldjlCollege,
-	    dept_id AS deptId
+	    anp.dept_id AS deptId
     </sql>
+    <select id="selectPage" resultType="com.stylefeng.guns.modular.assess.model.AssessNormPoint">
+        select
+        <include refid="Base_Column_List"/>
+        from assess_norm_point anp
+        left join sys_user su on su.id = anp.user_id
+        <where>
+            <if test="year != null and year != ''">
+                and year = #{year}
+            </if>
+            <if test="expand.account != null and expand.account != ''">
+                and su.account = #{expand.account}
+            </if>
+            <if test="expand.name != null and expand.name != ''">
+                and su.name = #{expand.name}
+            </if>
+            <if test="expand.dept != null">
+                and anp.dept_id = #{expand.deptId}
+            </if>
+        </where>
+    </select>
 
 </mapper>

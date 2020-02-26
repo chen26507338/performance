@@ -18,8 +18,10 @@ import com.stylefeng.guns.core.shiro.ShiroKit;
 import com.stylefeng.guns.core.util.JsonMapper;
 import com.stylefeng.guns.modular.act.service.ActTaskService;
 import com.stylefeng.guns.modular.act.utils.ActUtils;
+import com.stylefeng.guns.modular.assess.model.AssessCoefficient;
 import com.stylefeng.guns.modular.assess.model.AssessNorm;
 import com.stylefeng.guns.modular.assess.model.AssessNormPoint;
+import com.stylefeng.guns.modular.assess.service.IAssessCoefficientService;
 import com.stylefeng.guns.modular.assess.service.IAssessNormPointService;
 import com.stylefeng.guns.modular.assess.service.IAssessNormService;
 import com.stylefeng.guns.modular.job.service.IDeptService;
@@ -54,6 +56,8 @@ public class NormalAssessServiceImpl extends ServiceImpl<NormalAssessMapper, Nor
     private ActTaskService actTaskService;
     @Autowired
     private IAssessNormPointService assessNormPointService;
+    @Autowired
+    private IAssessCoefficientService assessCoefficientService;
 
 
     @Override
@@ -140,6 +144,9 @@ public class NormalAssessServiceImpl extends ServiceImpl<NormalAssessMapper, Nor
                 collegeNorm = assessNormService.getByCode(collegeNorm);
                 assess.setCollegeNormPoint(collegeNorm.getPoint());
                 assess.setProcInsId(procInsId);
+                //考核系数
+                AssessCoefficient coefficient = assessCoefficientService.selectById(type);
+                assess.setCoePoint(coefficient.getCoefficient());
             }
 
             String id = (String) excelMap.get("id");
@@ -189,16 +196,18 @@ public class NormalAssessServiceImpl extends ServiceImpl<NormalAssessMapper, Nor
                         assessNormPoint.setUserId(assess.getUserId());
                         assessNormPoint.setYear(assess.getYear());
                         assessNormPoint = assessNormPointService.selectOne(new EntityWrapper<>(assessNormPoint));
+
+                        AssessCoefficient assessCoefficient = assessCoefficientService.selectById(normalAssess.getType());
                         if (assessNormPoint != null) {
                             Double mainPoint = (Double) ReflectUtil.getFieldValue(assessNormPoint, normalAssess.getType() + "Main");
-                            mainPoint += assess.getMainNormPoint() * assess.getResult();
+                            mainPoint += assess.getMainNormPoint() * assess.getResult() * assessCoefficient.getCoefficient();
                             ReflectUtil.setFieldValue(assessNormPoint, normalAssess.getType() + "Main", mainPoint);
                             Double collegePoint = (Double) ReflectUtil.getFieldValue(assessNormPoint, normalAssess.getType() + "College");
                             collegePoint += (1 + assess.getCollegeNormPoint()) * mainPoint;
                             ReflectUtil.setFieldValue(assessNormPoint, normalAssess.getType() + "College", collegePoint);
                         } else {
                             assessNormPoint = new AssessNormPoint();
-                            Double mainPoint = assess.getMainNormPoint() * assess.getResult();
+                            Double mainPoint = assess.getMainNormPoint() * assess.getResult() * assessCoefficient.getCoefficient();
                             ReflectUtil.setFieldValue(assessNormPoint, normalAssess.getType() + "Main", mainPoint);
                             ReflectUtil.setFieldValue(assessNormPoint, normalAssess.getType() + "College", mainPoint * (1 + assess.getCollegeNormPoint()));
                         }

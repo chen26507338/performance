@@ -9,6 +9,23 @@
                 <div class="row row-lg">
                     <div class="col-sm-12">
                         <div class="row">
+                            <div class="col-sm-3">
+                                <#NameCon id="account" name="职工编号" value="${account!}"/>
+                            </div>
+                            <div class="col-sm-3">
+                                <#NameCon id="name" name="职工姓名"/>
+                            </div>
+                            <div class="col-sm-3">
+                                <#NameCon id="year" name="年度" value="${year!}"/>
+                            </div>
+                            <div class=col-sm-3>
+                                <#SelectCon id="deptId" name="部门" items="${deptList}"
+                                itemLabel="name" itemValue="id" />
+                            </div>
+                            <div class=col-sm-2>
+                                <#SelectCon id="status" name="状态" items="${constant.getDictsByName('考核状态')}"
+                                itemLabel="name" itemValue="num" />
+                            </div>
                             <div class=col-sm-3>
                                 <#TimeCon id="createTime" name="创建时间" isTime="true" pattern="yyyy/MM/dd HH:mm:ss" />
                             </div>
