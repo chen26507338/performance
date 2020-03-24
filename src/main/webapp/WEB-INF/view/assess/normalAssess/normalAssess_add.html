@@ -2,15 +2,38 @@
 <div class="ibox float-e-margins">
     <div class="ibox-content">
         <div class="form-horizontal" id="NormalAssessForm">
-
-            <input type="hidden" id="id" value="">
             <input type="hidden" id="type" value="${type}">
 
             <div class="row">
-                <div class="col-sm-6 b-r">
-                    <#fileUpload id="fileName" name="绩效数据表格" underline="true" accept="file" exts="xlsx,xls" mineType="application/excel"/>
+
+                <div class="col-sm-12" id="itemsArea">
+                    <div class="form-group">
+                        <div class="col-sm-2">
+                            <#button btnCss="info" name="增加" icon="fa-plus" clickFun="NormalAssessInfoDlg.addItem()"/>
+                        </div>
+                    </div>
                 </div>
             </div>
+
+            <script type="text/template" id="itemTemplate">
+                    <div class="form-group" name="normalAssessItem" id="normalAssessItem">
+                        <label class="col-sm-1 control-label">职工代码</label>
+                        <div class="col-sm-2">
+                            <input class="form-control" type="text" name="account">
+                        </div>
+                        <label class="col-sm-3 control-label" style="width: 10%;">考核指标代码</label>
+                        <div class="col-sm-2">
+                            <input class="form-control" type="text" name="normCode">
+                        </div>
+                        <label class="col-sm-2 control-label" style="width: 8%;">考核结果</label>
+                        <div class="col-sm-2">
+                            <input class="form-control" type="text" name="result">
+                        </div>
+                        <div class="col-sm-2">
+                            <#button btnCss="danger" name="删除" id="cancel" icon="fa-remove" clickFun="NormalAssessInfoDlg.deleteItem(event)"/>
+                        </div>
+                    </div>
+            </script>
 
             <div class="row btn-group-m-t">
                 <div class="col-sm-10">

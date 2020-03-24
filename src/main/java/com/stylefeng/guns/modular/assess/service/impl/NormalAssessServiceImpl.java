@@ -63,14 +63,20 @@ public class NormalAssessServiceImpl extends ServiceImpl<NormalAssessMapper, Nor
     @Override
     @Transactional(rollbackFor = Exception.class)
     public boolean insert(NormalAssess entity) {
-        ExcelReader reader = ExcelUtil.getReader(gunsProperties.getFileUploadPath() + entity.getExpand().get("fileName"));
-        reader.addHeaderAlias("分院名称", "deptName");
-        reader.addHeaderAlias("考核项目", "assessName");
-        reader.addHeaderAlias("考核指标代码", "normCode");
-        reader.addHeaderAlias("考核结果", "result");
-        reader.addHeaderAlias("职工姓名", "userName");
-        reader.addHeaderAlias("职工代码", "account");
-        List<Map> normalAssesses = reader.readAll(Map.class);
+        List<Map> normalAssesses;
+        if (entity.getExpand().get("fileName") != null) {
+            ExcelReader reader = ExcelUtil.getReader(gunsProperties.getFileUploadPath() + entity.getExpand().get("fileName"));
+            reader.addHeaderAlias("分院名称", "deptName");
+            reader.addHeaderAlias("考核项目", "assessName");
+            reader.addHeaderAlias("考核指标代码", "normCode");
+            reader.addHeaderAlias("考核结果", "result");
+            reader.addHeaderAlias("职工姓名", "userName");
+            reader.addHeaderAlias("职工代码", "account");
+            normalAssesses = reader.readAll(Map.class);
+        } else {
+            normalAssesses = (List<Map>) entity.getExpand().get("data");
+        }
+
         this.insertBatch(handleMap(normalAssesses, entity.getType(), true));
         return true;
     }

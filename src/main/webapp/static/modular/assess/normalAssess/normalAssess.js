@@ -13,7 +13,7 @@ var NormalAssess = {
  */
 NormalAssess.initColumn = function () {
     return [
-        {field: 'selectItem', radio: true}
+        {field: 'selectItem', check: true}
         ,{title: '职工编号', field:'expand.account', visible: true, align: 'center', valign: 'middle'}
         ,{title: '职工姓名', field:'expand.userName', visible: true, align: 'center', valign: 'middle'}
        ,{title: '部门', field:'expand.deptName', visible: true, align: 'center', valign: 'middle'}
@@ -72,6 +72,21 @@ NormalAssess.openAddNormalAssess = function () {
         fix: false, //不固定
         maxmin: true,
         content: Feng.ctxPath + '/normalAssess/normalAssess_add?type=' + type
+    });
+    layer.full(this.layerIndex);
+};
+
+/**
+ * 点击导入考核指标库
+ */
+NormalAssess.openImportNormalAssess = function () {
+    this.layerIndex = layer.open({
+        type: 2,
+        title: '添加考核指标库',
+        area: ['800px', '420px'], //宽高
+        fix: false, //不固定
+        maxmin: true,
+        content: Feng.ctxPath + '/normalAssess/normalAssess_import?type=' + type
     });
 };
 

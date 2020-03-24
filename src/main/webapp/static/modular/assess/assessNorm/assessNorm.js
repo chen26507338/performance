@@ -17,7 +17,8 @@ AssessNorm.initColumn = function () {
        ,{title: '内容', field:'content', visible: true, align: 'center', valign: 'middle'}
        ,{title: '代码', field:'code', visible: true, align: 'center', valign: 'middle'}
        ,{title: '考核项目', field:'type', visible: true, align: 'center', valign: 'middle',formatter:function(value, row, index){return row.expand.typeDict;}}
-        ,{title: '校级指标/院级浮动值', field:'point', visible: true, align: 'center', valign: 'middle'}
+        ,{title: '院级浮动值', field:'point', visible: true, align: 'center', valign: 'middle'}
+        ,{title: '校级指标', field:'expand.mainPoint', visible: true, align: 'center', valign: 'middle'}
         ,{title: '部门', field:'deptId', visible: true, align: 'center', valign: 'middle',formatter:function(value, row, index){return row.expand.deptDict;}}
        ,{title: '描述', field:'des', visible: true, align: 'center', valign: 'middle'}
     ];

@@ -3,6 +3,9 @@
  */
 var NormalAssessInfoDlg = {
     normalAssessInfoData : {},
+    count: $("#itemSize").val(),
+    itemTemplate: $("#itemTemplate").html(),
+    data: [],		//拼接字符串内容
     validateFields:{
     }
 };
@@ -12,6 +15,7 @@ var NormalAssessInfoDlg = {
  */
 NormalAssessInfoDlg.clearData = function() {
     this.normalAssessInfoData = {};
+    this.data = [];
 };
 
 /**
@@ -43,21 +47,49 @@ NormalAssessInfoDlg.close = function() {
 };
 
 /**
+ * 清除为空的item Dom
+ */
+NormalAssessInfoDlg.clearNullDom = function(){
+    $("[name='normalAssessItem']").each(function(){
+        var account = $(this).find("[name='account']").val();
+        var normCode = $(this).find("[name='normCode']").val();
+        var result = $(this).find("[name='result']").val();
+        if(account == '' || normCode == ''|| result == ''){
+            $(this).remove();
+        }
+    });
+};
+
+
+/**
  * 收集数据
  */
 NormalAssessInfoDlg.collectData = function() {
     this
-    .set('id')
-    .set('deptId')
-    .set('userId')
-    .set('normId')
-    .set('result')
-    .set('year')
-    .set('createTime')
-    .set('type')
-    .set('status')
-    .set('procInsId')
+        .set('id')
+        .set('deptId')
+        .set('userId')
+        .set('normId')
+        .set('result')
+        .set('year')
+        .set('createTime')
+        .set('type')
+        .set('status')
+        .set('procInsId')
     ;
+    this.clearNullDom();
+    var that = this;
+    $("[name='normalAssessItem']").each(function(){
+        var data = {};
+        var account = $(this).find("[name='account']").val();
+        var normCode = $(this).find("[name='normCode']").val();
+        var result = $(this).find("[name='result']").val();
+        data['account'] = account;
+        data['normCode'] = normCode;
+        data['result'] = result;
+        that.data.push(data);
+    });
+    // this.mutiString = mutiString;
 };
 
 /**
@@ -68,11 +100,62 @@ NormalAssessInfoDlg.validate = function () {
     $('#NormalAssessForm').bootstrapValidator('validate');
     return $("#NormalAssessForm").data('bootstrapValidator').isValid();
 };
+/**
+ * 删除item
+ */
+NormalAssessInfoDlg.deleteItem = function (event) {
+    var obj = Feng.eventParseObject(event);
+    obj.parent().parent().remove();
+};
+
+/**
+ * item获取新的id
+ */
+NormalAssessInfoDlg.newId = function () {
+    if(this.count == undefined){
+        this.count = 0;
+    }
+    this.count = this.count + 1;
+    return "normalAssessItem" + this.count;
+};
+
+
+/**
+ * 添加条目
+ */
+NormalAssessInfoDlg.addItem = function () {
+    $("#itemsArea").append(this.itemTemplate);
+    $("#normalAssessItem").attr("id", this.newId());
+};
+
 
 /**
  * 提交添加
  */
 NormalAssessInfoDlg.addSubmit = function() {
+    this.clearData();
+    this.collectData();
+
+    //提交信息
+    var ajax = new $ax(Feng.ctxPath + "/normalAssess/add", function(data){
+        Feng.success("添加成功!");
+        window.parent.NormalAssess.table.refresh();
+        NormalAssessInfoDlg.close();
+    },function(data){
+        Feng.error("添加失败!" + data.responseJSON.message + "!");
+    });
+    ajax.setContentType("application/json;");
+    var param = {};
+    param['data'] = this.data;
+    param['type'] = this.normalAssessInfoData.type;
+    ajax.setData(JSON.stringify(param));
+    ajax.start();
+};
+
+/**
+ * 提交导入
+ */
+NormalAssessInfoDlg.importSubmit = function() {
 
     this.clearData();
     this.collectData();
@@ -82,7 +165,7 @@ NormalAssessInfoDlg.addSubmit = function() {
     // }
     //
     // //提交信息
-    var ajax = new $ax(Feng.ctxPath + "/normalAssess/add", function(data){
+    var ajax = new $ax(Feng.ctxPath + "/normalAssess/import", function(data){
         Feng.success("导入成功!");
         window.parent.NormalAssess.table.refresh();
         NormalAssessInfoDlg.close();
@@ -90,30 +173,6 @@ NormalAssessInfoDlg.addSubmit = function() {
         Feng.error("导入失败!" + data.responseJSON.message + "!");
     });
     this.normalAssessInfoData['expand["fileName"]'] = $("#fileName").val();
-    ajax.set(this.normalAssessInfoData);
-    ajax.start();
-};
-
-/**
- * 提交修改
- */
-NormalAssessInfoDlg.editSubmit = function() {
-
-    this.clearData();
-    this.collectData();
-
-    if (!this.validate()) {
-        return;
-    }
-
-    //提交信息
-    var ajax = new $ax(Feng.ctxPath + "/normalAssess/update", function(data){
-        Feng.success("修改成功!");
-        window.parent.NormalAssess.table.refresh();
-        NormalAssessInfoDlg.close();
-    },function(data){
-        Feng.error("修改失败!" + data.responseJSON.message + "!");
-    });
     ajax.set(this.normalAssessInfoData);
     ajax.start();
 };

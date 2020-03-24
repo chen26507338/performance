@@ -69,6 +69,14 @@ public class AssessNormController extends BaseController {
     @RequiresPermissions(value = {"/assessNorm/update"})
     public String assessNormUpdate(@PathVariable String assessNormId, Model model) {
         AssessNorm assessNorm = assessNormService.selectById(assessNormId);
+        if (assessNorm.getDeptId() != IAssessNormService.TYPE_MAIN_DEPT) {
+            AssessNorm param = new AssessNorm();
+            param.setDeptId(IAssessNormService.TYPE_MAIN_DEPT);
+            param.setCode(assessNorm.getCode());
+            param.setType(assessNorm.getType());
+            AssessNorm mainNorm = assessNormService.getByCode(param);
+            model.addAttribute("mainPoint", mainNorm.getPoint());
+        }
         model.addAttribute("item",assessNorm);
         model.addAttribute("typeList", assessCoefficientService.selectAll());
         LogObjectHolder.me().set(assessNorm);

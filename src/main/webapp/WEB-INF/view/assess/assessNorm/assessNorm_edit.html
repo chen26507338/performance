@@ -18,7 +18,10 @@
                     itemLabel="name" itemValue="type" value="${item.type}" underline="true"/>
                 </div>
                 <div class="col-sm-6 b-r">
-                    <#input id="point" name="校级指标/院级浮动值" value="${item.point}" underline="true"/>
+                    <#input id="point" name="院级浮动值(校级指标)" value="${item.point}" underline="true"/>
+                </div
+                ><div class="col-sm-6 b-r">
+                    <#input id="dd" name="校级指标" value="${mainPoint!}" readonly="true" underline="true"/>
                 </div>
                 <div class="col-sm-6 b-r">
                     <#input id="des" name="描述" value="${item.des}" underline="true"/>

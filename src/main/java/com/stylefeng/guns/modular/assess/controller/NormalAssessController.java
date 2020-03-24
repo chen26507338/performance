@@ -1,27 +1,35 @@
 package com.stylefeng.guns.modular.assess.controller;
 
+import cn.hutool.core.collection.CollUtil;
+import cn.hutool.core.util.StrUtil;
+import com.stylefeng.guns.common.annotion.BussinessLog;
+import com.stylefeng.guns.common.annotion.Permission;
+import com.stylefeng.guns.common.constant.Const;
+import com.stylefeng.guns.common.constant.dictmap.DictMap;
+import com.stylefeng.guns.common.exception.BizExceptionEnum;
 import com.stylefeng.guns.core.base.controller.BaseController;
 import com.baomidou.mybatisplus.plugins.Page;
 import com.stylefeng.guns.common.constant.factory.PageFactory;
+import com.stylefeng.guns.core.exception.GunsException;
 import com.stylefeng.guns.modular.assess.model.AssessNorm;
 import com.stylefeng.guns.modular.assess.service.IAssessNormService;
 import com.stylefeng.guns.modular.job.service.IDeptService;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.stereotype.Controller;
 import org.apache.shiro.authz.annotation.RequiresPermissions;;
-import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.*;
 import com.baomidou.mybatisplus.mapper.EntityWrapper;;
-import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.beans.factory.annotation.Autowired;
 import com.stylefeng.guns.core.util.ToolUtil;
 import com.stylefeng.guns.core.log.LogObjectHolder;
-import org.springframework.web.bind.annotation.RequestParam;
+
 import java.util.*;
 import com.stylefeng.guns.modular.assess.model.NormalAssess;
 import com.stylefeng.guns.modular.assess.service.INormalAssessService;
 import com.stylefeng.guns.modular.assess.decorator.NormalAssessDecorator;
+
+import static com.stylefeng.guns.common.constant.factory.MutiStrFactory.parseKeyValue;
 
 /**
  * 考核指标库控制器
@@ -53,6 +61,16 @@ public class NormalAssessController extends BaseController {
         model.addAttribute("year", normalAssess.getYear());
         model.addAttribute("deptList", deptService.selectAllOn());
         return PREFIX + "normalAssess.html";
+    }
+
+    /**
+     * 跳转到添加考核指标库
+     */
+    @RequestMapping("/normalAssess_import")
+//    @RequiresPermissions(value = {"/normalAssess/add"})
+    public String normalAssessImport(String type,Model model) {
+        model.addAttribute("type", type);
+        return PREFIX + "normalAssess_import.html";
     }
 
     /**
@@ -120,12 +138,28 @@ public class NormalAssessController extends BaseController {
     }
 
     /**
-     * 新增考核指标库
+     * 新增数据
      */
     @RequestMapping(value = "/add")
+    @ResponseBody
+    public Object add(@RequestBody Map data) {
+        if (CollUtil.isEmpty(data)) {
+            throw new GunsException(BizExceptionEnum.REQUEST_NULL);
+        }
+        NormalAssess normalAssess = new NormalAssess();
+        normalAssess.setType((String) data.get("type"));
+        normalAssess.putExpand("data", data.get("data"));
+        normalAssessService.insert(normalAssess);
+        return SUCCESS_TIP;
+    }
+
+    /**
+     * 导入考核
+     */
+    @RequestMapping(value = "/import")
 //    @RequiresPermissions(value = {"/normalAssess/add"})
     @ResponseBody
-    public Object add(NormalAssess normalAssess) {
+    public Object dataImport(NormalAssess normalAssess) {
         normalAssessService.insert(normalAssess);
         return SUCCESS_TIP;
     }

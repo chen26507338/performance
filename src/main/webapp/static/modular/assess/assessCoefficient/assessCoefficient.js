@@ -69,7 +69,7 @@ AssessCoefficient.openAssessCoefficientDetail = function () {
             area: ['800px', '420px'], //宽高
             fix: false, //不固定
             maxmin: true,
-            content: Feng.ctxPath + '/assessCoefficient/assessCoefficient_update/' + AssessCoefficient.seItem.id
+            content: Feng.ctxPath + '/assessCoefficient/assessCoefficient_update/' + AssessCoefficient.seItem.type
         });
     }
 };
