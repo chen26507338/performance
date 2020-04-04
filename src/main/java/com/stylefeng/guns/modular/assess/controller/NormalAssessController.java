@@ -90,7 +90,7 @@ public class NormalAssessController extends BaseController {
 //    @RequiresPermissions(value = {"/normalAssess/update"})
     public String normalAssessUpdate(NormalAssess normalAssess, Model model) {
         NormalAssess params = new NormalAssess();
-        params.setProcInsId(normalAssess.getProcInsId());
+        params.setProcInsId(normalAssess.getAct().getProcInsId());
         EntityWrapper<NormalAssess> wrapper = new EntityWrapper<>(params);
         wrapper.last("limit 1");
         params = normalAssessService.selectOne(wrapper);
