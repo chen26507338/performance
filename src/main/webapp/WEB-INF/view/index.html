@@ -43,6 +43,15 @@
     <!-- 第三方插件 -->
     <script src="${ctxPath}/static/js/plugins/pace/pace.min.js"></script>
 
+    <script>
+        $(function () {
+            var body = $("body");
+            body.removeClass("skin-1");
+            body.removeClass("skin-2");
+            body.addClass("skin-3");
+            $(".navbar-right").html("");
+        });
+    </script>
 </body>
 
 </html>
