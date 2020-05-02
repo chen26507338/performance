@@ -721,8 +721,8 @@ body.canvas-menu.mini-navbar nav.navbar-static-side {
 }
 
 .btn-primary {
-    background-color: #ecba52;
-    border-color: #ecba52;
+    background-color: #0e9aef;
+    border-color: #0e9aef;
     color: #FFFFFF;
 }
 
@@ -731,8 +731,8 @@ body.canvas-menu.mini-navbar nav.navbar-static-side {
 .btn-primary:active,
 .btn-primary.active,
 .open .dropdown-toggle.btn-primary {
-    background-color: #f8ac59;
-    border-color: #f8ac59;
+    background-color: #39aef5;
+    border-color: #39aef5;;
     color: #FFFFFF;
 }
 
