@@ -252,7 +252,7 @@
     </dependencies>
 
     <build>
-        <finalName>scenarize_config</finalName>
+        <finalName>performance</finalName>
         <plugins>
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>

@@ -37,7 +37,9 @@ public class AssessNormDecorator extends BaseListDecorator<AssessNorm> {
             param.setCode(assessNorm.getCode());
             param.setType(assessNorm.getType());
             AssessNorm mainNorm = assessNormService.getByCode(param);
-            assessNorm.putExpand("mainPoint", mainNorm.getPoint());
+            if (mainNorm != null) {
+                assessNorm.putExpand("mainPoint", mainNorm.getPoint());
+            }
         }
     }
 }
