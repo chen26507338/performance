@@ -4,6 +4,34 @@
 var AssessNormInfoDlg = {
     assessNormInfoData : {},
     validateFields:{
+        code: {
+            validators: {
+                notEmpty: {
+                    message: '代码不能为空'
+                }
+            }
+        },
+        type: {
+            validators: {
+                notEmpty: {
+                    message: '考核项目不能为空'
+                }
+            }
+        },
+        point: {
+            validators: {
+                notEmpty: {
+                    message: '校级指标/院级浮动值不能为空'
+                }
+            }
+        },
+        content: {
+            validators: {
+                notEmpty: {
+                    message: '内容不能为空'
+                }
+            }
+        },
     }
 };
 
