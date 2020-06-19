@@ -128,7 +128,23 @@ UserInfoDlg.hideDeptSelectTree = function () {
  */
 UserInfoDlg.collectData = function () {
     this.set('id').set('account').set('sex').set('password').set('avatar')
-        .set('email').set('name').set('birthday').set('rePassword').set('deptId').set('jobId').set('phone');
+        .set('email').set('name').set('birthday').set('rePassword').set('deptId')
+        .set('jobId')
+        .set('qq')
+        .set('wechat')
+        .set('idCard')
+        .set('address')
+        .set('idCard')
+        .set('nativePlace')
+        .set('birthplace')
+        .set('mobile')
+        .set('emergencyContact')
+        .set('emergencyMobile')
+        .set('emergencyRelation')
+        .set('retireDate')
+        .set('jobType')
+        .set('partyGroupings')
+        .set('phone');
 };
 
 /**

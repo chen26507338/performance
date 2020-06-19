@@ -1,0 +1,52 @@
+@layout("/common/_container.html"){
+<div class="ibox float-e-margins">
+    <div class="ibox-content">
+        <div class="form-horizontal" id="EducationExperienceForm">
+
+            <input type="hidden" id="id" value="${item.id}">
+
+            <div class="row">
+
+                <div class="col-sm-6 b-r">
+                        <#input id="enrollmentTime" name="入学时间" underline="true" value="${item.enrollmentTime}"
+                        type="text" dateType="date" format="yyyy-MM-dd"/>
+                </div>
+                <div class="col-sm-6 b-r">
+                        <#input id="graduateTime" name="毕业时间" underline="true" value="${item.graduateTime}"
+                        type="text" dateType="date" format="yyyy-MM-dd"/>
+                </div>
+                <div class="col-sm-6 b-r">
+                    <#input id="school" name="毕业学校" value="${item.school}" underline="true"/>
+                </div>
+                <div class="col-sm-6 b-r">
+                    <#input id="major" name="所学专业" value="${item.major}" underline="true"/>
+                </div>
+                <div class="col-sm-6 b-r">
+                    <#select id="educationBackground" name="学历" items="${constant.getDictsByName('学历')}"
+                    itemLabel="name" itemValue="num" value="${item.educationBackground}" underline="true"/>
+                </div>
+                <div class="col-sm-6 b-r">
+                    <#select id="degree" name="学位" items="${constant.getDictsByName('学位')}"
+                    itemLabel="name" itemValue="num" value="${item.degree}" underline="true"/>
+                </div>
+                <div class="col-sm-6 b-r">
+                    <#select id="learnStyle" name="学习方式" items="${constant.getDictsByName('学习方式')}"
+                    itemLabel="name" itemValue="num" value="${item.learnStyle}" underline="true"/>
+                </div>
+                <div class="col-sm-6 b-r">
+                    <#input id="userId" name="用户ID" value="${item.userId}" underline="true"/>
+                </div>
+            </div>
+
+            <div class="row btn-group-m-t">
+                <div class="col-sm-10">
+                    <#button btnCss="info" name="提交" id="ensure" icon="fa-check" clickFun="EducationExperienceInfoDlg.editSubmit()"/>
+                    <#button btnCss="danger" name="取消" id="cancel" icon="fa-eraser" clickFun="EducationExperienceInfoDlg.close()"/>
+                </div>
+            </div>
+        </div>
+
+    </div>
+</div>
+<script src="${ctxPath}/static/modular/user/educationExperience/educationExperience_info.js"></script>
+@}

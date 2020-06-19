@@ -15,6 +15,10 @@ public interface IRoleService extends IService<Role> {
 
     String CACHE_LIST = "role_list_";
     /**
+     * 角色类型：老师
+     */
+    long TYPE_TEACHER = 9;
+    /**
      * 角色类型：校级指标编辑者
      */
     long TYPE_MAIN_ASSESS_HANDLE = 10;

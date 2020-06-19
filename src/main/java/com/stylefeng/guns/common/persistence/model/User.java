@@ -60,6 +60,10 @@ public class User extends BaseModel<User> {
      */
 	private Integer sex;
     /**
+     * 年龄
+     */
+	private Integer age;
+    /**
      * 电子邮件
      */
 	private String email;
@@ -67,6 +71,58 @@ public class User extends BaseModel<User> {
      * 电话
      */
 	private String phone;
+    /**
+     * qq
+     */
+	private String qq;
+    /**
+     * 微信
+     */
+	private String wechat;
+    /**
+     * 身份证号码
+     */
+	private String idCard;
+    /**
+     * 现居住地
+     */
+	private String address;
+    /**
+     * 籍贯
+     */
+	private String nativePlace;
+    /**
+     * 出生地
+     */
+	private String birthplace;
+    /**
+     * 联系电话
+     */
+	private String mobile;
+    /**
+     * 紧急联系人
+     */
+	private String emergencyContact;
+    /**
+     * 紧急联系人联系电话
+     */
+	private String emergencyMobile;
+    /**
+     * 紧急联系人关系
+     */
+	private String emergencyRelation;
+    /**
+     * 退休日期
+     */
+	private Date retireDate;
+    /**
+     * 用工类型
+     */
+	private Integer jobType;
+    /**
+     * 党派
+     */
+	private String partyGroupings;
     /**
      * 角色id
      */

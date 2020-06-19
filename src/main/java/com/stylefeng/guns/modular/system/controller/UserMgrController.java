@@ -30,6 +30,7 @@ import com.stylefeng.guns.modular.job.service.IJobService;
 import com.stylefeng.guns.modular.system.dao.UserMgrDao;
 import com.stylefeng.guns.modular.system.decorator.UserDecorator;
 import com.stylefeng.guns.modular.system.factory.UserFactory;
+import com.stylefeng.guns.modular.system.service.IRoleService;
 import com.stylefeng.guns.modular.system.service.IUserService;
 import com.stylefeng.guns.modular.system.transfer.UserDto;
 import com.stylefeng.guns.modular.system.warpper.UserWarpper;
@@ -198,7 +199,7 @@ public class UserMgrController extends BaseController {
      * 添加管理员
      */
     @RequestMapping("/add")
-    @BussinessLog(value = "添加管理员", key = "account", dict = UserDict.class)
+    @BussinessLog(value = "添加职工", key = "account", dict = UserDict.class)
     @ResponseBody
     public Tip add(User user) {
 
@@ -213,6 +214,7 @@ public class UserMgrController extends BaseController {
         user.setPassword(ShiroKit.md5(user.getPassword(), user.getSalt()));
         user.setStatus(ManagerStatus.OK.getCode());
         user.setCreateTime(new Date());
+        user.setRoleId(IRoleService.TYPE_TEACHER + "");
 
         this.userMapper.insert(user);
         return SUCCESS_TIP;

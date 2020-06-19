@@ -48,12 +48,13 @@ MgrUser.check = function () {
 MgrUser.openAddMgr = function () {
     this.layerIndex = layer.open({
         type: 2,
-        title: '添加管理员',
+        title: '添加职工信息',
         area: ['800px', '560px'], //宽高
         fix: false, //不固定
         maxmin: true,
         content: Feng.ctxPath + '/mgr/user_add'
     });
+    layer.full(this.layerIndex);
 };
 
 /**
@@ -64,12 +65,13 @@ MgrUser.openChangeUser = function () {
     if (this.check()) {
         this.layerIndex = layer.open({
             type: 2,
-            title: '编辑管理员',
+            title: '编辑职工信息',
             area: ['800px', '450px'], //宽高
             fix: false, //不固定
             maxmin: true,
             content: Feng.ctxPath + '/mgr/user_edit/' + this.seItem.id
         });
+        layer.full(this.layerIndex);
     }
 };
 
@@ -95,7 +97,6 @@ MgrUser.roleAssign = function () {
  */
 MgrUser.delMgrUser = function () {
     if (this.check()) {
-
         var operation = function(){
             var userId = MgrUser.seItem.id;
             var ajax = new $ax(Feng.ctxPath + "/mgr/delete", function () {

@@ -10,16 +10,62 @@
 			<div class="row">
 				<div class="col-sm-6 b-r">
                     <#input id="name" name="姓名" underline="true" value="${user.name}"/>
-                    <#select id="deptId" name="部门" items="${deptList}"
-                    itemLabel="name" itemValue="id" value="${user.deptId}" underline="true"/>
 				</div>
-				<div class="col-sm-6">
-					<div id="driverInfoContent">
+				<div class="col-sm-6 b-r">
+					<#select id="deptId" name="部门" items="${deptList}"
+					itemLabel="name" itemValue="id" value="${user.deptId}" underline="true"/>
+				</div>
+				<div class="col-sm-6 b-r">
                         <#select id="sex" name="性别" items="${constant.getDictsByName('性别')}"
                         itemLabel="name" itemValue="num" value="${user.sex}" underline="true"/>
-                        <#select id="jobId" name="岗位" items="${jobList}"
+				</div>
+				<div class="col-sm-6 b-r">
+				<#select id="jobId" name="岗位" items="${jobList}"
                         itemLabel="name" itemValue="id" value="${user.jobId}" underline="true"/>
-					</div>
+				</div>
+				<div class="col-sm-6 b-r">
+					<#input id="qq" name="qq" underline="true" value="${user.qq}"/>
+				</div>
+				<div class="col-sm-6 b-r">
+					<#input id="wechat" name="微信" underline="true" value="${user.wechat}"/>
+				</div>
+				<div class="col-sm-6 b-r">
+					<#input id="idCard" name="身份证号码" underline="true" value="${user.idCard}"/>
+				</div>
+				<div class="col-sm-6 b-r">
+					<#input id="address" name="现居住地" underline="true" value="${user.address}"/>
+				</div>
+				<div class="col-sm-6 b-r">
+					<#input id="nativePlace" name="籍贯" underline="true" value="${user.nativePlace}"/>
+				</div>
+				<div class="col-sm-6 b-r">
+					<#input id="birthplace" name="出生地" underline="true" value="${user.birthplace}"/>
+				</div>
+				<div class="col-sm-6 b-r">
+					<#input id="phone" name="联系电话1" underline="true" value="${user.phone}"/>
+				</div>
+				<div class="col-sm-6 b-r">
+					<#input id="mobile" name="联系电话2" underline="true" value="${user.mobile}"/>
+				</div>
+				<div class="col-sm-6 b-r">
+					<#input id="emergencyContact" name="紧急联系人" underline="true" value="${user.emergencyContact}"/>
+				</div>
+				<div class="col-sm-6 b-r">
+					<#input id="emergencyMobile" name="紧急联系人联系电话" underline="true" value="${user.emergencyMobile}"/>
+				</div>
+				<div class="col-sm-6 b-r">
+					<#select id="emergencyRelation" name="紧急联系人关系" underline="true" items="${constant.getDictsByName('紧急联系人关系')}"
+					itemLabel="name" itemValue="num" value="${user.emergencyRelation}"/>
+				</div>
+				<div class="col-sm-6 b-r">
+					<#input id="retireDate" name="退休日期" underline="true" type="text" dateType="date" format="yyyy-MM-dd" value="${user.retireDate}"/>
+				</div>
+				<div class="col-sm-6 b-r">
+					<#select id="jobType" name="用工类型" items="${constant.getDictsByName('用工类型')}"
+					itemLabel="name" itemValue="num" underline="true" value="${user.jobType}"/>
+				</div>
+				<div class="col-sm-6 b-r">
+					<#input id="partyGroupings" name="党派" underline="true" value="${user.partyGroupings}"/>
 				</div>
 			</div>
 
