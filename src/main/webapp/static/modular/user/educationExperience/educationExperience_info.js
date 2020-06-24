@@ -3,6 +3,9 @@
  */
 var EducationExperienceInfoDlg = {
     educationExperienceInfoData : {},
+    count: $("#itemSize").val(),
+    itemTemplate: $("#itemTemplate").html(),
+    data: [],		//拼接字符串内容
     validateFields:{
     }
 };
@@ -12,6 +15,33 @@ var EducationExperienceInfoDlg = {
  */
 EducationExperienceInfoDlg.clearData = function() {
     this.educationExperienceInfoData = {};
+};
+
+/**
+ * item获取新的id
+ */
+EducationExperienceInfoDlg.newId = function () {
+    if(this.count == undefined){
+        this.count = 0;
+    }
+    this.count = this.count + 1;
+    return "educationExperienceItem" + this.count;
+};
+
+/**
+ * 添加条目
+ */
+EducationExperienceInfoDlg.addItem = function () {
+    $("#itemsArea").append(this.itemTemplate);
+    $("#educationExperienceItem").attr("id", this.newId());
+};
+
+/**
+ * 删除item
+ */
+EducationExperienceInfoDlg.deleteItem = function (event) {
+    var obj = Feng.eventParseObject(event);
+    obj.parent().parent().remove();
 };
 
 /**
@@ -43,6 +73,20 @@ EducationExperienceInfoDlg.close = function() {
 };
 
 /**
+ * 清除为空的item Dom
+ */
+EducationExperienceInfoDlg.clearNullDom = function(){
+    $("[name='normalAssessItem']").each(function(){
+        var school = $(this).find("[name='school']").val();
+        var major = $(this).find("[name='major']").val();
+        var educationBackground = $(this).find("[name='educationBackground']").val();
+        if(school == '' || major == ''|| educationBackground == ''){
+            $(this).remove();
+        }
+    });
+};
+
+/**
  * 收集数据
  */
 EducationExperienceInfoDlg.collectData = function() {
@@ -60,6 +104,32 @@ EducationExperienceInfoDlg.collectData = function() {
 };
 
 /**
+ * 收集数据
+ */
+EducationExperienceInfoDlg.collectItems = function() {
+    this.clearNullDom();
+    var that = this;
+    $("[name='educationExperienceItem']").each(function(){
+        var data = {};
+        var school = $(this).find("[name='school']").val();
+        var major = $(this).find("[name='major']").val();
+        var educationBackground = $(this).find("[name='educationBackground']").val();
+        var enrollmentTime = $(this).find("[name='enrollmentTime']").val();
+        var graduateTime = $(this).find("[name='graduateTime']").val();
+        var degree = $(this).find("[name='degree']").val();
+        var learnStyle = $(this).find("[name='learnStyle']").val();
+        data['school'] = school;
+        data['major'] = major;
+        data['educationBackground'] = educationBackground;
+        data['enrollmentTime'] = enrollmentTime;
+        data['graduateTime'] = graduateTime;
+        data['degree'] = degree;
+        data['learnStyle'] = learnStyle;
+        that.data.push(data);
+    });
+};
+
+/**
  * 验证数据是否为空
  */
 EducationExperienceInfoDlg.validate = function () {
@@ -67,7 +137,25 @@ EducationExperienceInfoDlg.validate = function () {
     $('#EducationExperienceForm').bootstrapValidator('validate');
     return $("#EducationExperienceForm").data('bootstrapValidator').isValid();
 };
+/**
+ * 提交添加
+ */
+EducationExperienceInfoDlg.addApply = function() {
+    this.clearData();
+    this.collectItems();
 
+    //提交信息
+    var ajax = new $ax(Feng.ctxPath + "/educationExperience/doAddApply", function(data){
+        Feng.success("提交申请成功!");
+        window.parent.EducationExperience.table.refresh();
+        EducationExperienceInfoDlg.close();
+    },function(data){
+        Feng.error("提交申请失败!" + data.responseJSON.message + "!");
+    });
+    ajax.setContentType("application/json;");
+    ajax.setData(JSON.stringify(this.data));
+    ajax.start();
+};
 /**
  * 提交添加
  */

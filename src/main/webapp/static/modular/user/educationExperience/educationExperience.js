@@ -45,6 +45,7 @@ EducationExperience.check = function () {
 EducationExperience.formParams = function() {
     var queryData = {};
     queryData['userId'] = $("#userId").val();
+    queryData['status'] = $("#status").val();
     return queryData;
 };
 
@@ -61,6 +62,20 @@ EducationExperience.openAddEducationExperience = function () {
         maxmin: true,
         content: Feng.ctxPath + '/educationExperience/educationExperience_add'
     });
+};
+/**
+ * 点击添加学历培训
+ */
+EducationExperience.openAddApply = function () {
+    this.layerIndex = layer.open({
+        type: 2,
+        title: '申请修改',
+        area: ['800px', '420px'], //宽高
+        fix: false, //不固定
+        maxmin: true,
+        content: Feng.ctxPath + '/educationExperience/addApply'
+    });
+    layer.full(this.layerIndex);
 };
 
 /**

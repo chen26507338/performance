@@ -25,7 +25,8 @@ import java.util.Map;
 public class ActUtils {
 
 //	private static Logger logger = LoggerFactory.getLogger(ActUtils.class);
-	
+
+	public static final String PD_PERSONAL_INFO = "personal_info";
 	/**
 	 * 定义流程定义KEY，必须以“PD_”开头
 	 * 组成结构：string[]{"流程标识","业务主表表名"}

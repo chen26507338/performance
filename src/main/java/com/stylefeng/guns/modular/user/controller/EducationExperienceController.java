@@ -8,15 +8,13 @@ import com.stylefeng.guns.core.shiro.ShiroKit;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.stereotype.Controller;
 import org.apache.shiro.authz.annotation.RequiresPermissions;;
-import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.*;
 import com.baomidou.mybatisplus.mapper.EntityWrapper;;
-import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.beans.factory.annotation.Autowired;
 import com.stylefeng.guns.core.util.ToolUtil;
 import com.stylefeng.guns.core.log.LogObjectHolder;
-import org.springframework.web.bind.annotation.RequestParam;
+
 import java.util.*;
 import com.stylefeng.guns.modular.user.model.EducationExperience;
 import com.stylefeng.guns.modular.user.service.IEducationExperienceService;
@@ -61,6 +59,13 @@ public class EducationExperienceController extends BaseController {
         }
         return PREFIX + "educationExperience_add.html";
     }
+    /**
+     * 跳转到申请修改
+     */
+    @RequestMapping("/addApply")
+    public String addApply(User user,Model model) {
+        return PREFIX + "educationExperience_apply.html";
+    }
 
     /**
      * 跳转到修改学历培训
@@ -75,6 +80,15 @@ public class EducationExperienceController extends BaseController {
     }
 
     /**
+     * 跳转到修改学历培训
+     */
+    @RequestMapping("/educationExperience_act")
+    public String educationExperienceAct(EducationExperience educationExperience,Model model) {
+
+        return PREFIX + "educationExperience_edit.html";
+    }
+
+    /**
      * 获取学历培训列表
      */
     @RequestMapping(value = "/list")
@@ -83,21 +97,15 @@ public class EducationExperienceController extends BaseController {
     public Object list(EducationExperience educationExperience) {
         Page<EducationExperience> page = new PageFactory<EducationExperience>().defaultPage();
         EntityWrapper< EducationExperience> wrapper = new EntityWrapper<>();
+        if (educationExperience.getStatus() != null) {
+            wrapper.eq("status", educationExperience.getStatus());
+        }
+        if (educationExperience.getUserId() != null) {
+            wrapper.eq("user_id", educationExperience.getUserId());
+        }
         educationExperienceService.selectPage(page,wrapper);
         page.setRecords(new EducationExperienceDecorator(page.getRecords()).decorate());
         return packForBT(page);
-    }
-
-    /**
-     * 获取学历培训列表
-     */
-    @RequestMapping(value = "/test")
-    @RequiresPermissions(value = {"/educationExperience/list"})
-    @ResponseBody
-    public Object test(EducationExperience educationExperience) {
-//        Page<EducationExperience> page = new PageFactory<EducationExperience>().defaultPage();
-        EntityWrapper< EducationExperience> wrapper = new EntityWrapper<>();
-        return educationExperience.selectList(wrapper);
     }
 
     /**
@@ -108,6 +116,17 @@ public class EducationExperienceController extends BaseController {
     @ResponseBody
     public Object add(EducationExperience educationExperience) {
         educationExperienceService.insert(educationExperience);
+        return SUCCESS_TIP;
+    }
+
+    /**
+     * 新增申请
+     */
+    @RequestMapping(value = "/doAddApply")
+    @RequiresPermissions(value = {"/educationExperience/add"})
+    @ResponseBody
+    public Object doAddApply(@RequestBody List<EducationExperience> educationExperiences) {
+        educationExperienceService.addApply(educationExperiences);
         return SUCCESS_TIP;
     }
 

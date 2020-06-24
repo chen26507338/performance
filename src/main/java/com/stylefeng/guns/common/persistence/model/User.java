@@ -110,7 +110,7 @@ public class User extends BaseModel<User> {
     /**
      * 紧急联系人关系
      */
-	private String emergencyRelation;
+	private Integer emergencyRelation;
     /**
      * 退休日期
      */

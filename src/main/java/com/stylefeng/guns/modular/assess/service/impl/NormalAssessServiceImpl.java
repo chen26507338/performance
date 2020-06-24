@@ -213,7 +213,7 @@ public class NormalAssessServiceImpl extends ServiceImpl<NormalAssessMapper, Nor
                             ReflectUtil.setFieldValue(assessNormPoint, normalAssess.getType() + "College", collegePoint);
                         } else {
                             assessNormPoint = new AssessNormPoint();
-                            Double mainPoint = assess.getMainNormPoint() * assess.getResult() * assessCoefficient.getCoefficient();
+                            double mainPoint = assess.getMainNormPoint() * assess.getResult() * assessCoefficient.getCoefficient();
                             ReflectUtil.setFieldValue(assessNormPoint, normalAssess.getType() + "Main", mainPoint);
                             ReflectUtil.setFieldValue(assessNormPoint, normalAssess.getType() + "College", mainPoint * (1 + assess.getCollegeNormPoint()));
                         }

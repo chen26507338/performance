@@ -34,6 +34,11 @@ public interface IRoleService extends IService<Role> {
     long TYPE_HR_HANDLER = 13;
 
     /**
+     * 角色类型：学历培训审核人事专员
+     */
+    long TYPE_EDU_EXP_HR = 14;
+
+    /**
      * 设置某个角色的权限
      *
      * @param roleId 角色id

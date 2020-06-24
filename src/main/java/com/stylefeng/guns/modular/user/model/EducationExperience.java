@@ -1,16 +1,14 @@
 package com.stylefeng.guns.modular.user.model;
 
-import java.util.Date;
-
-import com.alibaba.fastjson.annotation.JSONField;
-import com.baomidou.mybatisplus.annotations.TableId;
 import com.baomidou.mybatisplus.annotations.TableField;
+import com.baomidou.mybatisplus.annotations.TableId;
 import com.baomidou.mybatisplus.annotations.TableName;
-import com.fasterxml.jackson.annotation.JsonFormat;
-import com.stylefeng.guns.core.base.BaseModel;
+import com.stylefeng.guns.common.persistence.model.BaseActEntity;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
+
 import java.io.Serializable;
+import java.util.Date;
 
 
 /**
@@ -22,7 +20,7 @@ import java.io.Serializable;
 @Data
 @EqualsAndHashCode(callSuper = true)
 @TableName("education_experience")
-public class EducationExperience extends BaseModel<EducationExperience> {
+public class EducationExperience extends BaseActEntity<EducationExperience> {
 
     @Override
     protected Serializable pkVal() {
@@ -39,13 +37,13 @@ public class EducationExperience extends BaseModel<EducationExperience> {
     * 入学时间
     */
     @TableField("enrollment_time")
-    private Date enrollmentTime;
+    private String enrollmentTime;
 
     /**
     * 毕业时间
     */
     @TableField("graduate_time")
-    private Date graduateTime;
+    private String graduateTime;
 
     /**
     * 毕业学校
@@ -70,6 +68,18 @@ public class EducationExperience extends BaseModel<EducationExperience> {
     */
     @TableField("degree")
     private Integer degree;
+    /**
+    * 状态
+    */
+    @TableField("status")
+    private Integer status;
+
+    /**
+     * 流程实例ID
+     */
+    @TableField("proc_ins_id")
+    private String procInsId;
+
 
     /**
     * 学习方式

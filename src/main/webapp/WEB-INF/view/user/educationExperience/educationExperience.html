@@ -1,6 +1,7 @@
 @layout("/common/_container.html"){
 <div class="row">
     <input id="userId" value="${user.id!}" type="hidden" />
+    <input id="status" value="1" type="hidden">
     <div class="col-sm-12">
         <div class="ibox float-e-margins">
             <div class="ibox-title">
@@ -15,6 +16,7 @@
                             </div>
                         </div>
                         <div class="hidden-xs" id="EducationExperienceTableToolbar" role="group">
+                            <#button name="申请修改" icon="fa-plus" clickFun="EducationExperience.openAddApply()"/>
                             @if(shiro.hasPermission("/educationExperience/add")){
                                 <#button name="添加" icon="fa-plus" clickFun="EducationExperience.openAddEducationExperience()"/>
                             @}
