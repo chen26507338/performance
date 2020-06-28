@@ -21,7 +21,7 @@
         <repository>
             <id>maven-snapshots</id>
             <name>maven-snapshots</name>
-            <url>http://maven.hishero.cn/repository/maven-snapshots</url>
+            <url>http://maven.hishero.cn:8081/repository/maven-snapshots</url>
         </repository>
 
         <repository>
