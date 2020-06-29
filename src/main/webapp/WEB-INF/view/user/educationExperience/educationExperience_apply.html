@@ -9,7 +9,55 @@
                     <#button btnCss="info" name="增加" icon="fa-plus" clickFun="EducationExperienceInfoDlg.addItem()"/>
                 </div>
                 <div class="col-sm-12" id="itemsArea">
+                    <input type="hidden" id="itemSize" value="${list.~size}">
+                    @for(listItem in list){
+                    <form class="form-inline" name="educationExperienceItem" id="educationExperienceItem${listItemLP.index}">
+                        <div class="form-group">
+                            <label >毕业学校</label>
+                            <input class="form-control" type="text" name="school" value="${listItem.school}">
+                        </div>
+                        <div class="form-group">
+                            <label>所学专业</label>
+                            <input class="form-control" type="text" name="major" value="${listItem.major}">
+                        </div>
+                        <div class="form-group">
+                            <label >学历</label>
+                            <select name="educationBackground" class="form-control">
+                                @for(item in constant.getDictsByName('学历')){
+                                <option value="${item.num}" ${parseInt(listItem.educationBackground) == parseInt(item.num) ? "selected"}>${item.name}</option>
+                                @}
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label >学位</label>
+                            <select name="degree" class="form-control">
+                                @for(item in constant.getDictsByName('学位')){
+                                <option value="${item.num}" ${parseInt(listItem.degree) == parseInt(item.num) ? "selected"}>${item.name}</option>
+                                @}
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label >学习方式</label>
+                            <select name="learnStyle" class="form-control">
+                                @for(item in constant.getDictsByName('学习方式')){
+                                <option value="${item.num}" ${parseInt(listItem.learnStyle) == parseInt(item.num) ? "selected"}>${item.name}</option>
+                                @}
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label>入学时间</label>
+                            <input class="form-control" type="text" name="enrollmentTime" value="${listItem.enrollmentTime}">
+                        </div>
+                        <div class="form-group">
+                            <label>毕业时间</label>
+                            <input class="form-control" type="text" name="graduateTime" value="${listItem.graduateTime}">
+                        </div>
 
+                        <div class="form-group">
+                            <#button btnCss="danger" name="删除" id="cancel" icon="fa-remove" clickFun="EducationExperienceInfoDlg.deleteItem(event)"/>
+                        </div>
+                    </form>
+                    @}
                 </div>
             </div>
 

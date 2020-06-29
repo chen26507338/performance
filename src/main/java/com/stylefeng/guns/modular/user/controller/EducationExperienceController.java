@@ -1,10 +1,15 @@
 package com.stylefeng.guns.modular.user.controller;
 
+import com.stylefeng.guns.common.constant.state.YesNo;
 import com.stylefeng.guns.common.persistence.model.User;
 import com.stylefeng.guns.core.base.controller.BaseController;
 import com.baomidou.mybatisplus.plugins.Page;
 import com.stylefeng.guns.common.constant.factory.PageFactory;
 import com.stylefeng.guns.core.shiro.ShiroKit;
+import com.stylefeng.guns.modular.act.service.ActTaskService;
+import com.stylefeng.guns.modular.assess.decorator.NormalAssessDecorator;
+import com.stylefeng.guns.modular.assess.model.NormalAssess;
+import org.activiti.engine.TaskService;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.stereotype.Controller;
 import org.apache.shiro.authz.annotation.RequiresPermissions;;
@@ -34,6 +39,8 @@ public class EducationExperienceController extends BaseController {
 
     @Autowired
     private IEducationExperienceService educationExperienceService;
+    @Autowired
+    private ActTaskService taskService;
 
     /**
      * 跳转到学历培训首页e'x
@@ -63,7 +70,13 @@ public class EducationExperienceController extends BaseController {
      * 跳转到申请修改
      */
     @RequestMapping("/addApply")
-    public String addApply(User user,Model model) {
+    public String addApply(Model model) {
+        EducationExperience params = new EducationExperience();
+        params.setUserId(ShiroKit.getUser().id);
+        params.setStatus(YesNo.YES.getCode());
+        EntityWrapper<EducationExperience> wrapper = new EntityWrapper<>(params);
+        List<EducationExperience> list = educationExperienceService.selectList(wrapper);
+        model.addAttribute("list", list);
         return PREFIX + "educationExperience_apply.html";
     }
 
@@ -84,8 +97,12 @@ public class EducationExperienceController extends BaseController {
      */
     @RequestMapping("/educationExperience_act")
     public String educationExperienceAct(EducationExperience educationExperience,Model model) {
-
-        return PREFIX + "educationExperience_edit.html";
+        String path = (String) taskService.getTaskService().getVariable(educationExperience.getAct().getTaskId(), "act_path");
+        if (!path.equals("/educationExperience/educationExperience_act")) {
+            return "forward:" + path;
+        }
+        model.addAttribute("act", educationExperience.getAct());
+        return PREFIX + "educationExperience_audit.html";
     }
 
     /**
@@ -103,9 +120,30 @@ public class EducationExperienceController extends BaseController {
         if (educationExperience.getUserId() != null) {
             wrapper.eq("user_id", educationExperience.getUserId());
         }
+        if (educationExperience.getProcInsId() != null) {
+            wrapper.eq("proc_ins_id", educationExperience.getProcInsId());
+        }
         educationExperienceService.selectPage(page,wrapper);
         page.setRecords(new EducationExperienceDecorator(page.getRecords()).decorate());
         return packForBT(page);
+    }
+
+    /**
+     * 学历流程数据
+     */
+    @RequestMapping("/educationExperienceProcData")
+    @ResponseBody
+//    @RequiresPermissions(value = {"/normalAssess/update"})
+    public Object normalAssessProcData(EducationExperience educationExperience) {
+        List<EducationExperience> educationExperiences = educationExperienceService.selectList(new EntityWrapper<>(educationExperience));
+        Map<String, Object> result = new HashMap<>();
+        result.put("code", 0);
+        List<Map<String, Object>> datas = new EducationExperienceDecorator(educationExperiences).decorateMaps();
+        for (Map<String, Object> data : datas) {
+            data.remove("act");
+        }
+        result.put("data", datas);
+        return result;
     }
 
     /**
@@ -116,6 +154,16 @@ public class EducationExperienceController extends BaseController {
     @ResponseBody
     public Object add(EducationExperience educationExperience) {
         educationExperienceService.insert(educationExperience);
+        return SUCCESS_TIP;
+    }
+
+    /**
+     * 审核
+     */
+    @RequestMapping(value = "/audit")
+    @ResponseBody
+    public Object audit(EducationExperience educationExperience) {
+        educationExperienceService.audit(educationExperience);
         return SUCCESS_TIP;
     }
 

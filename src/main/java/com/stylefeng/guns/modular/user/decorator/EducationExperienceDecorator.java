@@ -14,8 +14,8 @@ public class EducationExperienceDecorator extends BaseListDecorator<EducationExp
 
     @Override
     protected void decorateTheEntity(EducationExperience educationExperience) {
-        educationExperience.putExpand("educationBackgroundDict", ConstantFactory.me().getDictsByName("学历",educationExperience.getEducationBackground()));
-        educationExperience.putExpand("degreeDict", ConstantFactory.me().getDictsByName("学位",educationExperience.getDegree()));
-        educationExperience.putExpand("learnStyleDict", ConstantFactory.me().getDictsByName("学习方式",educationExperience.getLearnStyle()));
+        educationExperience.setEducationBackgroundDict(ConstantFactory.me().getDictsByName("学历",educationExperience.getEducationBackground()));
+        educationExperience.setDegreeDict(ConstantFactory.me().getDictsByName("学位",educationExperience.getDegree()));
+        educationExperience.setLearnStyleDict(ConstantFactory.me().getDictsByName("学习方式",educationExperience.getLearnStyle()));
     }
 }

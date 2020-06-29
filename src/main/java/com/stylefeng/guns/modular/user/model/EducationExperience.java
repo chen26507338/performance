@@ -64,6 +64,22 @@ public class EducationExperience extends BaseActEntity<EducationExperience> {
     private Integer educationBackground;
 
     /**
+    * 学历
+    */
+    @TableField(exist = false)
+    private String educationBackgroundDict;
+    /**
+    * 学位
+    */
+    @TableField(exist = false)
+    private String degreeDict;
+    /**
+    * 学习方式
+    */
+    @TableField(exist = false)
+    private String learnStyleDict;
+
+    /**
     * 学位
     */
     @TableField("degree")

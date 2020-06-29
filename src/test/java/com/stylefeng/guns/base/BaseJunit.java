@@ -1,9 +1,12 @@
 package com.stylefeng.guns.base;
 
+import cn.hutool.core.collection.CollUtil;
 import com.stylefeng.guns.GunsApplication;
+import com.stylefeng.guns.common.constant.factory.ConstantFactory;
 import com.stylefeng.guns.modular.system.service.IUserService;
 import org.junit.Assert;
 import org.junit.Before;
+import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -41,6 +44,12 @@ public class BaseJunit {
 
     @Before
     public void initDatabase(){
+    }
+
+    @Test
+    public void testGetDicts() {
+        System.out.println(ConstantFactory.me().getDictValueByName("学历", ""));
+
     }
 
 }

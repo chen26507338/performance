@@ -51,4 +51,9 @@ public class Dict extends Model<Dict> {
 	protected Serializable pkVal() {
 		return this.id;
 	}
+
+	@Override
+	public String toString() {
+		return this.name;
+	}
 }

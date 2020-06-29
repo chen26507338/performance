@@ -18,9 +18,9 @@ EducationExperience.initColumn = function () {
        ,{title: '毕业时间', field:'graduateTime', visible: true, align: 'center', valign: 'middle'}
        ,{title: '毕业学校', field:'school', visible: true, align: 'center', valign: 'middle'}
        ,{title: '所学专业', field:'major', visible: true, align: 'center', valign: 'middle'}
-       ,{title: '学历', field:'educationBackground', visible: true, align: 'center', valign: 'middle',formatter:function(value, row, index){return row.expand.educationBackgroundDict;}}
-       ,{title: '学位', field:'degree', visible: true, align: 'center', valign: 'middle',formatter:function(value, row, index){return row.expand.degreeDict;}}
-       ,{title: '学习方式', field:'learnStyle', visible: true, align: 'center', valign: 'middle',formatter:function(value, row, index){return row.expand.learnStyleDict;}}
+       ,{title: '学历', field:'educationBackgroundDict', visible: true, align: 'center', valign: 'middle'}
+       ,{title: '学位', field:'degreeDict', visible: true, align: 'center', valign: 'middle'}
+       ,{title: '学习方式', field:'learnStyleDict', visible: true, align: 'center', valign: 'middle'}
     ];
 };
 

@@ -27,7 +27,8 @@ guns:
 beetl:
   resource-auto-check: true #是否检测文件变化,开发用true合适，但线上要改为false
 logging:
-  level.root: info
-  level.com.stylefeng: debug
+  level:
+    root: info
+    com.stylefeng.guns: debug
   path: logs/
   file: guns.log

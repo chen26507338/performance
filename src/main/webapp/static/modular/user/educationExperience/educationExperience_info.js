@@ -109,6 +109,7 @@ EducationExperienceInfoDlg.collectData = function() {
 EducationExperienceInfoDlg.collectItems = function() {
     this.clearNullDom();
     var that = this;
+    this.data = [];
     $("[name='educationExperienceItem']").each(function(){
         var data = {};
         var school = $(this).find("[name='school']").val();
@@ -181,6 +182,28 @@ EducationExperienceInfoDlg.addSubmit = function() {
 };
 
 /**
+ * 审核
+ */
+EducationExperienceInfoDlg.auditSubmit = function(pass) {
+    //提交信息
+    var ajax = new $ax(Feng.ctxPath + "/educationExperience/audit", function(data){
+        Feng.success("提交成功!");
+        window.parent.ActTodoTask.table.refresh();
+        EducationExperienceInfoDlg.close();
+    },function(data){
+        Feng.error("提交失败!" + data.responseJSON.message + "!");
+    });
+    this.educationExperienceInfoData['expand["pass"]'] = pass;
+    this.educationExperienceInfoData['expand["comment"]'] = $("#comment").val();
+    this.educationExperienceInfoData['expand["data"]'] = JSON.stringify(datas);
+    this.educationExperienceInfoData['act.taskId'] = $("#taskId").val();
+    this.educationExperienceInfoData['act.procInsId'] = $("#procInsId").val();
+    this.educationExperienceInfoData['act.taskDefKey'] = $("#taskDefKey").val();
+    ajax.set(this.educationExperienceInfoData);
+    ajax.start();
+};
+
+/**
  * 提交修改
  */
 EducationExperienceInfoDlg.editSubmit = function() {
@@ -204,7 +227,44 @@ EducationExperienceInfoDlg.editSubmit = function() {
     ajax.start();
 };
 
+var table;
+var datas = [];
 $(function() {
     Feng.initValidator("EducationExperienceForm", EducationExperienceInfoDlg.validateFields);
+
+    layui.use('table', function(){
+        table = layui.table;
+
+        //执行渲染
+        table.render({
+            elem: '#educationExperienceTable' //指定原始表格元素选择器（推荐id选择器）
+            ,height: 315 //容器高度
+            ,url: Feng.ctxPath+'/educationExperience/educationExperienceProcData/'
+            ,where: {procInsId: $("#procInsId").val()}
+            ,cols: [[ //表头
+                {field: 'id', title: 'ID',hide:true, fixed: 'left'}
+                ,{field: 'enrollmentTime', title: '入学时间',edit:'text'}
+                ,{field: 'graduateTime', title: '毕业时间',edit:'text'}
+                ,{field: 'school', title: '毕业学校',edit:'text'}
+                ,{field: 'major', title: '所学专业',edit:'text'}
+                ,{field: 'educationBackgroundDict', title: '学历',edit:'text'}
+                ,{field: 'degreeDict', title: '学位',edit:'text'}
+                ,{field: 'learnStyleDict', title: '学习方式',edit:'text'}
+            ]] //设置表头
+        });
+
+        table.on('edit(eduExperience)', function(obj){ //注：edit是固定事件名，test是table原始容器的属性 lay-filter="对应的值"
+            var isAdd = false;
+            for (var index in datas) {
+                if (datas[index].id == obj.data.id) {
+                    datas[index] = obj.data;
+                    isAdd = true;
+                }
+            }
+            if (!isAdd) {
+                datas.push(obj.data);
+            }
+        });
+    });
 
 });
