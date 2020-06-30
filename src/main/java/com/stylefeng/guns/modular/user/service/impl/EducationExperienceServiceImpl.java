@@ -47,7 +47,6 @@ public class EducationExperienceServiceImpl extends ServiceImpl<EducationExperie
     public void addApply(List<EducationExperience> educationExperiences) {
         EntityWrapper<User> wrapper = new EntityWrapper<>();
         wrapper.like("role_id", IRoleService.TYPE_EDU_EXP_HR + "");
-//  wrapper.eq("dept_id", ShiroKit.getUser().deptId);
         User eduExpHr = userService.selectOne(wrapper);
         Map<String, Object> vars = new HashMap<>();
         vars.put("audit_user", eduExpHr.getId());

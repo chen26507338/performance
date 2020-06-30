@@ -76,7 +76,7 @@ EducationExperienceInfoDlg.close = function() {
  * 清除为空的item Dom
  */
 EducationExperienceInfoDlg.clearNullDom = function(){
-    $("[name='normalAssessItem']").each(function(){
+    $("[name='educationExperienceItem']").each(function(){
         var school = $(this).find("[name='school']").val();
         var major = $(this).find("[name='major']").val();
         var educationBackground = $(this).find("[name='educationBackground']").val();
