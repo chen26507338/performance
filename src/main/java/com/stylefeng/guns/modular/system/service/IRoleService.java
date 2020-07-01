@@ -44,6 +44,15 @@ public interface IRoleService extends IService<Role> {
     long TYPE_WORK_RESUME_HR = 15;
 
     /**
+     * 角色类型：亲属关系审核人事专员
+     */
+    long TYPE_KINSHIP_HR = 16;
+    /**
+     * 角色类型：奖惩考核审核人事专员
+     */
+    long TYPE_RP_HR = 17;
+
+    /**
      * 设置某个角色的权限
      *
      * @param roleId 角色id

@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.stylefeng.guns.modular.user.dao.RewardsPunishmentMapper">
+
+	<!-- 通用查询映射结果 -->
+	<resultMap id="BaseResultMap" type="com.stylefeng.guns.modular.user.model.RewardsPunishment">
+            <id column="id" property="id" />
+            <result column="content" property="content" />
+            <result column="time" property="time" />
+            <result column="type" property="type" />
+            <result column="name" property="name" />
+            <result column="reference_number" property="referenceNumber" />
+            <result column="approved_by" property="approvedBy" />
+            <result column="proc_ins_id" property="procInsId" />
+            <result column="status" property="status" />
+            <result column="user_id" property="userId" />
+	</resultMap>
+
+    <!-- 通用查询结果列 -->
+    <sql id="Base_Column_List">
+	    id AS id,
+	    content AS content,
+	    time AS time,
+	    type AS type,
+	    name AS name,
+	    reference_number AS referenceNumber,
+	    approved_by AS approvedBy,
+	    proc_ins_id AS procInsId,
+	    status AS status,
+	    user_id AS userId
+    </sql>
+
+</mapper>

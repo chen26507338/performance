@@ -1,0 +1,50 @@
+@layout("/common/_container.html"){
+<div class="ibox float-e-margins">
+    <div class="ibox-content">
+        <div class="form-horizontal" id="RewardsPunishmentForm">
+
+            <input type="hidden" id="id" value="${item.id}">
+
+            <div class="row">
+
+                <div class="col-sm-6 b-r">
+                    <#input id="content" name="奖或惩" value="${item.content}" underline="true"/>
+                </div>
+                <div class="col-sm-6 b-r">
+                    <#input id="time" name="时间" value="${item.time}" underline="true"/>
+                </div>
+                <div class="col-sm-6 b-r">
+                    <#input id="type" name="种类" value="${item.type}" underline="true"/>
+                </div>
+                <div class="col-sm-6 b-r">
+                    <#input id="name" name="名称" value="${item.name}" underline="true"/>
+                </div>
+                <div class="col-sm-6 b-r">
+                    <#input id="referenceNumber" name="批准依据（文号）" value="${item.referenceNumber}" underline="true"/>
+                </div>
+                <div class="col-sm-6 b-r">
+                    <#input id="approvedBy" name="批准单位" value="${item.approvedBy}" underline="true"/>
+                </div>
+                <div class="col-sm-6 b-r">
+                    <#input id="procInsId" name="流程实例ID" value="${item.procInsId}" underline="true"/>
+                </div>
+                <div class="col-sm-6 b-r">
+                    <#input id="status" name="状态" value="${item.status}" underline="true"/>
+                </div>
+                <div class="col-sm-6 b-r">
+                    <#input id="userId" name="用户ID" value="${item.userId}" underline="true"/>
+                </div>
+            </div>
+
+            <div class="row btn-group-m-t">
+                <div class="col-sm-10">
+                    <#button btnCss="info" name="提交" id="ensure" icon="fa-check" clickFun="RewardsPunishmentInfoDlg.editSubmit()"/>
+                    <#button btnCss="danger" name="取消" id="cancel" icon="fa-eraser" clickFun="RewardsPunishmentInfoDlg.close()"/>
+                </div>
+            </div>
+        </div>
+
+    </div>
+</div>
+<script src="${ctxPath}/static/modular/user/rewardsPunishment/rewardsPunishment_info.js"></script>
+@}

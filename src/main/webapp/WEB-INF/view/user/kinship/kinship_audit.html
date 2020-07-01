@@ -1,0 +1,30 @@
+@layout("/common/_container.html"){
+<div class="ibox float-e-margins">
+    <div class="ibox-content">
+        <div class="form-horizontal" id="KinshipForm">
+
+            <input type="hidden" id="taskId" value="${act.taskId}">
+            <input type="hidden" id="procInsId" value="${act.procInsId}">
+            <input type="hidden" id="taskDefKey" value="${act.taskDefKey}">
+
+            <div class="row">
+                <div class="col-sm-6 b-r">
+                    <#input id="comment" type="textarea" name="意见" underline="true"/>
+                </div>
+            </div>
+            <table id="editTable" lay-filter="editFilter"></table>
+
+            <div class="row btn-group-m-t">
+                <div class="col-sm-10">
+                    <#button btnCss="info" name="通过" id="ensure" icon="fa-check" clickFun="KinshipInfoDlg.auditSubmit(1)"/>
+                    <#button btnCss="danger" name="拒绝" id="cancel" icon="fa-eraser" clickFun="KinshipInfoDlg.auditSubmit(0)"/>
+                    <#button btnCss="danger" name="关闭" id="cancel" icon="fa-eraser" clickFun="KinshipInfoDlg.close()"/>
+                </div>
+            </div>
+            <#histoicFlow procInsId="${act.procInsId}"/>
+        </div>
+
+    </div>
+</div>
+<script src="${ctxPath}/static/modular/user/kinship/kinship_info.js"></script>
+@}

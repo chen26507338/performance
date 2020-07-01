@@ -95,6 +95,7 @@ public class EducationExperienceServiceImpl extends ServiceImpl<EducationExperie
     }
 
     @Override
+    @Transactional
     public void audit(EducationExperience educationExperience) {
         String pass = (String) educationExperience.getExpand().get("pass");
         StringBuilder comment = new StringBuilder(pass.equals(YesNo.YES.getCode() + "") ? "【通过】" : "【驳回】");

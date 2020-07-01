@@ -1,0 +1,98 @@
+@layout("/common/_container.html"){
+<div class="ibox float-e-margins">
+    <div class="ibox-content">
+
+        <div id="RewardsPunishmentForm">
+
+            <div class="row">
+                <div class="col-sm-2">
+                    <#button btnCss="info" name="增加" icon="fa-plus" clickFun="RewardsPunishmentInfoDlg.addItem()"/>
+                </div>
+                <div class="col-sm-12" id="itemsArea">
+                    <input type="hidden" id="itemSize" value="${list.~size}">
+                    @for(listItem in list){
+                    <form class="form-inline" name="RewardsPunishmentItem" id="RewardsPunishmentItem${listItemLP.index}">
+                        <div class="form-group">
+                            <label>奖或惩</label>
+                            <input class="form-control" type="text" name="content" value="${listItem.content}">
+                        </div>
+                        <div class="form-group">
+                            <label>时间</label>
+                            <input class="form-control" type="text" name="time" value="${listItem.time}">
+                        </div>
+                        <div class="form-group">
+                            <label>名称</label>
+                            <input class="form-control" type="text" name="name" value="${listItem.name}">
+                        </div>
+                        <div class="form-group">
+                            <label >种类</label>
+                            <select name="type" class="form-control">
+                                @for(item in constant.getDictsByName('奖惩种类')){
+                                <option value="${item.num}" ${parseInt(listItem.type) == parseInt(item.num) ? "selected"}>${item.name}</option>
+                                @}
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label>批准依据（文号）</label>
+                            <input class="form-control" type="text" name="referenceNumber" value="${listItem.referenceNumber}">
+                        </div>
+                        <div class="form-group">
+                            <label>批准单位</label>
+                            <input class="form-control" type="text" name="approvedBy" value="${listItem.approvedBy}">
+                        </div>
+
+                        <div class="form-group">
+                            <#button btnCss="danger" name="删除" id="cancel" icon="fa-remove" clickFun="RewardsPunishmentInfoDlg.deleteItem(event)"/>
+                        </div>
+                    </form>
+                    @}
+                </div>
+            </div>
+
+            <div class="row btn-group-m-t">
+                <div class="col-sm-10">
+                    <#button btnCss="info" name="提交" id="ensure" icon="fa-check" clickFun="RewardsPunishmentInfoDlg.addApply()"/>
+                    <#button btnCss="danger" name="取消" id="cancel" icon="fa-eraser" clickFun="RewardsPunishmentInfoDlg.close()"/>
+                </div>
+            </div>
+
+            <script type="text/template" id="itemTemplate">
+                <form class="form-inline" name="RewardsPunishmentItem" id="RewardsPunishmentItem">
+                    <div class="form-group">
+                        <label>奖或惩</label>
+                        <input class="form-control" type="text" name="name" >
+                    </div>
+                    <div class="form-group">
+                        <label>时间</label>
+                        <input class="form-control" type="text" name="time" >
+                    </div>
+                    <div class="form-group">
+                        <label>名称</label>
+                        <input class="form-control" type="text" name="name" >
+                    </div>
+                    <div class="form-group">
+                        <label >种类</label>
+                        <select name="type" class="form-control">
+                            @for(item in constant.getDictsByName('奖惩种类')){
+                            <option value="${item.num}" >${item.name}</option>
+                            @}
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label>批准依据（文号）</label>
+                        <input class="form-control" type="text" name="referenceNumber" >
+                    </div>
+                    <div class="form-group">
+                        <label>批准单位</label>
+                        <input class="form-control" type="text" name="approvedBy" >
+                    </div>
+
+                </form>
+            </script>
+
+        </div>
+
+    </div>
+</div>
+<script src="${ctxPath}/static/modular/user/RewardsPunishment/RewardsPunishment_info.js"></script>
+@}

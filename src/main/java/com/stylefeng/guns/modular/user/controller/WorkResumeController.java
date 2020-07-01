@@ -1,28 +1,28 @@
 package com.stylefeng.guns.modular.user.controller;
 
+import com.baomidou.mybatisplus.mapper.EntityWrapper;
+import com.baomidou.mybatisplus.plugins.Page;
+import com.stylefeng.guns.common.constant.factory.PageFactory;
 import com.stylefeng.guns.common.constant.state.YesNo;
 import com.stylefeng.guns.common.persistence.model.User;
 import com.stylefeng.guns.core.base.controller.BaseController;
-import com.baomidou.mybatisplus.plugins.Page;
-import com.stylefeng.guns.common.constant.factory.PageFactory;
-import com.stylefeng.guns.core.shiro.ShiroKit;
-import com.stylefeng.guns.modular.act.service.ActTaskService;
-import com.stylefeng.guns.modular.user.decorator.EducationExperienceDecorator;
-import com.stylefeng.guns.modular.user.model.EducationExperience;
-import org.apache.commons.lang3.StringUtils;
-import org.springframework.stereotype.Controller;
-import org.apache.shiro.authz.annotation.RequiresPermissions;;
-import org.springframework.web.bind.annotation.*;
-import com.baomidou.mybatisplus.mapper.EntityWrapper;;
-import org.springframework.ui.Model;
-import org.springframework.beans.factory.annotation.Autowired;
-import com.stylefeng.guns.core.util.ToolUtil;
 import com.stylefeng.guns.core.log.LogObjectHolder;
-
-import java.util.*;
+import com.stylefeng.guns.core.shiro.ShiroKit;
+import com.stylefeng.guns.modular.user.decorator.WorkResumeDecorator;
 import com.stylefeng.guns.modular.user.model.WorkResume;
 import com.stylefeng.guns.modular.user.service.IWorkResumeService;
-import com.stylefeng.guns.modular.user.decorator.WorkResumeDecorator;
+import org.apache.shiro.authz.annotation.RequiresPermissions;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
+import org.springframework.web.bind.annotation.*;
+
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+
+;
+;
 
 /**
  * 工作简历控制器
@@ -38,8 +38,6 @@ public class WorkResumeController extends BaseController {
 
     @Autowired
     private IWorkResumeService workResumeService;
-    @Autowired
-    private ActTaskService taskService;
 
     /**
      * 跳转到工作简历首页

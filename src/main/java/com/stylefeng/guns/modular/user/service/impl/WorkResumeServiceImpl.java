@@ -20,6 +20,7 @@ import com.baomidou.mybatisplus.service.impl.ServiceImpl;
 import com.stylefeng.guns.modular.user.model.WorkResume;
 import com.stylefeng.guns.modular.user.dao.WorkResumeMapper;
 import com.stylefeng.guns.modular.user.service.IWorkResumeService;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.HashMap;
 import java.util.List;
@@ -41,6 +42,7 @@ public class WorkResumeServiceImpl extends ServiceImpl<WorkResumeMapper, WorkRes
     private IUserService userService;
 
     @Override
+    @Transactional
     public void addApply(List<WorkResume> workResumes) {
         EntityWrapper<User> wrapper = new EntityWrapper<>();
         wrapper.like("role_id", IRoleService.TYPE_WORK_RESUME_HR + "");
@@ -60,6 +62,7 @@ public class WorkResumeServiceImpl extends ServiceImpl<WorkResumeMapper, WorkRes
     }
 
     @Override
+    @Transactional
     public void audit(WorkResume workResume) {
         String pass = (String) workResume.getExpand().get("pass");
         StringBuilder comment = new StringBuilder(pass.equals(YesNo.YES.getCode() + "") ? "【通过】" : "【驳回】");
