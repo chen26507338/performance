@@ -1,0 +1,80 @@
+@layout("/common/_container.html"){
+<div class="ibox float-e-margins">
+    <div class="ibox-content">
+
+        <div id="ScientificTreatiseForm">
+
+            <div class="row">
+                <div class="col-sm-2">
+                    <#button btnCss="info" name="增加" icon="fa-plus" clickFun="ScientificTreatiseInfoDlg.addItem()"/>
+                </div>
+                <div class="col-sm-12" id="itemsArea">
+                    <input type="hidden" id="itemSize" value="${list.~size}">
+                    @for(listItem in list){
+                    <form class="form-inline" name="ScientificTreatiseItem" id="ScientificTreatiseItem${listItemLP.index}">
+                        <div class="form-group">
+                            <label>发表时间</label>
+                            <input class="form-control" type="text" name="publishDate" value="${listItem.publishDate}">
+                        </div>
+                        <div class="form-group">
+                            <label>论文题目</label>
+                            <input class="form-control" type="text" name="title" value="${listItem.title}">
+                        </div>
+                        <div class="form-group">
+                            <label>刊物名称</label>
+                            <input class="form-control" type="text" name="periodicalName" value="${listItem.periodicalName}">
+                        </div>
+                        <div class="form-group">
+                            <label>作者顺序</label>
+                            <input class="form-control" type="text" name="authorOrder" value="${listItem.authorOrder}">
+                        </div>
+                        <div class="form-group">
+                            <label>刊物级别</label>
+                            <input class="form-control" type="text" name="periodicalLevel" value="${listItem.periodicalLevel}">
+                        </div>
+                        <div class="form-group">
+                            <#button btnCss="danger" name="删除" id="cancel" icon="fa-remove" clickFun="ScientificTreatiseInfoDlg.deleteItem(event)"/>
+                        </div>
+                    </form>
+                    @}
+                </div>
+            </div>
+
+            <div class="row btn-group-m-t">
+                <div class="col-sm-10">
+                    <#button btnCss="info" name="提交" id="ensure" icon="fa-check" clickFun="ScientificTreatiseInfoDlg.addApply()"/>
+                    <#button btnCss="danger" name="取消" id="cancel" icon="fa-eraser" clickFun="ScientificTreatiseInfoDlg.close()"/>
+                </div>
+            </div>
+
+            <script type="text/template" id="itemTemplate">
+                <form class="form-inline" name="ScientificTreatiseItem" id="ScientificTreatiseItem">
+                    <div class="form-group">
+                        <label>发表时间</label>
+                        <input class="form-control" type="text" name="publishDate" >
+                    </div>
+                    <div class="form-group">
+                        <label>论文题目</label>
+                        <input class="form-control" type="text" name="title" >
+                    </div>
+                    <div class="form-group">
+                        <label>刊物名称</label>
+                        <input class="form-control" type="text" name="periodicalName" >
+                    </div>
+                    <div class="form-group">
+                        <label>作者顺序</label>
+                        <input class="form-control" type="text" name="authorOrder" >
+                    </div>
+                    <div class="form-group">
+                        <label>刊物级别</label>
+                        <input class="form-control" type="text" name="periodicalLevel" >
+                    </div>
+                </form>
+            </script>
+
+        </div>
+
+    </div>
+</div>
+<script src="${ctxPath}/static/modular/user/ScientificTreatise/ScientificTreatise_info.js"></script>
+@}

@@ -53,6 +53,11 @@ public interface IRoleService extends IService<Role> {
     long TYPE_RP_HR = 17;
 
     /**
+     * 角色类型：科研论著审核人事专员
+     */
+    long TYPE_SCIENTIFIC_TREATISE_HR = 18;
+
+    /**
      * 设置某个角色的权限
      *
      * @param roleId 角色id
