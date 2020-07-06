@@ -7,72 +7,76 @@
 
             <div class="row">
                 <div class="col-sm-6 b-r">
-                    <#input id="name" name="名字" underline="true"/>
+                    <#input id="name" name="名字" value="${item.name!}" underline="true"/>
                 </div>
                 <div class="col-sm-6 b-r">
-                    <#input id="birthday" name="出生年月" underline="true"
+                    <#input id="idCard" name="身份证号码" value="${item.idCard!}" underline="true"/>
+                </div>
+                <div class="col-sm-6 b-r">
+                    <#input id="birthday" name="出生年月" underline="true" value="${item.birthday!}"
                     type="text" dateType="date" format="yyyy-MM-dd"/>
                 </div>
                 <div class="col-sm-6 b-r">
                     <#select id="sex" name="性别" items="${constant.getDictsByName('性别')}"
-                    itemLabel="name" itemValue="num" underline="true"/>
+                    itemLabel="name" itemValue="num" value="${item != null && item.sex != null ? tool.toStr(item.sex)}" underline="true"/>
+                </div>
+
+                <div class="col-sm-6 b-r">
+                    <#input id="age" name="年龄" value="${item.age!}" underline="true"/>
                 </div>
                 <div class="col-sm-6 b-r">
-                    <#input id="idCard" name="身份证号码" underline="true"/>
+                    <#input id="address" name="现居住地" value="${item.address!}" underline="true"/>
                 </div>
                 <div class="col-sm-6 b-r">
-                    <#input id="age" name="年龄" underline="true"/>
+                    <#input id="nativePlace" name="籍贯" value="${item.nativePlace!}" underline="true"/>
                 </div>
                 <div class="col-sm-6 b-r">
-                    <#input id="address" name="现居住地" underline="true"/>
+                    <#input id="birthplace" name="出生地" value="${item.birthplace!}" underline="true"/>
                 </div>
                 <div class="col-sm-6 b-r">
-                    <#input id="nativePlace" name="籍贯" underline="true"/>
-                </div>
-                <div class="col-sm-6 b-r">
-                    <#input id="birthplace" name="出生地" underline="true"/>
-                </div>
-                <div class="col-sm-6 b-r">
-                    <#input id="retireDate" name="退休日期" underline="true"
+                    <#input id="retireDate" name="退休日期" underline="true" value="${item.retireDate!}"
                     type="text" dateType="date" format="yyyy-MM-dd"/>
                 </div>
                 <div class="col-sm-6 b-r">
-                    <#input id="partyGroupings" name="党派" underline="true"/>
+                    <#input id="partyGroupings" name="党派" value="${item.partyGroupings!}" underline="true"/>
                 </div>
                 <div class="col-sm-6 b-r">
                     <#select id="jobType" name="用工类型" items="${constant.getDictsByName('用工类型')}"
-                    itemLabel="name" itemValue="num" underline="true"/>
+                    itemLabel="name" itemValue="num" value="${item != null && item.jobType != null ? tool.toStr(item.jobType)}" underline="true"/>
                 </div>
                 <div class="col-sm-6 b-r">
-                    <#input id="mobile" name="联系电话1" underline="true"/>
+                    <#input id="mobile" name="联系电话1" value="${item.mobile!}" underline="true"/>
                 </div>
                 <div class="col-sm-6 b-r">
-                    <#input id="phone" name="联系电话2" underline="true"/>
+                    <#input id="phone" name="联系电话2" value="${item.phone!}" underline="true"/>
                 </div>
                 <div class="col-sm-6 b-r">
-                    <#input id="emergencyContact" name="紧急联系人" underline="true"/>
+                    <#input id="emergencyContact" name="紧急联系人" value="${item.emergencyContact!}" underline="true"/>
                 </div>
                 <div class="col-sm-6 b-r">
                     <#select id="emergencyRelation" name="紧急联系人关系" items="${constant.getDictsByName('紧急联系人关系')}"
-                    itemLabel="name" itemValue="num" underline="true"/>
+                    itemLabel="name" itemValue="num" value="${item != null && item.emergencyRelation != null ? tool.toStr(item.emergencyRelation)}" underline="true"/>
                 </div>
                 <div class="col-sm-6 b-r">
-                    <#input id="emergencyMobile" name="紧急联系人联系电话" underline="true"/>
+                    <#input id="emergencyMobile" name="紧急联系人联系电话" value="${item.emergencyMobile!}" underline="true"/>
                 </div>
                 <div class="col-sm-6 b-r">
-                    <#input id="email" name="电子邮件" underline="true"/>
+                    <#input id="qq" name="qq" value="${item.qq!}" underline="true"/>
                 </div>
                 <div class="col-sm-6 b-r">
-                    <#input id="qq" name="qq" underline="true"/>
+                    <#input id="wechat" name="微信" value="${item.wechat!}" underline="true"/>
                 </div>
                 <div class="col-sm-6 b-r">
-                    <#input id="wechat" name="微信" underline="true"/>
+                    <#input id="email" name="电子邮件" value="${item.email!}" underline="true"/>
+                </div>
+
+                <div class="col-sm-6 b-r">
+                    <#input id="phone" name="联系电话2" value="${item.phone!}" underline="true"/>
                 </div>
                 <div class="col-sm-6 b-r">
                     <#select id="personalState" name="人员状态" items="${constant.getDictsByName('人员状态')}"
-                    itemLabel="name" itemValue="num" underline="true"/>
+                    itemLabel="name" itemValue="num" value="${item != null && item.personalState != null ? tool.toStr(item.personalState)}" underline="true"/>
                 </div>
-
             </div>
 
             <div class="row btn-group-m-t">

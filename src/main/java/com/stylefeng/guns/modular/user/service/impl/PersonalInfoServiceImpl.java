@@ -1,6 +1,7 @@
 package com.stylefeng.guns.modular.user.service.impl;
 
 import cn.hutool.core.collection.CollUtil;
+import cn.hutool.core.util.ReflectUtil;
 import com.alibaba.fastjson.JSON;
 import com.baomidou.mybatisplus.mapper.EntityWrapper;
 import com.stylefeng.guns.common.constant.state.YesNo;
@@ -19,6 +20,7 @@ import com.stylefeng.guns.modular.user.dao.PersonalInfoMapper;
 import com.stylefeng.guns.modular.user.service.IPersonalInfoService;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.lang.reflect.Field;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -63,6 +65,19 @@ public class PersonalInfoServiceImpl extends ServiceImpl<PersonalInfoMapper, Per
                 param.setProcInsId(personalInfo.getAct().getProcInsId());
                 newEntity.setStatus(YesNo.YES.getCode());
                 this.update(newEntity, new EntityWrapper<>(param));
+
+                //更新用户信息
+                PersonalInfo p = this.selectById(personalInfo.getId());
+                User user = userService.selectById(p.getUserId());
+                Field[] files = ReflectUtil.getFields(p.getClass());
+                for (Field file : files) {
+                    if (!file.getName().equals("id") && !file.getName().equals("serialVersionUID")
+                            && ReflectUtil.hasField(user.getClass(),file.getName())) {
+                        Object value = ReflectUtil.getFieldValue(p,file);
+                        ReflectUtil.setFieldValue(user, file.getName(), value);
+                    }
+                }
+                userService.updateById(user);
             }
         }
 

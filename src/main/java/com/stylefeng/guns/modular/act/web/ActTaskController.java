@@ -3,6 +3,8 @@
  */
 package com.stylefeng.guns.modular.act.web;
 
+import com.baomidou.mybatisplus.plugins.Page;
+import com.stylefeng.guns.common.constant.factory.PageFactory;
 import com.stylefeng.guns.core.base.controller.BaseController;
 import com.stylefeng.guns.modular.act.entity.Act;
 import com.stylefeng.guns.modular.act.service.ActTaskService;
@@ -58,20 +60,24 @@ public class ActTaskController extends BaseController {
 	
 	/**
 	 * 获取已办任务
-	 * @param page
-	 * @param procDefKey 流程定义标识
 	 * @return
 	 */
-//	@RequestMapping(value = "historic")
-//	public String historicList(Act act, HttpServletRequest request, HttpServletResponse response, Model model) throws Exception {
-//		Page<Act> page = new Page<Act>(request, response);
-//		page = actTaskService.historicList(page, act);
-//		model.addAttribute("page", page);
-//		if (UserUtils.getPrincipal().isMobileLogin()){
-//			return renderString(response, page);
-//		}
-//		return "modules/act/actTaskHistoricList";
-//	}
+	@RequestMapping(value = "historic")
+	public String historic() {
+		return "/act/actTaskHistoricList.html";
+	}
+
+	/**
+	 * 获取待办列表
+	 * @return
+	 */
+	@RequestMapping(value = "historicList")
+	@ResponseBody
+	public Object historicList(Act act) {
+		Page<Act> page = new PageFactory<Act>().defaultPage();
+		page = actTaskService.historicList(page, act);
+		return packForBT(page);
+	}
 
 	/**
 	 * 获取流转历史列表

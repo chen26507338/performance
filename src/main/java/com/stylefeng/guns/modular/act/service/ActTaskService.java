@@ -201,7 +201,7 @@ public class ActTaskService  {
 		page.setTotal(histTaskQuery.count());
 		
 		// 查询列表
-		List<HistoricTaskInstance> histList = histTaskQuery.listPage((int) page.getCurrent(), (int)page.getSize());
+		List<HistoricTaskInstance> histList = histTaskQuery.listPage(page.getCurrent(), page.getSize());
 		//处理分页问题
 		List<Act> actList= Lists.newArrayList();
 		for (HistoricTaskInstance histTask : histList) {
@@ -211,7 +211,14 @@ public class ActTaskService  {
 //			e.setTaskVars(histTask.getTaskLocalVariables());
 //			System.out.println(histTask.getId()+"  =  "+histTask.getProcessVariables() + "  ========== " + histTask.getTaskLocalVariables());
 			e.setProcDef(ProcessDefCache.get(histTask.getProcessDefinitionId()));
-//			e.setProcIns(runtimeService.createProcessInstanceQuery().processInstanceId(task.getProcessInstanceId()).singleResult());
+			e.setProcIns(runtimeService.createProcessInstanceQuery().processInstanceId(histTask.getProcessInstanceId()).singleResult());
+			e.setProcInsId(histTask.getProcessInstanceId());
+			e.setProcDefId(histTask.getProcessDefinitionId());
+			e.setTaskDefKey(histTask.getTaskDefinitionKey());
+			Map<String, Object> procDef = BeanUtil.beanToMap(e.getProcDef());
+			procDef.remove("processDefinition");
+			e.putExpand("proDef", procDef);
+
 //			e.setProcExecUrl(ActUtils.getProcExeUrl(task.getProcessDefinitionId()));
 			e.setStatus("finish");
 			actList.add(e);

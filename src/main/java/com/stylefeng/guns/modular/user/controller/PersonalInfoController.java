@@ -69,7 +69,12 @@ public class PersonalInfoController extends BaseController {
      * 跳转到添加自然信息
      */
     @RequestMapping("/personalInfo_add")
-    public String personalInfoAdd() {
+    public String personalInfoAdd(Model model) {
+        PersonalInfo params = new PersonalInfo();
+        params.setStatus(YesNo.YES.getCode());
+        params.setUserId(ShiroKit.getUser().id);
+        PersonalInfo item = personalInfoService.selectOne(new EntityWrapper<>(params));
+        model.addAttribute("item", item);
         return PREFIX + "personalInfo_add.html";
     }
 
@@ -117,7 +122,7 @@ public class PersonalInfoController extends BaseController {
         model.addAttribute("act", personalInfo.getAct());
         PersonalInfo params = new PersonalInfo();
         params.setProcInsId(personalInfo.getAct().getProcInsId());
-        EntityWrapper<PersonalInfo> wrapper = new EntityWrapper<>();
+        EntityWrapper<PersonalInfo> wrapper = new EntityWrapper<>(params);
         PersonalInfo item = personalInfoService.selectOne(wrapper);
         User user = userService.selectIgnorePointById(item.getUserId());
         model.addAttribute("item", item);
