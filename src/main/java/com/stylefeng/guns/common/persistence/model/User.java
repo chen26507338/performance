@@ -148,6 +148,10 @@ public class User extends BaseModel<User> {
      * 保留字段
      */
 	private Integer version;
+	/**
+     * 人员状态
+     */
+	private Integer personalState;
 
     @Override
     protected Serializable pkVal() {

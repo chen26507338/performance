@@ -231,7 +231,7 @@ $(function() {
                 {field: 'id', title: 'ID',hide:true, fixed: 'left'}
                 ,{field: 'relationshipDict', title: '关系',edit:'text'}
                 ,{field: 'name', title: '姓名',edit:'text'}
-                ,{field: 'birthday', title: '生日',edit:'text'}
+                ,{field: 'birthday', title: '出生年月',edit:'text'}
                 ,{field: 'age', title: '年龄',edit:'text'}
                 ,{field: 'politicsStatusDict', title: '政治面貌',edit:'text'}
                 ,{field: 'company', title: '工作单位及职务',edit:'text'}

@@ -1,0 +1,89 @@
+@layout("/common/_container.html"){
+<div class="ibox float-e-margins">
+    <div class="ibox-content">
+        <div class="form-horizontal" id="PersonalInfoForm">
+
+            <input type="hidden" id="id" value="">
+
+            <div class="row">
+                <div class="col-sm-6 b-r">
+                    <#input id="name" name="名字" underline="true"/>
+                </div>
+                <div class="col-sm-6 b-r">
+                    <#input id="birthday" name="出生年月" underline="true"
+                    type="text" dateType="date" format="yyyy-MM-dd"/>
+                </div>
+                <div class="col-sm-6 b-r">
+                    <#select id="sex" name="性别" items="${constant.getDictsByName('性别')}"
+                    itemLabel="name" itemValue="num" underline="true"/>
+                </div>
+                <div class="col-sm-6 b-r">
+                    <#input id="idCard" name="身份证号码" underline="true"/>
+                </div>
+                <div class="col-sm-6 b-r">
+                    <#input id="age" name="年龄" underline="true"/>
+                </div>
+                <div class="col-sm-6 b-r">
+                    <#input id="address" name="现居住地" underline="true"/>
+                </div>
+                <div class="col-sm-6 b-r">
+                    <#input id="nativePlace" name="籍贯" underline="true"/>
+                </div>
+                <div class="col-sm-6 b-r">
+                    <#input id="birthplace" name="出生地" underline="true"/>
+                </div>
+                <div class="col-sm-6 b-r">
+                    <#input id="retireDate" name="退休日期" underline="true"
+                    type="text" dateType="date" format="yyyy-MM-dd"/>
+                </div>
+                <div class="col-sm-6 b-r">
+                    <#input id="partyGroupings" name="党派" underline="true"/>
+                </div>
+                <div class="col-sm-6 b-r">
+                    <#select id="jobType" name="用工类型" items="${constant.getDictsByName('用工类型')}"
+                    itemLabel="name" itemValue="num" underline="true"/>
+                </div>
+                <div class="col-sm-6 b-r">
+                    <#input id="mobile" name="联系电话1" underline="true"/>
+                </div>
+                <div class="col-sm-6 b-r">
+                    <#input id="phone" name="联系电话2" underline="true"/>
+                </div>
+                <div class="col-sm-6 b-r">
+                    <#input id="emergencyContact" name="紧急联系人" underline="true"/>
+                </div>
+                <div class="col-sm-6 b-r">
+                    <#select id="emergencyRelation" name="紧急联系人关系" items="${constant.getDictsByName('紧急联系人关系')}"
+                    itemLabel="name" itemValue="num" underline="true"/>
+                </div>
+                <div class="col-sm-6 b-r">
+                    <#input id="emergencyMobile" name="紧急联系人联系电话" underline="true"/>
+                </div>
+                <div class="col-sm-6 b-r">
+                    <#input id="email" name="电子邮件" underline="true"/>
+                </div>
+                <div class="col-sm-6 b-r">
+                    <#input id="qq" name="qq" underline="true"/>
+                </div>
+                <div class="col-sm-6 b-r">
+                    <#input id="wechat" name="微信" underline="true"/>
+                </div>
+                <div class="col-sm-6 b-r">
+                    <#select id="personalState" name="人员状态" items="${constant.getDictsByName('人员状态')}"
+                    itemLabel="name" itemValue="num" underline="true"/>
+                </div>
+
+            </div>
+
+            <div class="row btn-group-m-t">
+                <div class="col-sm-10">
+                    <#button btnCss="info" name="提交" id="ensure" icon="fa-check" clickFun="PersonalInfoInfoDlg.addSubmit()"/>
+                    <#button btnCss="danger" name="取消" id="cancel" icon="fa-eraser" clickFun="PersonalInfoInfoDlg.close()"/>
+                </div>
+            </div>
+        </div>
+
+    </div>
+</div>
+<script src="${ctxPath}/static/modular/user/personalInfo/personalInfo_info.js"></script>
+@}

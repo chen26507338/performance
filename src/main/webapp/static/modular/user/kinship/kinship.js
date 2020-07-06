@@ -16,7 +16,7 @@ Kinship.initColumn = function () {
         {field: 'selectItem', radio: true}
        ,{title: '关系', field:'relationshipDict', visible: true, align: 'center', valign: 'middle'}
        ,{title: '姓名', field:'name', visible: true, align: 'center', valign: 'middle'}
-       ,{title: '生日', field:'birthday', visible: true, align: 'center', valign: 'middle'}
+       ,{title: '出生年月', field:'birthday', visible: true, align: 'center', valign: 'middle'}
        ,{title: '年龄', field:'age', visible: true, align: 'center', valign: 'middle'}
        ,{title: '政治面貌', field:'politicsStatusDict', visible: true, align: 'center', valign: 'middle'}
        ,{title: '工作单位及职务', field:'company', visible: true, align: 'center', valign: 'middle'}
