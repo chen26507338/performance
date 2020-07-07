@@ -40,6 +40,12 @@ PersonalInfo.formParams = function() {
     return queryData;
 };
 
+/**
+ * 导出干部登记表
+ */
+PersonalInfo.exportCadreRegister = function () {
+    window.open(Feng.ctxPath + "/personalInfo/exportCadreRegister");
+};
 
 /**
  * 点击添加自然信息

@@ -15,7 +15,7 @@
                 </div>
                 <div class="col-sm-6 b-r">
                     <#select id="status" name="状态" items="${constant.getDictsByName('通用状态')}"
-                    itemLabel="name" itemValue="num" value="${item.status}" underline="true"/>
+                    itemLabel="name" itemValue="num" value="${tool.toStr(item.status)}" underline="true"/>
                 </div>
             </div>
 
