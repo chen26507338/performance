@@ -1,0 +1,77 @@
+@layout("/common/_container.html"){
+<div class="ibox float-e-margins">
+    <div class="ibox-content">
+        <div class="form-horizontal" id="JobTaskForm">
+
+            <input type="hidden" id="id" value="${item.id}">
+            <input type="hidden" id="taskId" value="${act.taskId}">
+            <input type="hidden" id="procInsId" value="${act.procInsId}">
+            <input type="hidden" id="taskDefKey" value="${act.taskDefKey}">
+            <input type="hidden" id="userId" value="${userId!}">
+
+            <div class="row">
+                @if(act.taskDefKey != "re_report"){
+                <div class="col-sm-6 b-r">
+                    <#input id="dd" value="${item.duties}" name="职责" underline="true" readonly="true"/>
+                </div>
+                <div class="col-sm-6 b-r">
+                    <#input id="dpoint" name="任务分" value="${item.point}" underline="true" readonly="true"/>
+                </div>
+                <div class="col-sm-6 b-r">
+                    <#input id="des" name="任务描述" value="${item.des}" underline="true" readonly="true"/>
+                </div>
+                @}
+                @select(act.taskDefKey){
+                    @case "user_handle":
+                    <div class="col-sm-6 b-r">
+                        <#input id="userDes" type="textarea" name="办理结果" underline="true"/>
+                    </div>
+                    @case "re_report":
+                    <div class="col-sm-6 b-r">
+                        <#select id="dutiesId" name="职责快捷选择" underline="true" />
+                    </div>
+                    <div class="col-sm-6 b-r">
+                        <#input id="duties" value="${item.duties}" name="职责" underline="true" />
+                    </div>
+                    <div class="col-sm-6 b-r">
+                        <#input id="point" name="任务分" value="${item.point}" underline="true" />
+                    </div>
+                    <div class="col-sm-6 b-r">
+                        <#input id="des" name="任务描述" value="${item.des}" underline="true" />
+                    </div>
+                    @case "set_point":
+                    <div class="col-sm-6 b-r">
+                        <#input id="dd" type="textarea" value="${item.userDes}" name="办理结果" underline="true" readonly="true"/>
+                    </div>
+                    <div class="col-sm-6 b-r">
+                        <#input id="point" value="${item.point}" name="经办人得分" underline="true"/>
+                    </div>
+                @}
+                <div class="col-sm-6 b-r">
+                    <#input id="comment" type="textarea" name="意见" underline="true"/>
+                </div>
+            </div>
+
+            <div class="row btn-group-m-t">
+                <div class="col-sm-10">
+                    @select(act.taskDefKey){
+                    @   case "dept_leader_audit":
+                    <#button btnCss="info" name="通过" id="ensure" icon="fa-check" clickFun="JobTaskInfoDlg.editSubmit(1)"/>
+                    <#button btnCss="danger" name="驳回" id="cancel" icon="fa-eraser" clickFun="JobTaskInfoDlg.editSubmit(0)"/>
+                    @   case "re_report":
+                    <#button btnCss="info" name="重新申请" id="ensure" icon="fa-check" clickFun="JobTaskInfoDlg.editSubmit(1)"/>
+                    <#button btnCss="danger" name="结束汇报" id="cancel" icon="fa-eraser" clickFun="JobTaskInfoDlg.editSubmit(0)"/>
+                    @   case "user_handle","set_point":
+                    <#button btnCss="info" name="确认" id="ensure" icon="fa-check" clickFun="JobTaskInfoDlg.editSubmit(1)"/>
+                    @}
+
+                    <#button btnCss="danger" name="关闭" id="cancel" icon="fa-eraser" clickFun="JobTaskInfoDlg.close()"/>
+                </div>
+            </div>
+            <#histoicFlow procInsId="${act.procInsId}"/>
+        </div>
+
+    </div>
+</div>
+<script src="${ctxPath}/static/modular/job/jobTask/jobTask_report.js"></script>
+@}

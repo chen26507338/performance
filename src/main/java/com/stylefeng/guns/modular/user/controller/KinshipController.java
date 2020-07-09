@@ -1,10 +1,13 @@
 package com.stylefeng.guns.modular.user.controller;
 
 import com.stylefeng.guns.common.constant.state.YesNo;
+import com.stylefeng.guns.common.persistence.model.User;
 import com.stylefeng.guns.core.base.controller.BaseController;
 import com.baomidou.mybatisplus.plugins.Page;
 import com.stylefeng.guns.common.constant.factory.PageFactory;
 import com.stylefeng.guns.core.shiro.ShiroKit;
+import com.stylefeng.guns.modular.system.service.IUserService;
+import com.stylefeng.guns.modular.user.model.EducationExperience;
 import com.stylefeng.guns.modular.user.model.Kinship;
 import com.stylefeng.guns.modular.user.model.Kinship;
 import org.apache.commons.lang3.StringUtils;
@@ -37,13 +40,19 @@ public class KinshipController extends BaseController {
 
     @Autowired
     private IKinshipService kinshipService;
+    @Autowired
+    private IUserService userService;
 
     /**
      * 跳转到亲属关系首页
      */
     @RequestMapping("")
     @RequiresPermissions(value = {"/kinship/list"})
-    public String index() {
+    public String index(User user,Model model) {
+        if (user.getId() == null) {
+            user.setId(ShiroKit.getUser().id);
+        }
+        model.addAttribute(user);
         return PREFIX + "kinship.html";
     }
 
@@ -76,6 +85,12 @@ public class KinshipController extends BaseController {
      */
     @RequestMapping("/kinship_act")
     public String kinshipAct(Kinship kinship, Model model) {
+        kinship.setProcInsId(kinship.getAct().getProcInsId());
+        EntityWrapper<Kinship> wrapper = new EntityWrapper<>(kinship);
+        wrapper.last("limit 1");
+        Kinship ks = kinshipService.selectOne(wrapper);
+        User user = userService.selectIgnorePointById(ks.getUserId());
+        model.addAttribute("user", user);
         model.addAttribute("act", kinship.getAct());
         return PREFIX + "kinship_audit.html";
     }

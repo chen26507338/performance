@@ -10,6 +10,7 @@ import com.stylefeng.guns.common.constant.dictmap.UserDict;
 import com.stylefeng.guns.common.constant.factory.ConstantFactory;
 import com.stylefeng.guns.common.constant.factory.PageFactory;
 import com.stylefeng.guns.common.constant.state.ManagerStatus;
+import com.stylefeng.guns.common.constant.state.YesNo;
 import com.stylefeng.guns.common.exception.BizExceptionEnum;
 import com.stylefeng.guns.common.persistence.dao.UserMapper;
 import com.stylefeng.guns.common.persistence.model.User;
@@ -123,7 +124,8 @@ public class UserMgrController extends BaseController {
         User user = this.userMapper.selectById(userId);
         model.addAttribute("deptList", deptService.selectAllOn());
         Job param = new Job();
-        param.setDeptId(user.getDeptId());
+//        param.setDeptId(user.getDeptId());
+        param.setStatus(YesNo.YES.getCode());
         model.addAttribute("jobList", jobService.selectList(new EntityWrapper<>(param)));
         model.addAttribute(user);
 //        model.addAttribute("roleName", ConstantFactory.me().getRoleName(user.getRoleId()));

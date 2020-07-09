@@ -10,7 +10,7 @@
     @for(act in histoicFlowList){
     <tr>
         <td>${act.histIns.activityName}</td>
-        <td>${act.assigneeName}</td>
+        <td>${act.assigneeName} 职工编号：${act.expand.account}</td>
         <td>${act.histIns.startTime == null ? "":dateUtil.formatDateTime(act.histIns.startTime)}</td>
         <td>${act.histIns.endTime == null ? "":dateUtil.formatDateTime(act.histIns.endTime)}</td>
         <td style="word-wrap:break-word;word-break:break-all;" >

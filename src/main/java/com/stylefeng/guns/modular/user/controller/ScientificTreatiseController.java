@@ -1,11 +1,14 @@
 package com.stylefeng.guns.modular.user.controller;
 
 import com.stylefeng.guns.common.constant.state.YesNo;
+import com.stylefeng.guns.common.persistence.model.User;
 import com.stylefeng.guns.core.base.controller.BaseController;
 import com.baomidou.mybatisplus.plugins.Page;
 import com.stylefeng.guns.common.constant.factory.PageFactory;
 import com.stylefeng.guns.core.shiro.ShiroKit;
+import com.stylefeng.guns.modular.system.service.IUserService;
 import com.stylefeng.guns.modular.user.decorator.ScientificTreatiseDecorator;
+import com.stylefeng.guns.modular.user.model.ScientificTreatise;
 import com.stylefeng.guns.modular.user.model.ScientificTreatise;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.stereotype.Controller;
@@ -36,13 +39,19 @@ public class ScientificTreatiseController extends BaseController {
 
     @Autowired
     private IScientificTreatiseService scientificTreatiseService;
+    @Autowired
+    private IUserService userService;
 
     /**
      * 跳转到科研论著首页
      */
     @RequestMapping("")
     @RequiresPermissions(value = {"/scientificTreatise/list"})
-    public String index() {
+    public String index(User user, Model model) {
+        if (user.getId() == null) {
+            user.setId(ShiroKit.getUser().id);
+        }
+        model.addAttribute(user);
         return PREFIX + "scientificTreatise.html";
     }
 
@@ -148,6 +157,12 @@ public class ScientificTreatiseController extends BaseController {
      */
     @RequestMapping("/scientificTreatise_act")
     public String scientificTreatiseAct(ScientificTreatise scientificTreatise, Model model) {
+        scientificTreatise.setProcInsId(scientificTreatise.getAct().getProcInsId());
+        EntityWrapper<ScientificTreatise> wrapper = new EntityWrapper<>(scientificTreatise);
+        wrapper.last("limit 1");
+        ScientificTreatise data = scientificTreatise.selectOne(wrapper);
+        User user = userService.selectIgnorePointById(data.getUserId());
+        model.addAttribute("user", user);
         model.addAttribute("act", scientificTreatise.getAct());
         return PREFIX + "scientificTreatise_audit.html";
     }

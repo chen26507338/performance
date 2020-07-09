@@ -8,7 +8,9 @@ import com.stylefeng.guns.common.persistence.model.User;
 import com.stylefeng.guns.core.base.controller.BaseController;
 import com.stylefeng.guns.core.log.LogObjectHolder;
 import com.stylefeng.guns.core.shiro.ShiroKit;
+import com.stylefeng.guns.modular.system.service.IUserService;
 import com.stylefeng.guns.modular.user.decorator.WorkResumeDecorator;
+import com.stylefeng.guns.modular.user.model.WorkResume;
 import com.stylefeng.guns.modular.user.model.WorkResume;
 import com.stylefeng.guns.modular.user.service.IWorkResumeService;
 import org.apache.shiro.authz.annotation.RequiresPermissions;
@@ -38,6 +40,8 @@ public class WorkResumeController extends BaseController {
 
     @Autowired
     private IWorkResumeService workResumeService;
+    @Autowired
+    private IUserService userService;
 
     /**
      * 跳转到工作简历首页
@@ -92,6 +96,12 @@ public class WorkResumeController extends BaseController {
      */
     @RequestMapping("/workResume_act")
     public String workResumeAct(WorkResume workResume,Model model) {
+        workResume.setProcInsId(workResume.getAct().getProcInsId());
+        EntityWrapper<WorkResume> wrapper = new EntityWrapper<>(workResume);
+        wrapper.last("limit 1");
+        WorkResume data = workResume.selectOne(wrapper);
+        User user = userService.selectIgnorePointById(data.getUserId());
+        model.addAttribute("user", user);
         model.addAttribute("act", workResume.getAct());
         return PREFIX + "workResume_audit.html";
     }

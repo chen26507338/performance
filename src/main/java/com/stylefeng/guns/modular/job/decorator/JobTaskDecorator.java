@@ -41,10 +41,10 @@ public class JobTaskDecorator extends BaseListDecorator<JobTask> {
         if (applyUser != null) {
             jobTask.putExpand("applyUserName", applyUser.getName());
         }
-        JobDuties jobDuties = jobDutiesService.selectById(jobTask.getDutiesId());
-        if (jobDuties != null) {
-            jobTask.putExpand("jobDutiesDes", jobDuties.getDes());
-        }
+//        JobDuties jobDuties = jobDutiesService.selectById(jobTask.getDutiesId());
+//        if (jobDuties != null) {
+//            jobTask.putExpand("jobDutiesDes", jobDuties.getDes());
+//        }
         Dept dept = deptService.selectById(jobTask.getDeptId());
         if (dept != null) {
             jobTask.putExpand("deptName", dept.getName());

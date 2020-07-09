@@ -31,11 +31,31 @@
                     <#input id="nativePlace" name="籍贯" value="${item.nativePlace!}" underline="true"/>
                 </div>
                 <div class="col-sm-6 b-r">
+                    <#input id="nation" name="民族" value="${item.nation!}" underline="true"/>
+                </div>
+                <div class="col-sm-6 b-r">
+                    <#input id="healthCondition" name="健康状况" value="${item.healthCondition!}" underline="true"/>
+                </div>
+                <div class="col-sm-6 b-r">
+                    <#input id="proPosts" name="专业技术职务" value="${item.proPosts!}" underline="true"/>
+                </div>
+                <div class="col-sm-6 b-r">
+                    <#input id="majorSpeciality" name="熟悉专业有何专长" value="${item.majorSpeciality!}" underline="true"/>
+                </div>
+                <div class="col-sm-6 b-r">
                     <#input id="birthplace" name="出生地" value="${item.birthplace!}" underline="true"/>
                 </div>
                 <div class="col-sm-6 b-r">
+                    <#input id="joinPartyTime" name="入党时间" underline="true" value="${item.joinPartyTime!}"
+                    type="text" dateType="month" format="yyyy-MM"/>
+                </div>
+                <div class="col-sm-6 b-r">
+                    <#input id="firstWorkTime" name="参加工作时间" underline="true" value="${item.firstWorkTime!}"
+                    type="text" dateType="month" format="yyyy-MM"/>
+                </div>
+                <div class="col-sm-6 b-r">
                     <#input id="retireDate" name="退休日期" underline="true" value="${item.retireDate!}"
-                    type="text" dateType="date" format="yyyy-MM-dd"/>
+                    type="text" dateType="month" format="yyyy-MM"/>
                 </div>
                 <div class="col-sm-6 b-r">
                     <#input id="partyGroupings" name="党派" value="${item.partyGroupings!}" underline="true"/>

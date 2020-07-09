@@ -1,5 +1,6 @@
 package com.stylefeng.guns.modular.user.controller;
 
+import cn.hutool.core.util.StrUtil;
 import cn.hutool.core.util.URLUtil;
 import com.baomidou.mybatisplus.mapper.EntityWrapper;
 import com.baomidou.mybatisplus.plugins.Page;
@@ -112,7 +113,7 @@ public class PersonalInfoController extends BaseController {
     @RequiresPermissions(value = {"/personalInfo/update"})
     public String personalInfoUpdate(@PathVariable String personalInfoId, Model model) {
         PersonalInfo personalInfo = personalInfoService.selectById(personalInfoId);
-        model.addAttribute("item",personalInfo);
+        model.addAttribute("item", personalInfo);
         LogObjectHolder.me().set(personalInfo);
         return PREFIX + "personalInfo_edit.html";
     }
@@ -125,8 +126,8 @@ public class PersonalInfoController extends BaseController {
     @ResponseBody
     public Object list(PersonalInfo personalInfo) {
         Page<PersonalInfo> page = new PageFactory<PersonalInfo>().defaultPage();
-        EntityWrapper< PersonalInfo> wrapper = new EntityWrapper<>();
-        personalInfoService.selectPage(page,wrapper);
+        EntityWrapper<PersonalInfo> wrapper = new EntityWrapper<>();
+        personalInfoService.selectPage(page, wrapper);
         page.setRecords(new PersonalInfoDecorator(page.getRecords()).decorate());
         return packForBT(page);
     }
@@ -152,11 +153,11 @@ public class PersonalInfoController extends BaseController {
         EntityWrapper<PersonalInfo> wrapper = new EntityWrapper<>(params);
         PersonalInfo item = personalInfoService.selectOne(wrapper);
         User user = userService.selectIgnorePointById(item.getUserId());
-        model.addAttribute("item", item);
         model.addAttribute("user", user);
+        model.addAttribute("item", item);
         return PREFIX + "personalInfo_edit.html";
     }
-    
+
     /**
      * 删除自然信息
      */
@@ -194,12 +195,43 @@ public class PersonalInfoController extends BaseController {
     @ResponseBody
     public void exportCadreRegister() throws IOException {
         Template template = GroupTemplateFactory.getClasspathResourceTemplate().getTemplate("doc/cadre_register.xml");
+        this.setPersonInfo(template);
 
+        HttpServletResponse response = HttpKit.getResponse();
+        response.setContentType("application/vnd.ms-excel;charset=utf-8");
+        //弹出下载对话框的文件名，不能为中文，中文请自行编码
+        response.setHeader("Content-Disposition", "attachment;filename=" + URLUtil.encode("干部登记表") + ".doc");
+        template.renderTo(response.getWriter());
+    }
+
+    /**
+     * 导出干部登记表
+     */
+    @RequestMapping("/exportAppoint")
+    @ResponseBody
+    public void exportCadreAppoint() throws IOException {
+        Template template = GroupTemplateFactory.getClasspathResourceTemplate().getTemplate("doc/cadre_appoint.xml");
+        this.setPersonInfo(template);
+
+        HttpServletResponse response = HttpKit.getResponse();
+        response.setContentType("application/vnd.ms-excel;charset=utf-8");
+        //弹出下载对话框的文件名，不能为中文，中文请自行编码
+        response.setHeader("Content-Disposition", "attachment;filename=" + URLUtil.encode("干部审批表") + ".doc");
+        template.renderTo(response.getWriter());
+    }
+
+    private void setPersonInfo(Template template) {
         //自然信息
         User user = userService.selectById(ShiroKit.getUser().id);
         user.putExpand("sex", ConstantFactory.me().getDictsByName("性别", user.getSex()));
         if (user.getBirthday() != null) {
-            user.putExpand("birthday", DateUtils.format(user.getBirthday(),"yyyy.MM"));
+            user.putExpand("birthday", DateUtils.format(user.getBirthday(), "yyyy.MM"));
+        }
+        if (user.getJoinPartyTime() != null) {
+            user.putExpand("joinPartyTime", DateUtils.format(user.getJoinPartyTime(), "yyyy.MM"));
+        }
+        if (user.getFirstWorkTime() != null) {
+            user.putExpand("firstWorkTime", DateUtils.format(user.getFirstWorkTime(), "yyyy.MM"));
         }
         if (user.getJobId() != null) {
             Job job = jobService.selectById(user.getJobId());
@@ -219,6 +251,13 @@ public class PersonalInfoController extends BaseController {
         rpParams.setUserId(ShiroKit.getUser().id);
         rpParams.setStatus(YesNo.YES.getCode());
         List<RewardsPunishment> rewardsPunishments = rewardsPunishmentService.selectList(new EntityWrapper<>(rpParams));
+        for (RewardsPunishment rewardsPunishment : rewardsPunishments) {
+            //调整日期格式
+            if (StrUtil.isNotBlank(rewardsPunishment.getTime())) {
+                String[] date = rewardsPunishment.getTime().split("-");
+                rewardsPunishment.setTime(date[0] + "年" + date[1] + "月");
+            }
+        }
         template.binding("rps", rewardsPunishments);
 
         //家庭成员
@@ -226,13 +265,12 @@ public class PersonalInfoController extends BaseController {
         ksParams.setUserId(ShiroKit.getUser().id);
         ksParams.setStatus(YesNo.YES.getCode());
         List<Kinship> kinships = kinshipService.selectList(new EntityWrapper<>(ksParams));
+        for (Kinship kinship : kinships) {
+            //调整出生年月格式
+            if (StrUtil.isNotBlank(kinship.getBirthday())) {
+                kinship.setBirthday(kinship.getBirthday().substring(0, kinship.getBirthday().lastIndexOf("-")).replace("-", "."));
+            }
+        }
         template.binding("kinships", new KinshipDecorator(kinships).decorate());
-
-        HttpServletResponse response = HttpKit.getResponse();
-        response.setContentType("application/vnd.ms-excel;charset=utf-8");
-        //弹出下载对话框的文件名，不能为中文，中文请自行编码
-        response.setHeader("Content-Disposition", "attachment;filename=" + URLUtil.encode("干部登记表") + ".doc");
-        template.renderTo(response.getWriter());
     }
-
 }

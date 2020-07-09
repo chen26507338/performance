@@ -34,10 +34,10 @@ public class JobTask extends BaseActEntity<JobTask> {
     private Long id;
 
     /**
-    * 职责ID
+    * 职责
     */
-    @TableField("duties_id")
-    private Long dutiesId;
+    @TableField("duties")
+    private String duties;
 
     /**
     * 部门ID
@@ -126,6 +126,18 @@ public class JobTask extends BaseActEntity<JobTask> {
     */
     @TableField("end_time")
     private Date endTime;
+
+    /**
+    * 状态
+    */
+    @TableField("status")
+    private Integer status;
+
+    /**
+    * 类型
+    */
+    @TableField("type")
+    private Integer type;
 
     /**
     * 开始处理结束时间

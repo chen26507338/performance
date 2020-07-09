@@ -9,10 +9,7 @@
                 <div class="col-sm-6 b-r">
                     <#input id="name" name="名称" value="${item.name}" underline="true"/>
                 </div>
-                <div class="col-sm-6 b-r">
-                    <#select id="deptId" name="部门" value="${item.deptId}" items="${deptList}"
-                    itemLabel="name" itemValue="id" underline="true"/>
-                </div>
+
                 <div class="col-sm-6 b-r">
                     <#select id="status" name="状态" items="${constant.getDictsByName('通用状态')}"
                     itemLabel="name" itemValue="num" value="${tool.toStr(item.status)}" underline="true"/>

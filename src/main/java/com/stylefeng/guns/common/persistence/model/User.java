@@ -1,6 +1,7 @@
 package com.stylefeng.guns.common.persistence.model;
 
 import com.baomidou.mybatisplus.activerecord.Model;
+import com.baomidou.mybatisplus.annotations.TableField;
 import com.baomidou.mybatisplus.annotations.TableId;
 import com.baomidou.mybatisplus.annotations.TableName;
 import com.baomidou.mybatisplus.enums.IdType;
@@ -152,6 +153,40 @@ public class User extends BaseModel<User> {
      * 人员状态
      */
 	private Integer personalState;
+
+    /**
+     * 民族
+     */
+    @TableField("nation")
+    private String nation;
+    /**
+     * 健康状况
+     */
+    @TableField("health_condition")
+    private String healthCondition;
+    /**
+     * 专业技术职务
+     */
+    @TableField("pro_posts")
+    private String proPosts;
+    /**
+     * 熟悉专业有何专长
+     */
+    @TableField("major_speciality")
+    private String majorSpeciality;
+
+    /**
+     * 入党时间
+     */
+    @TableField("join_party_time")
+    private Date joinPartyTime;
+
+    /**
+     * 参加工作时间
+     */
+    @TableField("first_work_time")
+    private Date firstWorkTime;
+
 
     @Override
     protected Serializable pkVal() {

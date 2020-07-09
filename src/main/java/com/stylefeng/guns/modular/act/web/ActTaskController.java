@@ -3,12 +3,15 @@
  */
 package com.stylefeng.guns.modular.act.web;
 
+import cn.hutool.core.util.StrUtil;
 import com.baomidou.mybatisplus.plugins.Page;
 import com.stylefeng.guns.common.constant.factory.PageFactory;
+import com.stylefeng.guns.common.persistence.model.User;
 import com.stylefeng.guns.core.base.controller.BaseController;
 import com.stylefeng.guns.modular.act.entity.Act;
 import com.stylefeng.guns.modular.act.service.ActTaskService;
 import com.stylefeng.guns.modular.act.utils.ActUtils;
+import com.stylefeng.guns.modular.system.service.IUserService;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.shiro.authz.annotation.RequiresPermissions;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -36,6 +39,8 @@ public class ActTaskController extends BaseController {
 
 	@Autowired
 	private ActTaskService actTaskService;
+	@Autowired
+	private IUserService userService;
 	
 	/**
 	 * 获取待办列表
@@ -90,6 +95,10 @@ public class ActTaskController extends BaseController {
 			List<Act> histoicFlowList = actTaskService.histoicFlowList(act.getProcInsId(), startAct, endAct);
             for (Act act1 : histoicFlowList) {
                 act1.putExpand("durationTime", act1.getDurationTime());
+				User assigneeUser = userService.selectIgnorePointById(act1.getAssignee());
+				if (assigneeUser != null) {
+					act1.putExpand("account", assigneeUser.getAccount());
+				}
             }
 			model.addAttribute("histoicFlowList", histoicFlowList);
 		}

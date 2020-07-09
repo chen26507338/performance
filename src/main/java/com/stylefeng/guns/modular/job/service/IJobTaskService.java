@@ -11,4 +11,25 @@ import com.stylefeng.guns.modular.job.model.JobTask;
  */
 public interface IJobTaskService extends IService<JobTask> {
 
+    /**
+     * 类型：下发任务
+     */
+    int TYPE_APPOINT = 1;
+
+    /**
+     * 类型：汇报任务
+     */
+    int TYPE_REPORT = 2;
+
+    /**
+     * 添加汇报任务
+     * @param jobTask
+     */
+    void addReport(JobTask jobTask);
+
+    /**
+     * 处理汇报任务
+     * @param jobTask
+     */
+    void handleReport(JobTask jobTask);
 }

@@ -11,6 +11,10 @@
                 <div class="col-sm-6 b-r">
                     <#input id="comment" type="textarea" name="意见" underline="true"/>
                 </div>
+                <div class="col-sm-6 b-r">
+                    <#input id="account"  name="职工编号" value="${user.account}" readonly="true" underline="true"/>
+                    <#input id="name"  name="职工姓名" value="${user.name!}" readonly="true" underline="true"/>
+                </div>
             </div>
             <table id="editTable" lay-filter="editFilter"></table>
 

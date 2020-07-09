@@ -90,7 +90,7 @@ public class KinshipServiceImpl extends ServiceImpl<KinshipMapper, Kinship> impl
         vars.put("audit_user", eduExpHr.getId());
         vars.put("user", ShiroKit.getUser().id);
         vars.put("act_path", "/kinship/kinship_act");
-        String proIncId = actTaskService.startProcessOnly(ActUtils.PD_PERSONAL_INFO, "kinship", ShiroKit.getUser().name + "亲属关系审核", vars);
+        String proIncId = actTaskService.startProcessOnly(ActUtils.PD_PERSONAL_INFO, "kinship", ShiroKit.getUser().name + " 亲属关系审核", vars);
         for (Kinship kinship : kinships) {
             kinship.setProcInsId(proIncId);
             kinship.setUserId(ShiroKit.getUser().id);

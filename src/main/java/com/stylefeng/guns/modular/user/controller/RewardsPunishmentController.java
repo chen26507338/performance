@@ -1,11 +1,14 @@
 package com.stylefeng.guns.modular.user.controller;
 
 import com.stylefeng.guns.common.constant.state.YesNo;
+import com.stylefeng.guns.common.persistence.model.User;
 import com.stylefeng.guns.core.base.controller.BaseController;
 import com.baomidou.mybatisplus.plugins.Page;
 import com.stylefeng.guns.common.constant.factory.PageFactory;
 import com.stylefeng.guns.core.shiro.ShiroKit;
+import com.stylefeng.guns.modular.system.service.IUserService;
 import com.stylefeng.guns.modular.user.decorator.RewardsPunishmentDecorator;
+import com.stylefeng.guns.modular.user.model.RewardsPunishment;
 import com.stylefeng.guns.modular.user.model.RewardsPunishment;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.stereotype.Controller;
@@ -36,13 +39,19 @@ public class RewardsPunishmentController extends BaseController {
 
     @Autowired
     private IRewardsPunishmentService rewardsPunishmentService;
+    @Autowired
+    private IUserService userService;
 
     /**
      * 跳转到考核奖惩首页
      */
     @RequestMapping("")
     @RequiresPermissions(value = {"/rewardsPunishment/list"})
-    public String index() {
+    public String index(User user,Model model) {
+        if (user.getId() == null) {
+            user.setId(ShiroKit.getUser().id);
+        }
+        model.addAttribute(user);
         return PREFIX + "rewardsPunishment.html";
     }
 
@@ -149,6 +158,12 @@ public class RewardsPunishmentController extends BaseController {
      */
     @RequestMapping("/rewardsPunishment_act")
     public String rewardsPunishmentAct(RewardsPunishment rewardsPunishment, Model model) {
+        rewardsPunishment.setProcInsId(rewardsPunishment.getAct().getProcInsId());
+        EntityWrapper<RewardsPunishment> wrapper = new EntityWrapper<>(rewardsPunishment);
+        wrapper.last("limit 1");
+        RewardsPunishment data = rewardsPunishment.selectOne(wrapper);
+        User user = userService.selectIgnorePointById(data.getUserId());
+        model.addAttribute("user", user);
         model.addAttribute("act", rewardsPunishment.getAct());
         return PREFIX + "rewardsPunishment_audit.html";
     }

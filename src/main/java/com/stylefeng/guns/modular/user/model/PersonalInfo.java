@@ -158,6 +158,39 @@ public class PersonalInfo extends BaseActEntity<PersonalInfo> {
     */
     @TableField("proc_ins_id")
     private String procInsId;
+    /**
+    * 民族
+    */
+    @TableField("nation")
+    private String nation;
+    /**
+    * 健康状况
+    */
+    @TableField("health_condition")
+    private String healthCondition;
+    /**
+    * 专业技术职务
+    */
+    @TableField("pro_posts")
+    private String proPosts;
+    /**
+    * 熟悉专业有何专长
+    */
+    @TableField("major_speciality")
+    private String majorSpeciality;
+
+    /**
+     * 入党时间
+     */
+    @TableField("join_party_time")
+    private Date joinPartyTime;
+
+    /**
+     * 参加工作时间
+     */
+    @TableField("first_work_time")
+    private Date firstWorkTime;
+
 
     /**
     * 状态

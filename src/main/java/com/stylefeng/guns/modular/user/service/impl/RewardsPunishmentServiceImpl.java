@@ -86,7 +86,7 @@ public class RewardsPunishmentServiceImpl extends ServiceImpl<RewardsPunishmentM
         vars.put("audit_user", eduExpHr.getId());
         vars.put("user", ShiroKit.getUser().id);
         vars.put("act_path", "/rewardsPunishment/rewardsPunishment_act");
-        String proIncId = actTaskService.startProcessOnly(ActUtils.PD_PERSONAL_INFO, "rewards_punishment", ShiroKit.getUser().name + "考核奖惩审核", vars);
+        String proIncId = actTaskService.startProcessOnly(ActUtils.PD_PERSONAL_INFO, "rewards_punishment", ShiroKit.getUser().name + " 考核奖惩审核", vars);
         for (RewardsPunishment rewardsPunishment : rewardsPunishments) {
             rewardsPunishment.setProcInsId(proIncId);
             rewardsPunishment.setUserId(ShiroKit.getUser().id);

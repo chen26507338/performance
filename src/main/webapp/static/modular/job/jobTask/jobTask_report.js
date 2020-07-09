@@ -44,7 +44,34 @@ var JobTaskInfoDlg = {
             validators:{
                 notEmpty:{
                     message: "得分不能为空"
+                },
+                numeric:{
+                    message:"需输入数字"
                 }
+            }
+        }
+        ,point:{
+            validators:{
+                notEmpty:{
+                    message: "得分不能为空"
+                },
+                numeric:{
+                    message:"需输入数字"
+                }
+            }
+        }
+        ,duties:{
+            validators:{
+                notEmpty:{
+                    message: "职责不能为空"
+                },
+            }
+        }
+        ,des:{
+            validators:{
+                notEmpty:{
+                    message: "任务描述不能为空"
+                },
             }
         }
         ,applyUserPoint:{
@@ -134,25 +161,27 @@ JobTaskInfoDlg.validate = function () {
 /**
  * 提交添加
  */
-JobTaskInfoDlg.addSubmit = function(pass) {
+JobTaskInfoDlg.addReport = function(pass) {
+    var that = this;
+    Feng.confirm("是否提交汇报申请", function () {
+        that.clearData();
+        that.collectData();
 
-    this.clearData();
-    this.collectData();
+        if (!that.validate()) {
+            return;
+        }
 
-    if (!this.validate()) {
-        return;
-    }
-
-    //提交信息
-    var ajax = new $ax(Feng.ctxPath + "/jobTask/add", function(data){
-        Feng.success("添加成功!");
-        window.parent.JobTask.table.refresh();
-        JobTaskInfoDlg.close();
-    },function(data){
-        Feng.error("添加失败!" + data.responseJSON.message + "!");
+        //提交信息
+        var ajax = new $ax(Feng.ctxPath + "/jobTask/reportAdd", function(data){
+            Feng.success("提交成功!");
+            // window.parent.JobTask.table.refresh();
+            // JobTaskInfoDlg.close();
+        },function(data){
+            Feng.error("提交失败!" + data.responseJSON.message + "!");
+        });
+        ajax.set(that.jobTaskInfoData);
+        ajax.start();
     });
-    ajax.set(this.jobTaskInfoData);
-    ajax.start();
 };
 
 /**
@@ -160,62 +189,66 @@ JobTaskInfoDlg.addSubmit = function(pass) {
  */
 JobTaskInfoDlg.editSubmit = function(pass) {
 
-    this.clearData();
-    this.collectData();
+    var that = this;
+    Feng.confirm("确认提交", function () {
+        that.clearData();
+        that.collectData();
 
-    if (!this.validate()) {
-        return;
-    }
+        if (!that.validate()) {
+            return;
+        }
 
-    //提交信息
-    var ajax = new $ax(Feng.ctxPath + "/jobTask/update", function(data){
-        Feng.success("办理成功!");
-        window.parent.ActTodoTask.table.refresh();
-        JobTaskInfoDlg.close();
-    },function(data){
-        Feng.error("办理失败!" + data.responseJSON.message + "!");
+        //提交信息
+        var ajax = new $ax(Feng.ctxPath + "/jobTask/handleReport", function(data){
+            Feng.success("办理成功!");
+            window.parent.ActTodoTask.table.refresh();
+            JobTaskInfoDlg.close();
+        },function(data){
+            Feng.error("办理失败!" + data.responseJSON.message + "!");
+        });
+
+        that.jobTaskInfoData['expand["pass"]'] = pass;
+        that.jobTaskInfoData['act.taskId'] = $("#taskId").val();
+        that.jobTaskInfoData['act.procInsId'] = $("#procInsId").val();
+        that.jobTaskInfoData['act.taskDefKey'] = $("#taskDefKey").val();
+        that.jobTaskInfoData['expand["comment"]'] = $("#comment").val();
+        ajax.set(that.jobTaskInfoData);
+        ajax.start();
     });
 
-    this.jobTaskInfoData['expand["pass"]'] = pass;
-    this.jobTaskInfoData['act.taskId'] = $("#taskId").val();
-    this.jobTaskInfoData['act.procInsId'] = $("#procInsId").val();
-    this.jobTaskInfoData['act.taskDefKey'] = $("#taskDefKey").val();
-    var userPoint = $("#userPoint").val();
-    this.jobTaskInfoData['expand["userPoint"]'] = userPoint ? userPoint : 0;
-    var applyUserPoint = $("#applyUserPoint").val();
-    this.jobTaskInfoData['expand["applyUserPoint"]'] = applyUserPoint ? applyUserPoint : 0;
-    var appointUserPoint = $("#appointUserPoint").val();
-    this.jobTaskInfoData['expand["appointUserPoint"]'] = appointUserPoint ? appointUserPoint : 0;
-    ajax.set(this.jobTaskInfoData);
-    ajax.start();
 };
 var duties;
 $(function() {
     Feng.initValidator("JobTaskForm", JobTaskInfoDlg.validateFields);
 
-    $('#userId').change(function(){
-        var s=$('#userId').val();
+    var s = $('#userId').val();
+    if ($("#dutiesId").length) {
         $.post(Feng.ctxPath + "/jobDuties/list/noPage", {id: s}, function (data) {
             duties = data;
             var options = '';
             for (var item in duties) {
                 options += '<option value="'+duties[item].id+'">'+duties[item].des+'</option>'
             }
-            $("#point").val(duties[0].point);
-            $("#des").val(duties[0].des);
+            var procId = $("#procInsId").val();
+            if (!procId) {
+                $("#point").val(duties[0].point);
+                $("#des").val(duties[0].des);
+                $("#duties").val(duties[0].des);
+            }
             $('#dutiesId').html(options);
         });
-    });
 
-    $('#dutiesId').change(function(){
-        var s = $('#dutiesId').val();
-        for (var item in duties) {
-            if (duties[item].id == s) {
-                $("#point").val(duties[item].point);
-                $("#des").val(duties[item].des);
-                $("#duties").val($(this).find("option:selected").text());
-                break;
+        $('#dutiesId').change(function(){
+            var s = $('#dutiesId').val();
+            for (var item in duties) {
+                if (duties[item].id == s) {
+                    $("#point").val(duties[item].point);
+                    $("#des").val(duties[item].des);
+                    $("#duties").val($(this).find("option:selected").text());
+                    break;
+                }
             }
-        }
-    });
+        });
+    }
+
 });

@@ -52,7 +52,7 @@ public class EducationExperienceServiceImpl extends ServiceImpl<EducationExperie
         vars.put("audit_user", eduExpHr.getId());
         vars.put("user", ShiroKit.getUser().id);
         vars.put("act_path", "/educationExperience/educationExperience_act");
-        String proIncId = actTaskService.startProcessOnly(ActUtils.PD_PERSONAL_INFO, "education_experience", ShiroKit.getUser().name + "个人信息审核", vars);
+        String proIncId = actTaskService.startProcessOnly(ActUtils.PD_PERSONAL_INFO, "education_experience", ShiroKit.getUser().name + " 个人信息审核", vars);
         for (EducationExperience educationExperience : educationExperiences) {
             educationExperience.setProcInsId(proIncId);
             educationExperience.setUserId(ShiroKit.getUser().id);

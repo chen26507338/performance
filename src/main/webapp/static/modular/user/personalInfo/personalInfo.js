@@ -48,6 +48,13 @@ PersonalInfo.exportCadreRegister = function () {
 };
 
 /**
+ * 导出干部登记表
+ */
+PersonalInfo.exportCadreAppoint = function () {
+    window.open(Feng.ctxPath + "/personalInfo/exportAppoint");
+};
+
+/**
  * 点击添加自然信息
  */
 PersonalInfo.openAddPersonalInfo = function () {

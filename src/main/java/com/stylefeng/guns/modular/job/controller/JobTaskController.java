@@ -69,10 +69,84 @@ public class JobTaskController extends BaseController {
     }
 
     /**
+     * 跳转到汇报任务
+     */
+    @RequestMapping("/jobTask_report")
+    public String jobTaskReport(Model model) {
+        model.addAttribute("userId", ShiroKit.getUser().id);
+        return PREFIX + "jobTask_report.html";
+    }
+
+    /**
+     * 新增汇报任务
+     */
+    @RequestMapping(value = "/reportAdd")
+    @ResponseBody
+    public Object reportAdd(JobTask jobTask) {
+        jobTask.setCreateTime(new Date());
+        User user = (User) ShiroKit.getUser().getUser();
+        jobTask.setUserId(user.getId());
+        jobTask.setDeptId(user.getDeptId());
+        jobTaskService.addReport(jobTask);
+        return SUCCESS_TIP;
+    }
+
+
+
+    /**
+     * 跳转到汇报工作任务
+     */
+    @RequestMapping("/doReport")
+    public String doReport(JobTask jobTask, Model model) {
+        JobTask temp = jobTaskService.selectById(jobTask.getId());
+
+        switch (jobTask.getAct().getTaskDefKey()) {
+            case "score":
+                double userPoint;
+                double applyPoint = 0;
+                double appointPoint = 0;
+                if (temp.getApplyUserId() == null && temp.getAppointUserId() == null) {
+                    userPoint = temp.getPoint();
+                } else {
+                    userPoint = temp.getPoint() * 0.7;
+                    double leftPoint = temp.getPoint() - userPoint;
+                    if (temp.getAppointUserId() == null && temp.getApplyUserId() != null) {
+                        applyPoint = leftPoint;
+                    } else if (temp.getAppointUserId() != null && temp.getApplyUserId() == null) {
+                        appointPoint = leftPoint;
+                    } else {
+                        applyPoint = leftPoint / 2;
+                        appointPoint = applyPoint;
+                    }
+                }
+                model.addAttribute("userPoint", userPoint);
+                model.addAttribute("applyPoint", applyPoint);
+                model.addAttribute("appointPoint", appointPoint);
+                break;
+            default:
+        }
+        model.addAttribute("userId", ShiroKit.getUser().id);
+        model.addAttribute("item",temp);
+        model.addAttribute("act",jobTask.getAct());
+        LogObjectHolder.me().set(jobTask);
+        return PREFIX + "jobTask_doReport.html";
+    }
+
+    /**
+     * 修改工作任务
+     */
+    @RequestMapping(value = "/handleReport")
+    @ResponseBody
+    public Object handleReport(JobTask jobTask) {
+        jobTaskService.handleReport(jobTask);
+        return SUCCESS_TIP;
+    }
+
+
+    /**
      * 跳转到修改工作任务
      */
     @RequestMapping("/jobTask_update")
-    @RequiresPermissions(value = {"/jobTask/update"})
     public String jobTaskUpdate(JobTask jobTask, Model model) {
         JobTask temp = jobTaskService.selectById(jobTask.getId());
         User user = (User) ShiroKit.getUser().getUser();
@@ -116,8 +190,6 @@ public class JobTaskController extends BaseController {
                 break;
             default:
         }
-        JobDuties jobDuties = jobDutiesService.selectById(temp.getDutiesId());
-        model.addAttribute("duties", jobDuties.getDes());
         model.addAttribute("item",temp);
         model.addAttribute("act",jobTask.getAct());
         LogObjectHolder.me().set(jobTask);
@@ -150,7 +222,6 @@ public class JobTaskController extends BaseController {
      * 新增工作任务
      */
     @RequestMapping(value = "/add")
-    @RequiresPermissions(value = {"/jobTask/add"})
     @ResponseBody
     public Object add(JobTask jobTask) {
         jobTask.setCreateTime(new Date());
@@ -165,7 +236,6 @@ public class JobTaskController extends BaseController {
      * 删除工作任务
      */
     @RequestMapping(value = "/delete")
-    @RequiresPermissions(value = {"/jobTask/delete"})
     @ResponseBody
     public Object delete(@RequestParam Long jobTaskId) {
         jobTaskService.deleteById(jobTaskId);
@@ -176,7 +246,6 @@ public class JobTaskController extends BaseController {
      * 修改工作任务
      */
     @RequestMapping(value = "/update")
-    @RequiresPermissions(value = {"/jobTask/update"})
     @ResponseBody
     public Object update(JobTask jobTask) {
         jobTaskService.updateById(jobTask);

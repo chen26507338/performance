@@ -84,7 +84,7 @@ public class ScientificTreatiseServiceImpl extends ServiceImpl<ScientificTreatis
         vars.put("audit_user", eduExpHr.getId());
         vars.put("user", ShiroKit.getUser().id);
         vars.put("act_path", "/scientificTreatise/scientificTreatise_act");
-        String proIncId = actTaskService.startProcessOnly(ActUtils.PD_PERSONAL_INFO, "scientific_treatise", ShiroKit.getUser().name + "科研论著审核", vars);
+        String proIncId = actTaskService.startProcessOnly(ActUtils.PD_PERSONAL_INFO, "scientific_treatise", ShiroKit.getUser().name + " 科研论著审核", vars);
         for (ScientificTreatise scientificTreatise : scientificTreatises) {
             scientificTreatise.setProcInsId(proIncId);
             scientificTreatise.setUserId(ShiroKit.getUser().id);

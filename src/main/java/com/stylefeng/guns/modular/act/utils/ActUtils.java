@@ -27,11 +27,22 @@ public class ActUtils {
 //	private static Logger logger = LoggerFactory.getLogger(ActUtils.class);
 
 	public static final String PD_PERSONAL_INFO = "personal_info";
+
+	/**
+	 * 流程标识
+	 */
+	public static final int PD_TASK_ID = 0;
+
+	/**
+	 * 流程业务表
+	 */
+	public static final int PD_TASK_TABLE = 1;
 	/**
 	 * 定义流程定义KEY，必须以“PD_”开头
 	 * 组成结构：string[]{"流程标识","业务主表表名"}
 	 */
-	public static final String[] PD_JOB_TASK = new String[]{"task_appoint", "job_task"};
+	public static final String[] PD_TASK_APPOINT = new String[]{"task_appoint", "job_task"};
+	public static final String[] PD_TASK_REPORT = new String[]{"task_report", "job_task"};
 	public static final String[] PD_NORMAL_ASSESS = new String[]{"normal_assess", "normal_assess"};
 
 //	/**

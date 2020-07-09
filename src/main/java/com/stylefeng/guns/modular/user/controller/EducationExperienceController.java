@@ -9,6 +9,7 @@ import com.stylefeng.guns.core.shiro.ShiroKit;
 import com.stylefeng.guns.modular.act.service.ActTaskService;
 import com.stylefeng.guns.modular.assess.decorator.NormalAssessDecorator;
 import com.stylefeng.guns.modular.assess.model.NormalAssess;
+import com.stylefeng.guns.modular.system.service.IUserService;
 import org.activiti.engine.TaskService;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.stereotype.Controller;
@@ -41,6 +42,8 @@ public class EducationExperienceController extends BaseController {
     private IEducationExperienceService educationExperienceService;
     @Autowired
     private ActTaskService taskService;
+    @Autowired
+    private IUserService userService;
 
     /**
      * 跳转到学历培训首页e'x
@@ -101,6 +104,12 @@ public class EducationExperienceController extends BaseController {
         if (!path.equals("/educationExperience/educationExperience_act")) {
             return "forward:" + path;
         }
+        educationExperience.setProcInsId(educationExperience.getAct().getProcInsId());
+        EntityWrapper<EducationExperience> wrapper = new EntityWrapper<>(educationExperience);
+        wrapper.last("limit 1");
+        EducationExperience edu = educationExperience.selectOne(wrapper);
+        User user = userService.selectIgnorePointById(edu.getUserId());
+        model.addAttribute("user", user);
         model.addAttribute("act", educationExperience.getAct());
         return PREFIX + "educationExperience_audit.html";
     }
@@ -171,7 +180,6 @@ public class EducationExperienceController extends BaseController {
      * 新增申请
      */
     @RequestMapping(value = "/doAddApply")
-    @RequiresPermissions(value = {"/educationExperience/add"})
     @ResponseBody
     public Object doAddApply(@RequestBody List<EducationExperience> educationExperiences) {
         educationExperienceService.addApply(educationExperiences);
