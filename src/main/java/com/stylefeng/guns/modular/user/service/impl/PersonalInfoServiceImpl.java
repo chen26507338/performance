@@ -2,16 +2,21 @@ package com.stylefeng.guns.modular.user.service.impl;
 
 import cn.hutool.core.collection.CollUtil;
 import cn.hutool.core.util.ReflectUtil;
+import cn.hutool.core.util.StrUtil;
 import com.alibaba.fastjson.JSON;
 import com.baomidou.mybatisplus.mapper.EntityWrapper;
 import com.stylefeng.guns.common.constant.state.YesNo;
 import com.stylefeng.guns.common.persistence.model.User;
+import com.stylefeng.guns.config.properties.GunsProperties;
+import com.stylefeng.guns.core.exception.GunsException;
 import com.stylefeng.guns.core.shiro.ShiroKit;
+import com.stylefeng.guns.core.util.ToolUtil;
 import com.stylefeng.guns.modular.act.service.ActTaskService;
 import com.stylefeng.guns.modular.act.utils.ActUtils;
 import com.stylefeng.guns.modular.system.service.IRoleService;
 import com.stylefeng.guns.modular.system.service.IUserService;
 import com.stylefeng.guns.modular.user.model.PersonalInfo;
+import net.coobird.thumbnailator.Thumbnails;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import com.baomidou.mybatisplus.service.impl.ServiceImpl;
@@ -20,6 +25,11 @@ import com.stylefeng.guns.modular.user.dao.PersonalInfoMapper;
 import com.stylefeng.guns.modular.user.service.IPersonalInfoService;
 import org.springframework.transaction.annotation.Transactional;
 
+import javax.annotation.Resource;
+import javax.imageio.ImageIO;
+import java.awt.image.BufferedImage;
+import java.io.File;
+import java.io.IOException;
 import java.lang.reflect.Field;
 import java.util.HashMap;
 import java.util.List;
@@ -38,6 +48,8 @@ public class PersonalInfoServiceImpl extends ServiceImpl<PersonalInfoMapper, Per
     private ActTaskService actTaskService;
     @Autowired
     private IUserService userService;
+    @Resource
+    private GunsProperties gunsProperties;
 
     @Override
     @Transactional
@@ -74,7 +86,9 @@ public class PersonalInfoServiceImpl extends ServiceImpl<PersonalInfoMapper, Per
                     if (!file.getName().equals("id") && !file.getName().equals("serialVersionUID")
                             && ReflectUtil.hasField(user.getClass(),file.getName())) {
                         Object value = ReflectUtil.getFieldValue(p,file);
-                        ReflectUtil.setFieldValue(user, file.getName(), value);
+                        if (ToolUtil.isNotEmpty(value)) {
+                            ReflectUtil.setFieldValue(user, file.getName(), value);
+                        }
                     }
                 }
                 userService.updateById(user);
@@ -87,6 +101,15 @@ public class PersonalInfoServiceImpl extends ServiceImpl<PersonalInfoMapper, Per
     @Override
     @Transactional
     public void addApply(PersonalInfo personalInfo) {
+        if (StrUtil.isNotBlank(personalInfo.getAvatar())) {
+            try {
+                String path = gunsProperties.getFileUploadPath() + personalInfo.getAvatar();
+                Thumbnails.Builder<File> builder = Thumbnails.of(path).forceSize(210, 310);
+                builder.toFile(path);
+            } catch (IOException e) {
+                throw new GunsException(e.getMessage());
+            }
+        }
         EntityWrapper<User> wrapper = new EntityWrapper<>();
         wrapper.like("role_id", IRoleService.TYPE_PERSONAL_HR + "");
         User hr = userService.selectOne(wrapper);

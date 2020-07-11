@@ -16,7 +16,8 @@ ActProcessRunning.initColumn = function () {
     return [
         {field: 'selectItem', radio: true},
         {title: 'id', field: 'id', visible: true, align: 'center', valign: 'middle'},
-        {title: '流程实例ID', field: 'processInstanceId', align: 'center', valign: 'middle', sortable: false},
+        {title: '流程名称', field: 'processDefinitionName', align: 'center', valign: 'middle', sortable: false},
+        // {title: '流程实例ID', field: 'processInstanceId', align: 'center', valign: 'middle', sortable: false},
         {title: '流程定义ID', field: 'processDefinitionId', align: 'center', valign: 'middle', sortable: false},
         {title: '当前环节', field: 'activityId', align: 'center', valign: 'middle', sortable: false},
         {title: '是否挂起', field: 'suspended', align: 'center', valign: 'middle', sortable: false}

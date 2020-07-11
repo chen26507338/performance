@@ -112,6 +112,12 @@ public class JobTask extends BaseActEntity<JobTask> {
     private Date createTime;
 
     /**
+    * 流程实例ID
+    */
+    @TableField("proc_ins_id")
+    private String procInsId;
+
+    /**
     * 开始提交时间
     */
     @TableField(exist = false)

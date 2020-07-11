@@ -16,6 +16,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 import java.awt.image.BufferedImage;
+import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 
 /**
@@ -93,17 +94,16 @@ public class KaptchaController {
 
     /**
      * 返回图片
-     *
      * @author stylefeng
      * @Date 2017/5/24 23:00
      */
-    @RequestMapping("/{pictureId}")
-    public void renderPicture(@PathVariable("pictureId") String pictureId, HttpServletResponse response) {
-        String path = gunsProperties.getFileUploadPath() + pictureId + ".jpg";
+    @RequestMapping("/{pictureId}.{exts}")
+    public void renderPicture(@PathVariable("pictureId") String pictureId, @PathVariable("exts") String exts, HttpServletResponse response) {
+        String path = gunsProperties.getFileUploadPath() + pictureId + "." + exts;
         try {
             byte[] bytes = FileUtil.toByteArray(path);
             response.getOutputStream().write(bytes);
-        }catch (Exception e){
+        } catch (Exception e) {
             //如果找不到图片就返回一个默认图片
             try {
                 response.sendRedirect("/static/img/missing.png");

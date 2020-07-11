@@ -41,6 +41,8 @@ public class JobTaskDecorator extends BaseListDecorator<JobTask> {
         if (applyUser != null) {
             jobTask.putExpand("applyUserName", applyUser.getName());
         }
+        jobTask.putExpand("type", ConstantFactory.me().getDictsByName("职责任务类型", jobTask.getType()));
+        jobTask.putExpand("status", ConstantFactory.me().getDictsByName("职责任务状态", jobTask.getStatus()));
 //        JobDuties jobDuties = jobDutiesService.selectById(jobTask.getDutiesId());
 //        if (jobDuties != null) {
 //            jobTask.putExpand("jobDutiesDes", jobDuties.getDes());

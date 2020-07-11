@@ -197,25 +197,33 @@ public class JobTaskServiceImpl extends ServiceImpl<JobTaskMapper, JobTask> impl
                 break;
             //经办人处理
             case "user_handle":
+                comment.setLength(0);
+                if (entity.getExpand().get("comment") != null) {
+                    comment.append("意见：").append(entity.getExpand().get("comment")).append("\n处理结果：");
+                }
+                comment.append(entity.getUserDes());
                 newData.setUserDes(entity.getUserDes());
                 newData.updateById();
                 break;
             //部门长设置积分
             case "set_point":
-                JobTask jobTask = this.selectById(entity.getId());
-                if (entity.getPoint() > jobTask.getPoint()) {
-                    throw new GunsException("得分不得大于任务分");
-                }
+                if (pass.equals(YesNo.YES.getCode()+"")) {
+                    JobTask jobTask = this.selectById(entity.getId());
+                    if (entity.getPoint() > jobTask.getPoint()) {
+                        throw new GunsException("得分不得大于任务分");
+                    }
 
-                JobTaskPoint userTaskPoint = new JobTaskPoint();
-                userTaskPoint.setUserId(jobTask.getUserId());
-                userTaskPoint.setCreateTime(new Date());
-                userTaskPoint.setPoint(entity.getPoint());
-                userTaskPoint.setTaskId(entity.getId());
-                userTaskPoint.setType(IJobTaskPointService.TYPE_MAIN_HANDLE);
-                userTaskPoint.insert();
-                newData.setStatus(YesNo.YES.getCode());
-                newData.updateById();
+                    JobTaskPoint userTaskPoint = new JobTaskPoint();
+                    userTaskPoint.setUserId(jobTask.getUserId());
+                    userTaskPoint.setCreateTime(new Date());
+                    userTaskPoint.setPoint(entity.getPoint());
+                    userTaskPoint.setTaskId(entity.getId());
+                    userTaskPoint.setType(IJobTaskPointService.TYPE_MAIN_HANDLE);
+                    userTaskPoint.insert();
+                    newData.setStatus(YesNo.YES.getCode());
+                    newData.setEndTime(new Date());
+                    newData.updateById();
+                }
                 break;
         }
         actTaskService.complete(entity.getAct().getTaskId(), entity.getAct().getProcInsId(), comment.toString(), vars);

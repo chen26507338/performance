@@ -1,14 +1,18 @@
 package com.stylefeng.guns.modular.user.controller;
 
+import cn.hutool.core.codec.Base64;
+import cn.hutool.core.io.FileUtil;
 import cn.hutool.core.util.StrUtil;
 import cn.hutool.core.util.URLUtil;
 import com.baomidou.mybatisplus.mapper.EntityWrapper;
 import com.baomidou.mybatisplus.plugins.Page;
+import com.stylefeng.guns.GunsApplication;
 import com.stylefeng.guns.common.constant.factory.ConstantFactory;
 import com.stylefeng.guns.common.constant.factory.GroupTemplateFactory;
 import com.stylefeng.guns.common.constant.factory.PageFactory;
 import com.stylefeng.guns.common.constant.state.YesNo;
 import com.stylefeng.guns.common.persistence.model.User;
+import com.stylefeng.guns.config.properties.GunsProperties;
 import com.stylefeng.guns.core.base.controller.BaseController;
 import com.stylefeng.guns.core.log.LogObjectHolder;
 import com.stylefeng.guns.core.shiro.ShiroKit;
@@ -22,14 +26,8 @@ import com.stylefeng.guns.modular.system.service.IUserService;
 import com.stylefeng.guns.modular.user.decorator.EducationExperienceDecorator;
 import com.stylefeng.guns.modular.user.decorator.KinshipDecorator;
 import com.stylefeng.guns.modular.user.decorator.PersonalInfoDecorator;
-import com.stylefeng.guns.modular.user.model.EducationExperience;
-import com.stylefeng.guns.modular.user.model.Kinship;
-import com.stylefeng.guns.modular.user.model.PersonalInfo;
-import com.stylefeng.guns.modular.user.model.RewardsPunishment;
-import com.stylefeng.guns.modular.user.service.IEducationExperienceService;
-import com.stylefeng.guns.modular.user.service.IKinshipService;
-import com.stylefeng.guns.modular.user.service.IPersonalInfoService;
-import com.stylefeng.guns.modular.user.service.IRewardsPunishmentService;
+import com.stylefeng.guns.modular.user.model.*;
+import com.stylefeng.guns.modular.user.service.*;
 import org.apache.shiro.authz.annotation.RequiresPermissions;
 import org.beetl.core.Template;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -40,7 +38,9 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
+import javax.annotation.Resource;
 import javax.servlet.http.HttpServletResponse;
+import java.io.File;
 import java.io.IOException;
 import java.util.List;
 
@@ -73,6 +73,10 @@ public class PersonalInfoController extends BaseController {
     private IRewardsPunishmentService rewardsPunishmentService;
     @Autowired
     private IKinshipService kinshipService;
+    @Autowired
+    private IWorkResumeService workResumeService;
+    @Resource
+    private GunsProperties gunsProperties;
 
     /**
      * 跳转到自然信息首页
@@ -80,16 +84,10 @@ public class PersonalInfoController extends BaseController {
     @RequestMapping("")
     @RequiresPermissions(value = {"/personalInfo/list"})
     public String index(Model model) {
-        PersonalInfo params = new PersonalInfo();
-        params.setStatus(YesNo.YES.getCode());
-        params.setUserId(ShiroKit.getUser().id);
-        PersonalInfo item = personalInfoService.selectOne(new EntityWrapper<>(params));
-        if (item != null) {
-            User user = userService.selectIgnorePointById(item.getUserId());
-            Dept dept = deptService.selectById(user.getDeptId());
-            model.addAttribute("dept", dept);
-        }
-        model.addAttribute("item", item);
+        User user = userService.selectById(ShiroKit.getUser().id);
+        Dept dept = deptService.selectById(user.getDeptId());
+        model.addAttribute("dept", dept);
+        model.addAttribute("item", user);
         return PREFIX + "personalInfo.html";
     }
 
@@ -194,13 +192,15 @@ public class PersonalInfoController extends BaseController {
     @RequestMapping("/exportCadreRegister")
     @ResponseBody
     public void exportCadreRegister() throws IOException {
+        User user = userService.selectById(ShiroKit.getUser().id);
+
         Template template = GroupTemplateFactory.getClasspathResourceTemplate().getTemplate("doc/cadre_register.xml");
-        this.setPersonInfo(template);
+        this.setPersonInfo(user,template);
 
         HttpServletResponse response = HttpKit.getResponse();
         response.setContentType("application/vnd.ms-excel;charset=utf-8");
         //弹出下载对话框的文件名，不能为中文，中文请自行编码
-        response.setHeader("Content-Disposition", "attachment;filename=" + URLUtil.encode("干部登记表") + ".doc");
+        response.setHeader("Content-Disposition", "attachment;filename=" + URLUtil.encode("干部登记表-" + user.getName()) + ".doc");
         template.renderTo(response.getWriter());
     }
 
@@ -210,19 +210,19 @@ public class PersonalInfoController extends BaseController {
     @RequestMapping("/exportAppoint")
     @ResponseBody
     public void exportCadreAppoint() throws IOException {
+        User user = userService.selectById(ShiroKit.getUser().id);
         Template template = GroupTemplateFactory.getClasspathResourceTemplate().getTemplate("doc/cadre_appoint.xml");
-        this.setPersonInfo(template);
+        this.setPersonInfo(user,template);
 
         HttpServletResponse response = HttpKit.getResponse();
         response.setContentType("application/vnd.ms-excel;charset=utf-8");
         //弹出下载对话框的文件名，不能为中文，中文请自行编码
-        response.setHeader("Content-Disposition", "attachment;filename=" + URLUtil.encode("干部审批表") + ".doc");
+        response.setHeader("Content-Disposition", "attachment;filename=" + URLUtil.encode("干部审批表-" + user.getName()) + ".doc");
         template.renderTo(response.getWriter());
     }
 
-    private void setPersonInfo(Template template) {
+    private void setPersonInfo(User user,Template template) {
         //自然信息
-        User user = userService.selectById(ShiroKit.getUser().id);
         user.putExpand("sex", ConstantFactory.me().getDictsByName("性别", user.getSex()));
         if (user.getBirthday() != null) {
             user.putExpand("birthday", DateUtils.format(user.getBirthday(), "yyyy.MM"));
@@ -236,6 +236,10 @@ public class PersonalInfoController extends BaseController {
         if (user.getJobId() != null) {
             Job job = jobService.selectById(user.getJobId());
             user.putExpand("job", job.getName());
+        }
+        if (StrUtil.isNotBlank(user.getAvatar())) {
+            String userPhoto = Base64.encode(new File(gunsProperties.getFileUploadPath() + user.getAvatar()));
+            template.binding("userPhoto", userPhoto);
         }
         template.binding("user", user);
 
@@ -259,6 +263,24 @@ public class PersonalInfoController extends BaseController {
             }
         }
         template.binding("rps", rewardsPunishments);
+
+        //工作简历
+        WorkResume wrParams = new WorkResume();
+        wrParams.setUserId(ShiroKit.getUser().id);
+        wrParams.setStatus(YesNo.YES.getCode());
+        List<WorkResume> workResumes = workResumeService.selectList(new EntityWrapper<>(wrParams));
+        for (WorkResume workResume : workResumes) {
+            //调整日期格式
+            if (StrUtil.isNotBlank(workResume.getStartDate())) {
+                String[] date = workResume.getStartDate().split("-");
+                workResume.setStartDate(date[0] + "." + date[1]);
+            }
+            if (StrUtil.isNotBlank(workResume.getEndDate())) {
+                String[] date = workResume.getEndDate().split("-");
+                workResume.setEndDate(date[0] + "." + date[1]);
+            }
+        }
+        template.binding("wrs", workResumes);
 
         //家庭成员
         Kinship ksParams = new Kinship();

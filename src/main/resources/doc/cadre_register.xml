@@ -1764,31 +1764,25 @@
                                 <w:tcPr>
                                     <w:tcW w:w="8006" w:type="dxa"/>
                                     <w:gridSpan w:val="6"/>
+                                    <w:vAlign w:val="center"/>
                                 </w:tcPr>
-                                <w:p w14:paraId="1D63397B" w14:textId="77777777" w:rsidR="0015376A"
-                                     w:rsidRDefault="0015376A">
+                                @for(wr in wrs){
+                                <w:p w14:paraId="6D42315B" w14:textId="77777777" w:rsidR="00B53A38"
+                                     w:rsidRDefault="00B53A38" w:rsidP="00B53A38">
                                     <w:pPr>
-                                        <w:spacing w:line="300" w:lineRule="exact"/>
-                                        <w:jc w:val="center"/>
+                                        <w:spacing w:line="320" w:lineRule="exact"/>
                                         <w:rPr>
-                                            <w:rFonts w:ascii="仿宋_GB2312" w:eastAsia="仿宋_GB2312" w:hAnsi="宋体"/>
-                                            <w:sz w:val="28"/>
-                                            <w:szCs w:val="28"/>
+                                            <w:rFonts w:ascii="仿宋_GB2312" w:eastAsia="仿宋_GB2312"/>
                                         </w:rPr>
                                     </w:pPr>
-                                </w:p>
-                                <w:p w14:paraId="78F22F88" w14:textId="1C9DAC2C" w:rsidR="0015376A"
-                                     w:rsidRDefault="0015376A">
-                                    <w:pPr>
-                                        <w:spacing w:line="300" w:lineRule="exact"/>
-                                        <w:jc w:val="left"/>
+                                    <w:r>
                                         <w:rPr>
-                                            <w:rFonts w:ascii="仿宋_GB2312" w:eastAsia="仿宋_GB2312" w:hAnsi="宋体"/>
-                                            <w:sz w:val="28"/>
-                                            <w:szCs w:val="28"/>
+                                            <w:rFonts w:ascii="仿宋_GB2312" w:eastAsia="仿宋_GB2312" w:hint="eastAsia"/>
                                         </w:rPr>
-                                    </w:pPr>
+                                        <w:t>${wr.startDate}-${wr.endDate} ${wr.company} ${wr.job}；</w:t>
+                                    </w:r>
                                 </w:p>
+                                @}
                             </w:tc>
                         </w:tr>
                     </w:tbl>
@@ -4852,6 +4846,8 @@
                 <Relationship Id="rId3"
                               Type="http://schemas.openxmlformats.org/officeDocument/2006/relationships/settings"
                               Target="settings.xml"/>
+                <Relationship Id="rId12" Type="http://schemas.openxmlformats.org/officeDocument/2006/relationships/image"
+                              Target="media/image1.png"/>
                 <Relationship Id="rId7"
                               Type="http://schemas.openxmlformats.org/officeDocument/2006/relationships/header"
                               Target="header1.xml"/>
@@ -5231,6 +5227,11 @@
                 </w:p>
             </w:ftr>
         </pkg:xmlData>
+    </pkg:part>
+    <pkg:part pkg:name="/word/media/image1.png" pkg:contentType="image/png" pkg:compression="store">
+        <pkg:binaryData>
+            ${userPhoto!}
+        </pkg:binaryData>
     </pkg:part>
     <pkg:part pkg:name="/word/theme/theme1.xml"
               pkg:contentType="application/vnd.openxmlformats-officedocument.theme+xml">

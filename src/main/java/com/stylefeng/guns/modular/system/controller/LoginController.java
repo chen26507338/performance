@@ -60,8 +60,7 @@ public class LoginController extends BaseController {
         Long id = ShiroKit.getUser().getId();
         User user = userMapper.selectById(id);
         String avatar = user.getAvatar();
-        model.addAttribute("avatar", avatar);
-
+        model.addAttribute("userPhoto", avatar);
         return "/index.html";
     }
 

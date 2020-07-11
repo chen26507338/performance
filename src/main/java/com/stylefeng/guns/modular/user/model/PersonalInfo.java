@@ -32,6 +32,10 @@ public class PersonalInfo extends BaseActEntity<PersonalInfo> {
     */
     @TableId("id")
     private Long id;
+    /**
+     * 头像
+     */
+    private String avatar;
 
     /**
     * qq

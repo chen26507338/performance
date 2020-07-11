@@ -26,7 +26,7 @@ public class ActivitiConfig {
         processEngineConfiguration.setDataSource(dataSource);
         processEngineConfiguration.setDatabaseSchemaUpdate("true");
         processEngineConfiguration.setDatabaseType("mysql");
-        processEngineConfiguration.setJobExecutorActivate(false);
+        processEngineConfiguration.setJobExecutorActivate(true);
         processEngineConfiguration.setTransactionManager(transactionManager);
 
         processEngineConfiguration.setIdGenerator(new IdGen());

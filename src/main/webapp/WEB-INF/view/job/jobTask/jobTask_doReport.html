@@ -24,7 +24,7 @@
                 @select(act.taskDefKey){
                     @case "user_handle":
                     <div class="col-sm-6 b-r">
-                        <#input id="userDes" type="textarea" name="办理结果" underline="true"/>
+                        <#input id="userDes" type="textarea" name="办理结果(详细描述)" value="${item.userDes}" underline="true"/>
                     </div>
                     @case "re_report":
                     <div class="col-sm-6 b-r">
@@ -61,7 +61,10 @@
                     @   case "re_report":
                     <#button btnCss="info" name="重新申请" id="ensure" icon="fa-check" clickFun="JobTaskInfoDlg.editSubmit(1)"/>
                     <#button btnCss="danger" name="结束汇报" id="cancel" icon="fa-eraser" clickFun="JobTaskInfoDlg.editSubmit(0)"/>
-                    @   case "user_handle","set_point":
+                    @   case "set_point":
+                    <#button btnCss="info" name="确认" id="ensure" icon="fa-check" clickFun="JobTaskInfoDlg.editSubmit(1)"/>
+                    <#button btnCss="danger" name="重新办理" id="cancel" icon="fa-eraser" clickFun="JobTaskInfoDlg.editSubmit(0)"/>
+                    @   case "user_handle":
                     <#button btnCss="info" name="确认" id="ensure" icon="fa-check" clickFun="JobTaskInfoDlg.editSubmit(1)"/>
                     @}
 

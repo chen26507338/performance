@@ -63,6 +63,7 @@ PersonalInfoInfoDlg.collectData = function() {
     .set('emergencyRelation')
     .set('emergencyMobile')
     .set('nation')
+    .set('avatar')
     .set('healthCondition')
     .set('proPosts')
     .set('majorSpeciality')

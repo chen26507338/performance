@@ -14,18 +14,20 @@ var JobTask = {
 JobTask.initColumn = function () {
     return [
         {field: 'selectItem', radio: true}
-       ,{title: '职责', field:'dutiesId', visible: true, align: 'center', valign: 'middle',formatter:function(value, row, index){return row.expand.jobDutiesDes;}}
+       ,{title: '职责', field:'duties', visible: true, align: 'center', valign: 'middle'}
        ,{title: '部门', field:'deptId', visible: true, align: 'center', valign: 'middle',formatter:function(value, row, index){return row.expand.deptName;}}
+       ,{title: '任务类型', field:'type', visible: true, align: 'center', valign: 'middle',formatter:function(value, row, index){return row.expand.type;}}
        ,{title: '经办人', field:'userId', visible: true, align: 'center', valign: 'middle',formatter:function(value, row, index){return row.expand.userName;}}
        ,{title: '委派协助人', field:'appointUserId', visible: true, align: 'center', valign: 'middle',formatter:function(value, row, index){return row.expand.appointUserName;}}
        ,{title: '经办协作人', field:'applyUserId', visible: true, align: 'center', valign: 'middle',formatter:function(value, row, index){return row.expand.applyUserName;}}
        ,{title: '任务分', field:'point', visible: true, align: 'center', valign: 'middle'}
        ,{title: '任务描述', field:'des', visible: true, align: 'center', valign: 'middle'}
-       ,{title: '经办人处理结果', field:'userDes', visible: true, align: 'center', valign: 'middle'}
-       ,{title: '委派协助人办理结果', field:'appointUserDes', visible: true, align: 'center', valign: 'middle'}
-       ,{title: '经办协作人办理结果', field:'applyUserDes', visible: true, align: 'center', valign: 'middle'}
-       ,{title: '提交时间', field:'createTime', visible: true, align: 'center', valign: 'middle'}
+       // ,{title: '经办人处理结果', field:'userDes', visible: true, align: 'center', valign: 'middle'}
+       // ,{title: '委派协助人办理结果', field:'appointUserDes', visible: true, align: 'center', valign: 'middle'}
+       // ,{title: '经办协作人办理结果', field:'applyUserDes', visible: true, align: 'center', valign: 'middle'}
+       ,{title: '提交时间', field:'createTime', visible: true, align: 'center', valign: 'middle',sortable:true}
        ,{title: '处理结束时间', field:'endTime', visible: true, align: 'center', valign: 'middle'}
+        ,{title: '状态', field:'status', visible: true, align: 'center', valign: 'middle',formatter:function(value, row, index){return row.expand.status;}}
     ];
 };
 
@@ -53,6 +55,8 @@ JobTask.formParams = function() {
     queryData['endCreateTime'] = $("#endCreateTime").val();
     queryData['startEndTime'] = $("#startEndTime").val();
     queryData['endEndTime'] = $("#endEndTime").val();
+    queryData['status'] = $("#status").val();
+    queryData['type'] = $("#type").val();
     return queryData;
 };
 
@@ -82,8 +86,9 @@ JobTask.openJobTaskDetail = function () {
             area: ['800px', '420px'], //宽高
             fix: false, //不固定
             maxmin: true,
-            content: Feng.ctxPath + '/jobTask/jobTask_update/' + JobTask.seItem.id
+            content: Feng.ctxPath + '/jobTask/detail/' + JobTask.seItem.id
         });
+        layer.full(this.layerIndex);
     }
 };
 
@@ -118,6 +123,7 @@ $(function () {
     var defaultColunms = JobTask.initColumn();
     var table = new BSTable(JobTask.id, "/jobTask/list", defaultColunms);
     table.setPaginationType("server");
+    table.setSortName("createTime");
     table.setQueryParams(JobTask.formParams());
     JobTask.table = table.init();
 

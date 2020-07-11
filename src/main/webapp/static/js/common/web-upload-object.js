@@ -13,6 +13,7 @@
 		this.pictureId = pictureId;
 		this.uploadBtnId = pictureId + "BtnId";
 		this.uploadPreId = pictureId + "PreId";
+		this.uploadImgId = pictureId + "Img";
 		this.uploadUrl = Feng.ctxPath + '/mgr/upload';
 		this.fileSizeLimit = 100 * 1024 * 1024;
 		this.picWidth = 800;
@@ -65,11 +66,7 @@
 		bindEvent : function(bindedObj) {
 			var me =  this;
 			bindedObj.on('fileQueued', function(file) {
-				var $li = $('<div><img width="100px" height="100px"></div>');
-				var $img = $li.find('img');
-
-				$("#" + me.uploadPreId).html($li);
-
+				var $img = $("#" + me.uploadImgId);
 				// 生成缩略图
 				bindedObj.makeThumb(file, function(error, src) {
 					if (error) {

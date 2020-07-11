@@ -104,8 +104,12 @@
                     <#input id="comment" type="textarea" name="意见" underline="true"/>
                 </div>
                 <div class="col-sm-6 b-r">
+                    <#avatar id="avatar" name="头像" underline="true" avatarImg="${item.avatar}" width="210" height="315" responsive="true"/>
+                </div>
+                <div class="col-sm-6 b-r">
                     <#input id="account"  name="职工编号" readonly="true" value="${user.account}" underline="true"/>
                 </div>
+
             </div>
 
             <div class="row btn-group-m-t">

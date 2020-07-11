@@ -6,21 +6,22 @@ import com.baomidou.mybatisplus.plugins.Page;
 import com.stylefeng.guns.common.constant.factory.PageFactory;
 import com.stylefeng.guns.core.shiro.ShiroKit;
 import com.stylefeng.guns.core.shiro.ShiroUser;
+import com.stylefeng.guns.modular.job.model.Job;
 import com.stylefeng.guns.modular.job.model.JobDuties;
+import com.stylefeng.guns.modular.job.model.JobTaskPoint;
 import com.stylefeng.guns.modular.job.service.IJobDutiesService;
+import com.stylefeng.guns.modular.job.service.IJobTaskPointService;
 import com.stylefeng.guns.modular.system.service.IUserService;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.stereotype.Controller;
 import org.apache.shiro.authz.annotation.RequiresPermissions;;
-import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.*;
 import com.baomidou.mybatisplus.mapper.EntityWrapper;;
-import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.beans.factory.annotation.Autowired;
 import com.stylefeng.guns.core.util.ToolUtil;
 import com.stylefeng.guns.core.log.LogObjectHolder;
-import org.springframework.web.bind.annotation.RequestParam;
+
 import java.util.*;
 import com.stylefeng.guns.modular.job.model.JobTask;
 import com.stylefeng.guns.modular.job.service.IJobTaskService;
@@ -43,7 +44,7 @@ public class JobTaskController extends BaseController {
     @Autowired
     private IJobTaskService jobTaskService;
     @Autowired
-    private IJobDutiesService jobDutiesService;
+    private IJobTaskPointService jobTaskPointService;
     @Autowired
     private IUserService userService;
 
@@ -213,6 +214,12 @@ public class JobTaskController extends BaseController {
             wrapper.ge("end_time",jobTask.getStartEndTime());
          if(jobTask.getEndEndTime() != null)
             wrapper.le("end_time",jobTask.getEndEndTime());
+        if (jobTask.getStatus() != null) {
+            wrapper.eq("status", jobTask.getStatus());
+        }
+        if (jobTask.getType() != null) {
+            wrapper.eq("type", jobTask.getType());
+        }
         jobTaskService.selectPage(page,wrapper);
         page.setRecords(new JobTaskDecorator(page.getRecords()).decorate());
         return packForBT(page);
@@ -255,9 +262,19 @@ public class JobTaskController extends BaseController {
     /**
      * 工作任务详情
      */
-    @RequestMapping(value = "/detail/{jobTaskId}")
-    @ResponseBody
-    public Object detail(@PathVariable("jobTaskId") String jobTaskId) {
-        return jobTaskService.selectById(jobTaskId);
+    @GetMapping(value = "/detail/{jobTaskId}")
+    public String detail(@PathVariable("jobTaskId") String jobTaskId, Model model) {
+        JobTask jobTask = jobTaskService.selectById(jobTaskId);
+        JobTaskPoint taskPointParams = new JobTaskPoint();
+        taskPointParams.setTaskId(jobTask.getId());
+        taskPointParams.setUserId(jobTask.getUserId());
+        JobTaskPoint userPoint = jobTaskPointService.selectOne(new EntityWrapper<>(taskPointParams));
+        model.addAttribute("userPoint", userPoint);
+        model.addAttribute("item", jobTask);
+        if (jobTask.getType() == IJobTaskService.TYPE_APPOINT) {
+            return "";
+        } else {
+            return PREFIX + "jobTask_report_detail.html";
+        }
     }
 }
