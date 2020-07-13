@@ -99,7 +99,6 @@ public class JobDutiesController extends BaseController {
      * 获取岗位职责管理列表
      */
     @RequestMapping(value = "/list/noPage")
-    @RequiresPermissions(value = {"/jobDuties/list"})
     @ResponseBody
     public Object listNoPage(JobDuties jobDuties) {
         User user = userService.selectById(jobDuties.getId());

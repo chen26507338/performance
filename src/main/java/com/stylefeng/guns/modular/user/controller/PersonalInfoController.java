@@ -205,7 +205,7 @@ public class PersonalInfoController extends BaseController {
     }
 
     /**
-     * 导出干部登记表
+     * 导出干部审批表
      */
     @RequestMapping("/exportAppoint")
     @ResponseBody

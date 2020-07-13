@@ -61,7 +61,6 @@ public class JobTaskController extends BaseController {
      * 跳转到添加工作任务
      */
     @RequestMapping("/jobTask_add")
-    @RequiresPermissions(value = {"/jobTask/add"})
     public String jobTaskAdd(Model model) {
         User user = (User) ShiroKit.getUser().getUser();
         List<User> users = userService.selectByDeptWithOutUser(user);
