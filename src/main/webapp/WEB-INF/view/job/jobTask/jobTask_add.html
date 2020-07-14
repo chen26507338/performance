@@ -11,7 +11,10 @@
                     itemLabel="name" itemValue="id" underline="true"/>
                 </div>
                 <div class="col-sm-6 b-r">
-                    <#select id="dutiesId" name="职责" underline="true"/>
+                    <#select id="dutiesId" name="职责快捷选择" underline="true"/>
+                </div>
+                <div class="col-sm-6 b-r">
+                    <#input id="duties" name="职责" underline="true"/>
                 </div>
                 <div class="col-sm-6 b-r">
                     <#select id="appointUserId" name="委派协助人" items="${userList}"
@@ -47,7 +50,6 @@
             <div class="row btn-group-m-t">
                 <div class="col-sm-10">
                     <#button btnCss="info" name="提交" id="ensure" icon="fa-check" clickFun="JobTaskInfoDlg.addSubmit()"/>
-                    <#button btnCss="danger" name="取消" id="cancel" icon="fa-eraser" clickFun="JobTaskInfoDlg.close()"/>
                 </div>
             </div>
         </div>

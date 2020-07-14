@@ -145,11 +145,11 @@ JobTaskInfoDlg.addSubmit = function(pass) {
 
     //提交信息
     var ajax = new $ax(Feng.ctxPath + "/jobTask/add", function(data){
-        Feng.success("添加成功!");
+        Feng.success("下达成功!");
         window.parent.JobTask.table.refresh();
         JobTaskInfoDlg.close();
     },function(data){
-        Feng.error("添加失败!" + data.responseJSON.message + "!");
+        Feng.error("下达失败!" + data.responseJSON.message + "!");
     });
     ajax.set(this.jobTaskInfoData);
     ajax.start();
@@ -193,29 +193,32 @@ var duties;
 $(function() {
     Feng.initValidator("JobTaskForm", JobTaskInfoDlg.validateFields);
 
-    $('#userId').change(function(){
-        var s=$('#userId').val();
-        $.post(Feng.ctxPath + "/jobDuties/list/noPage", {id: s}, function (data) {
-            duties = data;
-            var options = '';
-            for (var item in duties) {
-                options += '<option value="'+duties[item].id+'">'+duties[item].des+'</option>'
-            }
-            $("#point").val(duties[0].point);
-            $("#des").val(duties[0].des);
-            $('#dutiesId').html(options);
+    if ($("#dutiesId").length) {
+        $('#userId').change(function () {
+            var s = $('#userId').val();
+            $.post(Feng.ctxPath + "/jobDuties/list/noPage", {id: s}, function (data) {
+                duties = data;
+                var options = '';
+                for (var item in duties) {
+                    options += '<option value="' + duties[item].id + '">' + duties[item].des + '</option>'
+                }
+                $("#point").val(duties[0].point);
+                $("#des").val(duties[0].des);
+                $("#duties").val(duties[0].des);
+                $('#dutiesId').html(options);
+            });
         });
-    });
 
-    $('#dutiesId').change(function(){
-        var s = $('#dutiesId').val();
-        for (var item in duties) {
-            if (duties[item].id == s) {
-                $("#point").val(duties[item].point);
-                $("#des").val(duties[item].des);
-                $("#duties").val($(this).find("option:selected").text());
-                break;
+        $('#dutiesId').change(function () {
+            var s = $('#dutiesId').val();
+            for (var item in duties) {
+                if (duties[item].id == s) {
+                    $("#point").val(duties[item].point);
+                    $("#des").val(duties[item].des);
+                    $("#duties").val($(this).find("option:selected").text());
+                    break;
+                }
             }
-        }
-    });
+        });
+    }
 });

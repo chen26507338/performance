@@ -42,9 +42,12 @@
                     <#input id="applyUserDes" type="textarea"  name="经办协助人办理结果" underline="true"/>
                 </div>
                 @case "user_summary":
+                @if(isNotEmpty(jobTaskApplies)){
+                @for(jobTaskApply in jobTaskApplies){
                 <div class="col-sm-6 b-r">
-                    <#input id="d" type="textarea" value="${item.applyUserDes}"  name="经办协助人办理结果" underline="true" readonly="true"/>
+                    <#input id="d" type="textarea" value="${jobTaskApply.des}"  name="${jobTaskApply.account}\n${jobTaskApply.name}\n经办协助人办理结果" underline="true" readonly="true"/>
                 </div>
+                @}}
                 <div class="col-sm-6 b-r">
                     <#input id="summary" type="textarea" value="${item.summary!}" name="经办汇总结果" underline="true"/>
                 </div>
@@ -64,16 +67,17 @@
                     <#input id="da" type="textarea" value="${item.summary}"  name="经办汇总结果" underline="true" readonly="true"/>
                 </div>
                 <div class="col-sm-6 b-r">
-                    <#input id="userPoint" value="${userPoint}" name="经办人得分" underline="true"/>
+                    <#input id="userPoint" type="textarea" value="${userPoint}" name="经办人得分" underline="true"/>
                 </div>
-                @if(item.applyUserId != null){
+                @if(isNotEmpty(jobTaskApplies)){
+                @for(jobTaskApply in jobTaskApplies){
                 <div class="col-sm-6 b-r">
-                    <#input id="applyUserPoint" value="${applyPoint}" name="经办协助人得分" underline="true"/>
+                    <#input id="d{jobTaskApplyLP.index}" type="textarea" value="${jobTaskApply.des}"  name="${jobTaskApply.account}\n${jobTaskApply.name}\n经办协助人办理结果" underline="true" readonly="true"/>
                 </div>
                 <div class="col-sm-6 b-r">
-                    <#input id="d" type="textarea" value="${item.applyUserDes}"  name="经办协助人办理结果" underline="true" readonly="true"/>
+                    <#input id="applyUserPoint${jobTaskApplyLP.index}" type="textarea"  name="${jobTaskApply.account}\n${jobTaskApply.name}\n经办协助人得分" underline="true"/>
                 </div>
-                @}
+                @}}
                 @if(item.appointUserId != null){
                 <div class="col-sm-6 b-r">
                     <#input id="appointUserPoint" value="${appointPoint}" name="委派协助人得分" underline="true"/>

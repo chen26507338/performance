@@ -6,9 +6,8 @@ import com.baomidou.mybatisplus.plugins.Page;
 import com.stylefeng.guns.common.constant.factory.PageFactory;
 import com.stylefeng.guns.core.shiro.ShiroKit;
 import com.stylefeng.guns.core.shiro.ShiroUser;
-import com.stylefeng.guns.modular.job.model.Job;
-import com.stylefeng.guns.modular.job.model.JobDuties;
-import com.stylefeng.guns.modular.job.model.JobTaskPoint;
+import com.stylefeng.guns.modular.job.decorator.JobTaskApplyDecorator;
+import com.stylefeng.guns.modular.job.model.*;
 import com.stylefeng.guns.modular.job.service.IJobDutiesService;
 import com.stylefeng.guns.modular.job.service.IJobTaskPointService;
 import com.stylefeng.guns.modular.system.service.IUserService;
@@ -23,7 +22,7 @@ import com.stylefeng.guns.core.util.ToolUtil;
 import com.stylefeng.guns.core.log.LogObjectHolder;
 
 import java.util.*;
-import com.stylefeng.guns.modular.job.model.JobTask;
+
 import com.stylefeng.guns.modular.job.service.IJobTaskService;
 import com.stylefeng.guns.modular.job.decorator.JobTaskDecorator;
 
@@ -187,6 +186,12 @@ public class JobTaskController extends BaseController {
                 model.addAttribute("userPoint", userPoint);
                 model.addAttribute("applyPoint", applyPoint);
                 model.addAttribute("appointPoint", appointPoint);
+            case "user_summary":
+            case "summary_confirm":
+                JobTaskApply params = new JobTaskApply();
+                params.setTaskId(jobTask.getId());
+                List<JobTaskApply> jobTaskApplies = params.selectList(new EntityWrapper<>(params));
+                model.addAttribute("jobTaskApplies", new JobTaskApplyDecorator(jobTaskApplies).decorateMaps());
                 break;
             default:
         }

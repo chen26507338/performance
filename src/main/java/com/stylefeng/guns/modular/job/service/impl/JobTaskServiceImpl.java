@@ -7,10 +7,12 @@ import com.stylefeng.guns.core.exception.GunsException;
 import com.stylefeng.guns.core.shiro.ShiroKit;
 import com.stylefeng.guns.modular.act.service.ActTaskService;
 import com.stylefeng.guns.modular.act.utils.ActUtils;
+import com.stylefeng.guns.modular.job.model.JobTaskApply;
 import com.stylefeng.guns.modular.job.model.JobTaskPoint;
 import com.stylefeng.guns.modular.job.service.IJobTaskPointService;
 import com.stylefeng.guns.modular.system.service.IRoleService;
 import com.stylefeng.guns.modular.system.service.IUserService;
+import jdk.nashorn.internal.scripts.JO;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import com.baomidou.mybatisplus.service.impl.ServiceImpl;
@@ -19,9 +21,7 @@ import com.stylefeng.guns.modular.job.dao.JobTaskMapper;
 import com.stylefeng.guns.modular.job.service.IJobTaskService;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.Date;
-import java.util.HashMap;
-import java.util.Map;
+import java.util.*;
 
 /**
  * 工作任务服务实现类
@@ -59,6 +59,7 @@ public class JobTaskServiceImpl extends ServiceImpl<JobTaskMapper, JobTask> impl
     @Override
     @Transactional(rollbackFor = Exception.class)
     public boolean updateById(JobTask entity) {
+        String comment = "";
         Map<String, Object> vars = new HashMap<>();
         switch (entity.getAct().getTaskDefKey()) {
             //经办确认
@@ -72,14 +73,19 @@ public class JobTaskServiceImpl extends ServiceImpl<JobTaskMapper, JobTask> impl
                     temp.updateAllColumnById();
                 } else {
                     vars.put("pass", YesNo.YES.getCode());
-                    if (entity.getApplyUserId() != null) {
-                        actTaskService.getTaskService().setVariable(entity.getAct().getTaskId(),
-                                "apply_user", entity.getApplyUserId());
-                        vars.put("hasApply", YesNo.YES.getCode());
-                        entity.updateById();
-                    }else{
-                        vars.put("hasApply", YesNo.NO.getCode());
-                    }
+                    List<Long> ids = new ArrayList<>();
+                    ids.add(1218709038965035010L);
+                    ids.add(1218708381650489346L);
+                    ids.add(1218348541631631361L);
+                    actTaskService.getTaskService().setVariable(entity.getAct().getTaskId(),
+                            "applyUserList", ids);
+                    vars.put("hasApply", YesNo.YES.getCode());
+                    entity.updateById();
+//                    if (entity.getApplyUserId() != null) {
+//
+//                    }else{
+//                        vars.put("hasApply", YesNo.NO.getCode());
+//                    }
                 }
                 break;
                 case "re_nominate_appoint":
@@ -99,6 +105,20 @@ public class JobTaskServiceImpl extends ServiceImpl<JobTaskMapper, JobTask> impl
                         vars.put("hasApply", YesNo.NO.getCode());
                     }
                 }
+                break;
+            //经办协作人办理
+            case "user_handle":
+                comment = entity.getUserDes();
+                break;
+            //经办人办理
+            case "apply_handle":
+                JobTaskApply jobTaskApply = new JobTaskApply();
+                jobTaskApply.setUserId(ShiroKit.getUser().id);
+                jobTaskApply.setTaskId(entity.getId());
+                jobTaskApply.setCreateTime(new Date());
+                jobTaskApply.setDes(entity.getApplyUserDes());
+                jobTaskApply.insert();
+                comment = entity.getApplyUserDes();
                 break;
             case "apply_user_confirm":
             case "appoint_handle_confirm":
@@ -151,7 +171,7 @@ public class JobTaskServiceImpl extends ServiceImpl<JobTaskMapper, JobTask> impl
             default:
                 entity.updateById();
         }
-        actTaskService.complete(entity.getAct().getTaskId(), entity.getAct().getProcInsId(), "", vars);
+        actTaskService.complete(entity.getAct().getTaskId(), entity.getAct().getProcInsId(), comment, vars);
         return true;
     }
 
