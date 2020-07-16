@@ -8,7 +8,7 @@
             <input type="hidden" id="procInsId" value="${act.procInsId}">
             <input type="hidden" id="taskDefKey" value="${act.taskDefKey}">
 
-            <div class="row">
+            <div class="row" id="dataRow">
                 <div class="col-sm-6 b-r">
                     <#input id="dd" value="${item.duties}" name="职责" underline="true" readonly="true"/>
                 </div>
@@ -19,7 +19,16 @@
                     <#input id="des" name="任务描述" value="${item.des}" underline="true" readonly="true"/>
                 </div>
                 @select(act.taskDefKey){
-                @   case "user_confirm","re_nominate_apply":
+                @   case "user_confirm":
+                <div class="col-sm-6 b-r">
+                    <div class="form-group">
+                        <div class="col-sm-9">
+                            <#button btnCss="info" name="添加写作人" icon="fa-plus" clickFun="JobTaskInfoDlg.addItem()"/>
+                        </div>
+                    </div>
+                    <div class="hr-line-dashed"></div>
+                </div>
+                @   case "re_nominate_apply":
                 <div class="col-sm-6 b-r">
                     <#select id="applyUserId" name="申请协助人" items="${userList}"
                     itemLabel="name" itemValue="id" underline="true"/>
@@ -75,7 +84,7 @@
                     <#input id="d{jobTaskApplyLP.index}" type="textarea" value="${jobTaskApply.des}"  name="${jobTaskApply.account}\n${jobTaskApply.name}\n经办协助人办理结果" underline="true" readonly="true"/>
                 </div>
                 <div class="col-sm-6 b-r">
-                    <#input id="applyUserPoint${jobTaskApplyLP.index}" type="textarea"  name="${jobTaskApply.account}\n${jobTaskApply.name}\n经办协助人得分" underline="true"/>
+                    <#input id="${jobTaskApply.id}" class="applyUserPoint" type="textarea"  name="${jobTaskApply.account}\n${jobTaskApply.name}\n经办协助人得分" underline="true"/>
                 </div>
                 @}}
                 @if(item.appointUserId != null){
@@ -117,7 +126,27 @@
             </div>
             <#histoicFlow procInsId="${act.procInsId}"/>
         </div>
-
+        @if(isNotEmpty(userList)){
+        <script type="text/template" id="itemTemplate">
+            <div class="col-sm-6 b-r">
+                <div class="form-group">
+                    <label class="col-sm-3 control-label">申请协助人</label>
+                    <div class="col-sm-7">
+                        <select class="form-control applyUserItem" id="applyUserItem" name="applyUserItem">
+                            <option value="">请选择</option>
+                            @for(item in userList){
+                            <option value="${item.id}">${item.name}</option>
+                            @}
+                        </select>
+                    </div>
+                    <div class="col-sm-2">
+                        <#button btnCss="danger" name="删除" id="cancel" icon="fa-remove" clickFun="JobTaskInfoDlg.deleteItem(event)"/>
+                    </div>
+                </div>
+                <div class="hr-line-dashed"></div>
+            </div>
+        </script>
+        @}
     </div>
 </div>
 <script src="${ctxPath}/static/modular/job/jobTask/jobTask_info.js"></script>

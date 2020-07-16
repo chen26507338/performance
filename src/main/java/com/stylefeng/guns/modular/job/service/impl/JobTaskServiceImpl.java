@@ -1,12 +1,16 @@
 package com.stylefeng.guns.modular.job.service.impl;
 
+import cn.hutool.core.collection.CollUtil;
+import cn.hutool.core.util.ArrayUtil;
 import com.baomidou.mybatisplus.mapper.EntityWrapper;
 import com.stylefeng.guns.common.constant.state.YesNo;
 import com.stylefeng.guns.common.persistence.model.User;
 import com.stylefeng.guns.core.exception.GunsException;
 import com.stylefeng.guns.core.shiro.ShiroKit;
+import com.stylefeng.guns.core.util.ToolUtil;
 import com.stylefeng.guns.modular.act.service.ActTaskService;
 import com.stylefeng.guns.modular.act.utils.ActUtils;
+import com.stylefeng.guns.modular.job.dao.JobTaskPointMapper;
 import com.stylefeng.guns.modular.job.model.JobTaskApply;
 import com.stylefeng.guns.modular.job.model.JobTaskPoint;
 import com.stylefeng.guns.modular.job.service.IJobTaskPointService;
@@ -21,6 +25,7 @@ import com.stylefeng.guns.modular.job.dao.JobTaskMapper;
 import com.stylefeng.guns.modular.job.service.IJobTaskService;
 import org.springframework.transaction.annotation.Transactional;
 
+import javax.annotation.Resource;
 import java.util.*;
 
 /**
@@ -36,6 +41,8 @@ public class JobTaskServiceImpl extends ServiceImpl<JobTaskMapper, JobTask> impl
     private ActTaskService actTaskService;
     @Autowired
     private IUserService userService;
+    @Autowired
+    private IJobTaskPointService jobTaskPointService;
 
     @Override
     @Transactional(rollbackFor = Exception.class)
@@ -64,31 +71,38 @@ public class JobTaskServiceImpl extends ServiceImpl<JobTaskMapper, JobTask> impl
         switch (entity.getAct().getTaskDefKey()) {
             //经办确认
             case "user_confirm":
+                if (entity.getExpand().get("pass").equals(YesNo.NO.getCode() + "")) {
+                    vars.put("pass", YesNo.NO.getCode());
+                } else {
+                    vars.put("pass", YesNo.YES.getCode());
+                    //是否申请协助人
+                    if (ToolUtil.isNotEmpty(entity.getExpand().get("applyUserList"))) {
+                        String[] ids = ((String)entity.getExpand().get("applyUserList")).split(",");
+                        if (ids.length != ArrayUtil.distinct(ids).length) {
+                            throw new GunsException("经派协助人不能重复");
+                        }
+                        actTaskService.getTaskService().setVariable(entity.getAct().getTaskId(),
+                                "applyUserList", Arrays.asList(ids));
+                        vars.put("hasApply", YesNo.YES.getCode());
+                        entity.updateById();
+                    }else{
+                        vars.put("hasApply", YesNo.NO.getCode());
+                    }
+                }
+                break;
             //重新申请协助人
             case "re_nominate_apply":
                 if (entity.getExpand().get("pass").equals(YesNo.NO.getCode() + "")) {
                     vars.put("pass", YesNo.NO.getCode());
-                    JobTask temp = selectById(entity.getId());
-                    temp.setApplyUserId(null);
-                    temp.updateAllColumnById();
+                    comment = "不申请";
                 } else {
                     vars.put("pass", YesNo.YES.getCode());
-                    List<Long> ids = new ArrayList<>();
-                    ids.add(1218709038965035010L);
-                    ids.add(1218708381650489346L);
-                    ids.add(1218348541631631361L);
+                    comment = "重新申请";
                     actTaskService.getTaskService().setVariable(entity.getAct().getTaskId(),
-                            "applyUserList", ids);
-                    vars.put("hasApply", YesNo.YES.getCode());
-                    entity.updateById();
-//                    if (entity.getApplyUserId() != null) {
-//
-//                    }else{
-//                        vars.put("hasApply", YesNo.NO.getCode());
-//                    }
+                            "apply_user", entity.getApplyUserId()+"");
                 }
                 break;
-                case "re_nominate_appoint":
+            case "re_nominate_appoint":
                 if (entity.getExpand().get("pass").equals(YesNo.NO.getCode() + "")) {
                     vars.put("pass", YesNo.NO.getCode());
                     JobTask temp = selectById(entity.getId());
@@ -123,6 +137,7 @@ public class JobTaskServiceImpl extends ServiceImpl<JobTaskMapper, JobTask> impl
             case "apply_user_confirm":
             case "appoint_handle_confirm":
             case "appoint_user_confirm":
+                comment = entity.getExpand().get("pass").equals(YesNo.YES.getCode() + "") ? "【通过】" : "【拒绝】";
             case "summary_confirm":
                 vars.put("pass", entity.getExpand().get("pass"));
                 break;
@@ -134,8 +149,26 @@ public class JobTaskServiceImpl extends ServiceImpl<JobTaskMapper, JobTask> impl
             //评分
             case "score":
                 double userPoint = Double.parseDouble(entity.getExpand().get("userPoint")+"");
-                double applyUserPoint = Double.parseDouble(entity.getExpand().get("applyUserPoint")+"");
+                double applyUserPoint = 0;
                 double appointUserPoint = Double.parseDouble(entity.getExpand().get("appointUserPoint")+"");
+
+                JobTaskApply applyParams = new JobTaskApply();
+                applyParams.setTaskId(entity.getId());
+                List<JobTaskApply> jobTaskApplies = applyParams.selectList(new EntityWrapper<>(applyParams));
+                List<JobTaskPoint> applyJobTaskPoints = new ArrayList<>();
+                if (CollUtil.isNotEmpty(jobTaskApplies)) {
+                    for (JobTaskApply taskApply : jobTaskApplies) {
+                        double point = Double.parseDouble(entity.getExpand().get(taskApply.getId() + "") + "");
+                        applyUserPoint += point;
+                        JobTaskPoint jobTaskPoint = new JobTaskPoint();
+                        jobTaskPoint.setUserId(taskApply.getUserId());
+                        jobTaskPoint.setTaskId(entity.getId());
+                        jobTaskPoint.setCreateTime(new Date());
+                        jobTaskPoint.setType(IJobTaskPointService.TYPE_ASSIST_HANDLE);
+                        applyJobTaskPoints.add(jobTaskPoint);
+                    }
+                }
+
                 if (userPoint + applyUserPoint + appointUserPoint > entity.getPoint()) {
                     throw new GunsException("总得分不得大于任务总分");
                 }
@@ -149,15 +182,6 @@ public class JobTaskServiceImpl extends ServiceImpl<JobTaskMapper, JobTask> impl
                 userTaskPoint.setType(IJobTaskPointService.TYPE_MAIN_HANDLE);
                 userTaskPoint.insert();
 
-                if (applyUserPoint > 0) {
-                    JobTaskPoint applyTaskPoint = new JobTaskPoint();
-                    applyTaskPoint.setUserId(jobTask.getApplyUserId());
-                    applyTaskPoint.setCreateTime(new Date());
-                    applyTaskPoint.setPoint(applyUserPoint);
-                    applyTaskPoint.setTaskId(entity.getId());
-                    applyTaskPoint.setType(IJobTaskPointService.TYPE_ASSIST_HANDLE);
-                    applyTaskPoint.insert();
-                }
                 if (appointUserPoint > 0) {
                     JobTaskPoint appointTaskPoint = new JobTaskPoint();
                     appointTaskPoint.setUserId(jobTask.getAppointUserId());
@@ -168,6 +192,8 @@ public class JobTaskServiceImpl extends ServiceImpl<JobTaskMapper, JobTask> impl
                     appointTaskPoint.insert();
                 }
                 entity.setEndTime(new Date());
+
+                jobTaskPointService.insertBatch(applyJobTaskPoints);
             default:
                 entity.updateById();
         }

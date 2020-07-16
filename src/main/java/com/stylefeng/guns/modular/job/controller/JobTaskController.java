@@ -6,6 +6,7 @@ import com.baomidou.mybatisplus.plugins.Page;
 import com.stylefeng.guns.common.constant.factory.PageFactory;
 import com.stylefeng.guns.core.shiro.ShiroKit;
 import com.stylefeng.guns.core.shiro.ShiroUser;
+import com.stylefeng.guns.modular.act.service.ActTaskService;
 import com.stylefeng.guns.modular.job.decorator.JobTaskApplyDecorator;
 import com.stylefeng.guns.modular.job.model.*;
 import com.stylefeng.guns.modular.job.service.IJobDutiesService;
@@ -46,6 +47,8 @@ public class JobTaskController extends BaseController {
     private IJobTaskPointService jobTaskPointService;
     @Autowired
     private IUserService userService;
+    @Autowired
+    private ActTaskService actTaskService;
 
     /**
      * 跳转到工作任务首页
@@ -163,6 +166,16 @@ public class JobTaskController extends BaseController {
                 //去除发起人和委派协助人
                 userList.removeIf(tempUser -> tempUser.getId().equals(temp.getAppointUserId()) ||
                         tempUser.getId().equals(temp.getStartUserId()));
+
+                if (jobTask.getAct().getTaskDefKey().equals("re_nominate_apply")) {
+                    List<String> ids = new ArrayList<>((List<String>) actTaskService.getTaskService().getVariable(jobTask.getAct().getTaskId(), "applyUserList"));
+                    String applyUser = (String) actTaskService.getTaskService().getVariable(jobTask.getAct().getTaskId(), "apply_user");
+                    //排除当前协助人
+                    ids.removeIf(id -> id.equals(applyUser));
+                    //排除当前协助人以外的职员
+                    userList.removeIf(tempUser -> ids.contains(tempUser.getId() + ""));
+                }
+
                 model.addAttribute("userList", userList);
                 break;
             case "score":

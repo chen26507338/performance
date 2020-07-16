@@ -3,6 +3,8 @@
  */
 var JobTaskInfoDlg = {
     jobTaskInfoData : {},
+    count: $("#itemSize").val(),
+    itemTemplate: $("#itemTemplate").html(),
     validateFields:{
         appointUserId:{
             validators:{
@@ -63,6 +65,36 @@ var JobTaskInfoDlg = {
         }
     }
 };
+
+
+/**
+ * item获取新的id
+ */
+JobTaskInfoDlg.newId = function () {
+    if(this.count == undefined){
+        this.count = 0;
+    }
+    this.count = this.count + 1;
+    return "applyUserItem" + this.count;
+};
+
+/**
+ * 添加条目
+ */
+JobTaskInfoDlg.addItem = function () {
+    $("#dataRow").append(this.itemTemplate);
+    var applyUserItem = $("#applyUserItem");
+    applyUserItem.attr("id", this.newId());
+};
+
+/**
+ * 删除item
+ */
+JobTaskInfoDlg.deleteItem = function (event) {
+    var obj = Feng.eventParseObject(event);
+    obj.parent().parent().parent().remove();
+};
+
 
 /**
  * 清除数据
@@ -160,6 +192,7 @@ JobTaskInfoDlg.addSubmit = function(pass) {
  */
 JobTaskInfoDlg.editSubmit = function(pass) {
 
+
     this.clearData();
     this.collectData();
 
@@ -167,27 +200,67 @@ JobTaskInfoDlg.editSubmit = function(pass) {
         return;
     }
 
-    //提交信息
-    var ajax = new $ax(Feng.ctxPath + "/jobTask/update", function(data){
-        Feng.success("办理成功!");
-        window.parent.ActTodoTask.table.refresh();
-        JobTaskInfoDlg.close();
-    },function(data){
-        Feng.error("办理失败!" + data.responseJSON.message + "!");
-    });
+    var that = this;
+    Feng.confirm("是否进行操作？", function () {
 
-    this.jobTaskInfoData['expand["pass"]'] = pass;
-    this.jobTaskInfoData['act.taskId'] = $("#taskId").val();
-    this.jobTaskInfoData['act.procInsId'] = $("#procInsId").val();
-    this.jobTaskInfoData['act.taskDefKey'] = $("#taskDefKey").val();
-    var userPoint = $("#userPoint").val();
-    this.jobTaskInfoData['expand["userPoint"]'] = userPoint ? userPoint : 0;
-    var applyUserPoint = $("#applyUserPoint").val();
-    this.jobTaskInfoData['expand["applyUserPoint"]'] = applyUserPoint ? applyUserPoint : 0;
-    var appointUserPoint = $("#appointUserPoint").val();
-    this.jobTaskInfoData['expand["appointUserPoint"]'] = appointUserPoint ? appointUserPoint : 0;
-    ajax.set(this.jobTaskInfoData);
-    ajax.start();
+        //提交信息
+        var ajax = new $ax(Feng.ctxPath + "/jobTask/update", function(data){
+            Feng.success("办理成功!");
+            window.parent.ActTodoTask.table.refresh();
+            JobTaskInfoDlg.close();
+        },function(data){
+            Feng.error("办理失败!" + data.responseJSON.message + "!");
+        });
+
+        var applyUserItems = $(".applyUserItem");
+        if (applyUserItems.length > 0) {
+            var ids = [];
+            for (var i = 0; i < applyUserItems.length; i++) {
+                var itemEle = $(applyUserItems[i]);
+                if (itemEle) {
+                    var id = itemEle.val();
+                    if (!id) {
+                        Feng.error("请选择协助人");
+                        return;
+                    }
+                    if (ids.indexOf(id) > -1) {
+                        Feng.error("协助人不能重复选择");
+                        return;
+                    }
+                    ids.push(id);
+                }
+            }
+            that.jobTaskInfoData['expand["applyUserList"]'] = ids.join(",");
+        }
+
+        var applyUserPoints = $(".applyUserPoint");
+        if (applyUserPoints.length > 0) {
+            for (var index = 0; index < applyUserPoints.length; index++) {
+                itemEle = $(applyUserPoints[index]);
+                if (itemEle) {
+                    var point = itemEle.val();
+                    if (!point) {
+                        Feng.error("经派协作人分数不能为空");
+                        return;
+                    }
+                    that.jobTaskInfoData['expand["' + applyUserPoints[index].name + '"]'] = point;
+                }
+            }
+        }
+
+        that.jobTaskInfoData['expand["pass"]'] = pass;
+        that.jobTaskInfoData['act.taskId'] = $("#taskId").val();
+        that.jobTaskInfoData['act.procInsId'] = $("#procInsId").val();
+        that.jobTaskInfoData['act.taskDefKey'] = $("#taskDefKey").val();
+        var userPoint = $("#userPoint").val();
+        that.jobTaskInfoData['expand["userPoint"]'] = userPoint ? userPoint : 0;
+        // var applyUserPoint = $("#applyUserPoint").val();
+        // that.jobTaskInfoData['expand["applyUserPoint"]'] = applyUserPoint ? applyUserPoint : 0;
+        var appointUserPoint = $("#appointUserPoint").val();
+        that.jobTaskInfoData['expand["appointUserPoint"]'] = appointUserPoint ? appointUserPoint : 0;
+        ajax.set(that.jobTaskInfoData);
+        ajax.start();
+    });
 };
 var duties;
 $(function() {

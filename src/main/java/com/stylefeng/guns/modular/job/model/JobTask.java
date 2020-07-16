@@ -64,9 +64,9 @@ public class JobTask extends BaseActEntity<JobTask> {
     private Long startUserId;
 
     /**
-    * 经办协作人
-    */
-    @TableField("apply_user_id")
+     * 经办协作人
+     */
+    @TableField(exist = false)
     private Long applyUserId;
 
     /**
