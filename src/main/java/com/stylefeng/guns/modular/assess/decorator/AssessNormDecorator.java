@@ -3,7 +3,9 @@ package com.stylefeng.guns.modular.assess.decorator;
 import com.stylefeng.guns.common.constant.factory.ConstantFactory;
 import com.stylefeng.guns.core.base.BaseListDecorator;
 import com.stylefeng.guns.core.util.SpringContextHolder;
+import com.stylefeng.guns.modular.assess.model.AssessCoefficient;
 import com.stylefeng.guns.modular.assess.model.AssessNorm;
+import com.stylefeng.guns.modular.assess.service.IAssessCoefficientService;
 import com.stylefeng.guns.modular.assess.service.IAssessNormService;
 import com.stylefeng.guns.modular.job.model.Dept;
 import com.stylefeng.guns.modular.job.service.IDeptService;
@@ -15,16 +17,24 @@ public class AssessNormDecorator extends BaseListDecorator<AssessNorm> {
 
     private IDeptService deptService;
     private IAssessNormService assessNormService;
+    private IAssessCoefficientService assessCoefficientService;
 
     public AssessNormDecorator(List<AssessNorm> list) {
         super(list);
         deptService = SpringContextHolder.getBean(IDeptService.class);
         assessNormService = SpringContextHolder.getBean(IAssessNormService.class);
+        assessCoefficientService = SpringContextHolder.getBean(IAssessCoefficientService.class);
     }
 
     @Override
     protected void decorateTheEntity(AssessNorm assessNorm) {
-        assessNorm.putExpand("typeDict", ConstantFactory.me().getDictsByName("考核项目",assessNorm.getType()));
+        List<AssessCoefficient> assessCoefficients = assessCoefficientService.selectAll();
+        for (AssessCoefficient assessCoefficient : assessCoefficients) {
+            if (assessCoefficient.getType().equals(assessNorm.getType())) {
+                assessNorm.putExpand("typeDict", assessCoefficient.getName());
+                break;
+            }
+        }
         Dept dept = deptService.selectById(assessNorm.getDeptId());
         if (dept == null) {
             assessNorm.putExpand("deptDict", "校级");

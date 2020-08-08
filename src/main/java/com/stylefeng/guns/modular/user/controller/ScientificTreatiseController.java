@@ -1,11 +1,13 @@
 package com.stylefeng.guns.modular.user.controller;
 
+import cn.hutool.core.util.StrUtil;
 import com.stylefeng.guns.common.constant.state.YesNo;
 import com.stylefeng.guns.common.persistence.model.User;
 import com.stylefeng.guns.core.base.controller.BaseController;
 import com.baomidou.mybatisplus.plugins.Page;
 import com.stylefeng.guns.common.constant.factory.PageFactory;
 import com.stylefeng.guns.core.shiro.ShiroKit;
+import com.stylefeng.guns.modular.act.service.ActTaskService;
 import com.stylefeng.guns.modular.system.service.IUserService;
 import com.stylefeng.guns.modular.user.decorator.ScientificTreatiseDecorator;
 import com.stylefeng.guns.modular.user.model.ScientificTreatise;
@@ -41,6 +43,8 @@ public class ScientificTreatiseController extends BaseController {
     private IScientificTreatiseService scientificTreatiseService;
     @Autowired
     private IUserService userService;
+    @Autowired
+    private ActTaskService taskService;
 
     /**
      * 跳转到科研论著首页
@@ -157,6 +161,10 @@ public class ScientificTreatiseController extends BaseController {
      */
     @RequestMapping("/scientificTreatise_act")
     public String scientificTreatiseAct(ScientificTreatise scientificTreatise, Model model) {
+        String path = (String) taskService.getTaskService().getVariable(scientificTreatise.getAct().getTaskId(), "act_path");
+        if (StrUtil.isNotBlank(path)) {
+            return "forward:" + path;
+        }
         scientificTreatise.setProcInsId(scientificTreatise.getAct().getProcInsId());
         EntityWrapper<ScientificTreatise> wrapper = new EntityWrapper<>(scientificTreatise);
         wrapper.last("limit 1");
