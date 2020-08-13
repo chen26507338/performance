@@ -21,6 +21,11 @@ public interface IDeptService extends IService<Dept> {
     long HR = 1224197239301328897L;
 
     /**
+     * 部门ID：科技处
+     */
+    long SCI = 1293432010613932034L;
+
+    /**
      * 获取所有启用部门
      * @return
      */

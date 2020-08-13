@@ -150,4 +150,7 @@ public class ScientificTreatise extends BaseActEntity<ScientificTreatise> {
 
     @TableField(exist = false)
     private String normCode;
+
+    @TableField(exist = false)
+    private String normName;
 }

@@ -32,6 +32,10 @@ public interface IRoleService extends IService<Role> {
      * 角色类型：人事经办
      */
     long TYPE_HR_HANDLER = 13;
+    /**
+     * 角色类型：科技处经办
+     */
+    long TYPE_SCI_HANDLER = 21;
 
     /**
      * 角色类型：学历培训审核人事专员

@@ -14,6 +14,11 @@ import java.util.List;
 public interface IAssessCoefficientService extends IService<AssessCoefficient> {
     String CACHE_LIST = "assess_coefficient_list_";
     String CACHE_ENTITY = "assess_coefficient_entity_";
+
+    /**
+     * 类型：科研工作
+     */
+    String TYPE_KYGZ = "kygz";
     /**
      * 查询所有
      */

@@ -147,12 +147,12 @@ public class ScientificTreatiseController extends BaseController {
      */
     @RequestMapping("/addApply")
     public String addApply(Model model) {
-        ScientificTreatise params = new ScientificTreatise();
-        params.setUserId(ShiroKit.getUser().id);
-        params.setStatus(YesNo.YES.getCode());
-        EntityWrapper<ScientificTreatise> wrapper = new EntityWrapper<>(params);
-        List<ScientificTreatise> list = scientificTreatiseService.selectList(wrapper);
-        model.addAttribute("list", list);
+//        ScientificTreatise params = new ScientificTreatise();
+//        params.setUserId(ShiroKit.getUser().id);
+//        params.setStatus(YesNo.YES.getCode());
+//        EntityWrapper<ScientificTreatise> wrapper = new EntityWrapper<>(params);
+//        List<ScientificTreatise> list = scientificTreatiseService.selectList(wrapper);
+//        model.addAttribute("list", list);
         return PREFIX + "scientificTreatise_apply.html";
     }
 
@@ -191,7 +191,7 @@ public class ScientificTreatiseController extends BaseController {
     @RequestMapping("/scientificTreatiseProcData")
     @ResponseBody
     public Object scientificTreatiseProcData(ScientificTreatise scientificTreatise) {
-        List<ScientificTreatise> datas = scientificTreatise.selectList(new EntityWrapper<>(scientificTreatise));
+        List<ScientificTreatise> datas = new ScientificTreatiseDecorator(scientificTreatise.selectList(new EntityWrapper<>(scientificTreatise))).decorate();
         Map<String, Object> result = new HashMap<>();
         result.put("code", 0);
         result.put("data", datas);

@@ -26,6 +26,7 @@ public class ActUtils {
 
 //	private static Logger logger = LoggerFactory.getLogger(ActUtils.class);
 
+	public static final String PD_SCIENTIFIC_ASSESS = "scientific_assess";
 	public static final String PD_PERSONAL_INFO = "personal_info";
 
 	/**

@@ -138,6 +138,7 @@ ScientificTreatiseInfoDlg.auditSubmit = function(pass) {
     this.scientificTreatiseInfoData['act.taskId'] = $("#taskId").val();
     this.scientificTreatiseInfoData['act.procInsId'] = $("#procInsId").val();
     this.scientificTreatiseInfoData['act.taskDefKey'] = $("#taskDefKey").val();
+    this.scientificTreatiseInfoData['year'] = $("#year").val();
     ajax.set(this.scientificTreatiseInfoData);
     ajax.start();
 };
@@ -235,6 +236,11 @@ $(function() {
                 ,{field: 'periodicalName', title: '刊物名称',edit:'text'}
                 ,{field: 'authorOrder', title: '作者顺序',edit:'text'}
                 ,{field: 'periodicalLevel', title: '刊物级别',edit:'text'}
+                ,{field: 'normCode', title: '指标代码',edit:'text'}
+                ,{field: 'normName', title: '指标名'}
+                ,{field: 'coePoint', title: '考核系数'}
+                ,{field: 'mainNormPoint', title: '校级指标分'}
+                ,{field: 'year', title: '年度'}
             ]] //设置表头
         });
 

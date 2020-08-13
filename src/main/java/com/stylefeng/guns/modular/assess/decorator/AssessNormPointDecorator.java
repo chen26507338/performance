@@ -42,8 +42,14 @@ public class AssessNormPointDecorator extends BaseListDecorator<AssessNormPoint>
         }
 
         if (StrUtil.isNotBlank(type)) {
-            assessNormPoint.putExpand("main", NumberUtil.roundStr((double)ReflectUtil.getFieldValue(assessNormPoint, type + "Main"),2));
-            assessNormPoint.putExpand("college", NumberUtil.roundStr((double)ReflectUtil.getFieldValue(assessNormPoint, type + "College"),2));
+            Object mainPoint = ReflectUtil.getFieldValue(assessNormPoint, type + "Main");
+            if (mainPoint != null) {
+                assessNormPoint.putExpand("main", NumberUtil.roundStr((double)mainPoint,2));
+            }
+            Object collegePoint = ReflectUtil.getFieldValue(assessNormPoint, type + "College");
+            if (collegePoint != null) {
+                assessNormPoint.putExpand("college", NumberUtil.roundStr((double)collegePoint,2));
+            }
         }
     }
 }

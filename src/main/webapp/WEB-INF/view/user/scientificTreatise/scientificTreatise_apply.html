@@ -9,34 +9,7 @@
                     <#button btnCss="info" name="增加" icon="fa-plus" clickFun="ScientificTreatiseInfoDlg.addItem()"/>
                 </div>
                 <div class="col-sm-12" id="itemsArea">
-                    <input type="hidden" id="itemSize" value="${list.~size}">
-                    @for(listItem in list){
-                    <form class="form-inline" name="ScientificTreatiseItem" id="ScientificTreatiseItem${listItemLP.index}">
-                        <div class="form-group">
-                            <label>发表时间</label>
-                            <input class="form-control" type="text" name="publishDate" value="${listItem.publishDate}">
-                        </div>
-                        <div class="form-group">
-                            <label>论文题目</label>
-                            <input class="form-control" type="text" name="title" value="${listItem.title}">
-                        </div>
-                        <div class="form-group">
-                            <label>刊物名称</label>
-                            <input class="form-control" type="text" name="periodicalName" value="${listItem.periodicalName}">
-                        </div>
-                        <div class="form-group">
-                            <label>作者顺序</label>
-                            <input class="form-control" type="text" name="authorOrder" value="${listItem.authorOrder}">
-                        </div>
-                        <div class="form-group">
-                            <label>刊物级别</label>
-                            <input class="form-control" type="text" name="periodicalLevel" value="${listItem.periodicalLevel}">
-                        </div>
-                        <div class="form-group">
-                            <#button btnCss="danger" name="删除" id="cancel" icon="fa-remove" clickFun="ScientificTreatiseInfoDlg.deleteItem(event)"/>
-                        </div>
-                    </form>
-                    @}
+
                 </div>
             </div>
 
@@ -72,6 +45,9 @@
                     <div class="form-group">
                         <label>考核代码</label>
                         <input class="form-control" type="text" name="normCode" >
+                    </div>
+                    <div class="form-group">
+                        <#button btnCss="danger" name="删除" id="cancel" icon="fa-remove" clickFun="ScientificTreatiseInfoDlg.deleteItem(event)"/>
                     </div>
                 </form>
             </script>
