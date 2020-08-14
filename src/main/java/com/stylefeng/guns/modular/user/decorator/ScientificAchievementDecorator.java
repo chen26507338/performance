@@ -5,26 +5,24 @@ import com.stylefeng.guns.core.base.BaseListDecorator;
 import com.stylefeng.guns.core.util.SpringContextHolder;
 import com.stylefeng.guns.modular.assess.model.AssessNorm;
 import com.stylefeng.guns.modular.assess.service.IAssessNormService;
-import com.stylefeng.guns.modular.user.model.ScientificProject;
+import com.stylefeng.guns.modular.user.model.ScientificAchievement;
 
 import java.util.List;
 
-public class ScientificProjectDecorator extends BaseListDecorator<ScientificProject> {
-
+public class ScientificAchievementDecorator extends BaseListDecorator<ScientificAchievement> {
     private final IAssessNormService assessNormService;
 
-
-    public ScientificProjectDecorator(List<ScientificProject> list) {
+    public ScientificAchievementDecorator(List<ScientificAchievement> list) {
         super(list);
         assessNormService = SpringContextHolder.getBean(IAssessNormService.class);
     }
 
     @Override
-    protected void decorateTheEntity(ScientificProject scientificProject) {
-        AssessNorm assessNorm = assessNormService.selectById(scientificProject.getNormId());
+    protected void decorateTheEntity(ScientificAchievement scientificAchievement) {
+        AssessNorm assessNorm = assessNormService.selectById(scientificAchievement.getNormId());
         if (assessNorm != null) {
-            scientificProject.setNormCode(assessNorm.getCode());
-            scientificProject.setNormName(assessNorm.getContent());
+            scientificAchievement.setNormCode(assessNorm.getCode());
+            scientificAchievement.setNormName(assessNorm.getContent());
         }
     }
 }

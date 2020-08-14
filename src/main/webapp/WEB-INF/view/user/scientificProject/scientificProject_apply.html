@@ -9,46 +9,6 @@
                     <#button btnCss="info" name="增加" icon="fa-plus" clickFun="ScientificProjectInfoDlg.addItem()"/>
                 </div>
                 <div class="col-sm-12" id="itemsArea">
-                    <input type="hidden" id="itemSize" value="${list.~size}">
-                    @for(listItem in list){
-                    <form class="form-inline" name="ScientificProjectItem" id="ScientificProjectItem${listItemLP.index}">
-                        <div class="form-group">
-                            <label>课题名称</label>
-                            <input class="form-control" type="text" name="name" value="${listItem.name}">
-                        </div>
-                        <div class="form-group">
-                            <label>课题性质</label>
-                            <input class="form-control" type="text" name="nature" value="${listItem.nature}">
-                        </div>
-                        <div class="form-group">
-                            <label>课题项目类别</label>
-                            <input class="form-control" type="text" name="type" value="${listItem.type}">
-                        </div>
-                        <div class="form-group">
-                            <label>开题时间</label>
-                            <input class="form-control" type="text" name="startTime" value="${listItem.startTime}">
-                        </div>
-                        <div class="form-group">
-                            <label>结题时间</label>
-                            <input class="form-control" type="text" name="endTime" value="${listItem.endTime}">
-                        </div>
-                        <div class="form-group">
-                            <label>到账经费</label>
-                            <input class="form-control" type="text" name="expenditure" value="${listItem.expenditure}">
-                        </div>
-                        <div class="form-group">
-                            <label>排名</label>
-                            <input class="form-control" type="text" name="rank" value="${listItem.rank}">
-                        </div>
-                        <div class="form-group">
-                            <label>结题时间</label>
-                            <input class="form-control" type="text" name="endTime" value="${listItem.endTime}">
-                        </div>
-                        <div class="form-group">
-                            <#button btnCss="danger" name="删除" id="cancel" icon="fa-remove" clickFun="ScientificProjectInfoDlg.deleteItem(event)"/>
-                        </div>
-                    </form>
-                    @}
                 </div>
             </div>
 
@@ -90,8 +50,11 @@
                         <input class="form-control" type="text" name="rank" >
                     </div>
                     <div class="form-group">
-                        <label>结题时间</label>
-                        <input class="form-control" type="text" name="endTime" >
+                        <label>考核代码</label>
+                        <input class="form-control" type="text" name="normCode" >
+                    </div>
+                    <div class="form-group">
+                        <#button btnCss="danger" name="删除" id="cancel" icon="fa-remove" clickFun="ScientificTreatiseInfoDlg.deleteItem(event)"/>
                     </div>
                 </form>
             </script>

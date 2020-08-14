@@ -1,0 +1,38 @@
+@layout("/common/_container.html"){
+<div class="row">
+    <input id="userId" value="${user.id!}" type="hidden" />
+    <input id="status" value="1" type="hidden">
+    <div class="col-sm-12">
+        <div class="ibox float-e-margins">
+            <div class="ibox-title">
+                <h5>科研成果管理</h5>
+            </div>
+            <div class="ibox-content">
+                <div class="row row-lg">
+                    <div class="col-sm-12">
+                        <div class="row">
+                            <div class="col-sm-2">
+                                <#button name="搜索" icon="fa-search" clickFun="ScientificAchievement.search()"/>
+                            </div>
+                        </div>
+                        <div class="hidden-xs" id="ScientificAchievementTableToolbar" role="group">
+                            <#button name="申请审核" icon="fa-plus" clickFun="ScientificAchievement.openAddApply()"/>
+                            @if(shiro.hasPermission("/scientificAchievement/add")){
+                                <#button name="添加" icon="fa-plus" clickFun="ScientificAchievement.openAddScientificAchievement()"/>
+                            @}
+                            @if(shiro.hasPermission("/scientificAchievement/update")){
+                                <#button name="修改" icon="fa-plus" clickFun="ScientificAchievement.openScientificAchievementDetail()" space="true"/>
+                            @}
+                            @if(shiro.hasPermission("/scientificAchievement/delete")){
+                                <#button name="删除" icon="fa-plus" clickFun="ScientificAchievement.delete()" space="true"/>
+                            @}
+                        </div>
+                        <#table id="ScientificAchievementTable"/>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<script src="${ctxPath}/static/modular/user/scientificAchievement/scientificAchievement.js"></script>
+@}

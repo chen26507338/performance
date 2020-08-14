@@ -1,7 +1,6 @@
 package com.stylefeng.guns.modular.user.service.impl;
 
 import cn.hutool.core.collection.CollUtil;
-import cn.hutool.core.util.ReflectUtil;
 import cn.hutool.core.util.StrUtil;
 import com.alibaba.fastjson.JSON;
 import com.baomidou.mybatisplus.mapper.EntityWrapper;
@@ -15,35 +14,34 @@ import com.stylefeng.guns.modular.act.utils.ActUtils;
 import com.stylefeng.guns.modular.assess.model.AssessCoefficient;
 import com.stylefeng.guns.modular.assess.model.AssessNorm;
 import com.stylefeng.guns.modular.assess.model.AssessNormPoint;
-import com.stylefeng.guns.modular.assess.model.NormalAssess;
 import com.stylefeng.guns.modular.assess.service.IAssessCoefficientService;
 import com.stylefeng.guns.modular.assess.service.IAssessNormPointService;
 import com.stylefeng.guns.modular.assess.service.IAssessNormService;
-import com.stylefeng.guns.modular.assess.service.INormalAssessService;
 import com.stylefeng.guns.modular.job.service.IDeptService;
 import com.stylefeng.guns.modular.system.service.IRoleService;
 import com.stylefeng.guns.modular.system.service.IUserService;
-import com.stylefeng.guns.modular.user.dao.ScientificTreatiseMapper;
-import com.stylefeng.guns.modular.user.model.ScientificTreatise;
-import com.stylefeng.guns.modular.user.service.IScientificTreatiseService;
+import com.stylefeng.guns.modular.user.dao.ScientificAchievementMapper;
+import com.stylefeng.guns.modular.user.model.ScientificAchievement;
+import com.stylefeng.guns.modular.user.model.ScientificAchievement;
+import com.stylefeng.guns.modular.user.service.IScientificAchievementService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.regex.Pattern;
 
 /**
- * 科研论著服务实现类
+ * 科研成果服务实现类
  *
  * @author cp
- * @Date 2020-07-02 10:13:49
+ * @Date 2020-08-14 15:55:50
  */
 @Service
-public class ScientificTreatiseServiceImpl extends ServiceImpl<ScientificTreatiseMapper, ScientificTreatise> implements IScientificTreatiseService {
+public class ScientificAchievementServiceImpl extends ServiceImpl<ScientificAchievementMapper, ScientificAchievement> implements IScientificAchievementService {
+
 
     @Autowired
     private ActTaskService actTaskService;
@@ -58,51 +56,61 @@ public class ScientificTreatiseServiceImpl extends ServiceImpl<ScientificTreatis
 
     @Override
     @Transactional
-    public void audit(ScientificTreatise scientificTreatise) {
-        String pass = (String) scientificTreatise.getExpand().get("pass");
+    public void addApply(List<ScientificAchievement> scientificAchievements) {
+        this.handList(scientificAchievements, true);
+        this.insertBatch(scientificAchievements);
+    }
+
+    @Override
+    @Transactional
+    public void audit(ScientificAchievement scientificAchievement) {
+        String pass = (String) scientificAchievement.getExpand().get("pass");
         StringBuilder comment;
-        switch (scientificTreatise.getAct().getTaskDefKey()) {
+        switch (scientificAchievement.getAct().getTaskDefKey()) {
             case "user_re_submit":
                 comment = new StringBuilder(pass.equals(YesNo.YES.getCode() + "") ? "【重新提交】" : "【放弃审核】");
                 break;
             case "hr_leader_audit":
                 switch (pass) {
                     case "0":
-                        comment = new StringBuilder("【重新提交】");break;
+                        comment = new StringBuilder("【重新提交】");
+                        break;
                     case "1":
-                        comment = new StringBuilder("【重新设置年份】");break;
+                        comment = new StringBuilder("【重新设置年份】");
+                        break;
                     default:
-                        comment = new StringBuilder("【通过】");break;
+                        comment = new StringBuilder("【通过】");
+                        break;
                 }
                 break;
             default:
                 comment = new StringBuilder(pass.equals(YesNo.YES.getCode() + "") ? "【通过】" : "【驳回】");
         }
-        if (scientificTreatise.getExpand().get("comment") != null) {
-            comment.append(scientificTreatise.getExpand().get("comment"));
+        if (scientificAchievement.getExpand().get("comment") != null) {
+            comment.append(scientificAchievement.getExpand().get("comment"));
         }
         Map<String, Object> vars = new HashMap<>();
         vars.put("pass", pass);
 
         //修改数据
-        String dataJson = (String) scientificTreatise.getExpand().get("data");
-        List<ScientificTreatise> auditDatas = JSON.parseArray(dataJson, ScientificTreatise.class);
+        String dataJson = (String) scientificAchievement.getExpand().get("data");
+        List<ScientificAchievement> auditDatas = JSON.parseArray(dataJson, ScientificAchievement.class);
         if (CollUtil.isNotEmpty(auditDatas)) {
-            this.handList(auditDatas,false);
+            this.handList(auditDatas, false);
             this.updateBatchById(auditDatas);
         }
 
+
+        ScientificAchievement param = new ScientificAchievement();
+        param.setUserId((Long) actTaskService.getTaskService().getVariable(scientificAchievement.getAct().getTaskId(), "user"));
+
+        ScientificAchievement newEntity = new ScientificAchievement();
+        param.setProcInsId(scientificAchievement.getAct().getProcInsId());
         if (pass.equals(YesNo.YES.getCode() + "")) {
-            ScientificTreatise param = new ScientificTreatise();
-            param.setUserId((Long) actTaskService.getTaskService().getVariable(scientificTreatise.getAct().getTaskId(), "user"));
-
-            ScientificTreatise newEntity = new ScientificTreatise();
-            param.setProcInsId(scientificTreatise.getAct().getProcInsId());
-
-            //核算积分
-            if (scientificTreatise.getAct().getTaskDefKey().equals("hr_leader_audit") ) {
-                List<ScientificTreatise> assessList = this.selectList(new EntityWrapper<>(param));
-                for (ScientificTreatise entity : assessList) {
+            if (scientificAchievement.getAct().getTaskDefKey().equals("hr_leader_audit")) {
+                //本次审核的数据标识为已通过
+                List<ScientificAchievement> assessList = this.selectList(new EntityWrapper<>(param));
+                for (ScientificAchievement entity : assessList) {
                     AssessNormPoint assessNormPoint = new AssessNormPoint();
                     assessNormPoint.setUserId(entity.getUserId());
                     assessNormPoint.setYear(entity.getYear());
@@ -111,14 +119,14 @@ public class ScientificTreatiseServiceImpl extends ServiceImpl<ScientificTreatis
                     AssessCoefficient assessCoefficient = assessCoefficientService.selectById(IAssessCoefficientService.TYPE_KYGZ);
                     if (assessNormPoint != null) {
                         Double mainPoint = assessNormPoint.getKygzMain();
-                        mainPoint += entity.getMainNormPoint()  * assessCoefficient.getCoefficient();
+                        mainPoint += entity.getMainNormPoint() * assessCoefficient.getCoefficient();
                         assessNormPoint.setKygzMain(mainPoint);
 //                    Double collegePoint = (Double) ReflectUtil.getFieldValue(assessNormPoint, normalAssess.getType() + "College");
 //                    collegePoint += (1 + entity.getCollegeNormPoint()) * mainPoint;
 //                    ReflectUtil.setFieldValue(assessNormPoint, normalAssess.getType() + "College", collegePoint);
                     } else {
                         assessNormPoint = new AssessNormPoint();
-                        double mainPoint = entity.getMainNormPoint()  * assessCoefficient.getCoefficient();
+                        double mainPoint = entity.getMainNormPoint() * assessCoefficient.getCoefficient();
                         assessNormPoint.setKygzMain(mainPoint);
 //                    ReflectUtil.setFieldValue(assessNormPoint, normalAssess.getType() + "Main", mainPoint);
 //                    ReflectUtil.setFieldValue(assessNormPoint, normalAssess.getType() + "College", mainPoint * (1 + entity.getCollegeNormPoint()));
@@ -128,26 +136,23 @@ public class ScientificTreatiseServiceImpl extends ServiceImpl<ScientificTreatis
                     assessNormPoint.setUserId(entity.getUserId());
                     assessNormPointService.insertOrUpdate(assessNormPoint);
                 }
-                //本次审核的数据标识为已通过
                 newEntity.setStatus(YesNo.YES.getCode());
                 this.update(newEntity, new EntityWrapper<>(param));
-            } else if (scientificTreatise.getAct().getTaskDefKey().equals("hr_handle_audit")) {
+            } else if (scientificAchievement.getAct().getTaskDefKey().equals("hr_handle_audit")) {
                 //设置年度
-                newEntity.setYear(scientificTreatise.getYear());
+
+                newEntity.setYear(scientificAchievement.getYear());
                 this.update(newEntity, new EntityWrapper<>(param));
             }
         }
-        actTaskService.complete(scientificTreatise.getAct().getTaskId(), scientificTreatise.getAct().getProcInsId(), comment.toString(), vars);
+
+
+        actTaskService.complete(scientificAchievement.getAct().getTaskId(), scientificAchievement.getAct().getProcInsId(), comment.toString(), vars);
+
     }
 
-    @Override
-    @Transactional
-    public void addApply(List<ScientificTreatise> scientificTreatises) {
-        this.handList(scientificTreatises,true);
-        this.insertBatch(scientificTreatises);
-    }
+    private void handList(List<ScientificAchievement> scientificAchievements, boolean isImport) {
 
-    private void handList(List<ScientificTreatise> scientificTreatises,boolean isImport) {
         User sciCommissioner = null;
         User sciLeader = null;
         User hrHandle = null;
@@ -182,27 +187,27 @@ public class ScientificTreatiseServiceImpl extends ServiceImpl<ScientificTreatis
             vars.put("hr_handle", hrHandle.getId());
             vars.put("hr_leader", hrLeader.getId());
 
-//        vars.put("act_path", "/scientificTreatise/scientificTreatise_act");
-            proIncId = actTaskService.startProcessOnly(ActUtils.PD_SCIENTIFIC_ASSESS, "scientific_treatise", ShiroKit.getUser().name + " 科研论著审核", vars);
+            vars.put("act_path", "/scientificAchievement/scientificAchievement_act");
+            proIncId = actTaskService.startProcessOnly(ActUtils.PD_SCIENTIFIC_ASSESS, "scientific_achievement", ShiroKit.getUser().name + " 科研成果审核", vars);
         }
 
         //验证时间格式
         Pattern p = Pattern.compile("[0-9]{4}-[0-9]{2}-[0-9]{2}");
-        for (ScientificTreatise scientificTreatise : scientificTreatises) {
-            if (!p.matcher(scientificTreatise.getPublishDate()).find()) {
-                throw new GunsException("发布时间格式不正确，正确格式xxxx-xx-xx");
+        for (ScientificAchievement scientificAchievement : scientificAchievements) {
+            if (!p.matcher(scientificAchievement.getTime()).find()) {
+                throw new GunsException("时间格式不正确，正确格式xxxx-xx-xx");
             }
 
             if (isImport) {
-//                scientificTreatise.setDeptId(employee.getDeptId());
-                scientificTreatise.setHrHandleId(hrHandle.getId());
-                scientificTreatise.setHrLeaderId(hrLeader.getId());
-                scientificTreatise.setSciCommissioner(sciCommissioner.getId());
-                scientificTreatise.setSciLeaderId(sciLeader.getId());
-//                scientificTreatise.set(new Date());
+//                scientificAchievement.setDeptId(employee.getDeptId());
+                scientificAchievement.setHrHandleId(hrHandle.getId());
+                scientificAchievement.setHrLeaderId(hrLeader.getId());
+                scientificAchievement.setSciCommissioner(sciCommissioner.getId());
+                scientificAchievement.setSciLeaderId(sciLeader.getId());
+//                scientificAchievement.set(new Date());
             }
 
-            String normCode = scientificTreatise.getNormCode();
+            String normCode = scientificAchievement.getNormCode();
             if (StrUtil.isNotBlank(normCode)) {
                 //校级标准分
                 AssessNorm mainNorm = new AssessNorm();
@@ -210,24 +215,23 @@ public class ScientificTreatiseServiceImpl extends ServiceImpl<ScientificTreatis
                 mainNorm.setCode(normCode);
                 mainNorm.setType(IAssessCoefficientService.TYPE_KYGZ);
                 mainNorm = assessNormService.getByCode(mainNorm);
-                scientificTreatise.setMainNormPoint(mainNorm.getPoint());
-                scientificTreatise.setNormId(mainNorm.getId());
+                scientificAchievement.setMainNormPoint(mainNorm.getPoint());
+                scientificAchievement.setNormId(mainNorm.getId());
                 //院级浮动值
 //                AssessNorm collegeNorm = new AssessNorm();
 //                collegeNorm.setDeptId(ShiroKit.getUser().deptId);
 //                collegeNorm.setCode(normCode);
 //                collegeNorm.setType(IAssessCoefficientService.TYPE_KYGZ);
 //                collegeNorm = assessNormService.getByCode(collegeNorm);
-//                scientificTreatise.setCollegeNormPoint(collegeNorm.getPoint());
+//                scientificAchievement.setCollegeNormPoint(collegeNorm.getPoint());
 
                 //考核系数
                 AssessCoefficient coefficient = assessCoefficientService.selectById(IAssessCoefficientService.TYPE_KYGZ);
-                scientificTreatise.setCoePoint(coefficient.getCoefficient());
+                scientificAchievement.setCoePoint(coefficient.getCoefficient());
             }
 
-            scientificTreatise.setProcInsId(proIncId);
-            scientificTreatise.setUserId(ShiroKit.getUser().id);
+            scientificAchievement.setProcInsId(proIncId);
+            scientificAchievement.setUserId(ShiroKit.getUser().id);
         }
     }
-
 }

@@ -1,6 +1,7 @@
 package com.stylefeng.guns.modular.user.service.impl;
 
 import cn.hutool.core.collection.CollUtil;
+import cn.hutool.core.util.StrUtil;
 import com.alibaba.fastjson.JSON;
 import com.baomidou.mybatisplus.mapper.EntityWrapper;
 import com.stylefeng.guns.common.constant.state.YesNo;
@@ -9,8 +10,16 @@ import com.stylefeng.guns.core.exception.GunsException;
 import com.stylefeng.guns.core.shiro.ShiroKit;
 import com.stylefeng.guns.modular.act.service.ActTaskService;
 import com.stylefeng.guns.modular.act.utils.ActUtils;
+import com.stylefeng.guns.modular.assess.model.AssessCoefficient;
+import com.stylefeng.guns.modular.assess.model.AssessNorm;
+import com.stylefeng.guns.modular.assess.model.AssessNormPoint;
+import com.stylefeng.guns.modular.assess.service.IAssessCoefficientService;
+import com.stylefeng.guns.modular.assess.service.IAssessNormPointService;
+import com.stylefeng.guns.modular.assess.service.IAssessNormService;
+import com.stylefeng.guns.modular.job.service.IDeptService;
 import com.stylefeng.guns.modular.system.service.IRoleService;
 import com.stylefeng.guns.modular.system.service.IUserService;
+import com.stylefeng.guns.modular.user.model.ScientificProject;
 import com.stylefeng.guns.modular.user.model.ScientificProject;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -38,22 +47,17 @@ public class ScientificProjectServiceImpl extends ServiceImpl<ScientificProjectM
     private ActTaskService actTaskService;
     @Autowired
     private IUserService userService;
+    @Autowired
+    private IAssessNormService assessNormService;
+    @Autowired
+    private IAssessCoefficientService assessCoefficientService;
+    @Autowired
+    private IAssessNormPointService assessNormPointService;
+
     @Override
     @Transactional
     public void addApply(List<ScientificProject> scientificProjects) {
-        EntityWrapper<User> wrapper = new EntityWrapper<>();
-        wrapper.like("role_id", IRoleService.TYPE_SCIENTIFIC_TREATISE_HR + "");
-        User eduExpHr = userService.selectOne(wrapper);
-        Map<String, Object> vars = new HashMap<>();
-        vars.put("audit_user", eduExpHr.getId());
-        vars.put("user", ShiroKit.getUser().id);
-        vars.put("act_path", "/scientificProject/scientificProject_act");
-        String proIncId = actTaskService.startProcessOnly(ActUtils.PD_PERSONAL_INFO, "scientific_treatise", ShiroKit.getUser().name + "科研论著审核", vars);
-        for (ScientificProject scientificProject : scientificProjects) {
-            scientificProject.setProcInsId(proIncId);
-            scientificProject.setUserId(ShiroKit.getUser().id);
-        }
-        this.handList(scientificProjects);
+        this.handList(scientificProjects, true);
         this.insertBatch(scientificProjects);
     }
 
@@ -61,7 +65,27 @@ public class ScientificProjectServiceImpl extends ServiceImpl<ScientificProjectM
     @Transactional
     public void audit(ScientificProject scientificProject) {
         String pass = (String) scientificProject.getExpand().get("pass");
-        StringBuilder comment = new StringBuilder(pass.equals(YesNo.YES.getCode() + "") ? "【通过】" : "【驳回】");
+        StringBuilder comment;
+        switch (scientificProject.getAct().getTaskDefKey()) {
+            case "user_re_submit":
+                comment = new StringBuilder(pass.equals(YesNo.YES.getCode() + "") ? "【重新提交】" : "【放弃审核】");
+                break;
+            case "hr_leader_audit":
+                switch (pass) {
+                    case "0":
+                        comment = new StringBuilder("【重新提交】");
+                        break;
+                    case "1":
+                        comment = new StringBuilder("【重新设置年份】");
+                        break;
+                    default:
+                        comment = new StringBuilder("【通过】");
+                        break;
+                }
+                break;
+            default:
+                comment = new StringBuilder(pass.equals(YesNo.YES.getCode() + "") ? "【通过】" : "【驳回】");
+        }
         if (scientificProject.getExpand().get("comment") != null) {
             comment.append(scientificProject.getExpand().get("comment"));
         }
@@ -72,29 +96,102 @@ public class ScientificProjectServiceImpl extends ServiceImpl<ScientificProjectM
         String dataJson = (String) scientificProject.getExpand().get("data");
         List<ScientificProject> auditDatas = JSON.parseArray(dataJson, ScientificProject.class);
         if (CollUtil.isNotEmpty(auditDatas)) {
-            this.handList(auditDatas);
+            this.handList(auditDatas, false);
             this.updateBatchById(auditDatas);
         }
 
-        if (scientificProject.getAct().getTaskDefKey().equals("audit") && pass.equals(YesNo.YES.getCode() + "")) {
-            ScientificProject param = new ScientificProject();
-            param.setUserId((Long) actTaskService.getTaskService().getVariable(scientificProject.getAct().getTaskId(), "user"));
 
-            //将所有状态标识为拒绝
-            ScientificProject newEntity = new ScientificProject();
-            newEntity.setStatus(YesNo.NO.getCode());
-            this.update(newEntity, new EntityWrapper<>(param));
-            //本次审核的数据标识为已通过
-            param.setProcInsId(scientificProject.getAct().getProcInsId());
-            newEntity.setStatus(YesNo.YES.getCode());
-            this.update(newEntity, new EntityWrapper<>(param));
+        ScientificProject param = new ScientificProject();
+        param.setUserId((Long) actTaskService.getTaskService().getVariable(scientificProject.getAct().getTaskId(), "user"));
+
+        ScientificProject newEntity = new ScientificProject();
+        param.setProcInsId(scientificProject.getAct().getProcInsId());
+        if (pass.equals(YesNo.YES.getCode() + "")) {
+            if (scientificProject.getAct().getTaskDefKey().equals("hr_leader_audit")) {
+                //本次审核的数据标识为已通过
+                List<ScientificProject> assessList = this.selectList(new EntityWrapper<>(param));
+                for (ScientificProject entity : assessList) {
+                    AssessNormPoint assessNormPoint = new AssessNormPoint();
+                    assessNormPoint.setUserId(entity.getUserId());
+                    assessNormPoint.setYear(entity.getYear());
+                    assessNormPoint = assessNormPointService.selectOne(new EntityWrapper<>(assessNormPoint));
+
+                    AssessCoefficient assessCoefficient = assessCoefficientService.selectById(IAssessCoefficientService.TYPE_KYGZ);
+                    if (assessNormPoint != null) {
+                        Double mainPoint = assessNormPoint.getKygzMain();
+                        mainPoint += entity.getMainNormPoint() * assessCoefficient.getCoefficient();
+                        assessNormPoint.setKygzMain(mainPoint);
+//                    Double collegePoint = (Double) ReflectUtil.getFieldValue(assessNormPoint, normalAssess.getType() + "College");
+//                    collegePoint += (1 + entity.getCollegeNormPoint()) * mainPoint;
+//                    ReflectUtil.setFieldValue(assessNormPoint, normalAssess.getType() + "College", collegePoint);
+                    } else {
+                        assessNormPoint = new AssessNormPoint();
+                        double mainPoint = entity.getMainNormPoint() * assessCoefficient.getCoefficient();
+                        assessNormPoint.setKygzMain(mainPoint);
+//                    ReflectUtil.setFieldValue(assessNormPoint, normalAssess.getType() + "Main", mainPoint);
+//                    ReflectUtil.setFieldValue(assessNormPoint, normalAssess.getType() + "College", mainPoint * (1 + entity.getCollegeNormPoint()));
+                    }
+                    assessNormPoint.setYear(entity.getYear());
+//                assessNormPoint.setDeptId(entity.getDeptId());
+                    assessNormPoint.setUserId(entity.getUserId());
+                    assessNormPointService.insertOrUpdate(assessNormPoint);
+                }
+                newEntity.setStatus(YesNo.YES.getCode());
+                this.update(newEntity, new EntityWrapper<>(param));
+            } else if (scientificProject.getAct().getTaskDefKey().equals("hr_handle_audit") ) {
+                //设置年度
+
+                newEntity.setYear(scientificProject.getYear());
+                this.update(newEntity, new EntityWrapper<>(param));
+            }
         }
+
+
 
         actTaskService.complete(scientificProject.getAct().getTaskId(), scientificProject.getAct().getProcInsId(), comment.toString(), vars);
 
     }
 
-    private void handList(List<ScientificProject> scientificProjects) {
+    private void handList(List<ScientificProject> scientificProjects, boolean isImport) {
+
+        User sciCommissioner = null;
+        User sciLeader = null;
+        User hrHandle = null;
+        User hrLeader = null;
+        String proIncId = null;
+
+        if (isImport) {
+            EntityWrapper<User> wrapper = new EntityWrapper<>();
+            wrapper.like("role_id", IRoleService.TYPE_SCI_HANDLER + "");
+            wrapper.eq("dept_id", IDeptService.SCI);
+            sciCommissioner = userService.selectOne(wrapper);
+
+            wrapper = new EntityWrapper<>();
+            wrapper.like("role_id", IRoleService.TYPE_DEPT_LEADER + "");
+            wrapper.eq("dept_id", IDeptService.SCI);
+            sciLeader = userService.selectOne(wrapper);
+
+            wrapper = new EntityWrapper<>();
+            wrapper.like("role_id", IRoleService.TYPE_HR_HANDLER + "");
+            wrapper.eq("dept_id", IDeptService.HR);
+            hrHandle = userService.selectOne(wrapper);
+
+            wrapper = new EntityWrapper<>();
+            wrapper.like("role_id", IRoleService.TYPE_DEPT_LEADER + "");
+            wrapper.eq("dept_id", IDeptService.HR);
+            hrLeader = userService.selectOne(wrapper);
+
+            Map<String, Object> vars = new HashMap<>();
+            vars.put("user", ShiroKit.getUser().id);
+            vars.put("sci_commissioner", sciCommissioner.getId());
+            vars.put("sci_leader_user", sciLeader.getId());
+            vars.put("hr_handle", hrHandle.getId());
+            vars.put("hr_leader", hrLeader.getId());
+
+            vars.put("act_path", "/scientificProject/scientificProject_act");
+            proIncId = actTaskService.startProcessOnly(ActUtils.PD_SCIENTIFIC_ASSESS, "scientific_project", ShiroKit.getUser().name + " 科研项目审核", vars);
+        }
+
         //验证时间格式
         Pattern p = Pattern.compile("[0-9]{4}-[0-9]{2}-[0-9]{2}");
         for (ScientificProject scientificProject : scientificProjects) {
@@ -104,6 +201,43 @@ public class ScientificProjectServiceImpl extends ServiceImpl<ScientificProjectM
             if (!p.matcher(scientificProject.getEndTime()).find()) {
                 throw new GunsException("结题时间格式不正确，正确格式xxxx-xx-xx");
             }
+
+            if (isImport) {
+//                scientificProject.setDeptId(employee.getDeptId());
+                scientificProject.setHrHandleId(hrHandle.getId());
+                scientificProject.setHrLeaderId(hrLeader.getId());
+                scientificProject.setSciCommissioner(sciCommissioner.getId());
+                scientificProject.setSciLeaderId(sciLeader.getId());
+//                scientificProject.set(new Date());
+            }
+
+            String normCode = scientificProject.getNormCode();
+            if (StrUtil.isNotBlank(normCode)) {
+                //校级标准分
+                AssessNorm mainNorm = new AssessNorm();
+                mainNorm.setDeptId(IAssessNormService.TYPE_MAIN_DEPT);
+                mainNorm.setCode(normCode);
+                mainNorm.setType(IAssessCoefficientService.TYPE_KYGZ);
+                mainNorm = assessNormService.getByCode(mainNorm);
+                scientificProject.setMainNormPoint(mainNorm.getPoint());
+                scientificProject.setNormId(mainNorm.getId());
+                //院级浮动值
+//                AssessNorm collegeNorm = new AssessNorm();
+//                collegeNorm.setDeptId(ShiroKit.getUser().deptId);
+//                collegeNorm.setCode(normCode);
+//                collegeNorm.setType(IAssessCoefficientService.TYPE_KYGZ);
+//                collegeNorm = assessNormService.getByCode(collegeNorm);
+//                scientificProject.setCollegeNormPoint(collegeNorm.getPoint());
+
+                //考核系数
+                AssessCoefficient coefficient = assessCoefficientService.selectById(IAssessCoefficientService.TYPE_KYGZ);
+                scientificProject.setCoePoint(coefficient.getCoefficient());
+            }
+
+            scientificProject.setProcInsId(proIncId);
+            scientificProject.setUserId(ShiroKit.getUser().id);
         }
+
+
     }
 }

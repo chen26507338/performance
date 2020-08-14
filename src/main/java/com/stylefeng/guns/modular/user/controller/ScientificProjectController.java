@@ -9,6 +9,7 @@ import com.stylefeng.guns.core.shiro.ShiroKit;
 import com.stylefeng.guns.modular.system.service.IUserService;
 import com.stylefeng.guns.modular.user.model.ScientificProject;
 import com.stylefeng.guns.modular.user.model.ScientificProject;
+import com.stylefeng.guns.modular.user.model.ScientificTreatise;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.stereotype.Controller;
 import org.apache.shiro.authz.annotation.RequiresPermissions;;
@@ -183,7 +184,7 @@ public class ScientificProjectController extends BaseController {
     @RequestMapping("/scientificProjectProcData")
     @ResponseBody
     public Object scientificProjectProcData(ScientificProject scientificProject) {
-        List<ScientificProject> datas = scientificProject.selectList(new EntityWrapper<>(scientificProject));
+        List<ScientificProject> datas = new ScientificProjectDecorator(scientificProject.selectList(new EntityWrapper<>(scientificProject))).decorate();
         Map<String, Object> result = new HashMap<>();
         result.put("code", 0);
         result.put("data", datas);

@@ -53,7 +53,7 @@ ScientificTreatise.formParams = function() {
 ScientificTreatise.openAddApply = function () {
     this.layerIndex = layer.open({
         type: 2,
-        title: '申请修改',
+        title: '申请审核',
         area: ['800px', '420px'], //宽高
         fix: false, //不固定
         maxmin: true,

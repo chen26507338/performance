@@ -1,0 +1,78 @@
+@layout("/common/_container.html"){
+<div class="ibox float-e-margins">
+    <div class="ibox-content">
+        <div class="form-horizontal" id="ScientificAchievementForm">
+
+            <input type="hidden" id="id" value="">
+
+            <div class="row">
+
+                <div class="col-sm-6 b-r">
+                    <#input id="name" name="名称" underline="true"/>
+                </div>
+                <div class="col-sm-6 b-r">
+                    <#input id="des" name="简要描述" underline="true"/>
+                </div>
+                <div class="col-sm-6 b-r">
+                    <#input id="time" name="时间" underline="true"/>
+                </div>
+                <div class="col-sm-6 b-r">
+                    <#input id="type" name="类型" underline="true"/>
+                </div>
+                <div class="col-sm-6 b-r">
+                    <#input id="userId" name="用户ID" underline="true"/>
+                </div>
+                <div class="col-sm-6 b-r">
+                    <#input id="procInsId" name="流程实例ID" underline="true"/>
+                </div>
+                <div class="col-sm-6 b-r">
+                    <#input id="status" name="状态" underline="true"/>
+                </div>
+                <div class="col-sm-6 b-r">
+                    <#input id="hrHandleId" name="人事经办ID" underline="true"/>
+                </div>
+                <div class="col-sm-6 b-r">
+                    <#input id="deptLeaderId" name="部门领导ID" underline="true"/>
+                </div>
+                <div class="col-sm-6 b-r">
+                    <#input id="hrLeaderId" name="人事领导ID" underline="true"/>
+                </div>
+                <div class="col-sm-6 b-r">
+                    <#input id="sciCommissioner" name="科技处专员ID" underline="true"/>
+                </div>
+                <div class="col-sm-6 b-r">
+                    <#input id="normId" name="指标ID" underline="true"/>
+                </div>
+                <div class="col-sm-6 b-r">
+                    <#input id="coePoint" name="考核系数" underline="true"/>
+                </div>
+                <div class="col-sm-6 b-r">
+                    <#input id="mainNormPoint" name="校级指标分" underline="true"/>
+                </div>
+                <div class="col-sm-6 b-r">
+                    <#input id="collegeNormPoint" name="院级浮动值" underline="true"/>
+                </div>
+                <div class="col-sm-6 b-r">
+                    <#input id="result" name="考核结果" underline="true"/>
+                </div>
+                <div class="col-sm-6 b-r">
+                    <#input id="year" name="年度" underline="true"/>
+                </div>
+                <div class="col-sm-6 b-r">
+                    <#input id="sciLeaderId" name="科技处领导ID" underline="true"/>
+                </div>
+
+            </div>
+
+            <div class="row btn-group-m-t">
+                <div class="col-sm-10">
+                    <#button btnCss="info" name="提交" id="ensure" icon="fa-check" clickFun="ScientificAchievementInfoDlg.addSubmit()"/>
+                    <#button btnCss="danger" name="取消" id="cancel" icon="fa-eraser" clickFun="ScientificAchievementInfoDlg.close()"/>
+                </div>
+            </div>
+        </div>
+
+    </div>
+</div>
+<script src="${ctxPath}/static/modular/user/scientificAchievement/scientificAchievement_info.js"></script>
+@}

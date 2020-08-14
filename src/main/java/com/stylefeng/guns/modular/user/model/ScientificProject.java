@@ -93,4 +93,78 @@ public class ScientificProject extends BaseActEntity<ScientificProject> {
     @TableField("status")
     private Integer status;
 
+
+    /**
+     * 校级指标分
+     */
+    @TableField("main_norm_point")
+    private Double mainNormPoint;
+
+
+    /**
+     * 考核系数
+     */
+    @TableField("coe_point")
+    private Double coePoint;
+
+    /**
+     * 院级浮动值
+     */
+    @TableField("college_norm_point")
+    private Double collegeNormPoint;
+
+    /**
+     * 考核结果
+     */
+    @TableField("result")
+    private Integer result;
+
+    /**
+     * 年度
+     */
+    @TableField("year")
+    private String year;
+
+    /**
+     * 指标ID
+     */
+    @TableField("norm_id")
+    private Long normId;
+
+    /**
+     * 人事经办ID
+     */
+    @TableField("hr_handle_id")
+    private Long hrHandleId;
+
+    /**
+     * 部门领导ID
+     */
+    @TableField("dept_leader_id")
+    private Long deptLeaderId;
+
+    /**
+     * 人事领导ID
+     */
+    @TableField("hr_leader_id")
+    private Long hrLeaderId;
+
+    /**
+     * 科技处专员ID
+     */
+    @TableField("sci_commissioner")
+    private Long sciCommissioner;
+
+    /**
+     * 科技处领导ID
+     */
+    @TableField("sci_leader_id")
+    private Long sciLeaderId;
+
+    @TableField(exist = false)
+    private String normCode;
+
+    @TableField(exist = false)
+    private String normName;
+
 }

@@ -16,7 +16,7 @@
                             </div>
                         </div>
                         <div class="hidden-xs" id="ScientificProjectTableToolbar" role="group">
-                            <#button name="申请修改" icon="fa-plus" clickFun="ScientificProject.openAddApply()"/>
+                            <#button name="申请审核" icon="fa-plus" clickFun="ScientificProject.openAddApply()"/>
                             @if(shiro.hasPermission("/scientificProject/add")){
                                 <#button name="添加" icon="fa-plus" clickFun="ScientificProject.openAddScientificProject()"/>
                             @}
