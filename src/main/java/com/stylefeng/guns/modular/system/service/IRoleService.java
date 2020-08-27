@@ -62,9 +62,24 @@ public interface IRoleService extends IService<Role> {
     long TYPE_SCIENTIFIC_TREATISE_HR = 18;
 
     /**
+     * 角色类型：专业建设审核人事专员
+     */
+    long TYPE_MAJOR_BUILD_HR = 19;
+
+    /**
      * 角色类型：自然信息审核人事专员
      */
     long TYPE_PERSONAL_HR = 20;
+
+    /**
+     * 角色类型：院长
+     */
+    long TYPE_DEAN = 22;
+
+    /**
+     * 角色类型：教务处处长
+     */
+    long TYPE_DEAN_OFFICE_LEADER = 24;
 
     /**
      * 设置某个角色的权限

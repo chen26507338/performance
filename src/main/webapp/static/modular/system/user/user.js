@@ -21,8 +21,12 @@ MgrUser.initColumn = function () {
         {title: '性别', field: 'sex', align: 'center', valign: 'middle', sortable: true,formatter:function(value, row, index){return row.expand.sexName;}},
         {title: '部门', field: 'deptId', align: 'center', valign: 'middle', sortable: true,formatter:function(value, row, index){return row.expand.deptName;}},
         {title: '岗位', field: 'jobId', align: 'center', valign: 'middle', sortable: true,formatter:function(value, row, index){return row.expand.jobName;}},
-        {title: '权限', field: 'expand.userType', align: 'center', valign: 'middle',formatter: function (value, row, index) {
-                return value;
+        {title: '权限', field: 'expand.userType',width:200, align: 'center', valign: 'middle',formatter: function (value, row, index) {
+                if(value.length>15){
+                    return "<div title="+value+" style='width:100px;white-space:nowrap; overflow:hidden; text-overflow: ellipsis;'>" + value + "</div>";
+                }else{
+                    return value;
+                }
             }},
         {title: '电话', field: 'phone', align: 'center', valign: 'middle', sortable: true},
         {title: '状态', field: 'statusName', align: 'center', valign: 'middle', sortable: true}];
