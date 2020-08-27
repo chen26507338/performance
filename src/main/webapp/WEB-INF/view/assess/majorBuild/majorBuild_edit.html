@@ -1,0 +1,65 @@
+@layout("/common/_container.html"){
+<div class="ibox float-e-margins">
+    <div class="ibox-content">
+        <div class="form-horizontal" id="MajorBuildForm">
+
+            <input type="hidden" id="id" value="${item.id}">
+
+            <div class="row">
+
+                <div class="col-sm-6 b-r">
+                    <#input id="principalId" name="负责人ID" value="${item.principalId}" underline="true"/>
+                </div>
+                <div class="col-sm-6 b-r">
+                    <#input id="name" name="名称" value="${item.name}" underline="true"/>
+                </div>
+                <div class="col-sm-6 b-r">
+                    <#input id="time" name="立项时间" value="${item.time}" underline="true"/>
+                </div>
+                <div class="col-sm-6 b-r">
+                    <#input id="procInsId" name="流程实例ID" value="${item.procInsId}" underline="true"/>
+                </div>
+                <div class="col-sm-6 b-r">
+                    <#input id="status" name="状态" value="${item.status}" underline="true"/>
+                </div>
+                <div class="col-sm-6 b-r">
+                    <#input id="hrHandleId" name="人事经办ID" value="${item.hrHandleId}" underline="true"/>
+                </div>
+                <div class="col-sm-6 b-r">
+                    <#input id="deanUserId" name="院长D" value="${item.deanUserId}" underline="true"/>
+                </div>
+                <div class="col-sm-6 b-r">
+                    <#input id="hrLeaderId" name="人事领导ID" value="${item.hrLeaderId}" underline="true"/>
+                </div>
+                <div class="col-sm-6 b-r">
+                    <#input id="majorCommissioner" name="科技处专员ID" value="${item.majorCommissioner}" underline="true"/>
+                </div>
+                <div class="col-sm-6 b-r">
+                    <#input id="normId" name="指标ID" value="${item.normId}" underline="true"/>
+                </div>
+                <div class="col-sm-6 b-r">
+                    <#input id="result" name="考核结果" value="${item.result}" underline="true"/>
+                </div>
+                <div class="col-sm-6 b-r">
+                    <#input id="approvalYear" name="立项年度" value="${item.approvalYear}" underline="true"/>
+                </div>
+                <div class="col-sm-6 b-r">
+                    <#input id="deanOfficeLeaderId" name="教务处处长ID" value="${item.deanOfficeLeaderId}" underline="true"/>
+                </div>
+                <div class="col-sm-6 b-r">
+                    <#input id="checkYear" name="验收年度" value="${item.checkYear}" underline="true"/>
+                </div>
+            </div>
+
+            <div class="row btn-group-m-t">
+                <div class="col-sm-10">
+                    <#button btnCss="info" name="提交" id="ensure" icon="fa-check" clickFun="MajorBuildInfoDlg.editSubmit()"/>
+                    <#button btnCss="danger" name="取消" id="cancel" icon="fa-eraser" clickFun="MajorBuildInfoDlg.close()"/>
+                </div>
+            </div>
+        </div>
+
+    </div>
+</div>
+<script src="${ctxPath}/static/modular/assess/majorBuild/majorBuild_info.js"></script>
+@}

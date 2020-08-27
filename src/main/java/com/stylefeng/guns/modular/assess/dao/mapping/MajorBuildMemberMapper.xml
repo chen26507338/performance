@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.stylefeng.guns.modular.assess.dao.MajorBuildMemberMapper">
+
+	<!-- 通用查询映射结果 -->
+	<resultMap id="BaseResultMap" type="com.stylefeng.guns.modular.assess.model.MajorBuildMember">
+            <id column="id" property="id" />
+            <result column="build_id" property="buildId" />
+            <result column="main_norm_point" property="mainNormPoint" />
+            <result column="college_norm_point" property="collegeNormPoint" />
+            <result column="status" property="status" />
+            <result column="coe_point" property="coePoint" />
+	</resultMap>
+
+    <!-- 通用查询结果列 -->
+    <sql id="Base_Column_List">
+	    id AS id,
+	    build_id AS buildId,
+	    main_norm_point AS mainNormPoint,
+	    college_norm_point AS collegeNormPoint,
+	    status AS status,
+	    coe_point AS coePoint
+    </sql>
+
+</mapper>

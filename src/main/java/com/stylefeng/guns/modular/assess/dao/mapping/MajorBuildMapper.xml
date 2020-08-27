@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.stylefeng.guns.modular.assess.dao.MajorBuildMapper">
+
+	<!-- 通用查询映射结果 -->
+	<resultMap id="BaseResultMap" type="com.stylefeng.guns.modular.assess.model.MajorBuild">
+            <id column="id" property="id" />
+            <result column="principal_id" property="principalId" />
+            <result column="name" property="name" />
+            <result column="time" property="time" />
+            <result column="proc_ins_id" property="procInsId" />
+            <result column="status" property="status" />
+            <result column="hr_handle_id" property="hrHandleId" />
+            <result column="dean_user_id" property="deanUserId" />
+            <result column="hr_leader_id" property="hrLeaderId" />
+            <result column="major_commissioner" property="majorCommissioner" />
+            <result column="norm_id" property="normId" />
+            <result column="result" property="result" />
+            <result column="approval_year" property="approvalYear" />
+            <result column="dean_office_leader_id" property="deanOfficeLeaderId" />
+            <result column="check_year" property="checkYear" />
+	</resultMap>
+
+    <!-- 通用查询结果列 -->
+    <sql id="Base_Column_List">
+	    id AS id,
+	    principal_id AS principalId,
+	    name AS name,
+	    time AS time,
+	    proc_ins_id AS procInsId,
+	    status AS status,
+	    hr_handle_id AS hrHandleId,
+	    dean_user_id AS deanUserId,
+	    hr_leader_id AS hrLeaderId,
+	    major_commissioner AS majorCommissioner,
+	    norm_id AS normId,
+	    result AS result,
+	    approval_year AS approvalYear,
+	    dean_office_leader_id AS deanOfficeLeaderId,
+	    check_year AS checkYear
+    </sql>
+
+</mapper>
