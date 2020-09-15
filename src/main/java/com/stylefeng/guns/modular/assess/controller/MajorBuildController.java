@@ -4,10 +4,14 @@ import com.stylefeng.guns.common.persistence.model.User;
 import com.stylefeng.guns.core.base.controller.BaseController;
 import com.baomidou.mybatisplus.plugins.Page;
 import com.stylefeng.guns.common.constant.factory.PageFactory;
+import com.stylefeng.guns.modular.assess.decorator.MajorBuildMemberDecorator;
 import com.stylefeng.guns.modular.assess.model.AssessNorm;
+import com.stylefeng.guns.modular.assess.model.MajorBuildMember;
 import com.stylefeng.guns.modular.assess.service.IAssessCoefficientService;
 import com.stylefeng.guns.modular.assess.service.IAssessNormService;
+import com.stylefeng.guns.modular.assess.service.IMajorBuildMemberService;
 import com.stylefeng.guns.modular.system.service.IUserService;
+import com.stylefeng.guns.modular.user.decorator.ScientificAchievementDecorator;
 import com.stylefeng.guns.modular.user.model.ScientificAchievement;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.stereotype.Controller;
@@ -40,6 +44,8 @@ public class MajorBuildController extends BaseController {
 
     @Autowired
     private IMajorBuildService majorBuildService;
+    @Autowired
+    private IMajorBuildMemberService majorBuildMemberService;
     @Autowired
     private IAssessNormService assessNormService;
 
@@ -159,6 +165,22 @@ public class MajorBuildController extends BaseController {
     public Object auditApproval(MajorBuild majorBuild) {
         majorBuildService.auditApproval(majorBuild);
         return SUCCESS_TIP;
+    }
+
+    /**
+     * 流程数据
+     */
+    @RequestMapping("/act/data/approval")
+    @ResponseBody
+    public Object scientificAchievementProcData(MajorBuild majorBuild) {
+        MajorBuildMember params = new MajorBuildMember();
+        params.setStatus(IMajorBuildMemberService.STATS_APPROVAL_WAIT);
+        params.setBuildId(majorBuild.getId());
+        List<MajorBuildMember> datas = new MajorBuildMemberDecorator(majorBuildMemberService.selectList(new EntityWrapper<>(params))).decorate();
+        Map<String, Object> result = new HashMap<>();
+        result.put("code", 0);
+        result.put("data", datas);
+        return result;
     }
 
     /**

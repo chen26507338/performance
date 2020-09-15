@@ -15,6 +15,7 @@ import com.stylefeng.guns.modular.assess.service.*;
 import com.stylefeng.guns.modular.job.service.IDeptService;
 import com.stylefeng.guns.modular.system.service.IRoleService;
 import com.stylefeng.guns.modular.system.service.IUserService;
+import com.stylefeng.guns.modular.user.model.ScientificAchievement;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import com.baomidou.mybatisplus.service.impl.ServiceImpl;
@@ -115,57 +116,112 @@ public class MajorBuildServiceImpl extends ServiceImpl<MajorBuildMapper, MajorBu
         Map<String, Object> vars = new HashMap<>();
         vars.put("pass", pass);
         if (pass.equals(YesNo.YES.getCode() + "")) {
-            if (majorBuild.getAct().getTaskDefKey().equals("principal_audit")) {
-                AssessNorm assessNorm = assessNormService.selectById(majorBuild.getNormId());
+            switch (majorBuild.getAct().getTaskDefKey()) {
+                case "principal_audit":
+                    //项目负责人设置成员积分
+                    AssessNorm assessNorm = assessNormService.selectById(majorBuild.getNormId());
 
-                User principalUser = userService.selectById(majorBuild.getPrincipalId());
-                AssessNorm collegeNorm = new AssessNorm();
-                collegeNorm.setDeptId(principalUser.getDeptId());
-                collegeNorm.setCode(assessNorm.getCode());
-                collegeNorm.setType(IAssessCoefficientService.TYPE_ZYJS);
-                collegeNorm = assessNormService.getByCode(collegeNorm);
-                //考核系数
-                AssessCoefficient coefficient = assessCoefficientService.selectById(IAssessCoefficientService.TYPE_ZYJS);
+                    User principalUser = userService.selectById(majorBuild.getPrincipalId());
+                    AssessNorm collegeNorm = new AssessNorm();
+                    collegeNorm.setDeptId(principalUser.getDeptId());
+                    collegeNorm.setCode(assessNorm.getCode());
+                    collegeNorm.setType(IAssessCoefficientService.TYPE_ZYJS);
+                    collegeNorm = assessNormService.getByCode(collegeNorm);
+                    //考核系数
+                    AssessCoefficient coefficient = assessCoefficientService.selectById(IAssessCoefficientService.TYPE_ZYJS);
 
-                String dataJson = (String) majorBuild.getExpand().get("data");
-                List<Map> majorBuildMembers = JSON.parseArray(dataJson, Map.class);
-                List<MajorBuildMember> majorBuildMemberList = new ArrayList<>();
-                if (CollUtil.isNotEmpty(majorBuildMembers)) {
-                    double sum = 0;
-                    for (Map majorBuildMember : majorBuildMembers) {
-                        String account = (String) majorBuildMember.get("userNo");
-                        if (StrUtil.isBlank(account)) {
-                            throw new GunsException("职工编号不能为空");
+                    String dataJson = (String) majorBuild.getExpand().get("data");
+                    List<Map> majorBuildMembers = JSON.parseArray(dataJson, Map.class);
+                    List<MajorBuildMember> majorBuildMemberList = new ArrayList<>();
+                    if (CollUtil.isNotEmpty(majorBuildMembers)) {
+                        double sum = 0;
+                        for (Map majorBuildMember : majorBuildMembers) {
+                            String account = (String) majorBuildMember.get("userNo");
+                            if (StrUtil.isBlank(account)) {
+                                throw new GunsException("职工编号不能为空");
+                            }
+                            User user = userService.getByAccount(account);
+                            if (user == null) {
+                                throw new GunsException(StrUtil.format("职工编号 {} 不存在", account));
+                            }
+                            double point = Double.parseDouble(majorBuildMember.get("mainPoint") + "");
+                            sum += point;
+                            MajorBuildMember member = new MajorBuildMember();
+                            member.setUserId(user.getId());
+                            member.setBuildId(majorBuild.getId());
+                            member.setMainNormPoint(point);
+                            member.setCollegeNormPoint(member.getMainNormPoint() * collegeNorm.getPoint());
+                            member.setCoePoint(coefficient.getCoefficient());
+                            majorBuildMemberList.add(member);
+//                        member.set
                         }
-                        User user = userService.getByAccount(account);
-                        if (user == null) {
-                            throw new GunsException(StrUtil.format("职工编号 {} 不存在", account));
+                        if (sum > assessNorm.getPoint() / 2) {
+                            throw new GunsException("总分数不能高于" + assessNorm.getPoint() / 2);
                         }
-                        double point = Double.parseDouble(majorBuildMember.get("mainPoint") + "");
-                        sum += point;
                         MajorBuildMember member = new MajorBuildMember();
-                        member.setUserId(user.getId());
+                        member.setUserId(principalUser.getId());
                         member.setBuildId(majorBuild.getId());
-                        member.setMainNormPoint(point);
+                        member.setMainNormPoint(assessNorm.getPoint() / 2 - sum);
                         member.setCollegeNormPoint(member.getMainNormPoint() * collegeNorm.getPoint());
                         member.setCoePoint(coefficient.getCoefficient());
                         majorBuildMemberList.add(member);
-//                        member.set
+                    } else {
+                        throw new GunsException("请添加项目组成员");
                     }
-                    if (sum > assessNorm.getPoint() / 2) {
-                        throw new GunsException("总分数不能高于" + assessNorm.getPoint() / 2);
+                    majorBuildMemberService.insertBatch(majorBuildMemberList);
+                    break;
+                case "hr_handle_audit": {
+                    //人事经办审核
+                    if (StrUtil.isBlank(majorBuild.getApprovalYear())) {
+                        throw new GunsException("请设置年度");
                     }
+                    majorBuild.updateById();
+                    MajorBuildMember param = new MajorBuildMember();
+                    param.setBuildId(majorBuild.getId());
+                    param.setStatus(IMajorBuildMemberService.STATS_APPROVAL_WAIT);
                     MajorBuildMember member = new MajorBuildMember();
-                    member.setUserId(principalUser.getId());
-                    member.setBuildId(majorBuild.getId());
-                    member.setMainNormPoint(assessNorm.getPoint() / 2 - sum);
-                    member.setCollegeNormPoint(member.getMainNormPoint() * collegeNorm.getPoint());
-                    member.setCoePoint(coefficient.getCoefficient());
-                    majorBuildMemberList.add(member);
-                } else {
-                    throw new GunsException("请添加项目组成员");
+                    member.setYear(majorBuild.getApprovalYear());
+                    majorBuildMemberService.update(member, new EntityWrapper<>(param));
+                    break;
                 }
-                majorBuildMemberService.insertBatch(majorBuildMemberList);
+                case "hr_leader_audit": {
+                    //人事领导审核
+                    majorBuild.setStatus(IMajorBuildMemberService.STATS_APPROVAL_SUCCESS);
+                    majorBuild.updateById();
+                    MajorBuildMember param = new MajorBuildMember();
+                    param.setBuildId(majorBuild.getId());
+                    param.setStatus(IMajorBuildMemberService.STATS_APPROVAL_WAIT);
+                    List<MajorBuildMember> members = majorBuildMemberService.selectList(new EntityWrapper<>(param));
+                    for (MajorBuildMember entity : members) {
+                        AssessNormPoint assessNormPoint = new AssessNormPoint();
+                        assessNormPoint.setUserId(entity.getUserId());
+                        assessNormPoint.setYear(entity.getYear());
+                        assessNormPoint = assessNormPointService.selectOne(new EntityWrapper<>(assessNormPoint));
+
+                        AssessCoefficient assessCoefficient = assessCoefficientService.selectById(IAssessCoefficientService.TYPE_ZYJS);
+                        if (assessNormPoint != null) {
+                            Double mainPoint = assessNormPoint.getKygzMain();
+                            mainPoint += entity.getMainNormPoint() * assessCoefficient.getCoefficient();
+                            assessNormPoint.setZyjsMain(mainPoint);
+                            Double collegePoint = assessNormPoint.getZyjsCollege();
+                            collegePoint += (1 + entity.getCollegeNormPoint()) * mainPoint;
+                            assessNormPoint.setZyjsCollege(collegePoint);
+                        } else {
+                            assessNormPoint = new AssessNormPoint();
+                            double mainPoint = entity.getMainNormPoint() * assessCoefficient.getCoefficient();
+                            assessNormPoint.setZyjsMain(mainPoint);
+                            assessNormPoint.setZyjsCollege(mainPoint * (1 + entity.getCollegeNormPoint()));
+                            assessNormPoint.setYear(entity.getYear());
+                            assessNormPoint.setUserId(entity.getUserId());
+                        }
+                        assessNormPointService.insertOrUpdate(assessNormPoint);
+                    }
+
+                    MajorBuildMember member = new MajorBuildMember();
+                    member.setStatus(IMajorBuildMemberService.STATS_APPROVAL_SUCCESS);
+                    majorBuildMemberService.update(member, new EntityWrapper<>(param));
+                    break;
+                }
             }
         } else if (pass.equals(YesNo.NO.getCode() + "")){
             switch (majorBuild.getAct().getTaskDefKey()) {
@@ -173,6 +229,13 @@ public class MajorBuildServiceImpl extends ServiceImpl<MajorBuildMapper, MajorBu
                 case "major_build_handle_audit":
                 case "deans_office_leader_audit":
                     majorBuild.deleteById();break;
+                case "dean_again_audit":
+                case "hr_handle_audit":
+                case "hr_leader_audit":
+                    MajorBuildMember param = new MajorBuildMember();
+                    param.setBuildId(majorBuild.getId());
+                    param.setStatus(IMajorBuildMemberService.STATS_APPROVAL_WAIT);
+                    majorBuildMemberService.delete(new EntityWrapper<>(param));break;
             }
         }
         actTaskService.complete(majorBuild.getAct().getTaskId(), majorBuild.getAct().getProcInsId(), comment.toString(), vars);

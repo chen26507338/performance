@@ -17,7 +17,7 @@ import java.io.Serializable;
  */
 @Data
 @EqualsAndHashCode(callSuper = true)
-@TableName("major_build_mamber")
+@TableName("major_build_member")
 public class MajorBuildMember extends BaseModel<MajorBuildMember> {
 
     @Override
@@ -72,5 +72,11 @@ public class MajorBuildMember extends BaseModel<MajorBuildMember> {
     */
     @TableField("year")
     private String year;
+
+    /**
+    * 姓名
+    */
+    @TableField(exist = false)
+    private String name;
 
 }

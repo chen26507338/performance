@@ -7,6 +7,13 @@ var MajorBuildInfoDlg = {
     itemTemplate: $("#itemTemplate").html(),
     data: [],		//拼接字符串内容
     validateFields:{
+        approvalYear: {
+            validators: {
+                notEmpty: {
+                    message: '不能为空'
+                }
+            }
+        }
     }
 };
 
@@ -221,5 +228,35 @@ var datas = [];
 
 $(function() {
     Feng.initValidator("MajorBuildForm", MajorBuildInfoDlg.validateFields);
+    layui.use('table', function(){
+        table = layui.table;
 
+        //执行渲染
+        table.render({
+            elem: '#assessTable' //指定原始表格元素选择器（推荐id选择器）
+            ,height: 315 //容器高度
+            ,url: Feng.ctxPath+'/majorBuild/act/data/approval/'
+            ,where: {procInsId: $("#procInsId").val(),id:$("#id").val()}
+            ,cols: [[ //表头
+                {field: 'id', title: 'ID',hide:true, fixed: 'left'}
+                ,{field: 'name', title: '名称'}
+                ,{field: 'coePoint', title: '考核系数'}
+                ,{field: 'mainNormPoint', title: '校级指标分'}
+                ,{field: 'year', title: '年度'}
+            ]] //设置表头
+        });
+
+        table.on('edit(test)', function(obj){ //注：edit是固定事件名，test是table原始容器的属性 lay-filter="对应的值"
+            var isAdd = false;
+            for (var index in datas) {
+                if (datas[index].id == obj.data.id) {
+                    datas[index] = obj.data;
+                    isAdd = true;
+                }
+            }
+            if (!isAdd) {
+                datas.push(obj.data);
+            }
+        });
+    });
 });
