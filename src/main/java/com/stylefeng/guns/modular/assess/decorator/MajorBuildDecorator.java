@@ -11,7 +11,7 @@ import java.util.List;
 
 public class MajorBuildDecorator extends BaseListDecorator<MajorBuild> {
 
-    private IUserService userService;
+    private final IUserService userService;
     public MajorBuildDecorator(List<MajorBuild> list) {
         super(list);
         userService = SpringContextHolder.getBean(IUserService.class);

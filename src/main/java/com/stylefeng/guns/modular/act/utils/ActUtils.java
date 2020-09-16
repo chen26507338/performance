@@ -43,6 +43,7 @@ public class ActUtils {
 	 * 组成结构：string[]{"流程标识","业务主表表名"}
 	 */
 	public static final String[] PD_TASK_APPOINT = new String[]{"task_appoint", "job_task"};
+	public static final String[] PD_TASK_STU_WORK_ASSESS = new String[]{"stu_work_assess", "stu_work"};
 	public static final String[] PD_TASK_MAJOR_BUILD_APPROVAL = new String[]{"major_build_approval", "major_build"};
 	public static final String[] PD_TASK_MAJOR_BUILD_CHECK = new String[]{"major_build_check", "major_build"};
 	public static final String[] PD_TASK_REPORT = new String[]{"task_report", "job_task"};
