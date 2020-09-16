@@ -18,4 +18,14 @@ public interface IMajorBuildMemberService extends IService<MajorBuildMember> {
      * 已立项
      */
     int STATS_APPROVAL_SUCCESS = 1;
+
+    /**
+     * 待验收
+     */
+    int STATS_CHECK_WAIT = 2;
+
+    /**
+     * 验收合格
+     */
+    int STATS_CHECK_SUCCESS = 3;
 }

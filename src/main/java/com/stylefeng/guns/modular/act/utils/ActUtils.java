@@ -44,6 +44,7 @@ public class ActUtils {
 	 */
 	public static final String[] PD_TASK_APPOINT = new String[]{"task_appoint", "job_task"};
 	public static final String[] PD_TASK_MAJOR_BUILD_APPROVAL = new String[]{"major_build_approval", "major_build"};
+	public static final String[] PD_TASK_MAJOR_BUILD_CHECK = new String[]{"major_build_check", "major_build"};
 	public static final String[] PD_TASK_REPORT = new String[]{"task_report", "job_task"};
 	public static final String[] PD_NORMAL_ASSESS = new String[]{"normal_assess", "normal_assess"};
 

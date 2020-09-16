@@ -13,6 +13,13 @@ var MajorBuildInfoDlg = {
                     message: '不能为空'
                 }
             }
+        },
+        checkYear: {
+            validators: {
+                notEmpty: {
+                    message: '不能为空'
+                }
+            }
         }
     }
 };
@@ -172,6 +179,37 @@ MajorBuildInfoDlg.auditSubmit = function(pass) {
 };
 
 /**
+ * 验收审核
+ */
+MajorBuildInfoDlg.auditCheckSubmit = function(pass) {
+    var that = this;
+    this.collectData();
+    if (!this.validate()) {
+        return;
+    }
+    Feng.confirm("确认操作", function () {
+        //提交信息
+        var ajax = new $ax(Feng.ctxPath + "/majorBuild/act/audit/check", function(data){
+            Feng.success("提交成功!");
+            window.parent.ActTodoTask.table.refresh();
+            MajorBuildInfoDlg.close();
+        },function(data){
+            Feng.error("提交失败!" + data.responseJSON.message + "!");
+        });
+        that.majorBuildInfoData['expand["pass"]'] = pass;
+        that.majorBuildInfoData['expand["comment"]'] = $("#comment").val();
+        that.majorBuildInfoData['expand["data"]'] = JSON.stringify(datas);
+        that.majorBuildInfoData['act.taskId'] = $("#taskId").val();
+        that.majorBuildInfoData['act.procInsId'] = $("#procInsId").val();
+        that.majorBuildInfoData['act.taskDefKey'] = $("#taskDefKey").val();
+        that.majorBuildInfoData['year'] = $("#year").val();
+        that.majorBuildInfoData['id'] = $("#id").val();
+        ajax.set(that.majorBuildInfoData);
+        ajax.start();
+    });
+};
+
+/**
  * 提交修改
  */
 MajorBuildInfoDlg.editSubmit = function() {
@@ -235,7 +273,7 @@ $(function() {
         table.render({
             elem: '#assessTable' //指定原始表格元素选择器（推荐id选择器）
             ,height: 315 //容器高度
-            ,url: Feng.ctxPath+'/majorBuild/act/data/approval/'
+            ,url: Feng.ctxPath+dataUrl
             ,where: {procInsId: $("#procInsId").val(),id:$("#id").val()}
             ,cols: [[ //表头
                 {field: 'id', title: 'ID',hide:true, fixed: 'left'}

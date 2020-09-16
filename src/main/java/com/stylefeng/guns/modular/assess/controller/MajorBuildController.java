@@ -168,7 +168,7 @@ public class MajorBuildController extends BaseController {
     }
 
     /**
-     * 流程数据
+     * 立项流程数据
      */
     @RequestMapping("/act/data/approval")
     @ResponseBody
@@ -202,6 +202,63 @@ public class MajorBuildController extends BaseController {
         model.addAttribute("item", data);
         model.addAttribute("act", majorBuild.getAct());
         return PREFIX + "majorBuild_approval_audit.html";
+    }
+
+    /**
+     * 专业建设验收申请
+     */
+    @RequestMapping(value = "/act/apply/check")
+    @ResponseBody
+    public Object applyCheck(MajorBuild majorBuild) {
+        majorBuildService.applyCheck(majorBuild);
+        return SUCCESS_TIP;
+    }
+
+    /**
+     * 专业建设立项审核
+     */
+    @RequestMapping(value = "/act/audit/check")
+    @ResponseBody
+    public Object auditCheck(MajorBuild majorBuild) {
+        majorBuildService.auditCheck(majorBuild);
+        return SUCCESS_TIP;
+    }
+
+    /**
+     * 验收流程数据
+     */
+    @RequestMapping("/act/data/check")
+    @ResponseBody
+    public Object checkProcData(MajorBuild majorBuild) {
+        MajorBuildMember params = new MajorBuildMember();
+        params.setStatus(IMajorBuildMemberService.STATS_CHECK_WAIT);
+        params.setBuildId(majorBuild.getId());
+        List<MajorBuildMember> datas = new MajorBuildMemberDecorator(majorBuildMemberService.selectList(new EntityWrapper<>(params))).decorate();
+        Map<String, Object> result = new HashMap<>();
+        result.put("code", 0);
+        result.put("data", datas);
+        return result;
+    }
+
+    /**
+     * 跳转到流程审核
+     */
+    @RequestMapping("/act/check")
+    public String actCheck(MajorBuild majorBuild, Model model) {
+        majorBuild.setProcInsId(majorBuild.getAct().getProcInsId());
+        EntityWrapper<MajorBuild> wrapper = new EntityWrapper<>(majorBuild);
+//        wrapper.last("limit 1");
+        MajorBuild data = majorBuild.selectOne(wrapper);
+//        User user = userService.selectIgnorePointById(data.getUserId());
+        AssessNorm mainNorm = new AssessNorm();
+        mainNorm.setDeptId(IAssessNormService.TYPE_MAIN_DEPT);
+        mainNorm.setCode(majorBuild.getNormCode());
+        mainNorm.setType(IAssessCoefficientService.TYPE_ZYJS);
+        mainNorm = assessNormService.getByCode(mainNorm);
+        model.addAttribute("norm", mainNorm);
+        model.addAttribute("item", data);
+        model.addAttribute("act", majorBuild.getAct());
+        return PREFIX + "majorBuild_check_audit.html";
     }
 
 }

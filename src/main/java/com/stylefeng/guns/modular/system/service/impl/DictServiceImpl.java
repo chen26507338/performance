@@ -2,12 +2,14 @@ package com.stylefeng.guns.modular.system.service.impl;
 
 import com.baomidou.mybatisplus.mapper.EntityWrapper;
 import com.baomidou.mybatisplus.mapper.Wrapper;
+import com.stylefeng.guns.common.constant.cache.Cache;
 import com.stylefeng.guns.common.exception.BizExceptionEnum;
 import com.stylefeng.guns.common.persistence.dao.DictMapper;
 import com.stylefeng.guns.common.persistence.model.Dict;
 import com.stylefeng.guns.core.exception.GunsException;
 import com.stylefeng.guns.modular.system.dao.DictDao;
 import com.stylefeng.guns.modular.system.service.IDictService;
+import org.springframework.cache.annotation.CacheEvict;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -62,6 +64,7 @@ public class DictServiceImpl implements IDictService {
     }
 
     @Override
+    @CacheEvict(value = Cache.DICT,allEntries = true)
     public void editDict(Long dictId, String dictName, String dicts) {
         //删除之前的字典
         this.delteDict(dictId);

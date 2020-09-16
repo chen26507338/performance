@@ -14,11 +14,11 @@ var MajorBuild = {
 MajorBuild.initColumn = function () {
     return [
         {field: 'selectItem', radio: true}
-       ,{title: '负责人ID', field:'principalId', visible: true, align: 'center', valign: 'middle'}
+       ,{title: '负责人职工编号', field:'expand.user.account', visible: true, align: 'center', valign: 'middle'}
+       ,{title: '负责人职工姓名', field:'expand.user.name', visible: true, align: 'center', valign: 'middle'}
        ,{title: '名称', field:'name', visible: true, align: 'center', valign: 'middle'}
        ,{title: '立项时间', field:'time', visible: true, align: 'center', valign: 'middle'}
-       ,{title: '流程实例ID', field:'procInsId', visible: true, align: 'center', valign: 'middle'}
-       ,{title: '状态', field:'status', visible: true, align: 'center', valign: 'middle'}
+       ,{title: '状态', field:'expand.statusDict', visible: true, align: 'center', valign: 'middle'}
     ];
 };
 
@@ -104,6 +104,25 @@ MajorBuild.delete = function () {
                 Feng.error("删除失败!" + data.responseJSON.message + "!");
             });
             ajax.set("majorBuildId",that.seItem.id);
+            ajax.start();
+        });
+    }
+};
+
+/**
+ * 申请验收
+ */
+MajorBuild.applyCheck = function () {
+    if (this.check()) {
+        var that = this;
+        Feng.confirm("是否要申请验收", function () {
+            var ajax = new $ax(Feng.ctxPath + "/majorBuild/act/apply/check", function (data) {
+                Feng.success("申请成功!");
+                MajorBuild.table.refresh();
+            }, function (data) {
+                Feng.error("申请失败!" + data.responseJSON.message + "!");
+            });
+            ajax.set("id",that.seItem.id);
             ajax.start();
         });
     }

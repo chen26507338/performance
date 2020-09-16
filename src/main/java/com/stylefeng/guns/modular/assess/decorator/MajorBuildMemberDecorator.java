@@ -1,5 +1,6 @@
 package com.stylefeng.guns.modular.assess.decorator;
 
+import com.stylefeng.guns.common.constant.factory.ConstantFactory;
 import com.stylefeng.guns.common.persistence.model.User;
 import com.stylefeng.guns.core.base.BaseListDecorator;
 import com.stylefeng.guns.core.util.SpringContextHolder;
