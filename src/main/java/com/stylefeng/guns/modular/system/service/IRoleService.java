@@ -66,7 +66,7 @@ public interface IRoleService extends IService<Role> {
      */
     long TYPE_MAJOR_BUILD_HR = 19;
     /**
-     * 角色类型：专业建设审核人事专员
+     * 角色类型：学生工作审核人事专员
      */
     long TYPE_STU_WORK_HR = 25;
 

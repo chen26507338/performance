@@ -187,11 +187,7 @@ public class StuWorkController extends BaseController {
 //        wrapper.last("limit 1");
         StuWork data = stuWork.selectOne(wrapper);
 //        User user = userService.selectIgnorePointById(data.getUserId());
-        AssessNorm mainNorm = new AssessNorm();
-        mainNorm.setDeptId(IAssessNormService.TYPE_MAIN_DEPT);
-        mainNorm.setCode(stuWork.getNormCode());
-        mainNorm.setType(IAssessCoefficientService.TYPE_ZYJS);
-        mainNorm = assessNormService.getByCode(mainNorm);
+        AssessNorm mainNorm = assessNormService.selectById(data.getNormId());
         model.addAttribute("norm", mainNorm);
         model.addAttribute("item", data);
         model.addAttribute("act", stuWork.getAct());

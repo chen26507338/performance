@@ -153,18 +153,19 @@ public class StuWorkServiceImpl extends ServiceImpl<StuWorkMapper, StuWork> impl
                     stuWork.setNormId(mainNorm.getId());
                     stuWork.updateById();
                     break;
-                case "principal_audit":
+                case "committee_secretary_audit":
                     //项目负责人设置成员积分
                     AssessNorm assessNorm = assessNormService.selectById(stuWork.getNormId());
 
-                    User dean = userService.selectById(stuWork.getDeanUserId());
+                    StuWork tempStuWork = this.selectById(stuWork.getId());
+                    User dean = userService.selectById(tempStuWork.getDeanUserId());
                     AssessNorm collegeNorm = new AssessNorm();
                     collegeNorm.setDeptId(dean.getDeptId());
                     collegeNorm.setCode(assessNorm.getCode());
-                    collegeNorm.setType(IAssessCoefficientService.TYPE_ZYJS);
+                    collegeNorm.setType(IAssessCoefficientService.TYPE_XSGZ);
                     collegeNorm = assessNormService.getByCode(collegeNorm);
                     //考核系数
-                    AssessCoefficient coefficient = assessCoefficientService.selectById(IAssessCoefficientService.TYPE_ZYJS);
+                    AssessCoefficient coefficient = assessCoefficientService.selectById(IAssessCoefficientService.TYPE_XSGZ);
 
                     String dataJson = (String) stuWork.getExpand().get("data");
                     List<String> addAccounts = new ArrayList<>();
@@ -197,12 +198,13 @@ public class StuWorkServiceImpl extends ServiceImpl<StuWorkMapper, StuWork> impl
                             member.setSWorkId(stuWork.getId());
                             member.setMainNormPoint(point);
                             member.setCollegeNormPoint(member.getMainNormPoint() * collegeNorm.getPoint());
+                            member.setYear(tempStuWork.getYear());
                             member.setCoePoint(coefficient.getCoefficient());
                             stuWorkMemberList.add(member);
 //                        member.set
                         }
-                        if (sum > assessNorm.getPoint() / 2) {
-                            throw new GunsException("总分数不能高于" + assessNorm.getPoint() / 2);
+                        if (sum > assessNorm.getPoint()) {
+                            throw new GunsException("总分数不能高于" + assessNorm.getPoint());
                         }
                     } else {
                         throw new GunsException("请添加项目组成员");
@@ -215,16 +217,10 @@ public class StuWorkServiceImpl extends ServiceImpl<StuWorkMapper, StuWork> impl
                         throw new GunsException("请设置年度");
                     }
                     stuWork.updateById();
-                    StuWorkMember param = new StuWorkMember();
-                    param.setSWorkId(stuWork.getId());
-                    param.setStatus(YesNo.NO.getCode());
-                    StuWorkMember member = new StuWorkMember();
-                    member.setYear(stuWork.getYear());
-                    stuWorkMemberService.update(member, new EntityWrapper<>(param));
                     break;
                 }
-                case "hr_leader_audit": {
-                    //人事领导审核
+                case "secretary_audit": {
+                    //二级学院书记审核
                     stuWork.setStatus(YesNo.YES.getCode());
                     stuWork.updateById();
                     StuWorkMember param = new StuWorkMember();
@@ -237,19 +233,19 @@ public class StuWorkServiceImpl extends ServiceImpl<StuWorkMapper, StuWork> impl
                         assessNormPoint.setYear(entity.getYear());
                         assessNormPoint = assessNormPointService.selectOne(new EntityWrapper<>(assessNormPoint));
 
-                        AssessCoefficient assessCoefficient = assessCoefficientService.selectById(IAssessCoefficientService.TYPE_ZYJS);
+                        AssessCoefficient assessCoefficient = assessCoefficientService.selectById(IAssessCoefficientService.TYPE_XSGZ);
                         if (assessNormPoint != null) {
                             Double mainPoint = assessNormPoint.getKygzMain();
                             mainPoint += entity.getMainNormPoint() * assessCoefficient.getCoefficient();
-                            assessNormPoint.setZyjsMain(mainPoint);
+                            assessNormPoint.setXsgzMain(mainPoint);
                             Double collegePoint = assessNormPoint.getZyjsCollege();
                             collegePoint += (1 + entity.getCollegeNormPoint()) * mainPoint;
-                            assessNormPoint.setZyjsCollege(collegePoint);
+                            assessNormPoint.setXsgzCollege(collegePoint);
                         } else {
                             assessNormPoint = new AssessNormPoint();
                             double mainPoint = entity.getMainNormPoint() * assessCoefficient.getCoefficient();
-                            assessNormPoint.setZyjsMain(mainPoint);
-                            assessNormPoint.setZyjsCollege(mainPoint * (1 + entity.getCollegeNormPoint()));
+                            assessNormPoint.setXsgzMain(mainPoint);
+                            assessNormPoint.setXsgzCollege(mainPoint * (1 + entity.getCollegeNormPoint()));
                             assessNormPoint.setYear(entity.getYear());
                             assessNormPoint.setUserId(entity.getUserId());
                         }
@@ -262,15 +258,12 @@ public class StuWorkServiceImpl extends ServiceImpl<StuWorkMapper, StuWork> impl
                     break;
                 }
             }
-        } else if (pass.equals(YesNo.NO.getCode() + "")){
-            switch (stuWork.getAct().getTaskDefKey()) {
-                case "dean_again_audit":
-                case "hr_handle_audit":
-                case "hr_leader_audit":
-                    StuWorkMember param = new StuWorkMember();
-                    param.setSWorkId(stuWork.getId());
-                    param.setStatus(YesNo.NO.getCode());
-                    stuWorkMemberService.delete(new EntityWrapper<>(param));break;
+        } else {
+            if ("secretary_audit".equals(stuWork.getAct().getTaskDefKey())) {
+                StuWorkMember param = new StuWorkMember();
+                param.setSWorkId(stuWork.getId());
+                param.setStatus(YesNo.NO.getCode());
+                stuWorkMemberService.delete(new EntityWrapper<>(param));
             }
         }
         actTaskService.complete(stuWork.getAct().getTaskId(), stuWork.getAct().getProcInsId(), comment.toString(), vars);

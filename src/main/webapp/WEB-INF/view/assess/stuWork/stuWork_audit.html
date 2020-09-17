@@ -18,18 +18,22 @@
                 <div class="col-sm-6 b-r">
                     <#input id="normCode" name="指标代码"  underline="true" />
                 </div>
-                @   case "dean_audit","major_build_handle_audit","deans_office_leader_audit":
+                @   case "dean_audit","stu_work_handle_audit","stu_office_leader_audit":
                 <div class="col-sm-6 b-r">
                     <#input id="normName" name="指标名称" value="${norm.content}" underline="true" readonly="readonly"/>
                 </div>
+                @   case "hr_leader_audit":
+                <div class="col-sm-6 b-r">
+                    <#input id="year" name="考核年度" value="${item.year}" underline="true" readonly="readonly"/>
+                </div>
                 @case "hr_handle_audit":
                 <div class="col-sm-6 b-r">
-                    <#input id="approvalYear" name="设置年度" underline="true" />
+                    <#input id="year" name="设置年度" underline="true" />
                 </div>
-                @case "principal_audit":
+                @case "committee_secretary_audit":
                 <div class="col-sm-6 b-r">
                     <#button btnCss="info" name="添加职工" icon="fa-plus" clickFun="StuWorkInfoDlg.addItem()"/>
-                    总共${norm.point/2}分，分配剩下分数归项目负责人
+                    总共${norm.point}分
                 </div>
                 <div class="col-sm-12 b-r" id="itemsArea">
 
@@ -37,7 +41,7 @@
                 @}
             </div>
             @select(act.taskDefKey){
-            @   case "dean_again_audit","hr_handle_audit","hr_leader_audit":
+            @   case "secretary_audit":
             <table id="assessTable" lay-filter="test"></table>
             @}
 
@@ -47,6 +51,9 @@
                     <#button btnCss="danger" name="驳回" id="cancel" icon="fa-eraser" clickFun="StuWorkInfoDlg.auditSubmit(0)"/>
                     @if(act.taskDefKey == "hr_leader_audit"){
                     <#button btnCss="danger" name="重新设置年度" id="cancel" icon="fa-eraser" clickFun="StuWorkInfoDlg.auditSubmit(2)"/>
+                    @}
+                    @if(act.taskDefKey == "secretary_audit"){
+                    <#button btnCss="danger" name="重新选择考核指标" id="cancel" icon="fa-eraser" clickFun="StuWorkInfoDlg.auditSubmit(2)"/>
                     @}
                     <#button btnCss="danger" name="关闭" id="cancel" icon="fa-eraser" clickFun="StuWorkInfoDlg.close()"/>
                 </div>

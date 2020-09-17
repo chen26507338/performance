@@ -7,6 +7,13 @@ var StuWorkInfoDlg = {
     itemTemplate: $("#itemTemplate").html(),
     data: [],
     validateFields:{
+        year: {
+            validators: {
+                notEmpty: {
+                    message: '不能为空'
+                }
+            }
+        }
     }
 };
 
@@ -65,6 +72,12 @@ StuWorkInfoDlg.collectData = function() {
     .set('secretaryId')
     .set('committeeSecretaryId')
     ;
+
+    datas = [];
+    $("[name='StuWorkItem']").each(function(){
+        var item = $(this).serializeObject();
+        datas.push(item);
+    });
 };
 
 /**
@@ -178,6 +191,34 @@ StuWorkInfoDlg.auditSubmit = function(pass) {
     });
 };
 
+
+/**
+ * item获取新的id
+ */
+StuWorkInfoDlg.newId = function () {
+    if(this.count == undefined){
+        this.count = 0;
+    }
+    this.count = this.count + 1;
+    return "StuWorkItem" + this.count;
+};
+
+/**
+ * 添加条目
+ */
+StuWorkInfoDlg.addItem = function () {
+    $("#itemsArea").append(this.itemTemplate);
+    $("#StuWorkItem").attr("id", this.newId());
+};
+
+/**
+ * 删除item
+ */
+StuWorkInfoDlg.deleteItem = function (event) {
+    var obj = Feng.eventParseObject(event);
+    obj.parent().parent().remove();
+};
+
 var table;
 var datas = [];
 
@@ -191,7 +232,7 @@ $(function() {
         table.render({
             elem: '#assessTable' //指定原始表格元素选择器（推荐id选择器）
             ,height: 315 //容器高度
-            ,url: Feng.ctxPath+'/act/data'
+            ,url: Feng.ctxPath+'/stuWork/act/data'
             ,where: {procInsId: $("#procInsId").val(),id:$("#id").val()}
             ,cols: [[ //表头
                 {field: 'id', title: 'ID',hide:true, fixed: 'left'}
