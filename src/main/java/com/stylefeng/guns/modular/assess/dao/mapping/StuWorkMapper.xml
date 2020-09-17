@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.stylefeng.guns.modular.assess.dao.StuWorkMapper">
+
+	<!-- 通用查询映射结果 -->
+	<resultMap id="BaseResultMap" type="com.stylefeng.guns.modular.assess.model.StuWork">
+            <id column="id" property="id" />
+            <result column="proc_ins_id" property="procInsId" />
+            <result column="status" property="status" />
+            <result column="hr_handle_id" property="hrHandleId" />
+            <result column="dean_user_id" property="deanUserId" />
+            <result column="hr_leader_id" property="hrLeaderId" />
+            <result column="stu_work_commissioner" property="stuWorkCommissioner" />
+            <result column="norm_id" property="normId" />
+            <result column="result" property="result" />
+            <result column="year" property="year" />
+            <result column="students_office_leader_id" property="studentsOfficeLeaderId" />
+            <result column="secretary_id" property="secretaryId" />
+            <result column="committee_secretary_id" property="committeeSecretaryId" />
+	</resultMap>
+
+    <!-- 通用查询结果列 -->
+    <sql id="Base_Column_List">
+	    id AS id,
+	    proc_ins_id AS procInsId,
+	    status AS status,
+	    hr_handle_id AS hrHandleId,
+	    dean_user_id AS deanUserId,
+	    hr_leader_id AS hrLeaderId,
+	    stu_work_commissioner AS stuWorkCommissioner,
+	    norm_id AS normId,
+	    result AS result,
+	    year AS year,
+	    students_office_leader_id AS studentsOfficeLeaderId,
+	    secretary_id AS secretaryId,
+	    committee_secretary_id AS committeeSecretaryId
+    </sql>
+
+</mapper>
