@@ -18,7 +18,7 @@ import com.stylefeng.guns.modular.system.service.IUserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import com.baomidou.mybatisplus.service.impl.ServiceImpl;
-import com.stylefeng.guns.modular.assess.dao.StuWorkMapper;
+import com.stylefeng.guns.modular.assess.dao.ManServiceMapper;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.ArrayList;
@@ -27,14 +27,13 @@ import java.util.List;
 import java.util.Map;
 
 /**
- * 学生工作考核服务实现类
+ * 管理服务服务实现类
  *
- * @author cp
- * @Date 2020-09-16 15:25:30
+ * @author
+ * @Date 2020-09-17 16:39:45
  */
 @Service
-public class StuWorkServiceImpl extends ServiceImpl<StuWorkMapper, StuWork> implements IStuWorkService {
-
+public class ManServiceServiceImpl extends ServiceImpl<ManServiceMapper, ManService> implements IManServiceService {
 
     @Autowired
     private IUserService userService;
@@ -47,33 +46,28 @@ public class StuWorkServiceImpl extends ServiceImpl<StuWorkMapper, StuWork> impl
     @Autowired
     private IAssessNormPointService assessNormPointService;
     @Autowired
-    private IStuWorkMemberService stuWorkMemberService;
-    
+    private IManServiceMemberService manServiceMemberService;
+
     @Override
     @Transactional
-    public void apply(StuWork stuWork) {
+    public void apply(ManService manService) {
         AssessNorm mainNorm = new AssessNorm();
         mainNorm.setDeptId(IAssessNormService.TYPE_MAIN_DEPT);
-        mainNorm.setCode(stuWork.getNormCode());
-        mainNorm.setType(IAssessCoefficientService.TYPE_XSGZ);
+        mainNorm.setCode(manService.getNormCode());
+        mainNorm.setType(IAssessCoefficientService.TYPE_GLFW);
         mainNorm = assessNormService.getByCode(mainNorm);
         if (mainNorm == null) {
             throw new GunsException("考核指标不存在");
         }
-        if (!mainNorm.getType().equals(IAssessCoefficientService.TYPE_XSGZ)) {
-            throw new GunsException("请填写学生工作考核相关指标代码");
+        if (!mainNorm.getType().equals(IAssessCoefficientService.TYPE_GLFW)) {
+            throw new GunsException("请填写管理服务考核相关指标代码");
         }
 
         EntityWrapper<User> wrapper = new EntityWrapper<>();
-        //院长
-        wrapper.like("role_id", IRoleService.TYPE_DEAN + "");
+        //部门领导
+        wrapper.like("role_id", IRoleService.TYPE_DEPT_LEADER + "");
         wrapper.eq("dept_id", ShiroKit.getUser().deptId);
-        User dean = userService.selectOne(wrapper);
-
-        //考核专员
-        wrapper = new EntityWrapper<>();
-        wrapper.like("role_id", IRoleService.TYPE_STU_WORK_HR + "");
-        User stuWorkHandle = userService.selectOne(wrapper);
+        User deptLeader = userService.selectOne(wrapper);
 
         //人事经办
         wrapper = new EntityWrapper<>();
@@ -81,11 +75,11 @@ public class StuWorkServiceImpl extends ServiceImpl<StuWorkMapper, StuWork> impl
         wrapper.eq("dept_id", IDeptService.HR);
         User hrHandle = userService.selectOne(wrapper);
 
-        //学生处处长
+        //部门综办
         wrapper = new EntityWrapper<>();
-        wrapper.like("role_id", IRoleService.TYPE_DEPT_LEADER + "");
-        wrapper.eq("dept_id", IDeptService.STU_WORK);
-        User stuOfficeLeader = userService.selectOne(wrapper);
+        wrapper.like("role_id", IRoleService.TYPE_DEPT_GENERAL + "");
+        wrapper.eq("dept_id", ShiroKit.getUser().deptId);
+        User deptGeneral = userService.selectOne(wrapper);
 
         //人事领导
         wrapper = new EntityWrapper<>();
@@ -93,93 +87,76 @@ public class StuWorkServiceImpl extends ServiceImpl<StuWorkMapper, StuWork> impl
         wrapper.eq("dept_id", IDeptService.HR);
         User hrLeader = userService.selectOne(wrapper);
 
-        //团委书记
-        wrapper = new EntityWrapper<>();
-        wrapper.like("role_id", IRoleService.TYPE_COMMITTEE_SECRETARY + "");
-        wrapper.eq("dept_id", ShiroKit.getUser().deptId);
-        User committeeSecretary = userService.selectOne(wrapper);
-
-        //书记
-        wrapper = new EntityWrapper<>();
-        wrapper.like("role_id", IRoleService.TYPE_SECRETARY + "");
-        wrapper.eq("dept_id", ShiroKit.getUser().deptId);
-        User secretary  = userService.selectOne(wrapper);
-
         Map<String, Object> vars = new HashMap<>();
         vars.put("user", ShiroKit.getUser().id);
-        vars.put("dean_user", dean.getId());
-        vars.put("stu_work_handle", stuWorkHandle.getId());
-        vars.put("stu_office_leader", stuOfficeLeader.getId());
+        vars.put("dept_leader", deptLeader.getId());
+        vars.put("general_man", deptGeneral.getId());
         vars.put("hr_handle", hrHandle.getId());
         vars.put("hr_leader", hrLeader.getId());
-        vars.put("committee_secretary", committeeSecretary.getId());
-        vars.put("secretary", secretary.getId());
-        String procInsId = actTaskService.startProcessOnly(ActUtils.PD_TASK_STU_WORK_ASSESS[0], ActUtils.PD_TASK_STU_WORK_ASSESS[1], "学生工作考核", vars);
+        String procInsId = actTaskService.startProcessOnly(ActUtils.PD_TASK_MAN_SERVICE_ASSESS[0], ActUtils.PD_TASK_MAN_SERVICE_ASSESS[1], "管理服务考核", vars);
 
-
-        stuWork.setNormId(mainNorm.getId());
-        stuWork.setProcInsId(procInsId);
-        stuWork.setSecretaryId(secretary.getId());
-        stuWork.setDeanUserId(dean.getId());
-        stuWork.setStudentsOfficeLeaderId(stuOfficeLeader.getId());
-        stuWork.setHrHandleId(hrHandle.getId());
-        stuWork.setHrLeaderId(hrLeader.getId());
-        stuWork.setCommitteeSecretaryId(committeeSecretary.getId());
-        stuWork.setStuWorkCommissioner(stuWorkHandle.getId());
-        stuWork.insert();
+        manService.setNormId(mainNorm.getId());
+        manService.setProcInsId(procInsId);
+        manService.setDeptLeaderId(deptLeader.getId());
+        manService.setGeneralManId(deptGeneral.getId());
+        manService.setHrHandleId(hrHandle.getId());
+        manService.setHrLeaderId(hrLeader.getId());
+        manService.insert();
     }
 
     @Override
-    public void audit(StuWork stuWork) {
-        String pass = (String) stuWork.getExpand().get("pass");
+    @Transactional
+    public void audit(ManService manService) {
+        String pass = (String) manService.getExpand().get("pass");
         StringBuilder comment = new StringBuilder(pass.equals(YesNo.YES.getCode() + "") ? "【通过】" : "【驳回】");
-        if (stuWork.getExpand().get("comment") != null) {
-            comment.append(stuWork.getExpand().get("comment"));
+        if (manService.getExpand().get("comment") != null) {
+            comment.append(manService.getExpand().get("comment"));
         }
         Map<String, Object> vars = new HashMap<>();
         vars.put("pass", pass);
         if (pass.equals(YesNo.YES.getCode() + "")) {
-            switch (stuWork.getAct().getTaskDefKey()) {
+            switch (manService.getAct().getTaskDefKey()) {
                 case "re_choice":
-                    if (StrUtil.isBlank(stuWork.getNormCode())) {
+                    //重新选择
+                    if (StrUtil.isBlank(manService.getNormCode())) {
                         throw new GunsException("请输入考核代码");
                     }
                     AssessNorm mainNorm = new AssessNorm();
                     mainNorm.setDeptId(IAssessNormService.TYPE_MAIN_DEPT);
-                    mainNorm.setCode(stuWork.getNormCode());
-                    mainNorm.setType(IAssessCoefficientService.TYPE_XSGZ);
+                    mainNorm.setCode(manService.getNormCode());
+                    mainNorm.setType(IAssessCoefficientService.TYPE_GLFW);
                     mainNorm = assessNormService.getByCode(mainNorm);
                     if (mainNorm == null) {
                         throw new GunsException("考核指标不存在");
                     }
-                    if (!mainNorm.getType().equals(IAssessCoefficientService.TYPE_XSGZ)) {
-                        throw new GunsException("请填写学生工作考核相关指标代码");
+                    if (!mainNorm.getType().equals(IAssessCoefficientService.TYPE_GLFW)) {
+                        throw new GunsException("请填写管理服务考核相关指标代码");
                     }
-                    stuWork.setNormId(mainNorm.getId());
-                    stuWork.updateById();
+                    manService.setNormId(mainNorm.getId());
+                    manService.updateById();
                     break;
-                case "committee_secretary_audit":
-                    //项目负责人设置成员积分
-                    AssessNorm assessNorm = assessNormService.selectById(stuWork.getNormId());
+                case "general_audit":
+                    //部门综办，分配积分至个人
+                    AssessNorm assessNorm = assessNormService.selectById(manService.getNormId());
 
-                    StuWork tempStuWork = this.selectById(stuWork.getId());
-                    User dean = userService.selectById(tempStuWork.getDeanUserId());
+                    ManService tempManService = this.selectById(manService.getId());
+                    User dean = userService.selectById(tempManService.getDeptLeaderId());
                     AssessNorm collegeNorm = new AssessNorm();
                     collegeNorm.setDeptId(dean.getDeptId());
                     collegeNorm.setCode(assessNorm.getCode());
-                    collegeNorm.setType(IAssessCoefficientService.TYPE_XSGZ);
+                    collegeNorm.setType(IAssessCoefficientService.TYPE_GLFW);
                     collegeNorm = assessNormService.getByCode(collegeNorm);
                     //考核系数
-                    AssessCoefficient coefficient = assessCoefficientService.selectById(IAssessCoefficientService.TYPE_XSGZ);
+                    AssessCoefficient coefficient = assessCoefficientService.selectById(IAssessCoefficientService.TYPE_GLFW);
 
-                    String dataJson = (String) stuWork.getExpand().get("data");
+                    String dataJson = (String) manService.getExpand().get("data");
                     List<String> addAccounts = new ArrayList<>();
-                    List<Map> stuWorkMembers = JSON.parseArray(dataJson, Map.class);
-                    List<StuWorkMember> stuWorkMemberList = new ArrayList<>();
-                    if (CollUtil.isNotEmpty(stuWorkMembers)) {
+                    List<Map> manServiceMembers = JSON.parseArray(dataJson, Map.class);
+                    List<ManServiceMember> manServiceMemberList = new ArrayList<>();
+                    if (CollUtil.isNotEmpty(manServiceMembers)) {
                         double sum = 0;
-                        for (Map stuWorkMember : stuWorkMembers) {
-                            String account = (String) stuWorkMember.get("userNo");
+                        for (Map manServiceMember : manServiceMembers) {
+                            String account = (String) manServiceMember.get("userNo");
                             if (StrUtil.isBlank(account)) {
                                 throw new GunsException("职工编号不能为空");
                             }
@@ -196,16 +173,16 @@ public class StuWorkServiceImpl extends ServiceImpl<StuWorkMapper, StuWork> impl
                                 throw new GunsException(StrUtil.format("职工编号 {} 不存在", account));
                             }
 
-                            double point = Double.parseDouble(stuWorkMember.get("mainPoint") + "");
+                            double point = Double.parseDouble(manServiceMember.get("mainPoint") + "");
                             sum += point;
-                            StuWorkMember member = new StuWorkMember();
+                            ManServiceMember member = new ManServiceMember();
                             member.setUserId(user.getId());
-                            member.setSWorkId(stuWork.getId());
+                            member.setMServiceId(manService.getId());
                             member.setMainNormPoint(point);
                             member.setCollegeNormPoint(member.getMainNormPoint() * collegeNorm.getPoint());
-                            member.setYear(tempStuWork.getYear());
+                            member.setYear(tempManService.getYear());
                             member.setCoePoint(coefficient.getCoefficient());
-                            stuWorkMemberList.add(member);
+                            manServiceMemberList.add(member);
 //                        member.set
                         }
                         if (sum > assessNorm.getPoint()) {
@@ -214,63 +191,63 @@ public class StuWorkServiceImpl extends ServiceImpl<StuWorkMapper, StuWork> impl
                     } else {
                         throw new GunsException("请添加项目组成员");
                     }
-                    stuWorkMemberService.insertBatch(stuWorkMemberList);
+                    manServiceMemberService.insertBatch(manServiceMemberList);
                     break;
                 case "hr_handle_audit": {
                     //人事经办审核
-                    if (StrUtil.isBlank(stuWork.getYear())) {
+                    if (StrUtil.isBlank(manService.getYear())) {
                         throw new GunsException("请设置年度");
                     }
-                    stuWork.updateById();
+                    manService.updateById();
                     break;
                 }
-                case "secretary_audit": {
-                    //二级学院书记审核
-                    stuWork.setStatus(YesNo.YES.getCode());
-                    stuWork.updateById();
-                    StuWorkMember param = new StuWorkMember();
-                    param.setSWorkId(stuWork.getId());
+                case "dept_leader_audit_again": {
+                    //部门长最终审核
+                    manService.setStatus(YesNo.YES.getCode());
+                    manService.updateById();
+                    ManServiceMember param = new ManServiceMember();
+                    param.setMServiceId(manService.getId());
                     param.setStatus(YesNo.NO.getCode());
-                    List<StuWorkMember> members = stuWorkMemberService.selectList(new EntityWrapper<>(param));
-                    for (StuWorkMember entity : members) {
+                    List<ManServiceMember> members = manServiceMemberService.selectList(new EntityWrapper<>(param));
+                    for (ManServiceMember entity : members) {
                         AssessNormPoint assessNormPoint = new AssessNormPoint();
                         assessNormPoint.setUserId(entity.getUserId());
                         assessNormPoint.setYear(entity.getYear());
                         assessNormPoint = assessNormPointService.selectOne(new EntityWrapper<>(assessNormPoint));
 
-                        AssessCoefficient assessCoefficient = assessCoefficientService.selectById(IAssessCoefficientService.TYPE_XSGZ);
+                        AssessCoefficient assessCoefficient = assessCoefficientService.selectById(IAssessCoefficientService.TYPE_GLFW);
                         if (assessNormPoint != null) {
                             Double mainPoint = assessNormPoint.getKygzMain();
                             mainPoint += entity.getMainNormPoint() * assessCoefficient.getCoefficient();
-                            assessNormPoint.setXsgzMain(mainPoint);
+                            assessNormPoint.setGlfwMain(mainPoint);
                             Double collegePoint = assessNormPoint.getZyjsCollege();
                             collegePoint += (1 + entity.getCollegeNormPoint()) * mainPoint;
-                            assessNormPoint.setXsgzCollege(collegePoint);
+                            assessNormPoint.setGlfwCollege(collegePoint);
                         } else {
                             assessNormPoint = new AssessNormPoint();
                             double mainPoint = entity.getMainNormPoint() * assessCoefficient.getCoefficient();
-                            assessNormPoint.setXsgzMain(mainPoint);
-                            assessNormPoint.setXsgzCollege(mainPoint * (1 + entity.getCollegeNormPoint()));
+                            assessNormPoint.setGlfwMain(mainPoint);
+                            assessNormPoint.setGlfwCollege(mainPoint * (1 + entity.getCollegeNormPoint()));
                             assessNormPoint.setYear(entity.getYear());
                             assessNormPoint.setUserId(entity.getUserId());
                         }
                         assessNormPointService.insertOrUpdate(assessNormPoint);
                     }
 
-                    StuWorkMember member = new StuWorkMember();
+                    ManServiceMember member = new ManServiceMember();
                     member.setStatus(YesNo.YES.getCode());
-                    stuWorkMemberService.update(member, new EntityWrapper<>(param));
+                    manServiceMemberService.update(member, new EntityWrapper<>(param));
                     break;
                 }
             }
         } else {
-            if ("secretary_audit".equals(stuWork.getAct().getTaskDefKey())) {
-                StuWorkMember param = new StuWorkMember();
-                param.setSWorkId(stuWork.getId());
+            if ("dept_leader_audit_again".equals(manService.getAct().getTaskDefKey())) {
+                ManServiceMember param = new ManServiceMember();
+                param.setMServiceId(manService.getId());
                 param.setStatus(YesNo.NO.getCode());
-                stuWorkMemberService.delete(new EntityWrapper<>(param));
+                manServiceMemberService.delete(new EntityWrapper<>(param));
             }
         }
-        actTaskService.complete(stuWork.getAct().getTaskId(), stuWork.getAct().getProcInsId(), comment.toString(), vars);
+        actTaskService.complete(manService.getAct().getTaskId(), manService.getAct().getProcInsId(), comment.toString(), vars);
     }
 }

@@ -78,6 +78,7 @@ AssessNormInfoDlg.collectData = function() {
     .set('id')
     .set('content')
     .set('code')
+    .set('IIIKpi')
     .set('type')
     .set('deptId')
     .set('point')

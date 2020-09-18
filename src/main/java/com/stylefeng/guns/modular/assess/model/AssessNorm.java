@@ -67,5 +67,10 @@ public class AssessNorm extends BaseModel<AssessNorm> {
     */
     @TableField("des")
     private String des;
+    /**
+    * III级指标
+    */
+    @TableField("III_kpi")
+    private String IIIKpi;
 
 }

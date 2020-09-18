@@ -94,6 +94,11 @@ public interface IRoleService extends IService<Role> {
     long TYPE_COMMITTEE_SECRETARY = 27;
 
     /**
+     * 角色类型：团委书记
+     */
+    long TYPE_DEPT_GENERAL = 28;
+
+    /**
      * 设置某个角色的权限
      *
      * @param roleId 角色id

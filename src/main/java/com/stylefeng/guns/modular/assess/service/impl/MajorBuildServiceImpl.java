@@ -4,22 +4,21 @@ import cn.hutool.core.collection.CollUtil;
 import cn.hutool.core.util.StrUtil;
 import com.alibaba.fastjson.JSON;
 import com.baomidou.mybatisplus.mapper.EntityWrapper;
+import com.baomidou.mybatisplus.service.impl.ServiceImpl;
 import com.stylefeng.guns.common.constant.state.YesNo;
 import com.stylefeng.guns.common.persistence.model.User;
 import com.stylefeng.guns.core.exception.GunsException;
 import com.stylefeng.guns.core.shiro.ShiroKit;
 import com.stylefeng.guns.modular.act.service.ActTaskService;
 import com.stylefeng.guns.modular.act.utils.ActUtils;
+import com.stylefeng.guns.modular.assess.dao.MajorBuildMapper;
 import com.stylefeng.guns.modular.assess.model.*;
 import com.stylefeng.guns.modular.assess.service.*;
 import com.stylefeng.guns.modular.job.service.IDeptService;
 import com.stylefeng.guns.modular.system.service.IRoleService;
 import com.stylefeng.guns.modular.system.service.IUserService;
-import com.stylefeng.guns.modular.user.model.ScientificAchievement;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import com.baomidou.mybatisplus.service.impl.ServiceImpl;
-import com.stylefeng.guns.modular.assess.dao.MajorBuildMapper;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.ArrayList;
@@ -52,6 +51,18 @@ public class MajorBuildServiceImpl extends ServiceImpl<MajorBuildMapper, MajorBu
     @Override
     @Transactional
     public void applyApproval(MajorBuild majorBuild) {
+        AssessNorm mainNorm = new AssessNorm();
+        mainNorm.setDeptId(IAssessNormService.TYPE_MAIN_DEPT);
+        mainNorm.setCode(majorBuild.getNormCode());
+        mainNorm.setType(IAssessCoefficientService.TYPE_ZYJS);
+        mainNorm = assessNormService.getByCode(mainNorm);
+        if (mainNorm == null) {
+            throw new GunsException("考核指标不存在");
+        }
+        if (!mainNorm.getType().equals(IAssessCoefficientService.TYPE_ZYJS)) {
+            throw new GunsException("请填写专业建设考核相关指标代码");
+        }
+
         EntityWrapper<User> wrapper = new EntityWrapper<>();
         wrapper.like("role_id", IRoleService.TYPE_DEAN + "");
         wrapper.eq("dept_id", ShiroKit.getUser().deptId);
@@ -85,14 +96,6 @@ public class MajorBuildServiceImpl extends ServiceImpl<MajorBuildMapper, MajorBu
         String procInsId = actTaskService.startProcessOnly(ActUtils.PD_TASK_MAJOR_BUILD_APPROVAL[0], ActUtils.PD_TASK_MAJOR_BUILD_APPROVAL[1], majorBuild.getName()+" 专业建设立项", vars);
 
 
-        AssessNorm mainNorm = new AssessNorm();
-        mainNorm.setDeptId(IAssessNormService.TYPE_MAIN_DEPT);
-        mainNorm.setCode(majorBuild.getNormCode());
-        mainNorm.setType(IAssessCoefficientService.TYPE_ZYJS);
-        mainNorm = assessNormService.getByCode(mainNorm);
-        if (mainNorm == null) {
-            throw new GunsException("考核指标不存在");
-        }
         majorBuild.setNormId(mainNorm.getId());
 
         majorBuild.setProcInsId(procInsId);
@@ -155,7 +158,7 @@ public class MajorBuildServiceImpl extends ServiceImpl<MajorBuildMapper, MajorBu
     @Transactional
     public void auditApproval(MajorBuild majorBuild) {
         String pass = (String) majorBuild.getExpand().get("pass");
-        StringBuilder comment = new StringBuilder(pass.equals(YesNo.YES.getCode() + "") ? "【通过】" : "【拒绝】");
+        StringBuilder comment = new StringBuilder(pass.equals(YesNo.YES.getCode() + "") ? "【通过】" : "【驳回】");
         if (majorBuild.getExpand().get("comment") != null) {
             comment.append(majorBuild.getExpand().get("comment"));
         }

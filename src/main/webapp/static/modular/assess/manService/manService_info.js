@@ -1,8 +1,8 @@
 /**
- * 初始化学生工作考核详情对话框
+ * 初始化管理服务详情对话框
  */
-var StuWorkInfoDlg = {
-    stuWorkInfoData : {},
+var ManServiceInfoDlg = {
+    manServiceInfoData : {},
     count: $("#itemSize").val(),
     itemTemplate: $("#itemTemplate").html(),
     data: [],
@@ -20,8 +20,8 @@ var StuWorkInfoDlg = {
 /**
  * 清除数据
  */
-StuWorkInfoDlg.clearData = function() {
-    this.stuWorkInfoData = {};
+ManServiceInfoDlg.clearData = function() {
+    this.manServiceInfoData = {};
 };
 
 /**
@@ -30,8 +30,8 @@ StuWorkInfoDlg.clearData = function() {
  * @param key 数据的名称
  * @param val 数据的具体值
  */
-StuWorkInfoDlg.set = function(key, val) {
-    this.stuWorkInfoData[key] = (typeof val == "undefined") ? $("#" + key).val() : val;
+ManServiceInfoDlg.set = function(key, val) {
+    this.manServiceInfoData[key] = (typeof val == "undefined") ? $("#" + key).val() : val;
     return this;
 };
 
@@ -40,14 +40,14 @@ StuWorkInfoDlg.set = function(key, val) {
  *
  * @param key 数据的名称
  */
-StuWorkInfoDlg.get = function(key) {
+ManServiceInfoDlg.get = function(key) {
     return $("#" + key).val();
 };
 
 /**
  * 关闭此对话框
  */
-StuWorkInfoDlg.close = function() {
+ManServiceInfoDlg.close = function() {
     var index = parent.layer.getFrameIndex(window.name);
     parent.layer.close(index);
 };
@@ -55,26 +55,24 @@ StuWorkInfoDlg.close = function() {
 /**
  * 收集数据
  */
-StuWorkInfoDlg.collectData = function() {
+ManServiceInfoDlg.collectData = function() {
     this
     .set('id')
     .set('procInsId')
     .set('status')
     .set('hrHandleId')
-    .set('deanUserId')
+    .set('deptLeaderId')
     .set('hrLeaderId')
-    .set('stuWorkCommissioner')
+    .set('generalManId')
     .set('normId')
     .set('normCode')
     .set('result')
     .set('year')
-    .set('studentsOfficeLeaderId')
-    .set('secretaryId')
-    .set('committeeSecretaryId')
     ;
 
+
     datas = [];
-    $("[name='StuWorkItem']").each(function(){
+    $("[name='ManServiceItem']").each(function(){
         var item = $(this).serializeObject();
         datas.push(item);
     });
@@ -83,39 +81,16 @@ StuWorkInfoDlg.collectData = function() {
 /**
  * 验证数据是否为空
  */
-StuWorkInfoDlg.validate = function () {
-    $('#StuWorkForm').data("bootstrapValidator").resetForm();
-    $('#StuWorkForm').bootstrapValidator('validate');
-    return $("#StuWorkForm").data('bootstrapValidator').isValid();
+ManServiceInfoDlg.validate = function () {
+    $('#ManServiceForm').data("bootstrapValidator").resetForm();
+    $('#ManServiceForm').bootstrapValidator('validate');
+    return $("#ManServiceForm").data('bootstrapValidator').isValid();
 };
 
-/**
- * 提交申请
- */
-StuWorkInfoDlg.addApply = function() {
-
-    this.clearData();
-    this.collectData();
-
-    if (!this.validate()) {
-        return;
-    }
-
-    //提交信息
-    var ajax = new $ax(Feng.ctxPath + "/stuWork/act/apply", function(data){
-        Feng.success("申请成功!");
-        window.parent.StuWork.table.refresh();
-        StuWorkInfoDlg.close();
-    },function(data){
-        Feng.error("申请失败!" + data.responseJSON.message + "!");
-    });
-    ajax.set(this.stuWorkInfoData);
-    ajax.start();
-};
 /**
  * 提交添加
  */
-StuWorkInfoDlg.addSubmit = function() {
+ManServiceInfoDlg.addSubmit = function() {
 
     this.clearData();
     this.collectData();
@@ -125,21 +100,21 @@ StuWorkInfoDlg.addSubmit = function() {
     }
 
     //提交信息
-    var ajax = new $ax(Feng.ctxPath + "/stuWork/add", function(data){
+    var ajax = new $ax(Feng.ctxPath + "/manService/add", function(data){
         Feng.success("添加成功!");
-        window.parent.StuWork.table.refresh();
-        StuWorkInfoDlg.close();
+        window.parent.ManService.table.refresh();
+        ManServiceInfoDlg.close();
     },function(data){
         Feng.error("添加失败!" + data.responseJSON.message + "!");
     });
-    ajax.set(this.stuWorkInfoData);
+    ajax.set(this.manServiceInfoData);
     ajax.start();
 };
 
 /**
  * 提交修改
  */
-StuWorkInfoDlg.editSubmit = function() {
+ManServiceInfoDlg.editSubmit = function() {
 
     this.clearData();
     this.collectData();
@@ -149,21 +124,46 @@ StuWorkInfoDlg.editSubmit = function() {
     }
 
     //提交信息
-    var ajax = new $ax(Feng.ctxPath + "/stuWork/update", function(data){
+    var ajax = new $ax(Feng.ctxPath + "/manService/update", function(data){
         Feng.success("修改成功!");
-        window.parent.StuWork.table.refresh();
-        StuWorkInfoDlg.close();
+        window.parent.ManService.table.refresh();
+        ManServiceInfoDlg.close();
     },function(data){
         Feng.error("修改失败!" + data.responseJSON.message + "!");
     });
-    ajax.set(this.stuWorkInfoData);
+    ajax.set(this.manServiceInfoData);
     ajax.start();
 };
 
 /**
+ * 提交申请
+ */
+ManServiceInfoDlg.addApply = function() {
+
+    this.clearData();
+    this.collectData();
+
+    if (!this.validate()) {
+        return;
+    }
+
+    //提交信息
+    var ajax = new $ax(Feng.ctxPath + "/manService/act/apply", function(data){
+        Feng.success("申请成功!");
+        window.parent.ManService.table.refresh();
+        ManServiceInfoDlg.close();
+    },function(data){
+        Feng.error("申请失败!" + data.responseJSON.message + "!");
+    });
+    ajax.set(this.manServiceInfoData);
+    ajax.start();
+};
+
+
+/**
  * 验收审核
  */
-StuWorkInfoDlg.auditSubmit = function(pass) {
+ManServiceInfoDlg.auditSubmit = function(pass) {
     var that = this;
     this.collectData();
     if (!this.validate()) {
@@ -171,22 +171,22 @@ StuWorkInfoDlg.auditSubmit = function(pass) {
     }
     Feng.confirm("确认操作", function () {
         //提交信息
-        var ajax = new $ax(Feng.ctxPath + "/stuWork/act/audit", function(data){
+        var ajax = new $ax(Feng.ctxPath + "/manService/act/audit", function(data){
             Feng.success("提交成功!");
             window.parent.ActTodoTask.table.refresh();
-            StuWorkInfoDlg.close();
+            ManServiceInfoDlg.close();
         },function(data){
             Feng.error("提交失败!" + data.responseJSON.message + "!");
         });
-        that.stuWorkInfoData['expand["pass"]'] = pass;
-        that.stuWorkInfoData['expand["comment"]'] = $("#comment").val();
-        that.stuWorkInfoData['expand["data"]'] = JSON.stringify(datas);
-        that.stuWorkInfoData['act.taskId'] = $("#taskId").val();
-        that.stuWorkInfoData['act.procInsId'] = $("#procInsId").val();
-        that.stuWorkInfoData['act.taskDefKey'] = $("#taskDefKey").val();
-        that.stuWorkInfoData['year'] = $("#year").val();
-        that.stuWorkInfoData['id'] = $("#id").val();
-        ajax.set(that.stuWorkInfoData);
+        that.manServiceInfoData['expand["pass"]'] = pass;
+        that.manServiceInfoData['expand["comment"]'] = $("#comment").val();
+        that.manServiceInfoData['expand["data"]'] = JSON.stringify(datas);
+        that.manServiceInfoData['act.taskId'] = $("#taskId").val();
+        that.manServiceInfoData['act.procInsId'] = $("#procInsId").val();
+        that.manServiceInfoData['act.taskDefKey'] = $("#taskDefKey").val();
+        that.manServiceInfoData['year'] = $("#year").val();
+        that.manServiceInfoData['id'] = $("#id").val();
+        ajax.set(that.manServiceInfoData);
         ajax.start();
     });
 };
@@ -195,26 +195,26 @@ StuWorkInfoDlg.auditSubmit = function(pass) {
 /**
  * item获取新的id
  */
-StuWorkInfoDlg.newId = function () {
+ManServiceInfoDlg.newId = function () {
     if(this.count == undefined){
         this.count = 0;
     }
     this.count = this.count + 1;
-    return "StuWorkItem" + this.count;
+    return "ManServiceItem" + this.count;
 };
 
 /**
  * 添加条目
  */
-StuWorkInfoDlg.addItem = function () {
+ManServiceInfoDlg.addItem = function () {
     $("#itemsArea").append(this.itemTemplate);
-    $("#StuWorkItem").attr("id", this.newId());
+    $("#ManServiceItem").attr("id", this.newId());
 };
 
 /**
  * 删除item
  */
-StuWorkInfoDlg.deleteItem = function (event) {
+ManServiceInfoDlg.deleteItem = function (event) {
     var obj = Feng.eventParseObject(event);
     obj.parent().parent().remove();
 };
@@ -222,8 +222,9 @@ StuWorkInfoDlg.deleteItem = function (event) {
 var table;
 var datas = [];
 
+
 $(function() {
-    Feng.initValidator("StuWorkForm", StuWorkInfoDlg.validateFields);
+    Feng.initValidator("ManServiceForm", ManServiceInfoDlg.validateFields);
 
     layui.use('table', function(){
         table = layui.table;
@@ -232,7 +233,7 @@ $(function() {
         table.render({
             elem: '#assessTable' //指定原始表格元素选择器（推荐id选择器）
             ,height: 315 //容器高度
-            ,url: Feng.ctxPath+'/stuWork/act/data'
+            ,url: Feng.ctxPath+'/manService/act/data'
             ,where: {procInsId: $("#procInsId").val(),id:$("#id").val()}
             ,cols: [[ //表头
                 {field: 'id', title: 'ID',hide:true, fixed: 'left'}

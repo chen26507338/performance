@@ -6,22 +6,25 @@
             <input type="hidden" id="id" value="">
 
             <div class="row">
-
-                <div class="col-sm-6 b-r">
-                    <#input id="content" name="内容" underline="true"/>
-                </div>
                 <div class="col-sm-6 b-r">
                     <#input id="code" name="代码" underline="true"/>
                 </div>
                 <div class="col-sm-6 b-r">
-                    <#select id="type" name="考核项目" items="${typeList}"
+                    <#select id="type" name="I级指标" items="${typeList}"
                     itemLabel="name" itemValue="type" underline="true"/>
                 </div>
                 <div class="col-sm-6 b-r">
-                    <#input id="point" name="校级指标/院级浮动值" underline="true"/>
+                    <#input id="content" name="II级指标" underline="true"/>
                 </div>
                 <div class="col-sm-6 b-r">
-                    <#input id="des" name="描述" underline="true"/>
+                    <#input id="IIIKpi" name="III级指标" underline="true"/>
+                </div>
+
+                <div class="col-sm-6 b-r">
+                    <#input id="des" name="IV指标" underline="true"/>
+                </div>
+                <div class="col-sm-6 b-r">
+                    <#input id="point" name="校级指标/院级浮动值" underline="true"/>
                 </div>
 
             </div>

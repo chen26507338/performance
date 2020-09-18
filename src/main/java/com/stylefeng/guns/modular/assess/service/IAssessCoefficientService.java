@@ -25,9 +25,13 @@ public interface IAssessCoefficientService extends IService<AssessCoefficient> {
      */
     String TYPE_ZYJS = "zyjs";
     /**
-     * 类型：专业建设
+     * 类型：学生工作
      */
     String TYPE_XSGZ = "xsgz";
+    /**
+     * 类型：管理服务
+     */
+    String TYPE_GLFW = "glfw";
     /**
      * 查询所有
      */

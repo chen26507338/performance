@@ -134,7 +134,7 @@ public class StuWorkController extends BaseController {
     }
 
     /**
-     * 立项申请
+     * 考核申请
      */
     @RequestMapping("/stuWork_apply")
     public String applyApproval() {
