@@ -142,7 +142,7 @@ public class StuWorkController extends BaseController {
     }
 
     /**
-     * 专业建设立项申请
+     * 学生工作考核申请
      */
     @RequestMapping(value = "/act/apply")
     @ResponseBody
@@ -152,7 +152,7 @@ public class StuWorkController extends BaseController {
     }
     
     /**
-     * 专业建设立项审核
+     * 学生工作考核审核
      */
     @RequestMapping(value = "/act/audit")
     @ResponseBody

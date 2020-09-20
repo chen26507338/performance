@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.stylefeng.guns.modular.assess.dao.TeachingLoadAssessMapper">
+
+	<!-- 通用查询映射结果 -->
+	<resultMap id="BaseResultMap" type="com.stylefeng.guns.modular.assess.model.TeachingLoadAssess">
+            <id column="id" property="id" />
+            <result column="proc_ins_id" property="procInsId" />
+            <result column="status" property="status" />
+            <result column="hr_handle_id" property="hrHandleId" />
+            <result column="dean_office_leader_id" property="deanOfficeLeaderId" />
+            <result column="norm_id" property="normId" />
+            <result column="result" property="result" />
+            <result column="year" property="year" />
+            <result column="dean_user_id" property="deanUserId" />
+            <result column="dept_teaching_id" property="deptTeachingId" />
+            <result column="dean_office_commissioner" property="deanOfficeCommissioner" />
+            <result column="coe_point" property="coePoint" />
+            <result column="main_norm_point" property="mainNormPoint" />
+            <result column="college_norm_point" property="collegeNormPoint" />
+            <result column="user_id" property="userId" />
+	</resultMap>
+
+    <!-- 通用查询结果列 -->
+    <sql id="Base_Column_List">
+	    id AS id,
+	    proc_ins_id AS procInsId,
+	    status AS status,
+	    hr_handle_id AS hrHandleId,
+	    dean_office_leader_id AS deanOfficeLeaderId,
+	    norm_id AS normId,
+	    result AS result,
+	    year AS year,
+	    dean_user_id AS deanUserId,
+	    dept_teaching_id AS deptTeachingId,
+	    dean_office_commissioner AS deanOfficeCommissioner,
+	    coe_point AS coePoint,
+	    main_norm_point AS mainNormPoint,
+	    college_norm_point AS collegeNormPoint,
+	    user_id AS userId
+    </sql>
+
+</mapper>

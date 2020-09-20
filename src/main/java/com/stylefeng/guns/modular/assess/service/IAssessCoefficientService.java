@@ -29,6 +29,10 @@ public interface IAssessCoefficientService extends IService<AssessCoefficient> {
      */
     String TYPE_XSGZ = "xsgz";
     /**
+     * 类型：教学工作
+     */
+    String TYPE_JXGZ = "jxgz";
+    /**
      * 类型：管理服务
      */
     String TYPE_GLFW = "glfw";

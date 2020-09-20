@@ -1,0 +1,57 @@
+@layout("/common/_container.html"){
+<div class="ibox float-e-margins">
+    <div class="ibox-content">
+        <div class="form-horizontal" id="TeachingLoadForm">
+
+            <input type="hidden" id="id" value="">
+
+            <div class="row">
+                <div class="col-sm-12" id="itemsArea">
+                    <div class="form-group">
+                        <div class="col-sm-2">
+                            <#button btnCss="info" name="增加" icon="fa-plus" clickFun="TeachingLoadInfoDlg.addItem()"/>
+                        </div>
+                    </div>
+                </div>
+
+                <script type="text/template" id="itemTemplate">
+                    <form class="form col-sm-1 " style="margin-right: 5px" name="TeachingLoadItem" id="TeachingLoadItem">
+                        <div class="form-group">
+                            <label>职工编号</label>
+                            <input class="form-control" type="text" name="account" >
+                        </div>
+                        <div class="form-group">
+                            <label>课程名称</label>
+                            <input class="form-control" type="text" name="courseName" >
+                        </div>
+                        <div class="form-group">
+                            <label>课程类型</label>
+                            <input class="form-control" type="text" name="courseType" >
+                        </div>
+                        <div class="form-group">
+                            <label>周次</label>
+                            <input class="form-control" type="text" name="weeks" >
+                        </div>
+                        <div class="form-group">
+                            <label>课时时数</label>
+                            <input class="form-control" type="text" name="courseTimes" >
+                        </div>
+                        <div class="form-group">
+                            <#button btnCss="danger" name="删除" id="cancel" icon="fa-remove" clickFun="TeachingLoadInfoDlg.deleteItem(event)"/>
+                        </div>
+                    </form>
+                </script>
+            </div>
+
+            <div class="row btn-group-m-t">
+                <div class="col-sm-10">
+                    <#button btnCss="info" name="提交" id="ensure" icon="fa-check" clickFun="TeachingLoadInfoDlg.addSubmit()"/>
+                    <#button btnCss="danger" name="取消" id="cancel" icon="fa-eraser" clickFun="TeachingLoadInfoDlg.close()"/>
+                </div>
+            </div>
+        </div>
+        
+    </div>
+</div>
+<script src="${ctxPath}/static/modular/assess/teachingLoad/teachingLoad_info.js"></script>
+@}

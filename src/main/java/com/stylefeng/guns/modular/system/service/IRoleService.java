@@ -76,6 +76,11 @@ public interface IRoleService extends IService<Role> {
     long TYPE_PERSONAL_HR = 20;
 
     /**
+     * 角色类型：教学审核人事专员
+     */
+    long TYPE_TEACHING_HR = 29;
+
+    /**
      * 角色类型：院长
      */
     long TYPE_DEAN = 22;
@@ -97,6 +102,10 @@ public interface IRoleService extends IService<Role> {
      * 角色类型：团委书记
      */
     long TYPE_DEPT_GENERAL = 28;
+    /**
+     * 角色类型：学院教学干事
+     */
+    long TYPE_DEPT_TEACHING = 30;
 
     /**
      * 设置某个角色的权限

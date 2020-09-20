@@ -130,6 +130,7 @@ public class StuWorkServiceImpl extends ServiceImpl<StuWorkMapper, StuWork> impl
     }
 
     @Override
+    @Transactional
     public void audit(StuWork stuWork) {
         String pass = (String) stuWork.getExpand().get("pass");
         StringBuilder comment = new StringBuilder(pass.equals(YesNo.YES.getCode() + "") ? "【通过】" : "【驳回】");

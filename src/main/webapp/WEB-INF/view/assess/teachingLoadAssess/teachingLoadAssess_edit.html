@@ -1,0 +1,65 @@
+@layout("/common/_container.html"){
+<div class="ibox float-e-margins">
+    <div class="ibox-content">
+        <div class="form-horizontal" id="TeachingLoadAssessForm">
+
+            <input type="hidden" id="id" value="${item.id}">
+
+            <div class="row">
+
+                <div class="col-sm-6 b-r">
+                    <#input id="procInsId" name="流程实例ID" value="${item.procInsId}" underline="true"/>
+                </div>
+                <div class="col-sm-6 b-r">
+                    <#input id="status" name="状态" value="${item.status}" underline="true"/>
+                </div>
+                <div class="col-sm-6 b-r">
+                    <#input id="hrHandleId" name="人事经办ID" value="${item.hrHandleId}" underline="true"/>
+                </div>
+                <div class="col-sm-6 b-r">
+                    <#input id="deanOfficeLeaderId" name="教务处处长ID" value="${item.deanOfficeLeaderId}" underline="true"/>
+                </div>
+                <div class="col-sm-6 b-r">
+                    <#input id="normId" name="指标ID" value="${item.normId}" underline="true"/>
+                </div>
+                <div class="col-sm-6 b-r">
+                    <#input id="result" name="考核结果" value="${item.result}" underline="true"/>
+                </div>
+                <div class="col-sm-6 b-r">
+                    <#input id="year" name="考核年度" value="${item.year}" underline="true"/>
+                </div>
+                <div class="col-sm-6 b-r">
+                    <#input id="deanUserId" name="院长D" value="${item.deanUserId}" underline="true"/>
+                </div>
+                <div class="col-sm-6 b-r">
+                    <#input id="deptTeachingId" name="二级教学干事ID" value="${item.deptTeachingId}" underline="true"/>
+                </div>
+                <div class="col-sm-6 b-r">
+                    <#input id="deanOfficeCommissioner" name="教学考核专员ID" value="${item.deanOfficeCommissioner}" underline="true"/>
+                </div>
+                <div class="col-sm-6 b-r">
+                    <#input id="coePoint" name="考核系数" value="${item.coePoint}" underline="true"/>
+                </div>
+                <div class="col-sm-6 b-r">
+                    <#input id="mainNormPoint" name="校级指标分" value="${item.mainNormPoint}" underline="true"/>
+                </div>
+                <div class="col-sm-6 b-r">
+                    <#input id="collegeNormPoint" name="院级浮动值" value="${item.collegeNormPoint}" underline="true"/>
+                </div>
+                <div class="col-sm-6 b-r">
+                    <#input id="userId" name="用户ID" value="${item.userId}" underline="true"/>
+                </div>
+            </div>
+
+            <div class="row btn-group-m-t">
+                <div class="col-sm-10">
+                    <#button btnCss="info" name="提交" id="ensure" icon="fa-check" clickFun="TeachingLoadAssessInfoDlg.editSubmit()"/>
+                    <#button btnCss="danger" name="取消" id="cancel" icon="fa-eraser" clickFun="TeachingLoadAssessInfoDlg.close()"/>
+                </div>
+            </div>
+        </div>
+
+    </div>
+</div>
+<script src="${ctxPath}/static/modular/assess/teachingLoadAssess/teachingLoadAssess_info.js"></script>
+@}
