@@ -14,14 +14,14 @@ var TeachingLoadAssess = {
 TeachingLoadAssess.initColumn = function () {
     return [
         {field: 'selectItem', radio: true}
-       ,{title: '状态', field:'status', visible: true, align: 'center', valign: 'middle'}
-       ,{title: '指标ID', field:'normId', visible: true, align: 'center', valign: 'middle'}
-       ,{title: '考核结果', field:'result', visible: true, align: 'center', valign: 'middle'}
-       ,{title: '考核年度', field:'year', visible: true, align: 'center', valign: 'middle'}
-       ,{title: '考核系数', field:'coePoint', visible: true, align: 'center', valign: 'middle'}
-       ,{title: '校级指标分', field:'mainNormPoint', visible: true, align: 'center', valign: 'middle'}
-       ,{title: '院级浮动值', field:'collegeNormPoint', visible: true, align: 'center', valign: 'middle'}
-       ,{title: '用户ID', field:'userId', visible: true, align: 'center', valign: 'middle'}
+        , {title: '状态', field: 'status', visible: true, align: 'center', valign: 'middle'}
+        , {title: '指标ID', field: 'normId', visible: true, align: 'center', valign: 'middle'}
+        , {title: '考核结果', field: 'result', visible: true, align: 'center', valign: 'middle'}
+        , {title: '考核年度', field: 'year', visible: true, align: 'center', valign: 'middle'}
+        , {title: '考核系数', field: 'coePoint', visible: true, align: 'center', valign: 'middle'}
+        , {title: '校级指标分', field: 'mainNormPoint', visible: true, align: 'center', valign: 'middle'}
+        , {title: '院级浮动值', field: 'collegeNormPoint', visible: true, align: 'center', valign: 'middle'}
+        , {title: '用户ID', field: 'userId', visible: true, align: 'center', valign: 'middle'}
     ];
 };
 
@@ -30,10 +30,10 @@ TeachingLoadAssess.initColumn = function () {
  */
 TeachingLoadAssess.check = function () {
     var selected = $('#' + this.id).bootstrapTable('getSelections');
-    if(selected.length == 0){
+    if (selected.length == 0) {
         Feng.info("请先选中表格中的某一记录！");
         return false;
-    }else{
+    } else {
         TeachingLoadAssess.seItem = selected[0];
         return true;
     }
@@ -43,7 +43,7 @@ TeachingLoadAssess.check = function () {
  * 查询表单提交参数对象
  * @returns {{}}
  */
-TeachingLoadAssess.formParams = function() {
+TeachingLoadAssess.formParams = function () {
     var queryData = {};
     return queryData;
 };
@@ -92,10 +92,26 @@ TeachingLoadAssess.delete = function () {
             }, function (data) {
                 Feng.error("删除失败!" + data.responseJSON.message + "!");
             });
-            ajax.set("teachingLoadAssessId",that.seItem.id);
+            ajax.set("teachingLoadAssessId", that.seItem.id);
             ajax.start();
         });
     }
+};
+
+/**
+ * 开启教学考核
+ */
+TeachingLoadAssess.startTeachingLoadAssess = function () {
+    var that = this;
+    Feng.confirm("是否要开启教学考核", function () {
+        var ajax = new $ax(Feng.ctxPath + "/teachingLoadAssess/act/apply", function (data) {
+            Feng.success("开启成功!");
+            TeachingLoadAssess.table.refresh();
+        }, function (data) {
+            Feng.error("开启失败!" + data.responseJSON.message + "!");
+        });
+        ajax.start();
+    });
 };
 
 /**
@@ -113,10 +129,10 @@ $(function () {
     table.setQueryParams(TeachingLoadAssess.formParams());
     TeachingLoadAssess.table = table.init();
 
-    layui.use('layer', function(){
+    layui.use('layer', function () {
         layer = layui.layer;
     });
-    layui.use('laydate', function(){
+    layui.use('laydate', function () {
         laydate = layui.laydate;
     });
 });

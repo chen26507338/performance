@@ -126,7 +126,7 @@ TeachingLoadAssessInfoDlg.editSubmit = function() {
 /**
  * 验收审核
  */
-TeachingLoadAssessDlg.auditSubmit = function(pass) {
+TeachingLoadAssessInfoDlg.auditSubmit = function(pass) {
     var that = this;
     this.collectData();
     if (!this.validate()) {
@@ -137,7 +137,7 @@ TeachingLoadAssessDlg.auditSubmit = function(pass) {
         var ajax = new $ax(Feng.ctxPath + "/teachingLoadAssess/act/audit", function(data){
             Feng.success("提交成功!");
             window.parent.ActTodoTask.table.refresh();
-            TeachingLoadAssessDlg.close();
+            TeachingLoadAssessInfoDlg.close();
         },function(data){
             Feng.error("提交失败!" + data.responseJSON.message + "!");
         });
@@ -158,7 +158,7 @@ TeachingLoadAssessDlg.auditSubmit = function(pass) {
 /**
  * item获取新的id
  */
-TeachingLoadAssessDlg.newId = function () {
+TeachingLoadAssessInfoDlg.newId = function () {
     if(this.count == undefined){
         this.count = 0;
     }
@@ -169,7 +169,7 @@ TeachingLoadAssessDlg.newId = function () {
 /**
  * 添加条目
  */
-TeachingLoadAssessDlg.addItem = function () {
+TeachingLoadAssessInfoDlg.addItem = function () {
     $("#itemsArea").append(this.itemTemplate);
     $("#StuWorkItem").attr("id", this.newId());
 };
@@ -177,7 +177,7 @@ TeachingLoadAssessDlg.addItem = function () {
 /**
  * 删除item
  */
-TeachingLoadAssessDlg.deleteItem = function (event) {
+TeachingLoadAssessInfoDlg.deleteItem = function (event) {
     var obj = Feng.eventParseObject(event);
     obj.parent().parent().remove();
 };
@@ -201,9 +201,10 @@ $(function() {
                 {field: 'id', title: 'ID',hide:true, fixed: 'left'}
                 ,{field: 'account', title: '职工编号'}
                 ,{field: 'name', title: '职工姓名'}
-                ,{field: 'result', title: '考核结果'}
+                ,{field: 'result', title: '考核结果',edit:'text'}
                 ,{field: 'coePoint', title: '考核系数'}
                 ,{field: 'mainNormPoint', title: '校级指标分'}
+                ,{field: 'collegeNormPoint', title: '院级指标分'}
                 ,{field: 'year', title: '年度'}
             ]] //设置表头
         });

@@ -17,16 +17,6 @@
                 <div class="col-sm-6 b-r">
                     <#input id="normCode" name="指标代码"  underline="true" />
                 </div>
-                @   case "dept_leader_audit","hr_handle_audit","hr_leader_audit","general_audit","dept_leader_audit_again":
-                <div class="col-sm-6 b-r">
-                    <#input id="normName" name="II级指标" value="${norm.content}" underline="true" readonly="readonly"/>
-                </div>
-                <div class="col-sm-6 b-r">
-                    <#input id="normName" name="III级指标" value="${norm.iIIKpi}" underline="true" readonly="readonly"/>
-                </div>
-                <div class="col-sm-6 b-r">
-                    <#input id="normName" name="IV指标" value="${norm.des}" underline="true" readonly="readonly"/>
-                </div>
                 @   if(act.taskDefKey == "hr_leader_audit"){
                 <div class="col-sm-6 b-r">
                     <#input id="year" name="考核年度" value="${item.year}" underline="true" readonly="readonly"/>
