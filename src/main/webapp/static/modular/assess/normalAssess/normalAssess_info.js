@@ -7,6 +7,13 @@ var NormalAssessInfoDlg = {
     itemTemplate: $("#itemTemplate").html(),
     data: [],		//拼接字符串内容
     validateFields:{
+        year: {
+            validators: {
+                notEmpty: {
+                    message: '不能为空'
+                }
+            }
+        }
     }
 };
 
@@ -181,6 +188,9 @@ NormalAssessInfoDlg.importSubmit = function() {
  * 审核
  */
 NormalAssessInfoDlg.auditSubmit = function(pass) {
+    if (!this.validate()) {
+        return;
+    }
     //提交信息
     var ajax = new $ax(Feng.ctxPath + "/normalAssess/audit", function(data){
         Feng.success("提交成功!");

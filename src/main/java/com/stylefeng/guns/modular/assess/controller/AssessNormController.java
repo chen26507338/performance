@@ -75,7 +75,9 @@ public class AssessNormController extends BaseController {
             param.setCode(assessNorm.getCode());
             param.setType(assessNorm.getType());
             AssessNorm mainNorm = assessNormService.getByCode(param);
-            model.addAttribute("mainPoint", mainNorm.getPoint());
+            if (mainNorm != null) {
+                model.addAttribute("mainPoint", mainNorm.getPoint());
+            }
         }
         model.addAttribute("item",assessNorm);
         model.addAttribute("typeList", assessCoefficientService.selectAll());

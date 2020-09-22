@@ -1,5 +1,6 @@
 package com.stylefeng.guns.modular.system.service.impl;
 
+import com.baomidou.mybatisplus.mapper.EntityWrapper;
 import com.baomidou.mybatisplus.service.impl.ServiceImpl;
 import com.stylefeng.guns.common.constant.cache.Cache;
 import com.stylefeng.guns.common.persistence.dao.RelationMapper;
@@ -57,13 +58,22 @@ public class RoleServiceImpl extends ServiceImpl<RoleMapper, Role> implements IR
     }
 
     @Override
+    @Cacheable(value = Cache.CONSTANT,key = "'"+CACHE_TIPS+"'+#tips")
+    public Role getByTips(String tips) {
+        Role params = new Role();
+        params.setTips(tips);
+        return this.selectOne(new EntityWrapper<>(params));
+    }
+
+    @Override
     @Cacheable(value = Cache.CONSTANT,key = "'"+CACHE_ENTITY+"'+#id")
     public Role selectById(Serializable id) {
         return super.selectById(id);
     }
 
     @Override
-    @Caching(evict = {@CacheEvict( value = Cache.CONSTANT,key = "'"+CACHE_ENTITY+"'+#entity.id"),
+    @Caching(evict = {
+            @CacheEvict( value = Cache.CONSTANT,key = "'"+CACHE_ENTITY+"'+#entity.id"),
             @CacheEvict(value = Cache.CONSTANT,key = "'"+CACHE_LIST+"'")})
     public boolean updateById(Role entity) {
         return super.updateById(entity);

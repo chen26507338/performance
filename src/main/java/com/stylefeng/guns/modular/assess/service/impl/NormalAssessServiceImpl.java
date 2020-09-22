@@ -11,6 +11,7 @@ import com.baomidou.mybatisplus.mapper.EntityWrapper;
 import com.baomidou.mybatisplus.mapper.Wrapper;
 import com.baomidou.mybatisplus.plugins.Page;
 import com.stylefeng.guns.common.constant.state.YesNo;
+import com.stylefeng.guns.common.persistence.model.Role;
 import com.stylefeng.guns.common.persistence.model.User;
 import com.stylefeng.guns.config.properties.GunsProperties;
 import com.stylefeng.guns.core.exception.GunsException;
@@ -25,6 +26,7 @@ import com.stylefeng.guns.modular.assess.service.IAssessCoefficientService;
 import com.stylefeng.guns.modular.assess.service.IAssessNormPointService;
 import com.stylefeng.guns.modular.assess.service.IAssessNormService;
 import com.stylefeng.guns.modular.job.service.IDeptService;
+import com.stylefeng.guns.modular.system.model.DeptAssess;
 import com.stylefeng.guns.modular.system.service.IRoleService;
 import com.stylefeng.guns.modular.system.service.IUserService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -48,6 +50,8 @@ import java.util.*;
 public class NormalAssessServiceImpl extends ServiceImpl<NormalAssessMapper, NormalAssess> implements INormalAssessService {
     @Resource
     private GunsProperties gunsProperties;
+    @Autowired
+    private IRoleService roleService;
     @Autowired
     private IUserService userService;
     @Autowired
@@ -82,32 +86,34 @@ public class NormalAssessServiceImpl extends ServiceImpl<NormalAssessMapper, Nor
     }
 
     private List<NormalAssess> handleMap(List<Map> normalAssesses, String type, boolean isImport) {
-        User deptLeader = null;
+        User leader = null;
         User hrHandle = null;
-        User hrLeader = null;
+        User commissioner = null;
         String procInsId = null;
 
         if (isImport) {
             EntityWrapper<User> wrapper = new EntityWrapper<>();
             wrapper.like("role_id", IRoleService.TYPE_DEPT_LEADER + "");
-            wrapper.eq("dept_id", ShiroKit.getUser().deptId);
-            deptLeader = userService.selectOne(wrapper);
+            wrapper.eq("dept_id", DeptAssess.typeOf(type));
+            leader = userService.selectOne(wrapper);
 
+            //人事经办
             wrapper = new EntityWrapper<>();
             wrapper.like("role_id", IRoleService.TYPE_HR_HANDLER + "");
             wrapper.eq("dept_id", IDeptService.HR);
             hrHandle = userService.selectOne(wrapper);
 
+            //考核专员
+            Role role = roleService.getByTips(type + "_hr");
             wrapper = new EntityWrapper<>();
-            wrapper.like("role_id", IRoleService.TYPE_DEPT_LEADER + "");
-            wrapper.eq("dept_id", IDeptService.HR);
-            hrLeader = userService.selectOne(wrapper);
+            wrapper.like("role_id", role.getId() + "");
+            commissioner = userService.selectOne(wrapper);
 
             Map<String, Object> vars = new HashMap<>();
             vars.put("user", ShiroKit.getUser().id);
-            vars.put("dept_leader", deptLeader.getId());
+            vars.put("leader", leader.getId());
             vars.put("hr_handle", hrHandle.getId());
-            vars.put("hr_leader", hrLeader.getId());
+            vars.put("commissioner", commissioner.getId());
             procInsId = actTaskService.startProcessOnly(ActUtils.PD_NORMAL_ASSESS[0], ActUtils.PD_NORMAL_ASSESS[1], "考核", vars);
         }
         List<NormalAssess> datas = new ArrayList<>();
@@ -123,8 +129,8 @@ public class NormalAssessServiceImpl extends ServiceImpl<NormalAssessMapper, Nor
             if (isImport) {
                 assess.setDeptId(employee.getDeptId());
                 assess.setHrHandleId(hrHandle.getId());
-                assess.setHrLeaderId(hrLeader.getId());
-                assess.setDeptLeaderId(deptLeader.getId());
+                assess.setHrLeaderId(commissioner.getId());
+                assess.setDeptLeaderId(leader.getId());
                 assess.setInputUserId(ShiroKit.getUser().getId());
                 assess.setCreateTime(new Date());
             }
@@ -188,6 +194,9 @@ public class NormalAssessServiceImpl extends ServiceImpl<NormalAssessMapper, Nor
             switch (normalAssess.getAct().getTaskDefKey()) {
                 //人事经办
                 case "hr_handle_audit":
+                    if (StrUtil.isBlank(normalAssess.getYear())) {
+                        throw new GunsException("请设置年度");
+                    }
                     update.setYear(normalAssess.getYear());
                     this.update(update, wrapper);
                     break;

@@ -13,6 +13,8 @@ public interface IRoleService extends IService<Role> {
 
     String CACHE_ENTITY = "role_entity_";
 
+    String CACHE_TIPS = "role_tips_";
+
     String CACHE_LIST = "role_list_";
     /**
      * 角色类型：老师
@@ -124,5 +126,6 @@ public interface IRoleService extends IService<Role> {
      */
     void delRoleById(Long roleId);
 
+    Role getByTips(String tips);
 
 }
