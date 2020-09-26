@@ -37,6 +37,10 @@ public interface IAssessCoefficientService extends IService<AssessCoefficient> {
      */
     String TYPE_GLFW = "glfw";
     /**
+     * 类型：管理服务
+     */
+    String TYPE_DZBGZ = "dzbgz";
+    /**
      * 查询所有
      */
     List<AssessCoefficient> selectAll();

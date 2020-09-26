@@ -81,6 +81,10 @@ public interface IRoleService extends IService<Role> {
      * 角色类型：教学审核人事专员
      */
     long TYPE_TEACHING_HR = 29;
+    /**
+     * 角色类型：党支部工作考核专员
+     */
+    long TYPE_DZB_WORK_HR = 38;
 
     /**
      * 角色类型：院长

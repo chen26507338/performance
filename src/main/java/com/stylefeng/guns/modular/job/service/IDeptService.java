@@ -29,6 +29,10 @@ public interface IDeptService extends IService<Dept> {
      * 部门ID：科技处
      */
     long SCI = 1293432010613932034L;
+    /**
+     * 部门ID：组织部
+     */
+    long ZZB = 1308301836809277442L;
 
     /**
      * 获取所有启用部门

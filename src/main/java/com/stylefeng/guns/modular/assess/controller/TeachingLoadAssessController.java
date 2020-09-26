@@ -132,7 +132,7 @@ public class TeachingLoadAssessController extends BaseController {
 
 
     /**
-     * 教学工作考核考核申请
+     * 考核申请
      */
     @RequestMapping(value = "/act/apply")
     @ResponseBody
@@ -142,7 +142,7 @@ public class TeachingLoadAssessController extends BaseController {
     }
 
     /**
-     * 教学工作考核考核审核
+     * 考核审核
      */
     @RequestMapping(value = "/act/audit")
     @ResponseBody
@@ -152,7 +152,7 @@ public class TeachingLoadAssessController extends BaseController {
     }
 
     /**
-     * 立项流程数据
+     * 流程数据
      */
     @RequestMapping("/act/data")
     @ResponseBody
