@@ -188,6 +188,18 @@ public class AssessNormPoint extends BaseModel<AssessNormPoint> {
     private Double jxgzCollege;
 
     /**
+    * 党支部工作校级分
+    */
+    @TableField("dzbgz_main")
+    private Double dzbgzMain;
+
+    /**
+    * 党支部工作院级分
+    */
+    @TableField("dzbgz_college")
+    private Double dzbgzCollege;
+
+    /**
     * 部门ID
     */
     @TableField("dept_id")

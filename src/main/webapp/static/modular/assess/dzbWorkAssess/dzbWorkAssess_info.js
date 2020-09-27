@@ -165,17 +165,15 @@ DzbWorkAssessInfoDlg.addApply = function() {
 /**
  * 分配分数
  */
-DzbWorkAssessInfoDlg.doAllocation = function(pass) {
+DzbWorkAssessInfoDlg.doAllocation = function() {
+    this.collectData();
+
     var that = this;
-    // this.collectData();
-    if (pass == 1 && !this.validate()) {
-        return;
-    }
     Feng.confirm("确认操作", function () {
         //提交信息
         var ajax = new $ax(Feng.ctxPath + "/dzbWorkAssess/doAllocation", function(data){
             Feng.success("提交成功!");
-            window.parent.ActTodoTask.table.refresh();
+            window.parent.DzbWorkAssess.table.refresh();
             DzbWorkAssessInfoDlg.close();
         },function(data){
             Feng.error("提交失败!" + data.responseJSON.message + "!");

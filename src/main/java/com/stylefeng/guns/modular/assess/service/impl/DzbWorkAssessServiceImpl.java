@@ -16,8 +16,11 @@ import com.stylefeng.guns.modular.act.service.ActTaskService;
 import com.stylefeng.guns.modular.act.utils.ActUtils;
 import com.stylefeng.guns.modular.assess.model.*;
 import com.stylefeng.guns.modular.assess.service.*;
+import com.stylefeng.guns.modular.job.model.AllocationPointLog;
 import com.stylefeng.guns.modular.job.service.IDeptService;
 import com.stylefeng.guns.modular.system.model.DeptAssess;
+import com.stylefeng.guns.modular.system.model.OtherInfo;
+import com.stylefeng.guns.modular.system.service.IOtherInfoService;
 import com.stylefeng.guns.modular.system.service.IRoleService;
 import com.stylefeng.guns.modular.system.service.IUserService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -41,7 +44,7 @@ public class DzbWorkAssessServiceImpl extends ServiceImpl<DzbWorkAssessMapper, D
     @Resource
     private GunsProperties gunsProperties;
     @Autowired
-    private IRoleService roleService;
+    private IOtherInfoService otherInfoService;
     @Autowired
     private IUserService userService;
     @Autowired
@@ -206,9 +209,19 @@ public class DzbWorkAssessServiceImpl extends ServiceImpl<DzbWorkAssessMapper, D
     @Override
     @Transactional
     public void doAllocation(DzbWorkAssess dzbWorkAssess) {
+
+
         String dataJson = (String) dzbWorkAssess.getExpand().get("data");
         List<Map> maps = JSON.parseArray(dataJson, Map.class);
 
+        OtherInfo currentYears = otherInfoService.getOtherInfoByKey("current_years");
+        AllocationPointLog allocationPointLog = new AllocationPointLog();
+        allocationPointLog.setDeptId(ShiroKit.getUser().deptId);
+        allocationPointLog.setType(IAssessCoefficientService.TYPE_DZBGZ);
+        allocationPointLog.setYear(currentYears.getOtherValue());
+        if (allocationPointLog.selectCount(new EntityWrapper<>(allocationPointLog)) > 0) {
+            throw new GunsException("当前年度已分配");
+        }
 
         //考核系数
         AssessCoefficient coefficient = assessCoefficientService.selectById(IAssessCoefficientService.TYPE_DZBGZ);
@@ -216,7 +229,35 @@ public class DzbWorkAssessServiceImpl extends ServiceImpl<DzbWorkAssessMapper, D
         double maxPoint = (double) dzbWorkAssess.getExpand().get("maxPoint");
         double currentPoint = 0;
         for (Map map : maps) {
+            double point = Double.parseDouble(map.get("point") + "");
+            AssessNormPoint assessNormPoint = new AssessNormPoint();
+            assessNormPoint.setUserId(Long.parseLong(map.get("userId").toString()));
+            assessNormPoint.setYear(currentYears.getOtherValue());
+            assessNormPoint = assessNormPointService.selectOne(new EntityWrapper<>(assessNormPoint));
 
+            if (assessNormPoint != null) {
+                Double mainPoint = assessNormPoint.getKygzMain();
+                mainPoint += point * coefficient.getCoefficient();
+                assessNormPoint.setDzbgzMain(mainPoint);
+//                Double collegePoint = assessNormPoint.getZyjsCollege();
+//                collegePoint += (1 + entity.getCollegeNormPoint()) * mainPoint;
+//                assessNormPoint.setXsgzCollege(collegePoint);
+            } else {
+                assessNormPoint = new AssessNormPoint();
+                double mainPoint = point * coefficient.getCoefficient();
+                assessNormPoint.setDzbgzMain(mainPoint);
+//                assessNormPoint.setXsgzCollege(mainPoint * (1 + entity.getCollegeNormPoint()));
+                assessNormPoint.setYear(currentYears.getOtherValue());
+                assessNormPoint.setUserId(Long.parseLong(map.get("userId").toString()));
+            }
+            currentPoint += point;
+            assessNormPointService.insertOrUpdate(assessNormPoint);
         }
+
+        if (currentPoint > maxPoint) {
+            throw new GunsException(StrUtil.format("最多只能分配 {}", maxPoint));
+        }
+
+        allocationPointLog.insert();
     }
 }
