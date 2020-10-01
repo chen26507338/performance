@@ -84,7 +84,7 @@ public class StuWorkServiceImpl extends ServiceImpl<StuWorkMapper, StuWork> impl
         //学生处处长
         wrapper = new EntityWrapper<>();
         wrapper.like("role_id", IRoleService.TYPE_DEPT_LEADER + "");
-        wrapper.eq("dept_id", IDeptService.STU_WORK);
+        wrapper.eq("dept_id", IDeptService.XSC);
         User stuOfficeLeader = userService.selectOne(wrapper);
 
         //人事领导

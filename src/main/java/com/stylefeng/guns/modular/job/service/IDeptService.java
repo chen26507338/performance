@@ -23,7 +23,7 @@ public interface IDeptService extends IService<Dept> {
     /**
      * 部门ID：学生处
      */
-    long STU_WORK = 1306141570545934337L;
+    long XSC = 1306141570545934337L;
 
     /**
      * 部门ID：科技处

@@ -169,7 +169,7 @@ public class DzbWorkAssessController extends BaseController {
     }
 
     /**
-     * 考核申请
+     * 分配分数
      */
     @RequestMapping(value = "/doAllocation")
     @ResponseBody
