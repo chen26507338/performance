@@ -14,13 +14,14 @@ var SzgzAssess = {
 SzgzAssess.initColumn = function () {
     return [
         {field: 'selectItem', radio: true}
-       ,{title: '考核内容', field:'content', visible: true, align: 'center', valign: 'middle'}
-       ,{title: '状态', field:'status', visible: true, align: 'center', valign: 'middle'}
+       ,{title: '职工编号', field:'expand.account', visible: true, align: 'center', valign: 'middle'}
+       ,{title: '职工姓名', field:'expand.name', visible: true, align: 'center', valign: 'middle'}
        ,{title: '考核结果', field:'result', visible: true, align: 'center', valign: 'middle'}
        ,{title: '考核年度', field:'year', visible: true, align: 'center', valign: 'middle'}
        ,{title: '校级指标分', field:'mainNormPoint', visible: true, align: 'center', valign: 'middle'}
        ,{title: '院级浮动值', field:'collegeNormPoint', visible: true, align: 'center', valign: 'middle'}
        ,{title: '考核系数', field:'coePoint', visible: true, align: 'center', valign: 'middle'}
+        ,{title: '状态', field:'expand.statusDict', visible: true, align: 'center', valign: 'middle'}
     ];
 };
 

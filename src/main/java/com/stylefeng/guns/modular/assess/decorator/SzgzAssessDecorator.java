@@ -24,5 +24,6 @@ public class SzgzAssessDecorator extends BaseListDecorator<SzgzAssess> {
             szgzAssess.putExpand("account", user.getAccount());
             szgzAssess.putExpand("name", user.getName());
         }
+        szgzAssess.putExpand("statusDict", ConstantFactory.me().getDictsByName("考核状态", szgzAssess.getStatus()));
     }
 }

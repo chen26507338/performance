@@ -81,10 +81,9 @@ public class SzgzAssessServiceImpl extends ServiceImpl<SzgzAssessMapper, SzgzAss
         String procInsId = null;
 
         if (isImport) {
+            Map<String, Object> vars = new HashMap<>();
+
             EntityWrapper<User> wrapper = new EntityWrapper<>();
-            wrapper.like("role_id", IRoleService.TYPE_DEPT_LEADER + "");
-            wrapper.eq("dept_id", IDeptService.XSC);
-            xscLeader = userService.selectOne(wrapper);
 
             //人事经办
             wrapper = new EntityWrapper<>();
@@ -98,7 +97,10 @@ public class SzgzAssessServiceImpl extends ServiceImpl<SzgzAssessMapper, SzgzAss
             wrapper.eq("dept_id", IDeptService.HR);
             hrLeader = userService.selectOne(wrapper);
 
-            Map<String, Object> vars = new HashMap<>();
+            wrapper.like("role_id", IRoleService.TYPE_DEPT_LEADER + "");
+            wrapper.eq("dept_id", IDeptService.XSC);
+            xscLeader = userService.selectOne(wrapper);
+
             vars.put("hr_leader", hrLeader.getId());
             vars.put("stu_office_leader", xscLeader.getId());
             vars.put("hr_handle", hrHandle.getId());
@@ -176,18 +178,19 @@ public class SzgzAssessServiceImpl extends ServiceImpl<SzgzAssessMapper, SzgzAss
             wrapper.eq("proc_ins_id", szgzAssess.getAct().getProcInsId());
             SzgzAssess update = new SzgzAssess();
             if ("hr_leader_audit".equals(szgzAssess.getAct().getTaskDefKey())) {
-                //计算考核分入库
-                update.setStatus(YesNo.YES.getCode());
-                this.update(update, wrapper);
-
+                AssessCoefficient assessCoefficient = null;
                 List<SzgzAssess> assessList = this.selectList(wrapper);
                 for (SzgzAssess assess : assessList) {
+                    if (assessCoefficient == null) {
+                        assessCoefficient = assessCoefficientService.selectById(assess.getType().equals("fdyszgz") ?
+                                IAssessCoefficientService.TYPE_FDYSZGZ : IAssessCoefficientService.TYPE_SZJSSZGZ);
+                    }
+
                     AssessNormPoint assessNormPoint = new AssessNormPoint();
                     assessNormPoint.setUserId(assess.getUserId());
                     assessNormPoint.setYear(assess.getYear());
                     assessNormPoint = assessNormPointService.selectOne(new EntityWrapper<>(assessNormPoint));
 
-                    AssessCoefficient assessCoefficient = assessCoefficientService.selectById(IAssessCoefficientService.TYPE_JXGZ);
                     if (assessNormPoint != null) {
                         Double mainPoint = assessNormPoint.getJxgzMain();
                         mainPoint += assess.getMainNormPoint()  * assessCoefficient.getCoefficient();
@@ -210,6 +213,11 @@ public class SzgzAssessServiceImpl extends ServiceImpl<SzgzAssessMapper, SzgzAss
                     assessNormPoint.setUserId(assess.getUserId());
                     assessNormPointService.insertOrUpdate(assessNormPoint);
                 }
+
+                //计算考核分入库
+                update.setCoePoint(assessCoefficient.getCoefficient());
+                update.setStatus(YesNo.YES.getCode());
+                this.update(update, wrapper);
 
             } else if ("hr_handle_audit".equals(szgzAssess.getAct().getTaskDefKey())) {
                 //人事经办审核
