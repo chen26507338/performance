@@ -76,6 +76,7 @@ public class SzgzAssessServiceImpl extends ServiceImpl<SzgzAssessMapper, SzgzAss
 
     private List<SzgzAssess> handleMap(List<Map> normalAssesses, String type, boolean isImport) {
         User xscLeader = null;
+        User myDean = null;
         User hrHandle = null;
         User hrLeader = null;
         String procInsId = null;
@@ -83,10 +84,8 @@ public class SzgzAssessServiceImpl extends ServiceImpl<SzgzAssessMapper, SzgzAss
         if (isImport) {
             Map<String, Object> vars = new HashMap<>();
 
-            EntityWrapper<User> wrapper = new EntityWrapper<>();
-
             //人事经办
-            wrapper = new EntityWrapper<>();
+            EntityWrapper<User> wrapper = new EntityWrapper<>();
             wrapper.like("role_id", IRoleService.TYPE_HR_HANDLER + "");
             wrapper.eq("dept_id", IDeptService.HR);
             hrHandle = userService.selectOne(wrapper);
@@ -97,12 +96,20 @@ public class SzgzAssessServiceImpl extends ServiceImpl<SzgzAssessMapper, SzgzAss
             wrapper.eq("dept_id", IDeptService.HR);
             hrLeader = userService.selectOne(wrapper);
 
-            wrapper.like("role_id", IRoleService.TYPE_DEPT_LEADER + "");
-            wrapper.eq("dept_id", IDeptService.XSC);
-            xscLeader = userService.selectOne(wrapper);
+            wrapper = new EntityWrapper<>();
+            if (type.equalsIgnoreCase("fdyszgz")) {
+                wrapper.like("role_id", IRoleService.TYPE_DEPT_LEADER + "");
+                wrapper.eq("dept_id", IDeptService.XSC);
+                xscLeader = userService.selectOne(wrapper);
+                vars.put("stu_office_leader", xscLeader.getId());
+            } else {
+                wrapper.like("role_id", IRoleService.TYPE_DEAN + "");
+                wrapper.eq("dept_id", IDeptService.MY);
+                myDean = userService.selectOne(wrapper);
+                vars.put("dean_user", myDean.getId());
+            }
 
             vars.put("hr_leader", hrLeader.getId());
-            vars.put("stu_office_leader", xscLeader.getId());
             vars.put("hr_handle", hrHandle.getId());
             vars.put("commissioner", ShiroKit.getUser().id);
             String[] act = type.equalsIgnoreCase("fdyszgz") ? ActUtils.PD_TASK_FDYSZGZ_ASSESS : ActUtils.PD_TASK_SZJSSZGZ_ASSESS;
@@ -130,6 +137,8 @@ public class SzgzAssessServiceImpl extends ServiceImpl<SzgzAssessMapper, SzgzAss
                 assess.setHrLeaderId(hrLeader.getId());
                 if (type.equalsIgnoreCase("fdyszgz")) {
                     assess.setStudentsOfficeLeaderId(xscLeader.getId());
+                }else {
+                    assess.setDeanId(myDean.getId());
                 }
                 assess.setCommissionerId(ShiroKit.getUser().id);
                 assess.setType(type);
@@ -196,6 +205,8 @@ public class SzgzAssessServiceImpl extends ServiceImpl<SzgzAssessMapper, SzgzAss
                         mainPoint += assess.getMainNormPoint()  * assessCoefficient.getCoefficient();
                         if (assess.getType().equals("fdyszgz")) {
                             assessNormPoint.setFdyszgzMain(mainPoint);
+                        } else {
+                            assessNormPoint.setSzjsszgzMain(mainPoint);
                         }
 //                        Double collegePoint = assessNormPoint.getJxgzCollege();
 //                        collegePoint += (1 + assess.getCollegeNormPoint()) * mainPoint;
@@ -205,6 +216,8 @@ public class SzgzAssessServiceImpl extends ServiceImpl<SzgzAssessMapper, SzgzAss
                         double mainPoint = assess.getMainNormPoint()  * assessCoefficient.getCoefficient();
                         if (assess.getType().equals("fdyszgz")) {
                             assessNormPoint.setFdyszgzMain(mainPoint);
+                        } else {
+                            assessNormPoint.setSzjsszgzMain(mainPoint);
                         }
 //                        assessNormPoint.setJxgzCollege(mainPoint * (1 + assess.getCollegeNormPoint()));
                     }

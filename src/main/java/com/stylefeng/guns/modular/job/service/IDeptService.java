@@ -33,6 +33,10 @@ public interface IDeptService extends IService<Dept> {
      * 部门ID：组织部
      */
     long ZZB = 1308301836809277442L;
+    /**
+     * 部门ID：马院
+     */
+    long MY = 1312267081936392193L;
 
     /**
      * 获取所有启用部门
