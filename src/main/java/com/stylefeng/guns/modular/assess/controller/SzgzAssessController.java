@@ -181,11 +181,7 @@ public class SzgzAssessController extends BaseController {
     public String act(SzgzAssess szgzAssess, Model model) {
         szgzAssess.setProcInsId(szgzAssess.getAct().getProcInsId());
         EntityWrapper<SzgzAssess> wrapper = new EntityWrapper<>(szgzAssess);
-//        wrapper.last("limit 1");
         SzgzAssess data = szgzAssess.selectOne(wrapper);
-//        User user = userService.selectIgnorePointById(data.getUserId());
-//        AssessNorm mainNorm = assessNormService.selectById(data.getNormId());
-//        model.addAttribute("norm", mainNorm);
         model.addAttribute("item", data);
         model.addAttribute("act", szgzAssess.getAct());
         return PREFIX + "szgzAssess_audit.html";

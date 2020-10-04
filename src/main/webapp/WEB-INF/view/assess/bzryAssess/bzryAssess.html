@@ -1,0 +1,37 @@
+@layout("/common/_container.html"){
+<div class="row">
+    <div class="col-sm-12">
+        <div class="ibox float-e-margins">
+            <div class="ibox-title">
+                <h5>表彰荣誉考核管理</h5>
+            </div>
+            <div class="ibox-content">
+                <div class="row row-lg">
+                    <div class="col-sm-12">
+                        <div class="row">
+                            <div class="col-sm-2">
+                                <#button name="搜索" icon="fa-search" clickFun="BzryAssess.search()"/>
+                            </div>
+                        </div>
+                        <div class="hidden-xs" id="BzryAssessTableToolbar" role="group">
+                            <#button name="申请考核" icon="fa-plus" clickFun="BzryAssess.apply()"/>
+
+                            @if(shiro.hasPermission("/bzryAssess/add")){
+                                <#button name="添加" icon="fa-plus" clickFun="BzryAssess.openAddBzryAssess()"/>
+                            @}
+                            @if(shiro.hasPermission("/bzryAssess/update")){
+                                <#button name="修改" icon="fa-plus" clickFun="BzryAssess.openBzryAssessDetail()" space="true"/>
+                            @}
+                            @if(shiro.hasPermission("/bzryAssess/delete")){
+                                <#button name="删除" icon="fa-plus" clickFun="BzryAssess.delete()" space="true"/>
+                            @}
+                        </div>
+                        <#table id="BzryAssessTable"/>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<script src="${ctxPath}/static/modular/assess/bzryAssess/bzryAssess.js"></script>
+@}
