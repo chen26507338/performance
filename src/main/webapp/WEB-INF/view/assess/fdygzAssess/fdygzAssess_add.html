@@ -1,0 +1,63 @@
+@layout("/common/_container.html"){
+<div class="ibox float-e-margins">
+    <div class="ibox-content">
+        <div class="form-horizontal" id="FdygzAssessForm">
+
+            <input type="hidden" id="id" value="">
+
+            <div class="row">
+
+                <div class="col-sm-6 b-r">
+                    <#input id="content" name="考核内容" underline="true"/>
+                </div>
+                <div class="col-sm-6 b-r">
+                    <#input id="procInsId" name="流程实例ID" underline="true"/>
+                </div>
+                <div class="col-sm-6 b-r">
+                    <#input id="status" name="状态" underline="true"/>
+                </div>
+                <div class="col-sm-6 b-r">
+                    <#input id="hrHandleId" name="人事经办ID" underline="true"/>
+                </div>
+                <div class="col-sm-6 b-r">
+                    <#input id="hrLeaderId" name="人事领导ID" underline="true"/>
+                </div>
+                <div class="col-sm-6 b-r">
+                    <#input id="result" name="考核结果" underline="true"/>
+                </div>
+                <div class="col-sm-6 b-r">
+                    <#input id="year" name="考核年度" underline="true"/>
+                </div>
+                <div class="col-sm-6 b-r">
+                    <#input id="studentsOfficeLeaderId" name="学生处处长ID" underline="true"/>
+                </div>
+                <div class="col-sm-6 b-r">
+                    <#input id="deanId" name="院长ID" underline="true"/>
+                </div>
+                <div class="col-sm-6 b-r">
+                    <#input id="commissionerId" name="考核专员ID" underline="true"/>
+                </div>
+                <div class="col-sm-6 b-r">
+                    <#input id="normPoint" name="考核分值" underline="true"/>
+                </div>
+                <div class="col-sm-6 b-r">
+                    <#input id="sjId" name="书记ID" underline="true"/>
+                </div>
+                <div class="col-sm-6 b-r">
+                    <#input id="twsjId" name="团委书记ID" underline="true"/>
+                </div>
+
+            </div>
+
+            <div class="row btn-group-m-t">
+                <div class="col-sm-10">
+                    <#button btnCss="info" name="提交" id="ensure" icon="fa-check" clickFun="FdygzAssessInfoDlg.addSubmit()"/>
+                    <#button btnCss="danger" name="取消" id="cancel" icon="fa-eraser" clickFun="FdygzAssessInfoDlg.close()"/>
+                </div>
+            </div>
+        </div>
+
+    </div>
+</div>
+<script src="${ctxPath}/static/modular/assess/fdygzAssess/fdygzAssess_info.js"></script>
+@}

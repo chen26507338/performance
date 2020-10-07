@@ -1,0 +1,62 @@
+@layout("/common/_container.html"){
+<div class="ibox float-e-margins">
+    <div class="ibox-content">
+        <div class="form-horizontal" id="FdygzAssessForm">
+
+            <input type="hidden" id="id" value="${item.id}">
+
+            <div class="row">
+
+                <div class="col-sm-6 b-r">
+                    <#input id="content" name="考核内容" value="${item.content}" underline="true"/>
+                </div>
+                <div class="col-sm-6 b-r">
+                    <#input id="procInsId" name="流程实例ID" value="${item.procInsId}" underline="true"/>
+                </div>
+                <div class="col-sm-6 b-r">
+                    <#input id="status" name="状态" value="${item.status}" underline="true"/>
+                </div>
+                <div class="col-sm-6 b-r">
+                    <#input id="hrHandleId" name="人事经办ID" value="${item.hrHandleId}" underline="true"/>
+                </div>
+                <div class="col-sm-6 b-r">
+                    <#input id="hrLeaderId" name="人事领导ID" value="${item.hrLeaderId}" underline="true"/>
+                </div>
+                <div class="col-sm-6 b-r">
+                    <#input id="result" name="考核结果" value="${item.result}" underline="true"/>
+                </div>
+                <div class="col-sm-6 b-r">
+                    <#input id="year" name="考核年度" value="${item.year}" underline="true"/>
+                </div>
+                <div class="col-sm-6 b-r">
+                    <#input id="studentsOfficeLeaderId" name="学生处处长ID" value="${item.studentsOfficeLeaderId}" underline="true"/>
+                </div>
+                <div class="col-sm-6 b-r">
+                    <#input id="deanId" name="院长ID" value="${item.deanId}" underline="true"/>
+                </div>
+                <div class="col-sm-6 b-r">
+                    <#input id="commissionerId" name="考核专员ID" value="${item.commissionerId}" underline="true"/>
+                </div>
+                <div class="col-sm-6 b-r">
+                    <#input id="normPoint" name="考核分值" value="${item.normPoint}" underline="true"/>
+                </div>
+                <div class="col-sm-6 b-r">
+                    <#input id="sjId" name="书记ID" value="${item.sjId}" underline="true"/>
+                </div>
+                <div class="col-sm-6 b-r">
+                    <#input id="twsjId" name="团委书记ID" value="${item.twsjId}" underline="true"/>
+                </div>
+            </div>
+
+            <div class="row btn-group-m-t">
+                <div class="col-sm-10">
+                    <#button btnCss="info" name="提交" id="ensure" icon="fa-check" clickFun="FdygzAssessInfoDlg.editSubmit()"/>
+                    <#button btnCss="danger" name="取消" id="cancel" icon="fa-eraser" clickFun="FdygzAssessInfoDlg.close()"/>
+                </div>
+            </div>
+        </div>
+
+    </div>
+</div>
+<script src="${ctxPath}/static/modular/assess/fdygzAssess/fdygzAssess_info.js"></script>
+@}

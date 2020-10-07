@@ -1,0 +1,103 @@
+@layout("/common/_container.html"){
+<div class="ibox float-e-margins">
+    <div class="ibox-content">
+        <div class="form-horizontal" id="FdygzAssessForm">
+
+            <input type="hidden" id="id" value="${item.id}">
+            <input type="hidden" id="taskId" value="${act.taskId}">
+            <input type="hidden" id="procInsId" value="${act.procInsId}">
+            <input type="hidden" id="taskDefKey" value="${act.taskDefKey}">
+
+            <div class="row">
+                <div class="col-sm-6 b-r">
+                    <#input id="comment" type="textarea" name="意见" underline="true"/>
+                </div>
+                @select(act.taskDefKey){
+                @   case "re_commit":
+                <div class="col-sm-6 b-r">
+                    <#input id="content" name="考核内容" value="${item.content}" underline="true"/>
+                </div>
+                @   case "commissioner_audit","stu_office_leader_audit","sj_audit":
+                <div class="col-sm-6 b-r">
+                    <#input id="content" name="考核内容" value="${item.content}" underline="true" readonly="readonly"/>
+                </div>
+                @   case "hr_leader_audit":
+                <div class="col-sm-6 b-r">
+                    <#input id="content" name="考核内容" value="${item.content}" underline="true" readonly="readonly"/>
+                </div>
+                <div class="col-sm-6 b-r">
+                    <#input id="year" name="考核年度" value="${item.year}" underline="true" readonly="readonly"/>
+                </div>
+                <div class="col-sm-6 b-r">
+                    <#input id="point" name="分值" value="${item.point}" underline="true" readonly="readonly"/>
+                </div>
+                @case "hr_handle_audit":
+                <div class="col-sm-6 b-r">
+                    <#input id="content" name="考核内容" value="${item.content}" underline="true" readonly="readonly"/>
+                </div>
+                <div class="col-sm-6 b-r">
+                    <#input id="year" name="设置年度" underline="true" />
+                </div>
+                <div class="col-sm-6 b-r">
+                    <#input id="point" name="分值"  underline="true" />
+                </div>
+                @case "ftwsj_audit":
+                <div class="col-sm-6 b-r">
+                    <#button btnCss="info" name="添加职工" icon="fa-plus" clickFun="FdygzAssessInfoDlg.addItem()"/>
+                    总共${item.point}分
+                </div>
+                <div class="col-sm-12 b-r" id="itemsArea">
+
+                </div>
+                @}
+            </div>
+            @select(act.taskDefKey){
+            @   case "sj_audit":
+            <table id="assessTable" lay-filter="test"></table>
+            @}
+
+            <div class="row btn-group-m-t">
+                <div class="col-sm-10">
+                    @if(act.taskDefKey == "re_commit"){
+                    <#button btnCss="info" name="重新提交" id="ensure" icon="fa-check" clickFun="FdygzAssessInfoDlg.auditSubmit(1)"/>
+                    <#button btnCss="danger" name="放弃审核" id="cancel" icon="fa-eraser" clickFun="FdygzAssessInfoDlg.auditSubmit(0)"/>
+                    @}else if(act.taskDefKey == "general_audit"){
+                    <#button btnCss="info" name="确认" id="ensure" icon="fa-check" clickFun="FdygzAssessInfoDlg.auditSubmit(1)"/>
+                    @}else{
+                    <#button btnCss="info" name="通过" id="ensure" icon="fa-check" clickFun="FdygzAssessInfoDlg.auditSubmit(1)"/>
+                    <#button btnCss="danger" name="驳回" id="cancel" icon="fa-eraser" clickFun="FdygzAssessInfoDlg.auditSubmit(0)"/>
+                    @}
+                    @if(act.taskDefKey == "hr_leader_audit"){
+                    <#button btnCss="danger" name="重新设置年度" id="cancel" icon="fa-eraser" clickFun="FdygzAssessInfoDlg.auditSubmit(2)"/>
+                    @}
+                    @if(act.taskDefKey == "secretary_audit"){
+                    <#button btnCss="danger" name="重新选择考核指标" id="cancel" icon="fa-eraser" clickFun="FdygzAssessInfoDlg.auditSubmit(2)"/>
+                    @}
+                    <#button btnCss="danger" name="关闭" id="cancel" icon="fa-eraser" clickFun="FdygzAssessInfoDlg.close()"/>
+                </div>
+            </div>
+            <#histoicFlow procInsId="${act.procInsId}"/>
+        </div>
+
+        <script type="text/template" id="itemTemplate">
+            <form class="form col-sm-1 " name="FdygzAssessItem" id="FdygzAssessItem">
+                <div class="form-group">
+                    <label>职工编号</label>
+                    <input class="form-control" type="text" name="userNo" >
+                </div>
+                <div class="form-group">
+                    <label>校级分</label>
+                    <input class="form-control" type="text" name="mainPoint" >
+                </div>
+                <div class="form-group">
+                    <#button btnCss="danger" name="删除" id="cancel" icon="fa-remove" clickFun="FdygzAssessInfoDlg.deleteItem(event)"/>
+                </div>
+            </form>
+        </script>
+    </div>
+</div>
+<script>
+    var proInsId = '${act.procInsId}';
+</script>
+<script src="${ctxPath}/static/modular/assess/fdygzAssess/fdygzAssess_info.js"></script>
+@}
