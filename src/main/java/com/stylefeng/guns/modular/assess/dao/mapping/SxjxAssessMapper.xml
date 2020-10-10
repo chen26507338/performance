@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.stylefeng.guns.modular.assess.dao.SxjxAssessMapper">
+
+	<!-- 通用查询映射结果 -->
+	<resultMap id="BaseResultMap" type="com.stylefeng.guns.modular.assess.model.SxjxAssess">
+            <id column="id" property="id" />
+            <result column="proc_ins_id" property="procInsId" />
+            <result column="status" property="status" />
+            <result column="hr_handle_id" property="hrHandleId" />
+            <result column="content" property="content" />
+            <result column="problem_url" property="problemUrl" />
+            <result column="result" property="result" />
+            <result column="dean_id" property="deanId" />
+            <result column="sxjx_commissioner" property="sxjxCommissioner" />
+            <result column="main_norm_point" property="mainNormPoint" />
+            <result column="college_norm_point" property="collegeNormPoint" />
+            <result column="dept_id" property="deptId" />
+            <result column="hr_leader_id" property="hrLeaderId" />
+            <result column="sxsgl_user" property="sxsglUser" />
+            <result column="result_url" property="resultUrl" />
+            <result column="coe_point" property="coePoint" />
+	</resultMap>
+
+    <!-- 通用查询结果列 -->
+    <sql id="Base_Column_List">
+	    id AS id,
+	    proc_ins_id AS procInsId,
+	    status AS status,
+	    hr_handle_id AS hrHandleId,
+	    content AS content,
+	    problem_url AS problemUrl,
+	    result AS result,
+	    dean_id AS deanId,
+	    sxjx_commissioner AS sxjxCommissioner,
+	    main_norm_point AS mainNormPoint,
+	    college_norm_point AS collegeNormPoint,
+	    dept_id AS deptId,
+	    hr_leader_id AS hrLeaderId,
+	    sxsgl_user AS sxsglUser,
+	    result_url AS resultUrl,
+	    coe_point AS coePoint
+    </sql>
+
+</mapper>

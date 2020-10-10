@@ -209,8 +209,6 @@ public class DzbWorkAssessServiceImpl extends ServiceImpl<DzbWorkAssessMapper, D
     @Override
     @Transactional
     public void doAllocation(DzbWorkAssess dzbWorkAssess) {
-
-
         String dataJson = (String) dzbWorkAssess.getExpand().get("data");
         List<Map> maps = JSON.parseArray(dataJson, Map.class);
 

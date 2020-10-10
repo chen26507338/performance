@@ -1,0 +1,69 @@
+@layout("/common/_container.html"){
+<div class="ibox float-e-margins">
+    <div class="ibox-content">
+        <div class="form-horizontal" id="SxjxAssessForm">
+
+            <input type="hidden" id="id" value="">
+
+            <div class="row">
+
+                <div class="col-sm-6 b-r">
+                    <#input id="procInsId" name="流程实例ID" underline="true"/>
+                </div>
+                <div class="col-sm-6 b-r">
+                    <#input id="status" name="状态" underline="true"/>
+                </div>
+                <div class="col-sm-6 b-r">
+                    <#input id="hrHandleId" name="人事经办ID" underline="true"/>
+                </div>
+                <div class="col-sm-6 b-r">
+                    <#input id="content" name="考核内容" underline="true"/>
+                </div>
+                <div class="col-sm-6 b-r">
+                    <#avatar id="problemUrl" name="考核问题图片" underline="true"/>
+                </div>
+                <div class="col-sm-6 b-r">
+                    <#input id="result" name="整改内容" underline="true"/>
+                </div>
+                <div class="col-sm-6 b-r">
+                    <#input id="deanId" name="院长ID" underline="true"/>
+                </div>
+                <div class="col-sm-6 b-r">
+                    <#input id="sxjxCommissioner" name="实训绩效考核专员ID" underline="true"/>
+                </div>
+                <div class="col-sm-6 b-r">
+                    <#input id="mainNormPoint" name="校级指标分" underline="true"/>
+                </div>
+                <div class="col-sm-6 b-r">
+                    <#input id="collegeNormPoint" name="院级浮动值" underline="true"/>
+                </div>
+                <div class="col-sm-6 b-r">
+                    <#input id="deptId" name="部门ID" underline="true"/>
+                </div>
+                <div class="col-sm-6 b-r">
+                    <#input id="hrLeaderId" name="人事领导ID" underline="true"/>
+                </div>
+                <div class="col-sm-6 b-r">
+                    <#input id="sxsglUser" name="实训室管理人员ID" underline="true"/>
+                </div>
+                <div class="col-sm-6 b-r">
+                    <#avatar id="resultUrl" name="整改结果图片" underline="true"/>
+                </div>
+                <div class="col-sm-6 b-r">
+                    <#input id="coePoint" name="考核系数" underline="true"/>
+                </div>
+
+            </div>
+
+            <div class="row btn-group-m-t">
+                <div class="col-sm-10">
+                    <#button btnCss="info" name="提交" id="ensure" icon="fa-check" clickFun="SxjxAssessInfoDlg.addSubmit()"/>
+                    <#button btnCss="danger" name="取消" id="cancel" icon="fa-eraser" clickFun="SxjxAssessInfoDlg.close()"/>
+                </div>
+            </div>
+        </div>
+
+    </div>
+</div>
+<script src="${ctxPath}/static/modular/assess/sxjxAssess/sxjxAssess_info.js"></script>
+@}

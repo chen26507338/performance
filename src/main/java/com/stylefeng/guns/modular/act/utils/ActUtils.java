@@ -50,6 +50,7 @@ public class ActUtils {
 	public static final String[] PD_TASK_FDYSZGZ_ASSESS = new String[]{"fdyszgz_assess", "szgz_assess"};
 	public static final String[] PD_TASK_SZJSSZGZ_ASSESS = new String[]{"szjsszgz_assess", "szgz_assess"};
 	public static final String[] PD_TASK_DZB_WORK_ASSESS = new String[]{"dzb_work_assess", "dzb_work_assess"};
+	public static final String[] PD_TASK_SXJX_ASSESS = new String[]{"sxjx_assess", "sxjx_assess"};
 	public static final String[] PD_TASK_TEACHING_LOAD_ASSESS = new String[]{"teaching_load_assess", "teaching_load_assess"};
 	public static final String[] PD_TASK_MAJOR_BUILD_APPROVAL = new String[]{"major_build_approval", "major_build"};
 	public static final String[] PD_TASK_MAJOR_BUILD_CHECK = new String[]{"major_build_check", "major_build"};
