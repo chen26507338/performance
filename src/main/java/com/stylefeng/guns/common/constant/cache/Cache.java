@@ -23,4 +23,6 @@ public interface Cache {
     String USER_CHOOSE_LOCK_CACHE = "user_choose_lock_cache";
 
     String TOKEN_USED = "token_used";
+
+    String JOB_PRICE_DATA = "job_price_data";
 }

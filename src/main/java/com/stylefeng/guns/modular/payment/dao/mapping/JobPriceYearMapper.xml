@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.stylefeng.guns.modular.payment.dao.JobPriceYearMapper">
+
+	<!-- 通用查询映射结果 -->
+	<resultMap id="BaseResultMap" type="com.stylefeng.guns.modular.payment.model.JobPriceYear">
+            <id column="id" property="id" />
+            <result column="user_id" property="userId" />
+            <result column="month_1" property="month1" />
+            <result column="month_2" property="month2" />
+            <result column="month_3" property="month3" />
+            <result column="month_4" property="month4" />
+            <result column="month_5" property="month5" />
+            <result column="month_6" property="month6" />
+            <result column="month_7" property="month7" />
+            <result column="month_8" property="month8" />
+            <result column="month_9" property="month9" />
+            <result column="month_10" property="month10" />
+            <result column="month_11" property="month11" />
+            <result column="month_12" property="month12" />
+            <result column="status" property="status" />
+	</resultMap>
+
+    <!-- 通用查询结果列 -->
+    <sql id="Base_Column_List">
+	    id AS id,
+	    user_id AS userId,
+	    month_1 AS month1,
+	    month_2 AS month2,
+	    month_3 AS month3,
+	    month_4 AS month4,
+	    month_5 AS month5,
+	    month_6 AS month6,
+	    month_7 AS month7,
+	    month_8 AS month8,
+	    month_9 AS month9,
+	    month_10 AS month10,
+	    month_11 AS month11,
+	    month_12 AS month12,
+	    status AS status
+    </sql>
+
+</mapper>

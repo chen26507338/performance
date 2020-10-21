@@ -112,6 +112,10 @@ public interface IRoleService extends IService<Role> {
      * 角色类型：学院教学干事
      */
     long TYPE_DEPT_TEACHING = 30;
+    /**
+     * 角色类型：人事绩效专员
+     */
+    long TYPE_RSJX_HR = 39;
 
     /**
      * 设置某个角色的权限

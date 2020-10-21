@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.stylefeng.guns.modular.payment.dao.JobPriceMonthMapper">
+
+	<!-- 通用查询映射结果 -->
+	<resultMap id="BaseResultMap" type="com.stylefeng.guns.modular.payment.model.JobPriceMonth">
+            <id column="id" property="id" />
+            <result column="user_id" property="userId" />
+            <result column="base_price" property="basePrice" />
+            <result column="mgr_price" property="mgrPrice" />
+            <result column="retroactive_price" property="retroactivePrice" />
+            <result column="garnished_price" property="garnishedPrice" />
+            <result column="remark" property="remark" />
+            <result column="year" property="year" />
+            <result column="dept_id" property="deptId" />
+            <result column="month" property="month" />
+	</resultMap>
+
+    <!-- 通用查询结果列 -->
+    <sql id="Base_Column_List">
+	    id AS id,
+	    user_id AS userId,
+	    base_price AS basePrice,
+	    mgr_price AS mgrPrice,
+	    retroactive_price AS retroactivePrice,
+	    garnished_price AS garnishedPrice,
+	    remark AS remark,
+	    year AS year,
+	    dept_id AS deptId,
+	    month AS month
+    </sql>
+
+</mapper>

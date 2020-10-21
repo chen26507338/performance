@@ -1,0 +1,66 @@
+@layout("/common/_container.html"){
+<div class="ibox float-e-margins">
+    <div class="ibox-content">
+        <div class="form-horizontal" id="JobPriceYearForm">
+
+            <input type="hidden" id="id" value="">
+
+            <div class="row">
+
+                <div class="col-sm-6 b-r">
+                    <#input id="userId" name="用户ID" underline="true"/>
+                </div>
+                <div class="col-sm-6 b-r">
+                    <#input id="month1" name="一月" underline="true"/>
+                </div>
+                <div class="col-sm-6 b-r">
+                    <#input id="month2" name="二月" underline="true"/>
+                </div>
+                <div class="col-sm-6 b-r">
+                    <#input id="month3" name="三月" underline="true"/>
+                </div>
+                <div class="col-sm-6 b-r">
+                    <#input id="month4" name="四月" underline="true"/>
+                </div>
+                <div class="col-sm-6 b-r">
+                    <#input id="month5" name="五月" underline="true"/>
+                </div>
+                <div class="col-sm-6 b-r">
+                    <#input id="month6" name="六月" underline="true"/>
+                </div>
+                <div class="col-sm-6 b-r">
+                    <#input id="month7" name="七月" underline="true"/>
+                </div>
+                <div class="col-sm-6 b-r">
+                    <#input id="month8" name="八月" underline="true"/>
+                </div>
+                <div class="col-sm-6 b-r">
+                    <#input id="month9" name="九月" underline="true"/>
+                </div>
+                <div class="col-sm-6 b-r">
+                    <#input id="month10" name="十月" underline="true"/>
+                </div>
+                <div class="col-sm-6 b-r">
+                    <#input id="month11" name="十一月" underline="true"/>
+                </div>
+                <div class="col-sm-6 b-r">
+                    <#input id="month12" name="十二月" underline="true"/>
+                </div>
+                <div class="col-sm-6 b-r">
+                    <#input id="status" name="状态" underline="true"/>
+                </div>
+
+            </div>
+
+            <div class="row btn-group-m-t">
+                <div class="col-sm-10">
+                    <#button btnCss="info" name="提交" id="ensure" icon="fa-check" clickFun="JobPriceYearInfoDlg.addSubmit()"/>
+                    <#button btnCss="danger" name="取消" id="cancel" icon="fa-eraser" clickFun="JobPriceYearInfoDlg.close()"/>
+                </div>
+            </div>
+        </div>
+
+    </div>
+</div>
+<script src="${ctxPath}/static/modular/payment/jobPriceYear/jobPriceYear_info.js"></script>
+@}
