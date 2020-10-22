@@ -25,7 +25,7 @@ JobPriceMonth.initColumn = function () {
        ,{title: '备注', field:'remark', visible: true, align: 'center', valign: 'middle'}
        ,{title: '年度', field:'year', visible: true, align: 'center', valign: 'middle'}
        ,{title: '部门', field:'expand.deptName', visible: true, align: 'center', valign: 'middle'}
-       ,{title: ' 月度', field:'month', visible: true, align: 'center', valign: 'middle'}
+       ,{title: ' 月份', field:'month', visible: true, align: 'center', valign: 'middle'}
         ,{title: '状态', field:'status', visible: true, align: 'center', valign: 'middle',formatter:function(value, row, index){return row.expand.statusDict;}}
     ];
 };
@@ -65,6 +65,7 @@ JobPriceMonth.check = function () {
  */
 JobPriceMonth.formParams = function() {
     var queryData = {};
+    queryData['month'] = $("#month").val();
     return queryData;
 };
 
@@ -116,6 +117,19 @@ JobPriceMonth.delete = function () {
             ajax.start();
         });
     }
+};
+/**
+ * 删除月度岗位责任奖
+ */
+JobPriceMonth.exportJobPrice = function () {
+    var month = $("#month").val();
+    if (!month) {
+        Feng.error("请输入要导出的月份");
+        return;
+    }
+    Feng.confirm("是否导出月度报表", function () {
+        window.open(Feng.ctxPath + "/jobPriceMonth/exportData?month=" + month);
+    });
 };
 
 /**

@@ -1,5 +1,10 @@
 package com.stylefeng.guns.modular.payment.controller;
 
+import cn.hutool.core.io.IoUtil;
+import cn.hutool.core.util.StrUtil;
+import cn.hutool.core.util.URLUtil;
+import cn.hutool.poi.excel.ExcelUtil;
+import cn.hutool.poi.excel.ExcelWriter;
 import com.baomidou.mybatisplus.mapper.EntityWrapper;
 import com.baomidou.mybatisplus.plugins.Page;
 import com.stylefeng.guns.common.constant.factory.PageFactory;
@@ -7,6 +12,7 @@ import com.stylefeng.guns.common.constant.state.YesNo;
 import com.stylefeng.guns.core.base.controller.BaseController;
 import com.stylefeng.guns.core.log.LogObjectHolder;
 import com.stylefeng.guns.core.shiro.ShiroKit;
+import com.stylefeng.guns.core.support.HttpKit;
 import com.stylefeng.guns.modular.payment.decorator.JobPriceMonthDecorator;
 import com.stylefeng.guns.modular.payment.model.JobPriceMonth;
 import com.stylefeng.guns.modular.payment.service.IJobPriceMonthService;
@@ -19,6 +25,9 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
+import javax.servlet.ServletOutputStream;
+import javax.servlet.http.HttpServletResponse;
+import java.io.IOException;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -80,6 +89,9 @@ public class JobPriceMonthController extends BaseController {
     public Object list(JobPriceMonth jobPriceMonth) {
         Page<JobPriceMonth> page = new PageFactory<JobPriceMonth>().defaultPage();
         EntityWrapper< JobPriceMonth> wrapper = new EntityWrapper<>();
+        if (StrUtil.isNotBlank(jobPriceMonth.getMonth())) {
+            wrapper.eq("month", jobPriceMonth.getMonth());
+        }
         jobPriceMonthService.selectPage(page,wrapper);
         page.setRecords(new JobPriceMonthDecorator(page.getRecords()).decorate());
         return packForBT(page);
@@ -152,6 +164,58 @@ public class JobPriceMonthController extends BaseController {
     @RequestMapping("/importData")
     public Object importData() {
         return ShiroKit.getSession().getAttribute("jobPriceMonthData");
+    }
+
+    /**
+     *
+     */
+    @RequestMapping("/exportData")
+    public void exportData(JobPriceMonth jobPriceMonth) throws IOException {
+        List<JobPriceMonth> jobPriceMonths = jobPriceMonthService.selectList(new EntityWrapper<>(jobPriceMonth));
+        JobPriceMonth total = new JobPriceMonth();
+        total.putExpand("account", "总计");
+        total.putExpand("name", " ");
+        total.setResultPrice(0d);
+        total.setShouldPrice(0d);
+        total.setBasePrice(0d);
+        total.setMgrPrice(0d);
+        total.setRetroactivePrice(0d);
+        total.setGarnishedPrice(0d);
+        for (JobPriceMonth priceMonth : jobPriceMonths) {
+            total.setBasePrice(priceMonth.getBasePrice() + total.getBasePrice());
+            total.setMgrPrice(priceMonth.getMgrPrice() + total.getMgrPrice());
+            total.setRetroactivePrice(priceMonth.getRetroactivePrice() + total.getRetroactivePrice());
+            total.setShouldPrice(priceMonth.getShouldPrice() + total.getShouldPrice());
+            total.setGarnishedPrice(priceMonth.getGarnishedPrice() + total.getGarnishedPrice());
+            total.setResultPrice(priceMonth.getResultPrice() + total.getResultPrice());
+        }
+        jobPriceMonths.add(total);
+        List<Map<String, Object>> datas = new JobPriceMonthDecorator(jobPriceMonths).decorateMaps();
+
+        ExcelWriter writer = ExcelUtil.getWriter(true);
+        writer.addHeaderAlias("account", "职工编号");
+        writer.addHeaderAlias("name", "职工姓名");
+        writer.addHeaderAlias("basePrice", "基本岗位责任奖");
+        writer.addHeaderAlias("mgrPrice", "管理服务工作奖");
+        writer.addHeaderAlias("retroactivePrice", "补发");
+        writer.addHeaderAlias("shouldPrice", "应发数");
+        writer.addHeaderAlias("garnishedPrice", "扣发");
+        writer.addHeaderAlias("resultPrice", "实发数");
+        writer.addHeaderAlias("remark", "备注");
+        writer.setOnlyAlias(true);
+        writer.write(datas, true);
+        HttpServletResponse response = HttpKit.getResponse();
+
+        response.setContentType("application/vnd.ms-excel;charset=utf-8");
+        //弹出下载对话框的文件名，不能为中文，中文请自行编码
+        response.setHeader("Content-Disposition", URLUtil.encode(StrUtil.format("attachment;filename={}月份责任岗位奖.xlsx",jobPriceMonth.getMonth())));
+        ServletOutputStream out = response.getOutputStream();
+
+        writer.flush(out, true);
+        // 关闭writer，释放内存
+        writer.close();
+        //此处记得关闭输出Servlet流
+        IoUtil.close(out);
     }
 
 

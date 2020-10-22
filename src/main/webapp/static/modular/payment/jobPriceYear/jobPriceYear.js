@@ -14,7 +14,8 @@ var JobPriceYear = {
 JobPriceYear.initColumn = function () {
     return [
         {field: 'selectItem', radio: true}
-       ,{title: '用户ID', field:'userId', visible: true, align: 'center', valign: 'middle'}
+       ,{title: '职工编号', field:'expand.account', visible: true, align: 'center', valign: 'middle'}
+       ,{title: '职工姓名', field:'expand.name', visible: true, align: 'center', valign: 'middle'}
        ,{title: '一月', field:'month1', visible: true, align: 'center', valign: 'middle'}
        ,{title: '二月', field:'month2', visible: true, align: 'center', valign: 'middle'}
        ,{title: '三月', field:'month3', visible: true, align: 'center', valign: 'middle'}
@@ -27,7 +28,6 @@ JobPriceYear.initColumn = function () {
        ,{title: '十月', field:'month10', visible: true, align: 'center', valign: 'middle'}
        ,{title: '十一月', field:'month11', visible: true, align: 'center', valign: 'middle'}
        ,{title: '十二月', field:'month12', visible: true, align: 'center', valign: 'middle'}
-       ,{title: '状态', field:'status', visible: true, align: 'center', valign: 'middle',formatter:function(value, row, index){return row.expand.statusDict;}}
     ];
 };
 
@@ -52,6 +52,16 @@ JobPriceYear.check = function () {
 JobPriceYear.formParams = function() {
     var queryData = {};
     return queryData;
+};
+
+/**
+ * 导出
+ */
+JobPriceYear.exportJobPrice = function () {
+
+    Feng.confirm("是否导出年度报表", function () {
+        window.open(Feng.ctxPath + "/jobPriceYear/exportData");
+    });
 };
 
 

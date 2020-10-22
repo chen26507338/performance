@@ -99,17 +99,18 @@ public class JobPriceMonthServiceImpl extends ServiceImpl<JobPriceMonthMapper, J
                         params.setMonth(priceMonth.getMonth());
                         params.setUserId(priceMonth.getUserId());
                         JobPriceMonth oldJobPrice = this.selectOne(new EntityWrapper<>(params));
+                        String monthFieldName = "month" + priceMonth.getMonth();
                         if (oldJobPrice != null) {
-                            double price = (double) ReflectUtil.getFieldValue(jobPriceYear, "month" + priceMonth.getMonth());
+                            double price = (double) ReflectUtil.getFieldValue(jobPriceYear, monthFieldName);
                             price = price - oldJobPrice.getResultPrice();
-                            ReflectUtil.setFieldValue(jobPriceYear, "month" + oldJobPrice.getMonth(), price + priceMonth.getResultPrice());
-                            jobPriceYearService.updateById(jobPriceYear);
+                            ReflectUtil.setFieldValue(jobPriceYear, monthFieldName, price + priceMonth.getResultPrice());
                             oldJobPrice.deleteById();
                         } else {
-                            Object price = ReflectUtil.getFieldValue(jobPriceYear, "month" + priceMonth.getMonth());
-                            ReflectUtil.setFieldValue(jobPriceYear, "month" + priceMonth.getMonth(), price != null ? (double) price : 0 + priceMonth.getResultPrice());
-                            jobPriceYearService.insert(jobPriceYear);
+                            Object price = ReflectUtil.getFieldValue(jobPriceYear, monthFieldName);
+                            double newPrice = (price != null ? (double) price : 0) + priceMonth.getResultPrice();
+                            ReflectUtil.setFieldValue(jobPriceYear, monthFieldName, newPrice);
                         }
+                        jobPriceYearService.insertOrUpdate(jobPriceYear);
                     }
 
                     params = new JobPriceMonth();
@@ -143,6 +144,15 @@ public class JobPriceMonthServiceImpl extends ServiceImpl<JobPriceMonthMapper, J
         if (StrUtil.isBlank(jobPriceMonth.getMonth())) {
             throw new GunsException("月份不能为空");
         }
+        try {
+            int month = Integer.parseInt(jobPriceMonth.getMonth());
+            if (month < 1 || month > 12) {
+                throw new GunsException("请输入1-12数字");
+            }
+        } catch (NumberFormatException e) {
+            throw new GunsException("请输入数字");
+        }
+
         if (StrUtil.isBlank(jobPriceMonth.getExpand().get("fileName").toString())) {
             throw new GunsException("请导入数据");
         }
