@@ -30,21 +30,20 @@
                         <table class="layui-table">
                             <tbody>
                             <tr>
+                                <td rowspan="3"><img src="${ctxPath}/kaptcha/${item.avatar}"></td>
                                 <td>姓名:&nbsp;&nbsp;${item.name!}</td>
                                 <td>身份证号码:&nbsp;&nbsp;${item.idCard!}</td>
                                 <td>出生年月:&nbsp;&nbsp;${item != null && item.birthday != null ? dateUtil.formatDate(item.birthday,"yyyy-MM-dd")}</td>
-                                <td>性别:&nbsp;&nbsp;${item != null && item.sex != null ? constant.getDictsByName("性别",item.sex)}</td>
                             </tr>
                             <tr>
+                                <td>性别:&nbsp;&nbsp;${item != null && item.sex != null ? constant.getDictsByName("性别",item.sex)}</td>
                                 <td>年龄:&nbsp;&nbsp;${item.age!}</td>
                                 <td>（拟）离退休时间:&nbsp;&nbsp;${item != null && item.retireDate != null ? dateUtil.formatDate(item.retireDate,"yyyy-MM-dd")}</td>
-                                <td>籍贯:&nbsp;&nbsp;${item.nativePlace!}</td>
-                                <td>出生地:&nbsp;&nbsp;${item.birthplace!}</td>
                             </tr>
                             <tr>
+                                <td>籍贯:&nbsp;&nbsp;${item.nativePlace!}</td>
+                                <td>出生地:&nbsp;&nbsp;${item.birthplace!}</td>
                                 <td>党派:&nbsp;&nbsp;${item.partyGroupings!}</td>
-                                <td>用工类型:&nbsp;&nbsp;${item != null && item.jobType != null ? constant.getDictsByName("用工类型",item.jobType)}</td>
-                                <td colspan="2">现居住地（填至街道）:&nbsp;&nbsp;${item.address!}</td>
                             </tr>
                             <tr>
                                 <td>人员状态:&nbsp;&nbsp;${item != null && item.personalState != null ? constant.getDictsByName("人员状态",item.personalState)}</td>
@@ -53,15 +52,16 @@
                                 <td>联系电话2（手机）:&nbsp;&nbsp;${item.phone!}</td>
                             </tr>
                             <tr>
+                                <td >现居住地（填至街道）:&nbsp;&nbsp;${item.address!}</td>
                                 <td>紧急联系人:&nbsp;&nbsp;${item.emergencyContact!}</td>
                                 <td>关系:&nbsp;&nbsp;${item != null && item.emergencyRelation != null ? constant.getDictsByName("紧急联系人关系",item.emergencyRelation)}</td>
-                                <td colspan="2">紧急联系人联系电话:&nbsp;&nbsp;${item.emergencyMobile!}</td>
+                                <td>用工类型:&nbsp;&nbsp;${item != null && item.jobType != null ? constant.getDictsByName("用工类型",item.jobType)}</td>
                             </tr>
                             <tr>
                                 <td>QQ:&nbsp;&nbsp;${item.qq!}</td>
                                 <td>微信号:&nbsp;&nbsp;${item.wechat!}</td>
                                 <td>电子邮箱:&nbsp;&nbsp;${item.email!}</td>
-                                <td></td>
+                                <td>紧急联系人联系电话:&nbsp;&nbsp;${item.emergencyMobile!}</td>
                             </tr>
                             </tbody>
                         </table>
