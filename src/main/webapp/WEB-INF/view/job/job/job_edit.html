@@ -9,6 +9,9 @@
                 <div class="col-sm-6 b-r">
                     <#input id="name" name="名称" value="${item.name}" underline="true"/>
                 </div>
+                <div class="col-sm-6 b-r">
+                    <#input id="des" name="描述" value="${item.des}" underline="true"/>
+                </div>
 
                 <div class="col-sm-6 b-r">
                     <#select id="status" name="状态" items="${constant.getDictsByName('通用状态')}"

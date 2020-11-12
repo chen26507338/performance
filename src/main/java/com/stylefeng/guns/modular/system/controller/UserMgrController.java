@@ -95,6 +95,23 @@ public class UserMgrController extends BaseController {
         model.addAttribute("deptList", deptService.selectAllOn());
         return PREFIX + "user_add.html";
     }
+    /**
+     * 跳转到查看管理员列表的页面
+     */
+    @RequestMapping("/open_import")
+    public String openImport() {
+        return PREFIX + "user_import.html";
+    }
+
+    /**
+     * 跳转到查看管理员列表的页面
+     */
+    @RequestMapping("/import")
+    @ResponseBody
+    public Object importUser(User user) {
+        userService.importUser(user);
+        return SUCCESS_TIP;
+    }
 
     /**
      * 跳转到角色分配页面

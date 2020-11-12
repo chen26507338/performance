@@ -48,6 +48,7 @@ JobInfoDlg.collectData = function() {
     this
     .set('id')
     .set('name')
+    .set('des')
     .set('deptId')
     .set('status')
     ;

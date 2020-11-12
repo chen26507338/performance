@@ -1,7 +1,10 @@
 package com.stylefeng.guns.modular.system.controller;
 
+import com.stylefeng.guns.common.persistence.model.User;
 import com.stylefeng.guns.core.base.controller.BaseController;
+import com.stylefeng.guns.core.shiro.ShiroKit;
 import com.stylefeng.guns.modular.system.dao.NoticeDao;
+import com.stylefeng.guns.modular.system.service.IUserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -21,8 +24,9 @@ import java.util.Map;
 @RequestMapping("${guns.admin-prefix}/blackboard")
 public class BlackboardController extends BaseController {
 
-    @Resource
-    NoticeDao noticeDao;
+    @Autowired
+    private IUserService userService;
+
 
     /**
      * 跳转到黑板
@@ -31,6 +35,8 @@ public class BlackboardController extends BaseController {
     public String blackboard(Model model) {
 //        List<Map<String, Object>> notices = noticeDao.list(null);
 //        model.addAttribute("noticeList",notices);
+        User user = userService.selectById(ShiroKit.getUser().id);
+        model.addAttribute("item", user);
         return "/blackboard.html";
     }
 }

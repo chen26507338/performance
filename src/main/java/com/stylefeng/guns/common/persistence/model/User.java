@@ -186,6 +186,86 @@ public class User extends BaseModel<User> {
      */
     @TableField("first_work_time")
     private Date firstWorkTime;
+    /**
+     * 学历
+     */
+    @TableField("education")
+    private String education;
+    /**
+     * 学位
+     */
+    @TableField("degree")
+    private String degree;
+    /**
+     * 职务
+     */
+    @TableField("post")
+    private String post;
+    /**
+     * 职级
+     */
+    @TableField("zhi_ji")
+    private String zhiJi;
+    /**
+     * 职称
+     */
+    @TableField("zhi_chen")
+    private String zhiChen;
+    /**
+     * 职称等级
+     */
+    @TableField("zc_level")
+    private String zcLevel;
+    /**
+     * 专业岗位
+     */
+    @TableField("zy_job")
+    private String zyJob;
+    /**
+     * 毕业院校
+     */
+    @TableField("college")
+    private String college;
+    /**
+     * 专业
+     */
+    @TableField("major")
+    private String major;
+    /**
+     * 工龄起算时间
+     */
+    @TableField("gl_sj")
+    private String glSj;
+    /**
+     * 岗位类别
+     */
+    @TableField("gw_type")
+    private String gwType;
+    /**
+     * 岗位类别
+     */
+    @TableField("dx_sj")
+    private String dxSj;
+    /**
+     * 参保时间
+     */
+    @TableField("cb_sj")
+    private String cbSj;
+    /**
+     * 工资职级
+     */
+    @TableField("gzzj")
+    private String gzzj;
+    /**
+     * 聘期起始时间
+     */
+    @TableField("pqqs")
+    private String pqqs;
+    /**
+     * 个人身份
+     */
+    @TableField("grsf")
+    private String grsf;
 
 
     @Override

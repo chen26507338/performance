@@ -24,20 +24,21 @@ import java.util.List;
  */
  @Service
 public class JobServiceImpl extends ServiceImpl<JobMapper, Job> implements IJobService {
+
     @Override
-    @Cacheable(value = Cache.CONSTANT,key = "'"+CACHE_ENTITY+"'+#id")
+    @Cacheable(value = Cache.JOB,key = "'"+CACHE_ENTITY+"'+#id")
     public Job selectById(Serializable id) {
         return super.selectById(id);
     }
 
     @Override
-    @CacheEvict(value = Cache.CONSTANT,key = "'"+CACHE_LIST+"'")
+    @CacheEvict(value = Cache.JOB,allEntries = true)
     public boolean insert(Job entity) {
         return super.insert(entity);
     }
 
     @Override
-    @Cacheable(value = Cache.CONSTANT,key = "'"+CACHE_LIST+"'")
+    @Cacheable(value = Cache.JOB,key = "'"+CACHE_LIST+"'")
     public List<Job> selectAllOn() {
         Job param = new Job();
         param.setStatus(YesNo.YES.getCode());
@@ -45,11 +46,20 @@ public class JobServiceImpl extends ServiceImpl<JobMapper, Job> implements IJobS
     }
 
     @Override
-    @Caching(evict = {@CacheEvict(value = Cache.CONSTANT,key = "'"+CACHE_LIST+"'"),
-            @CacheEvict(value = Cache.CONSTANT,key = "'"+CACHE_ENTITY+"'+#entity.id")
-    })
+    @Cacheable(value = Cache.JOB,key = "'"+CACHE_ENTITY+"'+#job.deptId+#job.name")
+    public Job getDeptName(Job job) {
+        return this.selectOne(new EntityWrapper<>(job));
+    }
+
+    @Override
+    @CacheEvict(value = Cache.JOB,allEntries = true)
     public boolean updateById(Job entity) {
         return super.updateById(entity);
     }
 
+    @Override
+    @CacheEvict(value = Cache.JOB,allEntries = true)
+    public boolean deleteById(Serializable id) {
+        return super.deleteById(id);
+    }
 }

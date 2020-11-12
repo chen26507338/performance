@@ -84,6 +84,32 @@ UserInfoDlg.onClickDept = function (e, treeId, treeNode) {
 };
 
 /**
+ * 提交导入
+ */
+UserInfoDlg.importSubmit = function() {
+
+    this.clearData();
+    this.collectData();
+    //
+    // if (!this.validate()) {
+    //     return;
+    // }
+    //
+    // //提交信息
+    var ajax = new $ax(Feng.ctxPath + "/mgr/import", function(data){
+        Feng.success("导入成功!");
+        window.parent.MgrUser.table.refresh();
+        UserInfoDlg.close();
+    },function(data){
+        Feng.error("导入失败!" + data.responseJSON.message + "!");
+    });
+    this.userInfoData['expand["fileName"]'] = $("#fileName").val();
+    ajax.set(this.userInfoData);
+    ajax.start();
+};
+
+
+/**
  * 显示部门选择的树
  *
  * @returns

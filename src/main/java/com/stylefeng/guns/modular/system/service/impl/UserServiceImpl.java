@@ -1,12 +1,16 @@
 package com.stylefeng.guns.modular.system.service.impl;
 
+import cn.hutool.core.bean.BeanUtil;
 import cn.hutool.core.util.StrUtil;
+import cn.hutool.poi.excel.ExcelReader;
+import cn.hutool.poi.excel.ExcelUtil;
 import com.alibaba.druid.util.Base64;
 import com.baomidou.mybatisplus.mapper.EntityWrapper;
 import com.baomidou.mybatisplus.service.impl.ServiceImpl;
 import com.baomidou.mybatisplus.toolkit.IdWorker;
 import com.stylefeng.guns.common.constant.cache.Cache;
 import com.stylefeng.guns.common.constant.cache.CacheKey;
+import com.stylefeng.guns.common.constant.factory.ConstantFactory;
 import com.stylefeng.guns.common.constant.state.ManagerStatus;
 import com.stylefeng.guns.common.constant.state.YesNo;
 import com.stylefeng.guns.common.exception.BizExceptionEnum;
@@ -24,7 +28,12 @@ import com.stylefeng.guns.core.log.factory.LogTaskFactory;
 import com.stylefeng.guns.core.shiro.ShiroKit;
 import com.stylefeng.guns.core.support.HttpKit;
 import com.stylefeng.guns.core.util.*;
+import com.stylefeng.guns.modular.job.model.Dept;
+import com.stylefeng.guns.modular.job.model.Job;
+import com.stylefeng.guns.modular.job.service.IDeptService;
+import com.stylefeng.guns.modular.job.service.IJobService;
 import com.stylefeng.guns.modular.system.dao.UserMgrDao;
+import com.stylefeng.guns.modular.system.service.IRoleService;
 import com.stylefeng.guns.modular.system.service.IUserService;
 import org.apache.commons.lang.StringUtils;
 import org.slf4j.Logger;
@@ -50,6 +59,13 @@ import java.util.regex.Pattern;
 
 @Service
 public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements IUserService {
+
+    @Resource
+    private GunsProperties gunsProperties;
+    @Autowired
+    private IDeptService deptService;
+    @Autowired
+    private IJobService jobService;
 
     private Logger logger = LoggerFactory.getLogger(UserServiceImpl.class);
 
@@ -135,6 +151,79 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements IU
         }
         user.setVersion(user.getVersion() + 1);
         return user;
+    }
+
+    @Override
+    @Transactional
+    public void importUser(User user) {
+        if (user.getExpand().get("fileName") == null) {
+            throw new GunsException("请上传导入文件");
+        }
+
+        ExcelReader reader = ExcelUtil.getReader(gunsProperties.getFileUploadPath() + user.getExpand().get("fileName"));
+        reader.addHeaderAlias("姓名", "name");
+        reader.addHeaderAlias("职工号", "account");
+        reader.addHeaderAlias("所在部门", "dept");
+        reader.addHeaderAlias("类别", "type");
+        reader.addHeaderAlias("岗位", "job");
+        reader.addHeaderAlias("性别", "sex");
+        reader.addHeaderAlias("出生年月", "birthday");
+        reader.addHeaderAlias("年龄", "age");
+        reader.addHeaderAlias("最高学历", "college");
+        reader.addHeaderAlias("行政职务", "post");
+        reader.addHeaderAlias("学位", "degree");
+        reader.addHeaderAlias("职级", "zhiJi");
+        reader.addHeaderAlias("职称（聘任职称）", "zhiChen");
+        reader.addHeaderAlias("职称等级", "zcLevel");
+        reader.addHeaderAlias("专业岗位", "zyJob");
+        reader.addHeaderAlias("毕业院校", "college");
+        reader.addHeaderAlias("专业", "major");
+        reader.addHeaderAlias("身份证号码", "idCard");
+        reader.addHeaderAlias("籍贯", "nativePlace");
+        reader.addHeaderAlias("民族", "nation");
+        reader.addHeaderAlias("聘期起始时间", "pqqs");
+        reader.addHeaderAlias("到校工作时间", "dxSj");
+        reader.addHeaderAlias("工龄起算时间", "glSj");
+        reader.addHeaderAlias("个人身份", "grsf");
+        reader.addHeaderAlias("岗位类别", "gwType");
+        reader.addHeaderAlias("工资职级专业岗位", "gzzygw");
+        reader.addHeaderAlias("参保时间", "cbSj");
+        reader.addHeaderAlias("工资职级", "gzzj");
+        reader.addHeaderAlias("实际岗位描述", "sjgwms");
+        List<Map> users = reader.readAll(Map.class);
+        for (Map map : users) {
+            String deptName = (String) map.get("dept");
+            Dept dept = deptService.getByName(deptName);
+            if (dept == null) {
+                dept = new Dept();
+                dept.setName(deptName);
+                deptService.insert(dept);
+            }
+            user.setDeptId(dept.getId());
+            String jobName = (String) map.get("job");
+            Job params = new Job();
+            params.setDeptId(dept.getId());
+            params.setName(jobName);
+            Job job = jobService.getDeptName(params);
+            if (job == null) {
+                job = new Job();
+                job.setName(jobName);
+                job.setDeptId(dept.getId());
+                job.setDes((String) map.get("sjgwms"));
+                jobService.insert(job);
+            }
+            map.put("sex",Integer.parseInt(ConstantFactory.me().getDictValueByName("性别", String.valueOf(map.get("sex")))));
+            User u = BeanUtil.mapToBean(map, User.class,true);
+            u.setJobId(job.getId());
+            u.setDeptId(dept.getId());
+            u.setBirthday(DateUtils.parseDate(map.get("birthday")));
+            u.setCreateTime(new Date());
+            u.setSalt(ShiroKit.getRandomSalt(5));
+            u.setPassword(ShiroKit.md5("123456", u.getSalt()));
+            u.setRoleId(IRoleService.TYPE_TEACHER + "");
+
+            this.insert(u);
+        }
     }
 
     @Override

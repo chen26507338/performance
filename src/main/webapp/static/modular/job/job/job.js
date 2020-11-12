@@ -15,6 +15,7 @@ Job.initColumn = function () {
     return [
         {field: 'selectItem', radio: true}
        ,{title: '名称', field:'name', visible: true, align: 'center', valign: 'middle'}
+       ,{title: '描述', field:'des', visible: true, align: 'center', valign: 'middle'}
        // ,{title: '部门', field:'deptId', visible: true, align: 'center', valign: 'middle',formatter:function(value, row, index){return row.expand.deptIdDict;}}
        ,{title: '状态', field:'status', visible: true, align: 'center', valign: 'middle',formatter:function(value, row, index){return row.expand.statusDict;}}
     ];

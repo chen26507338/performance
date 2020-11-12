@@ -78,6 +78,19 @@ MgrUser.openChangeUser = function () {
         layer.full(this.layerIndex);
     }
 };
+/**
+ * 点击导入考核指标库
+ */
+MgrUser.import = function () {
+    this.layerIndex = layer.open({
+        type: 2,
+        title: '导入用户',
+        area: ['800px', '420px'], //宽高
+        fix: false, //不固定
+        maxmin: true,
+        content: Feng.ctxPath + '/mgr/open_import'
+    });
+};
 
 /**
  * 点击角色分配

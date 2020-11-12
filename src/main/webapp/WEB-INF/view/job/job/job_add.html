@@ -10,6 +10,10 @@
                     <#input id="name" name="名称" underline="true"/>
                 </div>
                 <div class="col-sm-6 b-r">
+                    <#input id="des" name="描述"  underline="true"/>
+                </div>
+
+                <div class="col-sm-6 b-r">
                     <#select id="status" name="状态" items="${constant.getDictsByName('通用状态')}"
                     itemLabel="name" itemValue="num" underline="true"/>
                 </div>

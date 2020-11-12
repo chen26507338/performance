@@ -22,4 +22,6 @@ public interface IJobService extends IService<Job> {
      */
     List<Job> selectAllOn();
 
+
+    Job getDeptName(Job job);
 }

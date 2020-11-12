@@ -27,19 +27,19 @@ public class DeptServiceImpl extends ServiceImpl<DeptMapper, Dept> implements ID
 
 
     @Override
-    @Cacheable(value = Cache.CONSTANT,key = "'"+CACHE_ENTITY+"'+#id")
+    @Cacheable(value = Cache.DEPT,key = "'"+CACHE_ENTITY+"'+#id")
     public Dept selectById(Serializable id) {
         return super.selectById(id);
     }
 
     @Override
-    @CacheEvict(value = Cache.CONSTANT,key = "'"+CACHE_LIST+"'")
+    @CacheEvict(value = Cache.DEPT,allEntries = true)
     public boolean insert(Dept entity) {
         return super.insert(entity);
     }
 
     @Override
-    @Cacheable(value = Cache.CONSTANT,key = "'"+CACHE_LIST+"'")
+    @Cacheable(value = Cache.DEPT,key = "'"+CACHE_LIST+"'")
     public List<Dept> selectAllOn() {
         Dept param = new Dept();
         param.setStatus(YesNo.YES.getCode());
@@ -47,9 +47,15 @@ public class DeptServiceImpl extends ServiceImpl<DeptMapper, Dept> implements ID
     }
 
     @Override
-    @Caching(evict = {@CacheEvict(value = Cache.CONSTANT,key = "'"+CACHE_LIST+"'"),
-            @CacheEvict(value = Cache.CONSTANT,key = "'"+CACHE_ENTITY+"'+#entity.id")
-    })
+    @Cacheable(value = Cache.DEPT,key = "'"+CACHE_ENTITY+"'+#name")
+    public Dept getByName(String name) {
+        Dept params = new Dept();
+        params.setName(name);
+        return this.selectOne(new EntityWrapper<>(params));
+    }
+
+    @Override
+    @CacheEvict(value = Cache.DEPT,allEntries = true)
     public boolean updateById(Dept entity) {
         return super.updateById(entity);
     }

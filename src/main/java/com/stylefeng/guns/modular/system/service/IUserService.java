@@ -62,4 +62,10 @@ public interface IUserService extends IService<User>{
     User delRole(User user, Serializable roleId);
 
     User updateUser(User user);
+
+    /**
+     * 导入用户
+     * @param user
+     */
+    void importUser(User user);
 }

@@ -43,4 +43,6 @@ public interface IDeptService extends IService<Dept> {
      * @return
      */
     List<Dept> selectAllOn();
+
+    Dept getByName(String name);
 }

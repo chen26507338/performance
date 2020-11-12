@@ -3,7 +3,7 @@
 <style>
     .main-center-m1 {
         text-align: center;
-        width:300px;
+        width:70%;
         height:350px;
     margin:auto;
     position: absolute;
@@ -23,10 +23,44 @@
         right:0;
         bottom:0;
     }
+    .gray-bg {
+        background-color: white;
+    }
 </style>
 <div class="container-fluid main-center-m2" style="padding: 0 !important;">
     <div class="row main-center-m1">
-        <img src="/static/img/logo.jpg" alt="福建船政交通职业学院" style="
+        <img src="/static/img/index_bg.jpg" alt="福建船政交通职业学院" style="
+background-size:cover;
+-moz-background-size:cover; /* 老版本的 Firefox */
+background-repeat:no-repeat;
+background-position:center center;/*居中显示*/"/>
+        <table class="layui-table">
+            <tbody>
+            <tr>
+                <td rowspan="3">
+                    @if(isEmpty(item.avatar)){
+                    <img src="/static/img/index_icon.png">
+                    @}else{
+                    <img src="${ctxPath}/kaptcha/${item.avatar}">
+                    @}
+                </td>
+                <td>姓名:&nbsp;&nbsp;${item.name!}</td>
+                <td>工号:&nbsp;&nbsp;${item.account!}</td>
+                <td>出生年月:&nbsp;&nbsp;${item != null && item.birthday != null ? dateUtil.formatDate(item.birthday,"yyyy-MM-dd")}</td>
+            </tr>
+            <tr>
+                <td>性别:&nbsp;&nbsp;${item != null && item.sex != null ? constant.getDictsByName("性别",item.sex)}</td>
+                <td>年龄:&nbsp;&nbsp;${item.age!}</td>
+                <td>（拟）离退休时间:&nbsp;&nbsp;${item != null && item.retireDate != null ? dateUtil.formatDate(item.retireDate,"yyyy-MM-dd")}</td>
+            </tr>
+            <tr>
+                <td>籍贯:&nbsp;&nbsp;${item.nativePlace!}</td>
+                <td>出生地:&nbsp;&nbsp;${item.birthplace!}</td>
+                <td>党派:&nbsp;&nbsp;${item.partyGroupings!}</td>
+            </tr>
+            </tbody>
+        </table>
+       @/* <img src="/static/img/logo.jpg" alt="福建船政交通职业学院" style="
 background-size:cover;
 -moz-background-size:cover; /* 老版本的 Firefox */
 background-repeat:no-repeat;
@@ -37,6 +71,7 @@ background-position:center center;/*居中显示*/"/>
                 parent.window.location.href = "https://192.168.91.31";
             }
         </script>
+        @*/
     </div>
 </div>
 @}

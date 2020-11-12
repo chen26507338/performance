@@ -12,6 +12,8 @@ public interface Cache {
      * 常量缓存
      */
     String CONSTANT = "CONSTANT";
+    String DEPT = "sys_dept";
+    String JOB = "job";
     String NORMAL_CONFIG = "normal_config";
 
     String DICT = "sys_dict";

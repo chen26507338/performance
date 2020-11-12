@@ -34,6 +34,12 @@ public class Job extends BaseModel<Job> {
     private String name;
 
     /**
+    * 描述
+    */
+    @TableField("des")
+    private String des;
+
+    /**
     * 部门ID
     */
     @TableField("dept_id")
