@@ -213,6 +213,7 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements IU
                 jobService.insert(job);
             }
             map.put("sex",Integer.parseInt(ConstantFactory.me().getDictValueByName("性别", String.valueOf(map.get("sex")))));
+            map.put("jobType",Integer.parseInt(ConstantFactory.me().getDictValueByName("用工类型", String.valueOf(map.get("type")))));
             User u = BeanUtil.mapToBean(map, User.class,true);
             u.setJobId(job.getId());
             u.setDeptId(dept.getId());
