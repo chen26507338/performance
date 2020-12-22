@@ -118,6 +118,15 @@ public interface IRoleService extends IService<Role> {
     long TYPE_RSJX_HR = 39;
 
     /**
+     * 角色类型：教研室主任
+     */
+    long TYPE_JYSZR = 40;
+    /**
+     * 角色类型：综办主任
+     */
+    long TYPE_ZBZR = 41;
+
+    /**
      * 设置某个角色的权限
      *
      * @param roleId 角色id

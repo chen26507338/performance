@@ -44,7 +44,7 @@ public class ActModelController extends BaseController {
 	@RequiresPermissions("/act/model/list")
 	@RequestMapping(value = "")
 	public String index() {
-        return PREFIX + "/actModel.html";
+        return PREFIX + "actModel.html";
 	}
 
     /**

@@ -8,6 +8,7 @@ import com.alibaba.druid.util.Base64;
 import com.baomidou.mybatisplus.mapper.EntityWrapper;
 import com.baomidou.mybatisplus.service.impl.ServiceImpl;
 import com.baomidou.mybatisplus.toolkit.IdWorker;
+import com.mysql.jdbc.exceptions.jdbc4.MySQLIntegrityConstraintViolationException;
 import com.stylefeng.guns.common.constant.cache.Cache;
 import com.stylefeng.guns.common.constant.cache.CacheKey;
 import com.stylefeng.guns.common.constant.factory.ConstantFactory;
@@ -43,6 +44,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.cache.annotation.CacheEvict;
 import org.springframework.cache.annotation.CachePut;
 import org.springframework.cache.annotation.Cacheable;
+import org.springframework.dao.DuplicateKeyException;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -223,7 +225,14 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements IU
             u.setPassword(ShiroKit.md5("123456", u.getSalt()));
             u.setRoleId(IRoleService.TYPE_TEACHER + "");
 
-            this.insert(u);
+            try {
+                this.insert(u);
+            } catch (DuplicateKeyException e) {
+                throw new GunsException("工号 " + u.getAccount() + " 已存在");
+            } catch (Exception e) {
+                logger.error("", e);
+                throw new GunsException("工号 " + u.getAccount() + " 导入异常");
+            }
         }
     }
 

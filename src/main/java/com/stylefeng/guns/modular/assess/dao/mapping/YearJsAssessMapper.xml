@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.stylefeng.guns.modular.assess.dao.YearJsAssessMapper">
+
+	<!-- 通用查询映射结果 -->
+	<resultMap id="BaseResultMap" type="com.stylefeng.guns.modular.assess.model.YearJsAssess">
+            <id column="id" property="id" />
+            <result column="proc_ins_id" property="procInsId" />
+            <result column="status" property="status" />
+            <result column="year" property="year" />
+            <result column="user_id" property="userId" />
+            <result column="remark" property="remark" />
+            <result column="level" property="level" />
+            <result column="jyszr_user" property="jyszrUser" />
+            <result column="zbsj_user" property="zbsjUser" />
+            <result column="dean_user" property="deanUser" />
+            <result column="zbzr_user" property="zbzrUser" />
+            <result column="kygz" property="kygz" />
+            <result column="sysgz" property="sysgz" />
+	</resultMap>
+
+    <!-- 通用查询结果列 -->
+    <sql id="Base_Column_List">
+	    id AS id,
+	    proc_ins_id AS procInsId,
+	    status AS status,
+	    year AS year,
+	    user_id AS userId,
+	    remark AS remark,
+	    level AS level,
+	    jyszr_user AS jyszrUser,
+	    zbsj_user AS zbsjUser,
+	    dean_user AS deanUser,
+	    zbzr_user AS zbzrUser,
+	    kygz AS kygz,
+	    sysgz AS sysgz
+    </sql>
+
+</mapper>
