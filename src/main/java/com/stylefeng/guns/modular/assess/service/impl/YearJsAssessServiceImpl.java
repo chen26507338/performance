@@ -62,10 +62,6 @@ public class YearJsAssessServiceImpl extends ServiceImpl<YearJsAssessMapper, Yea
         wrapper.eq("dept_id", ShiroKit.getUser().deptId);
         User dean = userService.selectOne(wrapper);
 
-        //教研室主任
-        wrapper = new EntityWrapper<>();
-        wrapper.like("role_id", IRoleService.TYPE_JYSZR + "");
-        User jysUser = userService.selectOne(wrapper);
 
         //支部书记
         wrapper = new EntityWrapper<>();
@@ -83,14 +79,13 @@ public class YearJsAssessServiceImpl extends ServiceImpl<YearJsAssessMapper, Yea
         vars.put("sj_user", sjUser.getId());
         vars.put("zbzr_user", zbUser.getId());
         vars.put("dean_user", dean.getId());
-        vars.put("jys_user", jysUser.getId());
+        vars.put("jys_user", yearJsAssess.getJyszrUser());
         vars.put("user", ShiroKit.getUser().id);
         String procInsId = actTaskService.startProcessOnly(ActUtils.PD_TASK_YEAR_JS_ASSESS[0], ActUtils.PD_TASK_YEAR_JS_ASSESS[1], "教师年度考核", vars);
 
         yearJsAssess.setProcInsId(procInsId);
         yearJsAssess.setDeanUser(dean.getId());
         yearJsAssess.setUserId(ShiroKit.getUser().id);
-        yearJsAssess.setJyszrUser(jysUser.getId());
         yearJsAssess.setZbzrUser(zbUser.getId());
         yearJsAssess.setZbsjUser(sjUser.getId());
         yearJsAssess.insert();

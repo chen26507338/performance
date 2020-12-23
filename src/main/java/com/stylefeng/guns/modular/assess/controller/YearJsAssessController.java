@@ -1,16 +1,33 @@
 package com.stylefeng.guns.modular.assess.controller;
 
+import cn.hutool.core.io.FileUtil;
+import cn.hutool.core.io.resource.ClassPathResource;
+import cn.hutool.core.io.resource.ResourceUtil;
+import cn.hutool.core.util.StrUtil;
+import cn.hutool.core.util.URLUtil;
+import cn.hutool.poi.word.Word07Writer;
 import com.stylefeng.guns.common.constant.state.YesNo;
 import com.stylefeng.guns.common.persistence.model.User;
+import com.stylefeng.guns.common.utils.DocWriter;
+import com.stylefeng.guns.config.properties.GunsProperties;
 import com.stylefeng.guns.core.base.controller.BaseController;
 import com.baomidou.mybatisplus.plugins.Page;
 import com.stylefeng.guns.common.constant.factory.PageFactory;
 import com.stylefeng.guns.core.shiro.ShiroKit;
+import com.stylefeng.guns.core.support.HttpKit;
 import com.stylefeng.guns.core.util.KaptchaUtil;
 import com.stylefeng.guns.modular.assess.decorator.YearJsAssessDecorator;
 import com.stylefeng.guns.modular.assess.model.YearJsAssess;
 import com.stylefeng.guns.modular.assess.service.IYearJsAssessService;
+import com.stylefeng.guns.modular.system.service.IRoleService;
+import com.stylefeng.guns.modular.system.service.IUserService;
+import fr.opensagres.odfdom.converter.core.utils.IOUtils;
+import fr.opensagres.poi.xwpf.converter.pdf.PdfConverter;
+import fr.opensagres.poi.xwpf.converter.pdf.PdfOptions;
+import fr.opensagres.poi.xwpf.converter.xhtml.XHTMLConverter;
 import org.apache.commons.lang3.StringUtils;
+import org.apache.poi.xwpf.usermodel.XWPFDocument;
+import org.springframework.http.MediaType;
 import org.springframework.stereotype.Controller;
 import org.apache.shiro.authz.annotation.RequiresPermissions;;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -22,10 +39,16 @@ import org.springframework.beans.factory.annotation.Autowired;
 import com.stylefeng.guns.core.util.ToolUtil;
 import com.stylefeng.guns.core.log.LogObjectHolder;
 import org.springframework.web.bind.annotation.RequestParam;
+
+import java.io.*;
+import java.net.URISyntaxException;
 import java.util.*;
 import com.stylefeng.guns.modular.assess.model.YearJsAssess;
 import com.stylefeng.guns.modular.assess.service.IYearJsAssessService;
 import com.stylefeng.guns.modular.assess.decorator.YearJsAssessDecorator;
+
+import javax.annotation.Resource;
+import javax.servlet.http.HttpServletResponse;
 
 /**
  * 教师考核控制器
@@ -41,7 +64,10 @@ public class YearJsAssessController extends BaseController {
 
     @Autowired
     private IYearJsAssessService yearJsAssessService;
-
+    @Autowired
+    private IUserService userService;
+    @Resource
+    private GunsProperties gunsProperties;
     /**
      * 跳转到教师考核首页
      */
@@ -135,8 +161,79 @@ public class YearJsAssessController extends BaseController {
      */
     @RequestMapping("/yearJsAssess_apply")
     public String applyApproval(Model model) {
-//        model.addAttribute("deptList", deptService.selectAllOn());
+        EntityWrapper<User> wrapper = new EntityWrapper<>();
+        wrapper.like("role_id", IRoleService.TYPE_JYSZR + "");
+        wrapper.eq("dept_id", ShiroKit.getUser().deptId);
+        model.addAttribute("users", userService.selectList(wrapper));
         return PREFIX + "yearJsAssess_apply.html";
+    }
+    /**
+     * 考核申请
+     */
+    @RequestMapping(value = "/previewDoc/{fileName}.{exts}")
+    public void previewDoc(@PathVariable String fileName, @PathVariable String exts) {
+        String path = gunsProperties.getFileUploadPath() + fileName + "." + exts;
+
+        try {
+            XWPFDocument xwpfDocument = new XWPFDocument(FileUtil.getInputStream(path));
+            ByteArrayOutputStream outputStream = new ByteArrayOutputStream();
+            XHTMLConverter.getInstance().convert(xwpfDocument, outputStream, null);
+            HttpServletResponse response = HttpKit.getResponse();
+            response.setHeader("Content-Type","text/html;charset=UTF-8");
+            PrintWriter pw = response.getWriter();
+            pw.write(outputStream.toString());
+            pw.flush();
+            pw.close();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
+    @RequestMapping("/downloadTemplate/{template}/{fileName}")
+    public void downloadTemplate(@PathVariable String template,@PathVariable String fileName) {
+        try {
+            InputStream inputStream = ResourceUtil.getStream(StrUtil.format("doc/{}.docx", template));
+//            File file = new File(ResourceUtil.getResource(StrUtil.format("doc/{}.docx", template)).toURI());
+//        File file = classPathResource.getFile();
+//            byte[] bytes = FileUtil.readBytes(ResourceUtil.getResource(StrUtil.format("doc/{}.docx", template)).getPath());
+
+            HttpServletResponse response = HttpKit.getResponse();
+            response.setContentType("application/vnd.ms-excel;charset=utf-8");
+            //弹出下载对话框的文件名，不能为中文，中文请自行编码
+            response.setHeader("Content-Disposition", "attachment;filename=" + URLUtil.encode(fileName) + ".doc");
+            IOUtils.copy(inputStream, response.getOutputStream());
+//            response.getOutputStream().write(bytes);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
+    @RequestMapping("/downloadDoc/{id}")
+    public void downloadDoc(@PathVariable Long id) {
+        YearJsAssess yearJsAssess = yearJsAssessService.selectById(id);
+        String path = gunsProperties.getFileUploadPath() + yearJsAssess.getKygz();
+        Map<String, String> map = new HashMap<>();
+        map.put("${comments}", yearJsAssess.getComments());
+        map.put("${level}", yearJsAssess.getLevel());
+        try {
+            User user = userService.selectIgnorePointById(yearJsAssess.getUserId());
+            HttpServletResponse response = HttpKit.getResponse();
+            response.setContentType("application/vnd.ms-excel;charset=utf-8");
+            //弹出下载对话框的文件名，不能为中文，中文请自行编码
+            response.setHeader("Content-Disposition", "attachment;filename=" + URLUtil.encode(user.getName()+"-教师年度考核文档") + ".doc");
+
+            DocWriter.searchAndReplace(path,response.getOutputStream(),map);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+//        File file = classPathResource.getFile();
+//        byte[] bytes = FileUtil.readBytes(file);
+//
+//        try {
+//            response.getOutputStream().write(bytes);
+//        } catch (IOException e) {
+//            e.printStackTrace();
+//        }
     }
     
     /**
@@ -184,24 +281,6 @@ public class YearJsAssessController extends BaseController {
         EntityWrapper<YearJsAssess> wrapper = new EntityWrapper<>(yearJsAssess);
 //        wrapper.last("limit 1");
         YearJsAssess data = yearJsAssess.selectOne(wrapper);
-        data.setKygz(
-                data.getKygz().replaceFirst(",","课题名称、级别：")
-                        .replaceFirst(",","\n本人承担任务：")
-                        .replaceFirst(",","\n完成任务情况及成果：")
-        );
-        data.setSysgz(
-                data.getSysgz().replaceFirst(",","工作内容：")
-                        .replaceFirst(",","\n本人承担任务：")
-                        .replaceFirst(",","\n完成任务情况及成果：")
-        );
-//        data.setProblemUrl(KaptchaUtil.formatFileUrl(data.getProblemUrl()));
-//        data.setResultUrl(KaptchaUtil.formatFileUrl(data.getResultUrl()));
-//        if (yearJsAssess.getAct().getTaskDefKey().equals("dean_audit")) {
-//            User params = new User();
-//            params.setDeptId(data.getDeptId());
-//            List<User> users = userService.selectList(new EntityWrapper<>(params));
-//            model.addAttribute("users", users);
-//        }
         model.addAttribute("item", data);
         model.addAttribute("act", yearJsAssess.getAct());
         return PREFIX + "yearJsAssess_audit.html";

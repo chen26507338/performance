@@ -19,10 +19,8 @@ YearJsAssess.initColumn = function () {
        ,{title: '职工编号', field:'expand.user.account', visible: true, align: 'center', valign: 'middle'}
        ,{title: '职工姓名', field:'expand.user.name', visible: true, align: 'center', valign: 'middle'}
        ,{title: '考核等次', field:'level', visible: true, align: 'center', valign: 'middle'}
-       ,{title: '科研工作', field:'kygz', visible: true, align: 'center', valign: 'middle'}
-       ,{title: '实验室工作', field:'sysgz', visible: true, align: 'center', valign: 'middle'}
-        ,{title: '备注', field:'remark', visible: true, align: 'center', valign: 'middle'}
         ,{title: '评语', field:'comments', visible: true, align: 'center', valign: 'middle'}
+        ,{title: '备注', field:'remark', visible: true, align: 'center', valign: 'middle'}
     ];
 };
 
@@ -62,6 +60,15 @@ YearJsAssess.openAddYearJsAssess = function () {
         maxmin: true,
         content: Feng.ctxPath + '/yearJsAssess/yearJsAssess_add'
     });
+};
+
+/**
+ * 点击添加教师考核
+ */
+YearJsAssess.exportDoc = function () {
+    if (this.check()) {
+        window.open(Feng.ctxPath + "/yearJsAssess/downloadDoc/" + YearJsAssess.seItem.id);
+    }
 };
 
 /**

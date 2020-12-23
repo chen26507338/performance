@@ -15,6 +15,7 @@
                         </div>
                         <div class="hidden-xs" id="YearJsAssessTableToolbar" role="group">
                             <#button name="申请考核" icon="fa-plus" clickFun="YearJsAssess.openAddApply()"/>
+                            <#button name="导出考核文档" icon="fa-plus" clickFun="YearJsAssess.exportDoc()"/>
                             @if(shiro.hasPermission("/yearJsAssess/add")){
                                 <#button name="添加" icon="fa-plus" clickFun="YearJsAssess.openAddYearJsAssess()"/>
                             @}

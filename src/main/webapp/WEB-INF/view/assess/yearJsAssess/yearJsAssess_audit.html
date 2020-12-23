@@ -12,12 +12,6 @@
                 <div class="col-sm-6 b-r">
                     <#input id="comment" type="textarea" name="意见" underline="true"/>
                 </div>
-                <div class="col-sm-6 b-r">
-                    <#input id="kygz3" name="科研工作" underline="true" value="${item.kygz}" type="textarea" readonly="readonly"/>
-                </div>
-                <div class="col-sm-6 b-r">
-                    <#input id="sysgz3" name="实验室工作" underline="true" value="${item.sysgz}" type="textarea" readonly="readonly"/>
-                </div>
                 @select(act.taskDefKey){
                 @   case "dean_audit":
                 <div class="col-sm-6 b-r">
@@ -31,6 +25,10 @@
                     <option >不合格</option>
                     </#select>
                 </div>
+                @   case "re_submit":
+                <div class="col-sm-6 b-r">
+                    <#fileUpload id="kygz" name="考核文档" underline="true" accept="file" exts="docx,doc" mineType="application/excel"/>
+                </div>
                 @ case "hr_handle_audit":
                 <div class="col-sm-6 b-r">
                     <#input id="year" name="设置年度" underline="true" />
@@ -41,32 +39,6 @@
                 </div>
                 @}
             </div>
-            @if(act.taskDefKey == "re_submit"){
-            <div class="row">
-                科研工作<br>
-                <div class="col-sm-6 b-r">
-                    <#input id="keti" name="课题名称、级别" underline="true"/>
-                </div>
-                <div class="col-sm-6 b-r">
-                    <#input id="ketiTask" name="本人承担任务" underline="true"/>
-                </div>
-                <div class="col-sm-6 b-r">
-                    <#input id="ketiFinish" name="完成任务情况及成果" underline="true"/>
-                </div>
-            </div>
-            <div class="row">
-                实验室工作<br>
-                <div class="col-sm-6 b-r">
-                    <#input id="sysgznr" name="工作内容" underline="true"/>
-                </div>
-                <div class="col-sm-6 b-r">
-                    <#input id="sysTask" name="本人承担任务" underline="true"/>
-                </div>
-                <div class="col-sm-6 b-r">
-                    <#input id="sysFinish" name="完成任务情况及成果" underline="true"/>
-                </div>
-            </div>
-            @}
 
 
             <div class="row btn-group-m-t">
@@ -82,6 +54,7 @@
                     <#button btnCss="danger" name="驳回" id="cancel" icon="fa-eraser" clickFun="YearJsAssessInfoDlg.auditSubmit(0)"/>
                     @}
                     <#button btnCss="danger" name="关闭" id="cancel" icon="fa-eraser" clickFun="YearJsAssessInfoDlg.close()"/>
+                    <a href="/yearJsAssess/previewDoc/${item.kygz}" class="btn btn-primary" target="_blank">查看考核文档</a>
                 </div>
             </div>
             <#histoicFlow procInsId="${act.procInsId}"/>

@@ -10,6 +10,20 @@ var YearJsAssessInfoDlg = {
                     message: '不能为空'
                 }
             }
+        },
+        comments: {
+            validators: {
+                notEmpty: {
+                    message: '不能为空'
+                }
+            }
+        },
+        jyszrUser: {
+            validators: {
+                notEmpty: {
+                    message: '请选择'
+                }
+            }
         }
     }
 };
@@ -137,6 +151,11 @@ YearJsAssessInfoDlg.addApply = function() {
     this.clearData();
     this.collectData();
 
+    if (!$("#kygz").val()) {
+        Feng.error("请上传考核文档");
+        return;
+    }
+
     if (!this.validate()) {
         return;
     }
@@ -150,8 +169,8 @@ YearJsAssessInfoDlg.addApply = function() {
         Feng.error("申请失败!" + data.responseJSON.message + "!");
     });
 
-    this.yearJsAssessInfoData.kygz = ","+$("#keti").val() +","+ $("#ketiTask").val()+","+ $("#ketiFinish").val();
-    this.yearJsAssessInfoData.sysgz = ","+$("#sysgz").val() + ","+$("#sysTask").val()+ ","+$("#sysFinish").val();
+    // this.yearJsAssessInfoData.kygz = ","+$("#keti").val() +","+ $("#ketiTask").val()+","+ $("#ketiFinish").val();
+    // this.yearJsAssessInfoData.sysgz = ","+$("#sysgz").val() + ","+$("#sysTask").val()+ ","+$("#sysFinish").val();
     // this.yearJsAssessInfoData['expand["data"]'] = JSON.stringify(datas);
     ajax.set(this.yearJsAssessInfoData);
     ajax.start();
@@ -164,8 +183,16 @@ YearJsAssessInfoDlg.addApply = function() {
 YearJsAssessInfoDlg.auditSubmit = function(pass) {
     var that = this;
     this.collectData();
-    if (pass == 1 && !this.validate()) {
-        return;
+
+    if (pass == 1 ) {
+        var defKey = $("#taskDefKey").val();
+        if (defKey == "re_submit" && !$("#kygz").val()) {
+            Feng.error("请上传考核文档");
+            return;
+        }
+        if (!this.validate()) {
+            return;
+        }
     }
     Feng.confirm("确认操作", function () {
         //提交信息
@@ -181,13 +208,9 @@ YearJsAssessInfoDlg.auditSubmit = function(pass) {
         // that.yearJsAssessInfoData['expand["data"]'] = JSON.stringify(datas);
         that.yearJsAssessInfoData['act.taskId'] = $("#taskId").val();
         that.yearJsAssessInfoData['act.procInsId'] = $("#procInsId").val();
-        var defKey = $("#taskDefKey").val();
         that.yearJsAssessInfoData['act.taskDefKey'] = defKey;
         that.yearJsAssessInfoData['year'] = $("#year").val();
-        if (defKey == "re_submit") {
-            that.yearJsAssessInfoData.kygz = ","+$("#keti").val() +","+ $("#ketiTask").val()+","+ $("#ketiFinish").val();
-            that.yearJsAssessInfoData.sysgz = ","+$("#sysgznr").val() + ","+$("#sysTask").val()+ ","+$("#sysFinish").val();
-        }
+
         ajax.set(that.yearJsAssessInfoData);
         ajax.start();
     });
