@@ -96,9 +96,7 @@ public class YearJsAssessServiceImpl extends ServiceImpl<YearJsAssessMapper, Yea
             wrapper.eq("dept_id", ShiroKit.getUser().deptId);
             User deptLeader = userService.selectOne(wrapper);
 
-
             //综办主任
-            wrapper = new EntityWrapper<>();
             wrapper.like("role_id", IRoleService.TYPE_ZBZR + "");
             wrapper.eq("dept_id", ShiroKit.getUser().deptId);
             User zbUser = userService.selectOne(wrapper);
@@ -134,6 +132,7 @@ public class YearJsAssessServiceImpl extends ServiceImpl<YearJsAssessMapper, Yea
         params.setProcInsId(yearJsAssess.getAct().getProcInsId());
         if (pass.equals(YesNo.YES.getCode() + "")) {
             switch (yearJsAssess.getAct().getTaskDefKey()) {
+                case "dept_leader_audit":
                 case "dean_audit":
                 case "re_submit":
                 case "zbzr_audit":

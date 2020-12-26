@@ -20,7 +20,7 @@
                     <#input id="username" name="职工姓名" underline="true" value="${user.name}"  readonly="readonly"/>
                 </div>
                 @select(act.taskDefKey){
-                @   case "dean_audit":
+                @   case "dean_audit","dept_leader_audit":
                 <div class="col-sm-6 b-r">
                     <#input id="comments" name="评语" underline="true" value="${item.comments}" type="textarea" />
                 </div>
