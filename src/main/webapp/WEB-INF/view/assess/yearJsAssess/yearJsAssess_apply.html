@@ -3,24 +3,24 @@
     <div class="ibox-content">
         <div class="form-horizontal" id="YearJsAssessForm">
 
-            <input type="hidden" id="id" value="">
+            <input id="type" type="hidden" value="${type!}">
 
             <div class="row">
                 <div class="col-sm-6 b-r">
                     <#fileUpload id="kygz" name="考核文档" underline="true" accept="file" exts="docx,doc" mineType="application/excel"/>
                 </div>
+                @if(type == 1){
                 <div class="col-sm-6 b-r">
                     <#select id="jyszrUser" name="教研室主任" items="${users}"
                     itemLabel="name" itemValue="id" underline="true"/>
                 </div>
+                @}
                 <div class="col-sm-6 b-r">
-                    <a href="/yearJsAssess/downloadTemplate/yaerJsAssess/教师年度考核" class="btn btn-primary" target="_blank">下载模板</a>
+                    <a href="/yearJsAssess/downloadTemplate/${fileName}/${modelName}" class="btn btn-primary" target="_blank">下载模板</a>
                     <br>
                     表格内  \${xxxxxx} 部分内容不可删除
                 </div>
             </div>
-
-
             <div class="row btn-group-m-t">
                 <div class="col-sm-10">
                     <#button btnCss="info" name="提交" id="ensure" icon="fa-check" clickFun="YearJsAssessInfoDlg.addApply()"/>
@@ -28,7 +28,6 @@
                 </div>
             </div>
         </div>
-
     </div>
 </div>
 <script src="${ctxPath}/static/modular/assess/yearJsAssess/yearJsAssess_info.js"></script>

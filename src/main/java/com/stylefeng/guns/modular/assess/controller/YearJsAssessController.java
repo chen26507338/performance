@@ -6,6 +6,7 @@ import cn.hutool.core.io.resource.ResourceUtil;
 import cn.hutool.core.util.StrUtil;
 import cn.hutool.core.util.URLUtil;
 import cn.hutool.poi.word.Word07Writer;
+import com.stylefeng.guns.common.constant.factory.ConstantFactory;
 import com.stylefeng.guns.common.constant.state.YesNo;
 import com.stylefeng.guns.common.persistence.model.User;
 import com.stylefeng.guns.common.utils.DocWriter;
@@ -68,12 +69,14 @@ public class YearJsAssessController extends BaseController {
     private IUserService userService;
     @Resource
     private GunsProperties gunsProperties;
+
     /**
      * 跳转到教师考核首页
      */
     @RequestMapping("")
     @RequiresPermissions(value = {"/yearJsAssess/list"})
-    public String index() {
+    public String index(int type, Model model) {
+        model.addAttribute("type", type);
         return PREFIX + "yearJsAssess.html";
     }
 
@@ -107,6 +110,9 @@ public class YearJsAssessController extends BaseController {
     public Object list(YearJsAssess yearJsAssess) {
         Page<YearJsAssess> page = new PageFactory<YearJsAssess>().defaultPage();
         EntityWrapper< YearJsAssess> wrapper = new EntityWrapper<>();
+        if (yearJsAssess.getType() != null) {
+            wrapper.eq("type", yearJsAssess.getType());
+        }
         yearJsAssessService.selectPage(page,wrapper);
         page.setRecords(new YearJsAssessDecorator(page.getRecords()).decorate());
         return packForBT(page);
@@ -159,12 +165,15 @@ public class YearJsAssessController extends BaseController {
     /**
      * 考核申请
      */
-    @RequestMapping("/yearJsAssess_apply")
-    public String applyApproval(Model model) {
+    @RequestMapping("/yearJsAssess_apply/{type}")
+    public String applyApproval(@PathVariable int type,Model model) {
         EntityWrapper<User> wrapper = new EntityWrapper<>();
         wrapper.like("role_id", IRoleService.TYPE_JYSZR + "");
         wrapper.eq("dept_id", ShiroKit.getUser().deptId);
         model.addAttribute("users", userService.selectList(wrapper));
+        model.addAttribute("type", type);
+        model.addAttribute("modelName", ConstantFactory.me().getDictsByName("模板名称", type));
+        model.addAttribute("fileName", ConstantFactory.me().getDictsByName("模板文件", type));
         return PREFIX + "yearJsAssess_apply.html";
     }
     /**
@@ -215,6 +224,7 @@ public class YearJsAssessController extends BaseController {
         Map<String, String> map = new HashMap<>();
         map.put("${comments}", yearJsAssess.getComments());
         map.put("${level}", yearJsAssess.getLevel());
+        map.put("${year}", yearJsAssess.getYear());
         try {
             User user = userService.selectIgnorePointById(yearJsAssess.getUserId());
             HttpServletResponse response = HttpKit.getResponse();
@@ -281,6 +291,7 @@ public class YearJsAssessController extends BaseController {
         EntityWrapper<YearJsAssess> wrapper = new EntityWrapper<>(yearJsAssess);
 //        wrapper.last("limit 1");
         YearJsAssess data = yearJsAssess.selectOne(wrapper);
+        model.addAttribute("user", userService.selectIgnorePointById(data.getUserId()));
         model.addAttribute("item", data);
         model.addAttribute("act", yearJsAssess.getAct());
         return PREFIX + "yearJsAssess_audit.html";

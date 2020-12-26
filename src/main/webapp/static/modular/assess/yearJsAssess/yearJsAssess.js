@@ -44,6 +44,7 @@ YearJsAssess.check = function () {
  */
 YearJsAssess.formParams = function() {
     var queryData = {};
+    queryData['type'] = $("#type").val();
     return queryData;
 };
 
@@ -81,7 +82,7 @@ YearJsAssess.openAddApply = function () {
         area: ['800px', '420px'], //宽高
         fix: false, //不固定
         maxmin: true,
-        content: Feng.ctxPath + '/yearJsAssess/yearJsAssess_apply'
+        content: Feng.ctxPath + '/yearJsAssess/yearJsAssess_apply/' + $("#type").val()
     });
 };
 

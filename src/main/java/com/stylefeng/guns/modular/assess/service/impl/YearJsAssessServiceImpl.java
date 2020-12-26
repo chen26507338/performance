@@ -2,6 +2,7 @@ package com.stylefeng.guns.modular.assess.service.impl;
 
 import cn.hutool.core.util.StrUtil;
 import com.baomidou.mybatisplus.mapper.EntityWrapper;
+import com.stylefeng.guns.common.constant.factory.ConstantFactory;
 import com.stylefeng.guns.common.constant.state.YesNo;
 import com.stylefeng.guns.common.persistence.model.User;
 import com.stylefeng.guns.config.properties.GunsProperties;
@@ -56,38 +57,65 @@ public class YearJsAssessServiceImpl extends ServiceImpl<YearJsAssessMapper, Yea
     @Override
     @Transactional
     public void apply(YearJsAssess yearJsAssess) {
-        //院长
+        String procInsId;
         EntityWrapper<User> wrapper = new EntityWrapper<>();
-        wrapper.like("role_id", IRoleService.TYPE_DEAN + "");
-        wrapper.eq("dept_id", ShiroKit.getUser().deptId);
-        User dean = userService.selectOne(wrapper);
+        if (yearJsAssess.getType() == TYPE_JS) {
+            //院长
+            wrapper.like("role_id", IRoleService.TYPE_DEAN + "");
+            wrapper.eq("dept_id", ShiroKit.getUser().deptId);
+            User dean = userService.selectOne(wrapper);
 
 
-        //支部书记
-        wrapper = new EntityWrapper<>();
-        wrapper.like("role_id", IRoleService.TYPE_SECRETARY + "");
-        wrapper.eq("dept_id", ShiroKit.getUser().deptId);
-        User sjUser = userService.selectOne(wrapper);
+            //支部书记
+            wrapper = new EntityWrapper<>();
+            wrapper.like("role_id", IRoleService.TYPE_SECRETARY + "");
+            wrapper.eq("dept_id", ShiroKit.getUser().deptId);
+            User sjUser = userService.selectOne(wrapper);
 
-        //综办主任
-        wrapper = new EntityWrapper<>();
-        wrapper.like("role_id", IRoleService.TYPE_ZBZR + "");
-        wrapper.eq("dept_id", ShiroKit.getUser().deptId);
-        User zbUser = userService.selectOne(wrapper);
+            //综办主任
+            wrapper = new EntityWrapper<>();
+            wrapper.like("role_id", IRoleService.TYPE_ZBZR + "");
+            wrapper.eq("dept_id", ShiroKit.getUser().deptId);
+            User zbUser = userService.selectOne(wrapper);
 
-        Map<String, Object> vars = new HashMap<>();
-        vars.put("sj_user", sjUser.getId());
-        vars.put("zbzr_user", zbUser.getId());
-        vars.put("dean_user", dean.getId());
-        vars.put("jys_user", yearJsAssess.getJyszrUser());
-        vars.put("user", ShiroKit.getUser().id);
-        String procInsId = actTaskService.startProcessOnly(ActUtils.PD_TASK_YEAR_JS_ASSESS[0], ActUtils.PD_TASK_YEAR_JS_ASSESS[1], "教师年度考核", vars);
+            Map<String, Object> vars = new HashMap<>();
+            vars.put("sj_user", sjUser.getId());
+            vars.put("zbzr_user", zbUser.getId());
+            vars.put("dean_user", dean.getId());
+            vars.put("jys_user", yearJsAssess.getJyszrUser());
+            vars.put("user", ShiroKit.getUser().id);
+            procInsId = actTaskService.startProcessOnly(ActUtils.PD_TASK_YEAR_JS_ASSESS[0], ActUtils.PD_TASK_YEAR_JS_ASSESS[1], "教师年度考核", vars);
+
+            yearJsAssess.setDeanUser(dean.getId());
+            yearJsAssess.setUserId(ShiroKit.getUser().id);
+            yearJsAssess.setZbzrUser(zbUser.getId());
+            yearJsAssess.setZbsjUser(sjUser.getId());
+        } else {
+            //部门领导
+            wrapper.like("role_id", IRoleService.TYPE_DEPT_LEADER + "");
+            wrapper.eq("dept_id", ShiroKit.getUser().deptId);
+            User deptLeader = userService.selectOne(wrapper);
+
+
+            //综办主任
+            wrapper = new EntityWrapper<>();
+            wrapper.like("role_id", IRoleService.TYPE_ZBZR + "");
+            wrapper.eq("dept_id", ShiroKit.getUser().deptId);
+            User zbUser = userService.selectOne(wrapper);
+
+            Map<String, Object> vars = new HashMap<>();
+            vars.put("zbzr_user", zbUser.getId());
+            vars.put("dept_leader", deptLeader.getId());
+            vars.put("user", ShiroKit.getUser().id);
+            procInsId = actTaskService.startProcessOnly(ActUtils.PD_TASK_YEAR_OTHER_ASSESS[0], ActUtils.PD_TASK_YEAR_OTHER_ASSESS[1],
+                    ConstantFactory.me().getDictsByName("模板名称", yearJsAssess.getType()), vars);
+
+            yearJsAssess.setUserId(ShiroKit.getUser().id);
+            yearJsAssess.setDeptLeader(deptLeader.getId());
+            yearJsAssess.setZbzrUser(zbUser.getId());
+        }
 
         yearJsAssess.setProcInsId(procInsId);
-        yearJsAssess.setDeanUser(dean.getId());
-        yearJsAssess.setUserId(ShiroKit.getUser().id);
-        yearJsAssess.setZbzrUser(zbUser.getId());
-        yearJsAssess.setZbsjUser(sjUser.getId());
         yearJsAssess.insert();
     }
 

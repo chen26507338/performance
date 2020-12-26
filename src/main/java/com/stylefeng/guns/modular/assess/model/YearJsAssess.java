@@ -45,6 +45,8 @@ public class YearJsAssess extends BaseActEntity<YearJsAssess> {
     @TableField("status")
     private Integer status;
 
+
+
     /**
     * 年份
     */
@@ -92,6 +94,24 @@ public class YearJsAssess extends BaseActEntity<YearJsAssess> {
     */
     @TableField("zbzr_user")
     private Long zbzrUser;
+
+    /**
+    * 部门领导
+    */
+    @TableField("dept_leader")
+    private Long deptLeader;
+
+    /**
+    * 部门审核员
+    */
+    @TableField("dept_check")
+    private Long deptCheck;
+
+    /**
+     * 类型
+     */
+    @TableField("type")
+    private Integer type;
 
     /**
     * 科研工作

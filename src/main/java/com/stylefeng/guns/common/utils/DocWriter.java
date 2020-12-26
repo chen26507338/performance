@@ -3,10 +3,13 @@ package com.stylefeng.guns.common.utils;
 import org.apache.poi.ooxml.POIXMLDocument;
 import org.apache.poi.xwpf.usermodel.*;
 
+import java.io.File;
+import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.OutputStream;
 import java.util.*;
 import java.util.Map.Entry;
+
 /**
  * Created by zhouhs on 2017/1/5.
  */
@@ -57,16 +60,21 @@ public class DocWriter {
                     List<XWPFTableCell> cells = row.getTableCells();
                     for (XWPFTableCell cell : cells) {
                         for (Entry<String, String> e : map.entrySet()) {
+                            //判断单元格内是否存在占位符
                             if (cell.getText().contains(e.getKey())) {
-                                cell.removeParagraph(0);
-                                cell.setText(e.getValue());
+                                //替换字符串
+                                for (XWPFParagraph paragraph : cell.getParagraphs()) {
+                                    for (XWPFRun run : paragraph.getRuns()) {
+                                        if (run.text().contains(e.getKey())) {
+                                            run.setText(e.getValue(), 0);
+                                        }
+                                    }
+                                }
                             }
                         }
                     }
                 }
             }
-//            FileOutputStream outStream;
-//            outStream = new FileOutputStream(destPath);
             document.write(outputStream);
             outputStream.close();
         } catch (Exception e) {
@@ -77,9 +85,18 @@ public class DocWriter {
 
     public static void main(String[] args) {
         Map<String, String> map = new HashMap<>();
-        map.put("${text}", "12313123333");
-        String srcPath = "D:\\yaerJsAssess.docx";
+        map.put("${comments}", "12313123333");
+        map.put("${year}", "2020");
+        map.put("${level}", "合格");
+        String srcPath = "D:\\yearGcAssess.docx";
         String destPath = "D:\\2.doc";
+        File file = new File(destPath);
+        try {
+            FileOutputStream fileOutputStream = new FileOutputStream(file);
+            searchAndReplace(srcPath, fileOutputStream, map);
+        } catch (FileNotFoundException e) {
+            e.printStackTrace();
+        }
 //        searchAndReplace(srcPath, destPath, map);
     }
 }

@@ -80,6 +80,7 @@ YearJsAssessInfoDlg.collectData = function() {
     .set('deanUser')
     .set('zbzrUser')
     .set('comments')
+    .set('type')
     .set('kygz')
     .set('sysgz')
     ;

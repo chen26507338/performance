@@ -12,6 +12,13 @@
                 <div class="col-sm-6 b-r">
                     <#input id="comment" type="textarea" name="意见" underline="true"/>
                 </div>
+
+                <div class="col-sm-6 b-r">
+                    <#input id="account" name="职工编号" underline="true" value="${user.account}"  readonly="readonly"/>
+                </div>
+                <div class="col-sm-6 b-r">
+                    <#input id="username" name="职工姓名" underline="true" value="${user.name}"  readonly="readonly"/>
+                </div>
                 @select(act.taskDefKey){
                 @   case "dean_audit":
                 <div class="col-sm-6 b-r">
