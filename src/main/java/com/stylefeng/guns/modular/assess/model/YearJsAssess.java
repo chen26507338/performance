@@ -120,6 +120,18 @@ public class YearJsAssess extends BaseActEntity<YearJsAssess> {
     private String kygz;
 
     /**
+    * 教研室评语
+    */
+    @TableField("jyscom")
+    private String jyscom ;
+
+    /**
+    * 书记评语
+    */
+    @TableField("sjcom")
+    private String sjcom;
+
+    /**
     * 评语
     */
     @TableField("comments")

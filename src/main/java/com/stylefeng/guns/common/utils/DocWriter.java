@@ -88,7 +88,10 @@ public class DocWriter {
         map.put("${comments}", "12313123333");
         map.put("${year}", "2020");
         map.put("${level}", "合格");
-        String srcPath = "D:\\yearGcAssess.docx";
+        map.put("${sjcom}", "书记");
+        map.put("${jyscom}", "书记");
+//        String srcPath = "D:\\yearJsAssess.docx";
+        String srcPath = "D:\\coding\\project\\performance\\src\\main\\resources\\doc\\yearXzAssess.docx";
         String destPath = "D:\\2.doc";
         File file = new File(destPath);
         try {

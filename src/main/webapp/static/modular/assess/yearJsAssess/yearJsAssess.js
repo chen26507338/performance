@@ -19,6 +19,8 @@ YearJsAssess.initColumn = function () {
        ,{title: '职工编号', field:'expand.user.account', visible: true, align: 'center', valign: 'middle'}
        ,{title: '职工姓名', field:'expand.user.name', visible: true, align: 'center', valign: 'middle'}
        ,{title: '考核等次', field:'level', visible: true, align: 'center', valign: 'middle'}
+        ,{title: '教研室评语', field:'jyscom', visible: true, align: 'center', valign: 'middle'}
+        ,{title: '书记评语', field:'sjcom', visible: true, align: 'center', valign: 'middle'}
         ,{title: '评语', field:'comments', visible: true, align: 'center', valign: 'middle'}
         ,{title: '备注', field:'remark', visible: true, align: 'center', valign: 'middle'}
     ];

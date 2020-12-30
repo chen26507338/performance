@@ -20,6 +20,7 @@ import com.stylefeng.guns.core.util.KaptchaUtil;
 import com.stylefeng.guns.modular.assess.decorator.YearJsAssessDecorator;
 import com.stylefeng.guns.modular.assess.model.YearJsAssess;
 import com.stylefeng.guns.modular.assess.service.IYearJsAssessService;
+import com.stylefeng.guns.modular.job.service.IDeptService;
 import com.stylefeng.guns.modular.system.service.IRoleService;
 import com.stylefeng.guns.modular.system.service.IUserService;
 import fr.opensagres.odfdom.converter.core.utils.IOUtils;
@@ -47,6 +48,7 @@ import java.util.*;
 import com.stylefeng.guns.modular.assess.model.YearJsAssess;
 import com.stylefeng.guns.modular.assess.service.IYearJsAssessService;
 import com.stylefeng.guns.modular.assess.decorator.YearJsAssessDecorator;
+import sun.security.provider.SHA;
 
 import javax.annotation.Resource;
 import javax.servlet.http.HttpServletResponse;
@@ -113,6 +115,12 @@ public class YearJsAssessController extends BaseController {
         if (yearJsAssess.getType() != null) {
             wrapper.eq("type", yearJsAssess.getType());
         }
+
+        List<Long> roles = ShiroKit.getUser().getRoleList();
+        if (!roles.contains(IRoleService.TYPE_HR_HANDLER) &&
+                (!roles.contains(IRoleService.TYPE_HR_HANDLER) && ShiroKit.getUser().deptId != IDeptService.HR)) {
+            wrapper.eq("user_id", ShiroKit.getUser().id);
+        }
         yearJsAssessService.selectPage(page,wrapper);
         page.setRecords(new YearJsAssessDecorator(page.getRecords()).decorate());
         return packForBT(page);
@@ -159,8 +167,6 @@ public class YearJsAssessController extends BaseController {
     public Object detail(@PathVariable("yearJsAssessId") String yearJsAssessId) {
         return yearJsAssessService.selectById(yearJsAssessId);
     }
-
-
 
     /**
      * 考核申请
@@ -225,12 +231,15 @@ public class YearJsAssessController extends BaseController {
         map.put("${comments}", yearJsAssess.getComments());
         map.put("${level}", yearJsAssess.getLevel());
         map.put("${year}", yearJsAssess.getYear());
+        map.put("${sjcom}", yearJsAssess.getSjcom());
+        map.put("${jyscom}", yearJsAssess.getJyscom());
         try {
             User user = userService.selectIgnorePointById(yearJsAssess.getUserId());
             HttpServletResponse response = HttpKit.getResponse();
             response.setContentType("application/vnd.ms-excel;charset=utf-8");
             //弹出下载对话框的文件名，不能为中文，中文请自行编码
-            response.setHeader("Content-Disposition", "attachment;filename=" + URLUtil.encode(user.getName()+"-教师年度考核文档") + ".doc");
+            response.setHeader("Content-Disposition", "attachment;filename=" + URLUtil.encode(
+                    user.getName() + "-" + ConstantFactory.me().getDictsByName("模板名称", yearJsAssess.getType()) + "文档") + ".doc");
 
             DocWriter.searchAndReplace(path,response.getOutputStream(),map);
         } catch (IOException e) {

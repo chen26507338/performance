@@ -24,6 +24,14 @@
                 <div class="col-sm-6 b-r">
                     <#input id="comments" name="评语" underline="true" value="${item.comments}" type="textarea" />
                 </div>
+                @   case "jys_audit":
+                <div class="col-sm-6 b-r">
+                    <#input id="jyscom" name="评语" underline="true" value="${item.jyscom}" type="textarea" />
+                </div>
+                @   case "zbsj_audit":
+                <div class="col-sm-6 b-r">
+                    <#input id="sjcom" name="评语" underline="true" value="${item.sjcom}" type="textarea" />
+                </div>
                 @   case "zbzr_audit":
                 <div class="col-sm-6 b-r">
                     <#select id="level" name="评级" underline="true">
