@@ -79,6 +79,7 @@ public class YearJsAssessController extends BaseController {
     @RequiresPermissions(value = {"/yearJsAssess/list"})
     public String index(int type, Model model) {
         model.addAttribute("type", type);
+        model.addAttribute("modelName", ConstantFactory.me().getDictsByName("模板名称", type));
         return PREFIX + "yearJsAssess.html";
     }
 
