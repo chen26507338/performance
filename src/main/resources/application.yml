@@ -21,7 +21,7 @@ beetl:
 ###################  spring配置  ###################
 spring:
   profiles:
-    active: produce
+    active: dev
   mvc:
     static-path-pattern: /static/**
     view:
