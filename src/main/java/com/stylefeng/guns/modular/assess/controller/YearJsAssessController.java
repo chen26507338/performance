@@ -118,9 +118,10 @@ public class YearJsAssessController extends BaseController {
         }
 
         List<Long> roles = ShiroKit.getUser().getRoleList();
-        if (!roles.contains(IRoleService.TYPE_HR_HANDLER) &&
-                (!roles.contains(IRoleService.TYPE_HR_HANDLER) && ShiroKit.getUser().deptId != IDeptService.HR)) {
-            wrapper.eq("user_id", ShiroKit.getUser().id);
+        boolean isHrLeader = roles.contains(IRoleService.TYPE_DEPT_LEADER) && ShiroKit.getUser().deptId == IDeptService.HR;
+
+        if (!roles.contains(IRoleService.TYPE_HR_HANDLER) && !isHrLeader) {
+                wrapper.eq("user_id", ShiroKit.getUser().id);
         }
         yearJsAssessService.selectPage(page,wrapper);
         page.setRecords(new YearJsAssessDecorator(page.getRecords()).decorate());

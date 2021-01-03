@@ -91,7 +91,7 @@ public class DocWriter {
         map.put("${sjcom}", "书记");
         map.put("${jyscom}", "书记");
 //        String srcPath = "D:\\yearJsAssess.docx";
-        String srcPath = "D:\\coding\\project\\performance\\src\\main\\resources\\doc\\yearXzAssess.docx";
+        String srcPath = "D:\\yearJdAssess.docx";
         String destPath = "D:\\2.doc";
         File file = new File(destPath);
         try {
