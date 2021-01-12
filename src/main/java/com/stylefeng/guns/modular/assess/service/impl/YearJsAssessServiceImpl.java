@@ -84,7 +84,8 @@ public class YearJsAssessServiceImpl extends ServiceImpl<YearJsAssessMapper, Yea
             vars.put("dean_user", dean.getId());
             vars.put("jys_user", yearJsAssess.getJyszrUser());
             vars.put("user", ShiroKit.getUser().id);
-            procInsId = actTaskService.startProcessOnly(ActUtils.PD_TASK_YEAR_JS_ASSESS[0], ActUtils.PD_TASK_YEAR_JS_ASSESS[1], "教师年度考核", vars);
+            procInsId = actTaskService.startProcessOnly(ActUtils.PD_TASK_YEAR_JS_ASSESS[0], ActUtils.PD_TASK_YEAR_JS_ASSESS[1],
+                    ShiroKit.getUser().name + " - 教师年度考核", vars);
 
             yearJsAssess.setDeanUser(dean.getId());
             yearJsAssess.setUserId(ShiroKit.getUser().id);
@@ -107,7 +108,7 @@ public class YearJsAssessServiceImpl extends ServiceImpl<YearJsAssessMapper, Yea
             vars.put("dept_leader", deptLeader.getId());
             vars.put("user", ShiroKit.getUser().id);
             procInsId = actTaskService.startProcessOnly(ActUtils.PD_TASK_YEAR_OTHER_ASSESS[0], ActUtils.PD_TASK_YEAR_OTHER_ASSESS[1],
-                    ConstantFactory.me().getDictsByName("模板名称", yearJsAssess.getType()), vars);
+                    ShiroKit.getUser().name + " - " + ConstantFactory.me().getDictsByName("模板名称", yearJsAssess.getType()), vars);
 
             yearJsAssess.setUserId(ShiroKit.getUser().id);
             yearJsAssess.setDeptLeader(deptLeader.getId());
@@ -147,6 +148,8 @@ public class YearJsAssessServiceImpl extends ServiceImpl<YearJsAssessMapper, Yea
                     this.update(yearJsAssess, new EntityWrapper<>(params));
                     break;
             }
+        } else if (pass.equals(YesNo.NO.getCode() + "") && yearJsAssess.getAct().getTaskDefKey().equals("re_submit")){
+            this.delete(new EntityWrapper<>(params));
         }
         actTaskService.complete(yearJsAssess.getAct().getTaskId(), yearJsAssess.getAct().getProcInsId(), comment.toString(), vars);
     }

@@ -127,6 +127,12 @@ public interface IRoleService extends IService<Role> {
     long TYPE_ZBZR = 41;
 
     /**
+     * 角色类型：人事主管
+     */
+    long TYPE_HR_LEADER = 42;
+
+
+    /**
      * 设置某个角色的权限
      *
      * @param roleId 角色id

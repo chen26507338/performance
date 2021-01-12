@@ -21,7 +21,8 @@ ActTodoTask.initColumn = function () {
             }},
         {title: '当前环节', field: 'taskName', align: 'center', valign: 'middle', sortable: false},
         {title: '流程名称', field: 'expand.proDef.name', align: 'center', valign: 'middle', sortable: false},
-        {title: '版本号', field: 'expand.proDef.version', align: 'center', valign: 'middle', sortable: false},
+        {title: '发起人工号', field: 'expand.user.account', align: 'center', valign: 'middle', sortable: false},
+        {title: '发起人姓名', field: 'expand.user.name', align: 'center', valign: 'middle', sortable: false},
         {title: '创建时间', field: 'taskCreateDate', align: 'center', valign: 'middle', sortable: false}
         ]
 };

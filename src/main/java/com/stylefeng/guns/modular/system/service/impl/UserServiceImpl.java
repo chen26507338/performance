@@ -237,6 +237,17 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements IU
     }
 
     @Override
+    public User fuzzyFind(String userInfo) {
+        EntityWrapper<User> userEntityWrapper = new EntityWrapper<>();
+        userEntityWrapper
+                .eq("account", userInfo).or()
+//                .eq("id", userInfo).or()
+                .eq("name", userInfo);
+        userEntityWrapper.last("limit 1");
+        return this.selectOne(userEntityWrapper);
+    }
+
+    @Override
     @CacheEvict(value = Cache.USER_IGNORE_POINT, key = "''+#entity.id")
     public boolean updateById(User entity) {
         return super.updateById(entity);

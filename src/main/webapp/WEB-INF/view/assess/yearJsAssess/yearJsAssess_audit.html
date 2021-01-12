@@ -61,9 +61,9 @@
                     @select(act.taskDefKey){
                     @ case "hr_handle_audit","dean_audit","glry_audit":
                     <#button btnCss="info" name="确认" id="ensure" icon="fa-check" clickFun="YearJsAssessInfoDlg.auditSubmit(1)"/>
-                    @ case "hr_leader_audit":
-                    <#button btnCss="info" name="通过" id="ensure" icon="fa-check" clickFun="YearJsAssessInfoDlg.auditSubmit(1)"/>
-                    <#button btnCss="danger" name="重新设置年份" id="cancel" icon="fa-eraser" clickFun="YearJsAssessInfoDlg.auditSubmit(0)"/>
+                    @ case "re_submit":
+                    <#button btnCss="info" name="重新提交" id="ensure" icon="fa-check" clickFun="YearJsAssessInfoDlg.auditSubmit(1)"/>
+                    <#button btnCss="danger" name="作废" id="cancel" icon="fa-eraser" clickFun="YearJsAssessInfoDlg.auditSubmit(0)"/>
                     @ default:
                     <#button btnCss="info" name="通过" id="ensure" icon="fa-check" clickFun="YearJsAssessInfoDlg.auditSubmit(1)"/>
                     <#button btnCss="danger" name="驳回" id="cancel" icon="fa-eraser" clickFun="YearJsAssessInfoDlg.auditSubmit(0)"/>

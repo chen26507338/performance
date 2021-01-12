@@ -13,7 +13,7 @@ var YearJsAssess = {
  */
 YearJsAssess.initColumn = function () {
     return [
-        {field: 'selectItem', radio: true}
+        {field: 'selectItem', check: true}
        ,{title: '状态', field:'expand.statusDict', visible: true, align: 'center', valign: 'middle'}
        ,{title: '年份', field:'year', visible: true, align: 'center', valign: 'middle'}
        ,{title: '职工编号', field:'expand.user.account', visible: true, align: 'center', valign: 'middle'}
@@ -47,6 +47,8 @@ YearJsAssess.check = function () {
 YearJsAssess.formParams = function() {
     var queryData = {};
     queryData['type'] = $("#type").val();
+    queryData['level'] = $("#level").val();
+    queryData['expand["userInfo"]'] = $("#userInfo").val();
     return queryData;
 };
 
@@ -124,10 +126,93 @@ YearJsAssess.delete = function () {
 };
 
 /**
+ * 作废考核
+ */
+YearJsAssess.cancellation = function () {
+    if (this.check()) {
+        var assesses = $('#' + this.id).bootstrapTable('getSelections');
+        var ids = "";
+        for (var index in assesses) {
+            if (assesses[index].status == 0) {
+                Feng.error("存在考核中的项目");
+                return;
+            }
+            ids += assesses[index].id + ",";
+        }
+
+        parent.layer.confirm('是否要作废？', {
+            btn: ['确定', '取消'],
+            shade: false //不显示遮罩
+        }, function () {
+            var ajax = new $ax(Feng.ctxPath + "/yearJsAssess/delete", function (data) {
+                Feng.success( "作废成功!");
+                YearJsAssess.search();
+            }, function (data) {
+                Feng.error("操作失败!" + data.responseJSON.message);
+            });
+            ajax.set("ids", ids);
+            ajax.start();
+        });
+    }
+
+};
+
+/**
+ * 作废考核
+ */
+YearJsAssess.audit = function () {
+    if (this.check()) {
+        var assesses = $('#' + this.id).bootstrapTable('getSelections');
+        var ids = "";
+        for (var index in assesses) {
+            if (assesses[index].status == 0) {
+                Feng.error("存在考核中的项目");
+                return;
+            }
+            ids += assesses[index].id + ",";
+        }
+
+        var level;
+        var choice = $("#level").val();
+        if (!choice) {
+            choice = "本次操作不修改评级";
+        } else {
+            level = choice;
+            choice = "将评级修改为 " + level;
+        }
+
+        parent.layer.confirm(choice + ',是否要审核？', {
+            btn: ['确定', '取消'],
+            shade: false //不显示遮罩
+        }, function () {
+            var ajax = new $ax(Feng.ctxPath + "/yearJsAssess/update", function (data) {
+                Feng.success( "审核成功!");
+                YearJsAssess.search();
+            }, function (data) {
+                Feng.error("操作失败!" + data.responseJSON.message);
+            });
+            ajax.set("ids", ids);
+            ajax.set("level", level);
+            ajax.start();
+        });
+    }
+
+};
+
+/**
  * 查询教师考核列表
  */
 YearJsAssess.search = function () {
     YearJsAssess.table.refresh({query: YearJsAssess.formParams()});
+};
+
+/**
+ * 查询教师考核列表
+ */
+YearJsAssess.exportTotal = function (type) {
+    Feng.confirm("是否导出考核汇总", function () {
+        window.open(Feng.ctxPath + "/yearJsAssess/exportTotal?type=" + type);
+    });
 };
 
 

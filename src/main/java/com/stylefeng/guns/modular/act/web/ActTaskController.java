@@ -58,7 +58,16 @@ public class ActTaskController extends BaseController {
 	@RequestMapping(value = "todoList")
     @ResponseBody
 	public Object todoList(Act act) {
-        return actTaskService.todoList(act);
+		List<Act> acts = actTaskService.todoList(act);
+		for (Act act1 : acts) {
+			Map<String,Object> map = act1.getVars().getMap();
+			if (map.containsKey("user")) {
+				String userId = String.valueOf(map.get("user"));
+//				User user = userService.selectIgnorePointById(userId);
+				act1.putExpand("user", userService.selectIgnorePointById(userId));
+			}
+		}
+		return acts;
 	}
 
 

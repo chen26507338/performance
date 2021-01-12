@@ -68,4 +68,11 @@ public interface IUserService extends IService<User>{
      * @param user
      */
     void importUser(User user);
+
+    /**
+     *
+     * @return
+     */
+    User fuzzyFind(String userInfo);
+
 }

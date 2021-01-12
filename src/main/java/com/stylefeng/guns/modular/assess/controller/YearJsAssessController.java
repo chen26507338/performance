@@ -1,10 +1,13 @@
 package com.stylefeng.guns.modular.assess.controller;
 
 import cn.hutool.core.io.FileUtil;
+import cn.hutool.core.io.IoUtil;
 import cn.hutool.core.io.resource.ClassPathResource;
 import cn.hutool.core.io.resource.ResourceUtil;
 import cn.hutool.core.util.StrUtil;
 import cn.hutool.core.util.URLUtil;
+import cn.hutool.poi.excel.ExcelUtil;
+import cn.hutool.poi.excel.ExcelWriter;
 import cn.hutool.poi.word.Word07Writer;
 import com.stylefeng.guns.common.constant.factory.ConstantFactory;
 import com.stylefeng.guns.common.constant.state.YesNo;
@@ -21,6 +24,9 @@ import com.stylefeng.guns.modular.assess.decorator.YearJsAssessDecorator;
 import com.stylefeng.guns.modular.assess.model.YearJsAssess;
 import com.stylefeng.guns.modular.assess.service.IYearJsAssessService;
 import com.stylefeng.guns.modular.job.service.IDeptService;
+import com.stylefeng.guns.modular.job.service.IJobService;
+import com.stylefeng.guns.modular.payment.decorator.JobPriceMonthDecorator;
+import com.stylefeng.guns.modular.payment.model.JobPriceMonth;
 import com.stylefeng.guns.modular.system.service.IRoleService;
 import com.stylefeng.guns.modular.system.service.IUserService;
 import fr.opensagres.odfdom.converter.core.utils.IOUtils;
@@ -44,6 +50,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 
 import java.io.*;
 import java.net.URISyntaxException;
+import java.sql.Struct;
 import java.util.*;
 import com.stylefeng.guns.modular.assess.model.YearJsAssess;
 import com.stylefeng.guns.modular.assess.service.IYearJsAssessService;
@@ -51,6 +58,7 @@ import com.stylefeng.guns.modular.assess.decorator.YearJsAssessDecorator;
 import sun.security.provider.SHA;
 
 import javax.annotation.Resource;
+import javax.servlet.ServletOutputStream;
 import javax.servlet.http.HttpServletResponse;
 
 /**
@@ -69,6 +77,10 @@ public class YearJsAssessController extends BaseController {
     private IYearJsAssessService yearJsAssessService;
     @Autowired
     private IUserService userService;
+    @Autowired
+    private IJobService jobService;
+    @Autowired
+    private IDeptService deptService;
     @Resource
     private GunsProperties gunsProperties;
 
@@ -116,10 +128,22 @@ public class YearJsAssessController extends BaseController {
         if (yearJsAssess.getType() != null) {
             wrapper.eq("type", yearJsAssess.getType());
         }
+        if (StrUtil.isNotBlank(yearJsAssess.getLevel())) {
+            wrapper.eq("level", yearJsAssess.getLevel());
+        }
+        String userInfo = (String) yearJsAssess.getExpand().get("userInfo");
+        if (StrUtil.isNotBlank(userInfo)) {
+            User user = userService.fuzzyFind(userInfo);
+            if (user != null) {
+                wrapper.eq("user_id", user.getId());
+            } else {
+                return packForBT(new PageFactory<User>().defaultPage());
+            }
+        }
 
         List<Long> roles = ShiroKit.getUser().getRoleList();
         if (!roles.contains(IRoleService.TYPE_HR_HANDLER) &&
-                (!roles.contains(IRoleService.TYPE_HR_HANDLER) && ShiroKit.getUser().deptId != IDeptService.HR)) {
+                (!roles.contains(IRoleService.TYPE_HR_LEADER))) {
             wrapper.eq("user_id", ShiroKit.getUser().id);
         }
         yearJsAssessService.selectPage(page,wrapper);
@@ -144,8 +168,11 @@ public class YearJsAssessController extends BaseController {
     @RequestMapping(value = "/delete")
     @RequiresPermissions(value = {"/yearJsAssess/delete"})
     @ResponseBody
-    public Object delete(@RequestParam Long yearJsAssessId) {
-        yearJsAssessService.deleteById(yearJsAssessId);
+    public Object delete(@RequestParam String ids) {
+        String[] id = ids.split(",");
+        EntityWrapper<YearJsAssess> wrapper = new EntityWrapper<>();
+        wrapper.in("id", id);
+        yearJsAssessService.delete(wrapper);
         return SUCCESS_TIP;
     }
 
@@ -155,10 +182,66 @@ public class YearJsAssessController extends BaseController {
     @RequestMapping(value = "/update")
     @RequiresPermissions(value = {"/yearJsAssess/update"})
     @ResponseBody
-    public Object update(YearJsAssess yearJsAssess) {
-        yearJsAssessService.updateById(yearJsAssess);
+    public Object update(@RequestParam String ids,String level) {
+//        yearJsAssessService.updateById(yearJsAssess);
+        YearJsAssess newAssess = new YearJsAssess();
+        newAssess.setStatus(IYearJsAssessService.STATUS_PASS);
+        if (StrUtil.isNotBlank(level)) {
+            newAssess.setLevel(level);
+        }
+        String[] id = ids.split(",");
+        EntityWrapper<YearJsAssess> wrapper = new EntityWrapper<>();
+        wrapper.in("id", id);
+        yearJsAssessService.update(newAssess, wrapper);
         return SUCCESS_TIP;
     }
+
+    /**
+     *
+     */
+    @RequestMapping("/exportTotal")
+    public void exportTotal(Integer type) throws IOException {
+        YearJsAssess params = new YearJsAssess();
+        params.setStatus(IYearJsAssessService.STATUS_PASS);
+        params.setType(type);
+        List<YearJsAssess> assesses = yearJsAssessService.selectList(new EntityWrapper<>(params));
+
+        List<Map<String, Object>> data = new ArrayList<>();
+        for (YearJsAssess assess : assesses) {
+            Map<String, Object> map = new HashMap<>();
+            User user = userService.selectIgnorePointById(assess.getUserId());
+            map.put("account", user.getAccount());
+            map.put("name", user.getName());
+            map.put("sex", ConstantFactory.me().getDictsByName("性别", user.getSex()));
+            map.put("dept", deptService.selectById(user.getDeptId()).getName());
+            map.put("job", jobService.selectById(user.getJobId()).getName());
+            map.put("level", assess.getLevel());
+            data.add(map);
+        }
+        ExcelWriter writer = ExcelUtil.getWriter(true);
+        writer.addHeaderAlias("account", "职工编号");
+        writer.addHeaderAlias("name", "职工姓名");
+        writer.addHeaderAlias("sex", "性别");
+        writer.addHeaderAlias("dept", "工作部门");
+        writer.addHeaderAlias("job", "职务");
+        writer.addHeaderAlias("level", "考核等次");
+        writer.addHeaderAlias("remark", "备注");
+        writer.setOnlyAlias(true);
+        writer.write(data, true);
+        HttpServletResponse response = HttpKit.getResponse();
+
+        response.setContentType("application/vnd.ms-excel;charset=utf-8");
+        //弹出下载对话框的文件名，不能为中文，中文请自行编码
+        response.setHeader("Content-Disposition", URLUtil.encode(StrUtil.format("attachment;filename=年度{}汇总.xlsx",ConstantFactory.me().getDictsByName("模板名称", type))));
+        ServletOutputStream out = response.getOutputStream();
+
+        writer.flush(out, true);
+        // 关闭writer，释放内存
+        writer.close();
+        //此处记得关闭输出Servlet流
+        IoUtil.close(out);
+    }
+
 
     /**
      * 教师考核详情

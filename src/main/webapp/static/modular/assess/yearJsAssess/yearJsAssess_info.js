@@ -187,8 +187,8 @@ YearJsAssessInfoDlg.auditSubmit = function(pass) {
     var that = this;
     this.collectData();
 
+    var defKey = $("#taskDefKey").val();
     if (pass == 1 ) {
-        var defKey = $("#taskDefKey").val();
         if (defKey == "re_submit" && !$("#kygz").val()) {
             Feng.error("请上传考核文档");
             return;

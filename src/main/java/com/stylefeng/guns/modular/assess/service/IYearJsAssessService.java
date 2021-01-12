@@ -14,6 +14,11 @@ public interface IYearJsAssessService extends IService<YearJsAssess> {
     int STATUS_WAIT_AUDIT = 1;
 
     /**
+     * 通过
+     */
+    int STATUS_PASS = 2;
+
+    /**
      * 考核类型：教师考核
      */
     int TYPE_JS = 1;

@@ -9,21 +9,32 @@
                 <div class="row row-lg">
                     <div class="col-sm-12">
                         <div class="row">
+                            <div class="col-lg-3 col-sm-12">
+                                <#NameCon id="userInfo" name="职工信息" placeholder="职工编号/姓名"/>
+                            </div>
+                            <div class="col-sm-3">
+                                <#SelectCon id="level" name="考核等次" >
+                                <option value="优秀">优秀</option>
+                                <option value="合格">合格</option>
+                                <option value="不合格">不合格</option>
+                                </#SelectCon>
+                            </div>
                             <div class="col-sm-2">
                                 <#button name="搜索" icon="fa-search" clickFun="YearJsAssess.search()"/>
                             </div>
                         </div>
                         <div class="hidden-xs" id="YearJsAssessTableToolbar" role="group">
-                            <#button name="申请考核" icon="fa-plus" clickFun="YearJsAssess.openAddApply()"/>
-                            <#button name="导出考核文档" icon="fa-plus" clickFun="YearJsAssess.exportDoc()"/>
+                            <#button name="申请考核" icon="fa-plus" clickFun="YearJsAssess.openAddApply()" />
+                            <#button name="导出考核文档" icon="fa-plus" clickFun="YearJsAssess.exportDoc()" space="true"/>
                             @if(shiro.hasPermission("/yearJsAssess/add")){
-                                <#button name="添加" icon="fa-plus" clickFun="YearJsAssess.openAddYearJsAssess()"/>
+                                <#button name="添加" icon="fa-plus" clickFun="YearJsAssess.openAddYearJsAssess()" space="true"/>
                             @}
                             @if(shiro.hasPermission("/yearJsAssess/update")){
-                                <#button name="修改" icon="fa-plus" clickFun="YearJsAssess.openYearJsAssessDetail()" space="true"/>
+                                <#button name="审核" icon="fa-plus" clickFun="YearJsAssess.audit()" space="true"/>
+                                <#button name="导出考核汇总" icon="fa-plus" clickFun="YearJsAssess.exportTotal(${type!})" space="true"/>
                             @}
                             @if(shiro.hasPermission("/yearJsAssess/delete")){
-                                <#button name="删除" icon="fa-plus" clickFun="YearJsAssess.delete()" space="true"/>
+                                <#button name="作废" icon="fa-plus" clickFun="YearJsAssess.cancellation()" space="true"/>
                             @}
                         </div>
                         <#table id="YearJsAssessTable"/>
