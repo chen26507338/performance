@@ -329,14 +329,6 @@ public class YearJsAssessController extends BaseController {
         } catch (IOException e) {
             e.printStackTrace();
         }
-//        File file = classPathResource.getFile();
-//        byte[] bytes = FileUtil.readBytes(file);
-//
-//        try {
-//            response.getOutputStream().write(bytes);
-//        } catch (IOException e) {
-//            e.printStackTrace();
-//        }
     }
     
     /**
