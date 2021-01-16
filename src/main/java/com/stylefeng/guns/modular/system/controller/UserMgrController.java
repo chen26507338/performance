@@ -141,7 +141,7 @@ public class UserMgrController extends BaseController {
         User user = this.userMapper.selectById(userId);
         model.addAttribute("deptList", deptService.selectAllOn());
         Job param = new Job();
-//        param.setDeptId(user.getDeptId());
+        param.setDeptId(user.getDeptId());
         param.setStatus(YesNo.YES.getCode());
         model.addAttribute("jobList", jobService.selectList(new EntityWrapper<>(param)));
         model.addAttribute(user);

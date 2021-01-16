@@ -24,6 +24,10 @@
                         itemLabel="name" itemValue="id" value="${user.jobId}" underline="true"/>
 				</div>
 				<div class="col-sm-6 b-r">
+					<#select id="personalState" name="人员状态" items="${constant.getDictsByName('人员状态')}"
+					itemLabel="name" itemValue="num" value="${user.personalState+''}" underline="true"/>
+				</div>
+				<div class="col-sm-6 b-r">
 					<#input id="qq" name="qq" underline="true" value="${user.qq}"/>
 				</div>
 				<div class="col-sm-6 b-r">

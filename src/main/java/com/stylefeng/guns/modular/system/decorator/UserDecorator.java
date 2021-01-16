@@ -41,6 +41,7 @@ public class UserDecorator extends BaseListDecorator<User> {
             user.putExpand("jobName", job.getName());
         }
         user.putExpand("statusName", ConstantFactory.me().getDictsByName("账号状态",user.getStatus()));
+        user.putExpand("stateDict", ConstantFactory.me().getDictsByName("人员状态",user.getPersonalState()));
         user.putExpand("sexName", ConstantFactory.me().getDictsByName("性别",user.getSex()));
         user.setAvatar(KaptchaUtil.formatFileUrl(user.getAvatar()));
         if (StrUtil.isNotBlank(user.getRoleId())) {

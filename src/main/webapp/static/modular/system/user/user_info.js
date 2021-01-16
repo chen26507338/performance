@@ -163,6 +163,7 @@ UserInfoDlg.collectData = function () {
         .set('idCard')
         .set('nativePlace')
         .set('birthplace')
+        .set('personalState')
         .set('mobile')
         .set('emergencyContact')
         .set('emergencyMobile')
