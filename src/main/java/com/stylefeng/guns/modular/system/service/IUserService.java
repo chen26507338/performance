@@ -3,6 +3,7 @@ package com.stylefeng.guns.modular.system.service;
 import com.baomidou.mybatisplus.service.IService;
 import com.stylefeng.guns.common.persistence.model.User;
 import com.stylefeng.guns.core.base.Token;
+import com.stylefeng.guns.modular.pay.model.PaySetting;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.Serializable;
@@ -75,4 +76,5 @@ public interface IUserService extends IService<User>{
      */
     User fuzzyFind(String userInfo);
 
+    void importSetting(PaySetting paySetting);
 }

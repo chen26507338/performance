@@ -33,6 +33,8 @@ import com.stylefeng.guns.modular.job.model.Dept;
 import com.stylefeng.guns.modular.job.model.Job;
 import com.stylefeng.guns.modular.job.service.IDeptService;
 import com.stylefeng.guns.modular.job.service.IJobService;
+import com.stylefeng.guns.modular.pay.model.PaySetting;
+import com.stylefeng.guns.modular.pay.service.IPaySettingService;
 import com.stylefeng.guns.modular.system.dao.UserMgrDao;
 import com.stylefeng.guns.modular.system.service.IRoleService;
 import com.stylefeng.guns.modular.system.service.IUserService;
@@ -68,6 +70,8 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements IU
     private IDeptService deptService;
     @Autowired
     private IJobService jobService;
+    @Autowired
+    private IPaySettingService paySettingService;
 
     private Logger logger = LoggerFactory.getLogger(UserServiceImpl.class);
 
@@ -245,6 +249,35 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements IU
                 .eq("name", userInfo);
         userEntityWrapper.last("limit 1");
         return this.selectOne(userEntityWrapper);
+    }
+
+    @Override
+    @Transactional
+    public void importSetting(PaySetting paySetting) {
+        if (paySetting.getExpand().get("fileName") == null) {
+            throw new GunsException("请上传导入文件");
+        }
+
+        ExcelReader reader = ExcelUtil.getReader(gunsProperties.getFileUploadPath() + paySetting.getExpand().get("fileName"));
+        reader.addHeaderAlias("岗位责任奖参考标准", "name");
+        reader.addHeaderAlias("代码", "account");
+        reader.addHeaderAlias("原标准值（180元）", "money");
+        List<Map> users = reader.readAll(Map.class);
+        for (Map map : users) {
+            User u = this.getByAccount(map.get("account") + "");
+            if (u == null) {
+                throw new GunsException(StrUtil.format("职工编号 {} 不存在", (String) map.get("account")));
+            }
+            PaySetting setting = paySettingService.getByName((String) map.get("name"));
+            if (setting == null) {
+                setting = new PaySetting();
+                setting.setName((String) map.get("name"));
+                setting.setMoney(Double.parseDouble(map.get("money") + ""));
+                paySettingService.insert(setting);
+            }
+            u.setPaysId(setting.getId());
+            u.updateById();
+        }
     }
 
     @Override

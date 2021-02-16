@@ -92,6 +92,19 @@ MgrUser.import = function () {
         content: Feng.ctxPath + '/mgr/open_import'
     });
 };
+/**
+ * 点击导入考核指标库
+ */
+MgrUser.importSetting = function () {
+    this.layerIndex = layer.open({
+        type: 2,
+        title: '导入薪酬',
+        area: ['800px', '420px'], //宽高
+        fix: false, //不固定
+        maxmin: true,
+        content: Feng.ctxPath + '/mgr/open_psImport'
+    });
+};
 
 /**
  * 点击角色分配

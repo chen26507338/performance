@@ -262,6 +262,12 @@ public class User extends BaseModel<User> {
     @TableField("pqqs")
     private String pqqs;
     /**
+     * 薪酬设置id
+     */
+    @TableField("pays_id")
+    private Long paysId;
+
+    /**
      * 个人身份
      */
     @TableField("grsf")

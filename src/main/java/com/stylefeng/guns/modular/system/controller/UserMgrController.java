@@ -28,6 +28,8 @@ import com.stylefeng.guns.core.util.ToolUtil;
 import com.stylefeng.guns.modular.job.model.Job;
 import com.stylefeng.guns.modular.job.service.IDeptService;
 import com.stylefeng.guns.modular.job.service.IJobService;
+import com.stylefeng.guns.modular.pay.model.PaySetting;
+import com.stylefeng.guns.modular.pay.service.IPaySettingService;
 import com.stylefeng.guns.modular.system.dao.UserMgrDao;
 import com.stylefeng.guns.modular.system.decorator.UserDecorator;
 import com.stylefeng.guns.modular.system.factory.UserFactory;
@@ -68,7 +70,8 @@ public class UserMgrController extends BaseController {
 
     @Resource
     private UserMgrDao managerDao;
-
+    @Autowired
+    private IPaySettingService paySettingService;
     @Resource
     private UserMapper userMapper;
     @Autowired
@@ -110,6 +113,24 @@ public class UserMgrController extends BaseController {
     @ResponseBody
     public Object importUser(User user) {
         userService.importUser(user);
+        return SUCCESS_TIP;
+    }
+
+    /**
+     * 跳转到查看管理员列表的页面
+     */
+    @RequestMapping("/open_psImport")
+    public String openPsImport() {
+        return  "/pay/paySetting/paySetting_import.html";
+    }
+
+    /**
+     * 跳转到查看管理员列表的页面
+     */
+    @RequestMapping("/importSetting")
+    @ResponseBody
+    public Object importSetting(PaySetting paySetting) {
+        userService.importSetting(paySetting);
         return SUCCESS_TIP;
     }
 

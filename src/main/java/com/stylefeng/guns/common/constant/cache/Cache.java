@@ -26,5 +26,7 @@ public interface Cache {
 
     String TOKEN_USED = "token_used";
 
+    String PAY_SETTING = "pay_setting";
+
     String JOB_PRICE_DATA = "job_price_data";
 }
