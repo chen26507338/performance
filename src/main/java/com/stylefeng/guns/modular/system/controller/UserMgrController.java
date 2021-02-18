@@ -279,7 +279,7 @@ public class UserMgrController extends BaseController {
     @BussinessLog(value = "删除管理员", key = "userId", dict = UserDict.class)
     @Permission
     @ResponseBody
-    public Tip delete(@RequestParam Integer userId) {
+    public Tip delete(@RequestParam Long userId) {
         if (ToolUtil.isEmpty(userId)) {
             throw new GunsException(BizExceptionEnum.REQUEST_NULL);
         }
@@ -287,8 +287,9 @@ public class UserMgrController extends BaseController {
         if (userId.equals(Const.ADMIN_ID)) {
             throw new GunsException(BizExceptionEnum.CANT_DELETE_ADMIN);
         }
-        assertAuth(userId);
-        this.managerDao.setStatus(userId, ManagerStatus.DELETED.getCode());
+        userService.deleteById(userId);
+//        assertAuth(userId);
+//        this.managerDao.setStatus(userId, ManagerStatus.DELETED.getCode());
         return SUCCESS_TIP;
     }
 

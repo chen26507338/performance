@@ -1,0 +1,41 @@
+@layout("/common/_container.html"){
+<div class="ibox float-e-margins">
+    <div class="ibox-content">
+        <div class="form-horizontal" id="DeptPostForm">
+
+            <input type="hidden" id="id" value="">
+
+            <div class="row">
+
+                <div class="col-sm-6 b-r">
+                    <#input id="deptId" name="部门id" underline="true"/>
+                </div>
+                <div class="col-sm-6 b-r">
+                    <#input id="postId" name="职务id" underline="true"/>
+                </div>
+                <div class="col-sm-6 b-r">
+                    <#input id="userId" name="用户id" underline="true"/>
+                </div>
+                <div class="col-sm-6 b-r">
+                    <#select id="isDb" name="是否定编" items="${constant.getDictsByName('是否')}"
+                    itemLabel="name" itemValue="num" underline="true"/>
+                </div>
+                <div class="col-sm-6 b-r">
+                    <#select id="isStar" name="是否星号" items="${constant.getDictsByName('是否')}"
+                    itemLabel="name" itemValue="num" underline="true"/>
+                </div>
+
+            </div>
+
+            <div class="row btn-group-m-t">
+                <div class="col-sm-10">
+                    <#button btnCss="info" name="提交" id="ensure" icon="fa-check" clickFun="DeptPostInfoDlg.addSubmit()"/>
+                    <#button btnCss="danger" name="取消" id="cancel" icon="fa-eraser" clickFun="DeptPostInfoDlg.close()"/>
+                </div>
+            </div>
+        </div>
+
+    </div>
+</div>
+<script src="${ctxPath}/static/modular/post/deptPost/deptPost_info.js"></script>
+@}

@@ -41,12 +41,37 @@ INSERT INTO `sys_menu` (`id`, `code`, `pcode`, `pcodes`, `name`, `icon`, `url`, 
 INSERT INTO `sys_menu` (`id`, `code`, `pcode`, `pcodes`, `name`, `icon`, `url`, `num`, `levels`, `ismenu`, `tips`, `status`, `isopen`) VALUES ('1360783475540606980', 'paySetting_update', 'paySetting', '[0],[emp_money],[paySetting],', '薪酬设置更新', '', '/paySetting/update', '99', '3', '0', NULL, '1', '0');
 INSERT INTO `sys_menu` (`id`, `code`, `pcode`, `pcodes`, `name`, `icon`, `url`, `num`, `levels`, `ismenu`, `tips`, `status`, `isopen`) VALUES ('1360783475540606981', 'paySetting_delete', 'paySetting', '[0],[emp_money],[paySetting],', '薪酬设置删除', '', '/paySetting/delete', '99', '3', '0', NULL, '1', '0');
 INSERT INTO `sys_menu` (`id`, `code`, `pcode`, `pcodes`, `name`, `icon`, `url`, `num`, `levels`, `ismenu`, `tips`, `status`, `isopen`) VALUES ('1360783475540606982', 'paySetting_detail', 'paySetting', '[0],[emp_money],[paySetting],', '薪酬设置详情', '', '/paySetting/detail', '99', '3', '0', NULL, '1', '0');
-
-delete from sys_menu where id = 1226328464463880225;
-
 insert into sys_relation (`menuid`,`roleid`) values (1360783475540606977,1);
 insert into sys_relation (`menuid`,`roleid`) values (1360783475540606978,1);
 insert into sys_relation (`menuid`,`roleid`) values (1360783475540606979,1);
 insert into sys_relation (`menuid`,`roleid`) values (1360783475540606980,1);
 insert into sys_relation (`menuid`,`roleid`) values (1360783475540606981,1);
 insert into sys_relation (`menuid`,`roleid`) values (1360783475540606982,1);
+
+delete from sys_menu where id = 1226328464463880225;
+
+INSERT INTO `sys_menu` (`id`, `code`, `pcode`, `pcodes`, `name`, `icon`, `url`, `num`, `levels`, `ismenu`, `tips`, `status`, `isopen`) VALUES ('1362305336648773634', 'postSetting', 'college', '[0],[college],', '职务设置', '', '/postSetting', '90', '2', '1', NULL, '1', '0');
+INSERT INTO `sys_menu` (`id`, `code`, `pcode`, `pcodes`, `name`, `icon`, `url`, `num`, `levels`, `ismenu`, `tips`, `status`, `isopen`) VALUES ('1362305336648773635', 'postSetting_list', 'postSetting', '[0],[college],[postSetting],', '职务设置列表', '', '/postSetting/list', '99', '3', '0', NULL, '1', '0');
+INSERT INTO `sys_menu` (`id`, `code`, `pcode`, `pcodes`, `name`, `icon`, `url`, `num`, `levels`, `ismenu`, `tips`, `status`, `isopen`) VALUES ('1362305336648773636', 'postSetting_add', 'postSetting', '[0],[college],[postSetting],', '职务设置添加', '', '/postSetting/add', '99', '3', '0', NULL, '1', '0');
+INSERT INTO `sys_menu` (`id`, `code`, `pcode`, `pcodes`, `name`, `icon`, `url`, `num`, `levels`, `ismenu`, `tips`, `status`, `isopen`) VALUES ('1362305336648773637', 'postSetting_update', 'postSetting', '[0],[college],[postSetting],', '职务设置更新', '', '/postSetting/update', '99', '3', '0', NULL, '1', '0');
+INSERT INTO `sys_menu` (`id`, `code`, `pcode`, `pcodes`, `name`, `icon`, `url`, `num`, `levels`, `ismenu`, `tips`, `status`, `isopen`) VALUES ('1362305336648773638', 'postSetting_delete', 'postSetting', '[0],[college],[postSetting],', '职务设置删除', '', '/postSetting/delete', '99', '3', '0', NULL, '1', '0');
+INSERT INTO `sys_menu` (`id`, `code`, `pcode`, `pcodes`, `name`, `icon`, `url`, `num`, `levels`, `ismenu`, `tips`, `status`, `isopen`) VALUES ('1362305336648773639', 'postSetting_detail', 'postSetting', '[0],[college],[postSetting],', '职务设置详情', '', '/postSetting/detail', '99', '3', '0', NULL, '1', '0');
+insert into sys_relation (`menuid`,`roleid`) values (1362305336648773634,1);
+insert into sys_relation (`menuid`,`roleid`) values (1362305336648773635,1);
+insert into sys_relation (`menuid`,`roleid`) values (1362305336648773636,1);
+insert into sys_relation (`menuid`,`roleid`) values (1362305336648773637,1);
+insert into sys_relation (`menuid`,`roleid`) values (1362305336648773638,1);
+insert into sys_relation (`menuid`,`roleid`) values (1362305336648773639,1);
+
+INSERT INTO `sys_menu` (`id`, `code`, `pcode`, `pcodes`, `name`, `icon`, `url`, `num`, `levels`, `ismenu`, `tips`, `status`, `isopen`) VALUES ('1362305938577534977', 'deptPost', 'college', '[0],[college],', '机构职务配置', '', '/deptPost', '99', '2', '1', NULL, '1', '0');
+INSERT INTO `sys_menu` (`id`, `code`, `pcode`, `pcodes`, `name`, `icon`, `url`, `num`, `levels`, `ismenu`, `tips`, `status`, `isopen`) VALUES ('1362305938577534978', 'deptPost_list', 'deptPost', '[0],[college],[deptPost],', '机构职务配置列表', '', '/deptPost/list', '99', '3', '0', NULL, '1', '0');
+INSERT INTO `sys_menu` (`id`, `code`, `pcode`, `pcodes`, `name`, `icon`, `url`, `num`, `levels`, `ismenu`, `tips`, `status`, `isopen`) VALUES ('1362305938577534979', 'deptPost_add', 'deptPost', '[0],[college],[deptPost],', '机构职务配置添加', '', '/deptPost/add', '99', '3', '0', NULL, '1', '0');
+INSERT INTO `sys_menu` (`id`, `code`, `pcode`, `pcodes`, `name`, `icon`, `url`, `num`, `levels`, `ismenu`, `tips`, `status`, `isopen`) VALUES ('1362305938577534980', 'deptPost_update', 'deptPost', '[0],[college],[deptPost],', '机构职务配置更新', '', '/deptPost/update', '99', '3', '0', NULL, '1', '0');
+INSERT INTO `sys_menu` (`id`, `code`, `pcode`, `pcodes`, `name`, `icon`, `url`, `num`, `levels`, `ismenu`, `tips`, `status`, `isopen`) VALUES ('1362305938577534981', 'deptPost_delete', 'deptPost', '[0],[college],[deptPost],', '机构职务配置删除', '', '/deptPost/delete', '99', '3', '0', NULL, '1', '0');
+INSERT INTO `sys_menu` (`id`, `code`, `pcode`, `pcodes`, `name`, `icon`, `url`, `num`, `levels`, `ismenu`, `tips`, `status`, `isopen`) VALUES ('1362305938577534982', 'deptPost_detail', 'deptPost', '[0],[college],[deptPost],', '机构职务配置详情', '', '/deptPost/detail', '99', '3', '0', NULL, '1', '0');
+insert into sys_relation (`menuid`,`roleid`) values (1362305938577534977,1);
+insert into sys_relation (`menuid`,`roleid`) values (1362305938577534978,1);
+insert into sys_relation (`menuid`,`roleid`) values (1362305938577534979,1);
+insert into sys_relation (`menuid`,`roleid`) values (1362305938577534980,1);
+insert into sys_relation (`menuid`,`roleid`) values (1362305938577534981,1);
+insert into sys_relation (`menuid`,`roleid`) values (1362305938577534982,1);

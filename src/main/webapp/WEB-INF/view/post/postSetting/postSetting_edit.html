@@ -1,0 +1,32 @@
+@layout("/common/_container.html"){
+<div class="ibox float-e-margins">
+    <div class="ibox-content">
+        <div class="form-horizontal" id="PostSettingForm">
+
+            <input type="hidden" id="id" value="${item.id}">
+
+            <div class="row">
+
+                <div class="col-sm-6 b-r">
+                    <#input id="ldks" name="领导科室" value="${item.ldks}" underline="true"/>
+                </div>
+                <div class="col-sm-6 b-r">
+                    <#input id="zj" name="职级" value="${item.zj}" underline="true"/>
+                </div>
+                <div class="col-sm-6 b-r">
+                    <#input id="zw" name="职务" value="${item.zw}" underline="true"/>
+                </div>
+            </div>
+
+            <div class="row btn-group-m-t">
+                <div class="col-sm-10">
+                    <#button btnCss="info" name="提交" id="ensure" icon="fa-check" clickFun="PostSettingInfoDlg.editSubmit()"/>
+                    <#button btnCss="danger" name="取消" id="cancel" icon="fa-eraser" clickFun="PostSettingInfoDlg.close()"/>
+                </div>
+            </div>
+        </div>
+
+    </div>
+</div>
+<script src="${ctxPath}/static/modular/post/postSetting/postSetting_info.js"></script>
+@}

@@ -30,6 +30,8 @@ MgrUser.initColumn = function () {
             }},
         {title: '电话', field: 'phone', align: 'center', valign: 'middle', sortable: true},
         {title: '人员状态', field: 'expand.stateDict', align: 'center', valign: 'middle', sortable: true},
+        {title: '岗位责任奖标准', field: 'expand.paySetting.name', align: 'center', valign: 'middle', sortable: true},
+        {title: '责任奖标准值', field: 'expand.paySetting.money', align: 'center', valign: 'middle', sortable: true},
         {title: '状态', field: 'expand.statusName', align: 'center', valign: 'middle', sortable: true}];
 };
 

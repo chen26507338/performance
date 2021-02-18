@@ -13,21 +13,25 @@ import com.stylefeng.guns.modular.job.model.Dept;
 import com.stylefeng.guns.modular.job.model.Job;
 import com.stylefeng.guns.modular.job.service.IDeptService;
 import com.stylefeng.guns.modular.job.service.IJobService;
+import com.stylefeng.guns.modular.pay.service.IPaySettingService;
 import com.stylefeng.guns.modular.system.service.IRoleService;
 
 import java.util.ArrayList;
 import java.util.List;
 
 public class UserDecorator extends BaseListDecorator<User> {
-    private IDeptService deptService;
-    private IJobService jobService;
-    private IRoleService roleService;
+    private final IDeptService deptService;
+    private final IJobService jobService;
+    private final IRoleService roleService;
+    private final IPaySettingService paySettingService;
+
 
     public UserDecorator(List<User> list) {
         super(list);
         deptService = SpringContextHolder.getBean(IDeptService.class);
         jobService = SpringContextHolder.getBean(IJobService.class);
         roleService = SpringContextHolder.getBean(IRoleService.class);
+        paySettingService = SpringContextHolder.getBean(IPaySettingService.class);
     }
 
     @Override
@@ -56,5 +60,6 @@ public class UserDecorator extends BaseListDecorator<User> {
             }
             user.putExpand("userType", CollUtil.isEmpty(roleNames)?"会员": CollUtil.join(roleNames.iterator(), ","));
         }
+        user.putExpand("paySetting", paySettingService.selectById(user.getPaysId()));
     }
 }
