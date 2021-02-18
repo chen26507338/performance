@@ -14,9 +14,12 @@ var DeptPost = {
 DeptPost.initColumn = function () {
     return [
         {field: 'selectItem', radio: true}
-       ,{title: '部门id', field:'deptId', visible: true, align: 'center', valign: 'middle'}
-       ,{title: '职务id', field:'postId', visible: true, align: 'center', valign: 'middle'}
-       ,{title: '用户id', field:'userId', visible: true, align: 'center', valign: 'middle'}
+       ,{title: '部门', field:'expand.dept.name', visible: true, align: 'center', valign: 'middle'}
+       ,{title: '领导科室', field:'expand.postS.ldks', visible: true, align: 'center', valign: 'middle'}
+       ,{title: '职级', field:'expand.postS.zj', visible: true, align: 'center', valign: 'middle'}
+       ,{title: '职务', field:'expand.postS.zw', visible: true, align: 'center', valign: 'middle'}
+       ,{title: '职工编号', field:'expand.user.account', visible: true, align: 'center', valign: 'middle'}
+       ,{title: '职工姓名', field:'expand.user.name', visible: true, align: 'center', valign: 'middle'}
        ,{title: '是否定编', field:'isDb', visible: true, align: 'center', valign: 'middle',formatter:function(value, row, index){return row.expand.isDbDict;}}
        ,{title: '是否星号', field:'isStar', visible: true, align: 'center', valign: 'middle',formatter:function(value, row, index){return row.expand.isStarDict;}}
     ];

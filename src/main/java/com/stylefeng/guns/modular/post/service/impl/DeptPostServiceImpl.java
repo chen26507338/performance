@@ -73,6 +73,7 @@ public class DeptPostServiceImpl extends ServiceImpl<DeptPostMapper, DeptPost> i
             PostSetting postSetting = postSettingService.getByCache(postSParam);
             if (postSetting == null) {
                 postSettingService.insert(postSParam);
+                postSetting = new PostSetting();
                 postSetting.setId(postSParam.getId());
             }
 
@@ -81,7 +82,9 @@ public class DeptPostServiceImpl extends ServiceImpl<DeptPostMapper, DeptPost> i
             DeptPost dPost = new DeptPost();
             dPost.setDeptId(dept.getId());
             dPost.setPostId(postSetting.getId());
-            dPost.setUserId(user.getId());
+            if (user != null) {
+                dPost.setUserId(user.getId());
+            }
             dPost.setIsDb(map.get("isDb") == null ? YesNo.NO.getCode() : YesNo.YES.getCode());
             dPost.setIsStar(map.get("isStar") == null ? YesNo.NO.getCode() : YesNo.YES.getCode());
             dPost.insert();

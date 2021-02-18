@@ -9,6 +9,8 @@ import com.stylefeng.guns.modular.post.model.PostSetting;
 import com.stylefeng.guns.modular.post.dao.PostSettingMapper;
 import com.stylefeng.guns.modular.post.service.IPostSettingService;
 
+import java.io.Serializable;
+
 /**
  * 职务设置服务实现类
  *
@@ -22,6 +24,12 @@ public class PostSettingServiceImpl extends ServiceImpl<PostSettingMapper, PostS
     @Cacheable(value = CACHE_NAME,key = "'"+CACHE_ENTITY+"'+#postSetting.ldks+#postSetting.zj+#postSetting.zw")
     public PostSetting getByCache(PostSetting postSetting) {
         return this.selectOne(new EntityWrapper<>(postSetting));
+    }
+
+    @Override
+    @Cacheable(value = CACHE_NAME,key = "'"+CACHE_ENTITY+"'+#id")
+    public PostSetting selectById(Serializable id) {
+        return super.selectById(id);
     }
 
     @Override
