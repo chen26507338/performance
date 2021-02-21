@@ -27,6 +27,8 @@
 	    college_norm_point AS collegeNormPoint,
 	    na.year AS year,
 	    na.create_time AS createTime,
+	    na.main_point AS mainPoint,
+	    na.assess_name AS assessName,
 	    na.status AS status,
 	    proc_ins_id AS procInsId
     </sql>
@@ -36,7 +38,7 @@
         left join sys_user su on na.user_id = su.id
         <where>
             <if test="type != null and type != ''">
-                and an.type = #{type}
+                and na.type = #{type}
             </if>
             <if test="expand.name != null and expand.name != ''">
                 and su.name = #{expand.name}

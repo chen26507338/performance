@@ -22,7 +22,7 @@ NormalAssess.initColumn = function () {
        ,{title: '校级标准分', field:'mainNormPoint', visible: true, align: 'center', valign: 'middle'}
        ,{title: '院级浮动值', field:'collegeNormPoint', visible: true, align: 'center', valign: 'middle'}
        ,{title: '考核结果', field:'result', visible: true, align: 'center', valign: 'middle'}
-       ,{title: '校级分', field:'expand.mainPoint', visible: true, align: 'center', valign: 'middle'}
+       ,{title: '校级分', field:'mainPoint', visible: true, align: 'center', valign: 'middle'}
        ,{title: '院级分', field:'expand.collegePoint', visible: true, align: 'center', valign: 'middle'}
        ,{title: '年度', field:'year', visible: true, align: 'center', valign: 'middle'}
        ,{title: '创建时间', field:'createTime', visible: true, align: 'center', valign: 'middle'}
@@ -67,7 +67,7 @@ NormalAssess.formParams = function() {
 NormalAssess.openAddNormalAssess = function () {
     this.layerIndex = layer.open({
         type: 2,
-        title: '添加考核指标库',
+        title: '添加考核指标',
         area: ['800px', '420px'], //宽高
         fix: false, //不固定
         maxmin: true,
@@ -82,11 +82,25 @@ NormalAssess.openAddNormalAssess = function () {
 NormalAssess.openImportNormalAssess = function () {
     this.layerIndex = layer.open({
         type: 2,
-        title: '添加考核指标库',
+        title: '导入绩效考核',
         area: ['800px', '420px'], //宽高
         fix: false, //不固定
         maxmin: true,
         content: Feng.ctxPath + '/normalAssess/normalAssess_import?type=' + type
+    });
+};
+
+/**
+ * 点击导入考核指标库
+ */
+NormalAssess.openImportAssess = function () {
+    this.layerIndex = layer.open({
+        type: 2,
+        title: '导入现有绩效考核',
+        area: ['800px', '420px'], //宽高
+        fix: false, //不固定
+        maxmin: true,
+        content: Feng.ctxPath + '/normalAssess/normal_importAssess?type=' + type
     });
 };
 

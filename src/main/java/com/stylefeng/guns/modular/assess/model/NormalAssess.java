@@ -85,8 +85,26 @@ public class NormalAssess extends BaseActEntity<NormalAssess> {
     /**
     * 类型
     */
-    @TableField(exist = false)
+    @TableField("type")
     private String type;
+
+    /**
+    * 考核项目
+    */
+    @TableField("assess_name")
+    private String assessName;
+
+    /**
+    * 校积分
+    */
+    @TableField("main_point")
+    private Double mainPoint;
+
+    /**
+    * 考核项目
+    */
+    @TableField(exist = false)
+    private String account;
 
     /**
     * 创建时间

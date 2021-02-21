@@ -75,3 +75,13 @@ insert into sys_relation (`menuid`,`roleid`) values (1362305938577534979,1);
 insert into sys_relation (`menuid`,`roleid`) values (1362305938577534980,1);
 insert into sys_relation (`menuid`,`roleid`) values (1362305938577534981,1);
 insert into sys_relation (`menuid`,`roleid`) values (1362305938577534982,1);
+
+alter table normal_assess
+	add type varchar(100) null comment '类型';
+
+alter table normal_assess
+	add assess_name varchar(100) null comment '考核项目';
+
+alter table normal_assess
+    add main_point double null comment '校积分';
+

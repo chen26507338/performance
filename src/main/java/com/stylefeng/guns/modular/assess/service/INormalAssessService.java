@@ -14,4 +14,10 @@ public interface INormalAssessService extends IService<NormalAssess> {
      * 审核
      */
     void audit(NormalAssess normalAssess);
+
+    /**
+     * 导入现有数据
+     * @param normalAssess
+     */
+    void importAssess(NormalAssess normalAssess);
 }

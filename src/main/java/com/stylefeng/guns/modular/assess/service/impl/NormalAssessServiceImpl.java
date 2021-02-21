@@ -240,6 +240,27 @@ public class NormalAssessServiceImpl extends ServiceImpl<NormalAssessMapper, Nor
     }
 
     @Override
+    @Transactional
+    public void importAssess(NormalAssess normalAssess) {
+        ExcelReader reader = ExcelUtil.getReader(gunsProperties.getFileUploadPath() + normalAssess.getExpand().get("fileName"));
+        reader.addHeaderAlias("考核项目", "assessName");
+        reader.addHeaderAlias("校级积分", "mainPoint");
+        reader.addHeaderAlias("积分归属年份", "year");
+        reader.addHeaderAlias("教师工号", "account");
+        List<NormalAssess> normalAssesses = reader.readAll(NormalAssess.class);
+        AssessCoefficient assessCoefficient = assessCoefficientService.selectById(normalAssess.getType());
+        for (NormalAssess assess : normalAssesses) {
+            assess.setCoePoint(assessCoefficient.getCoefficient());
+            User user = userService.getByAccount(assess.getAccount());
+            assess.setUserId(user.getId());
+            assess.setStatus(YesNo.YES.getCode());
+            assess.setCreateTime(new Date());
+            assess.setType(normalAssess.getType());
+        }
+        this.insertBatch(normalAssesses);
+    }
+
+    @Override
     public Page<NormalAssess> selectPage(Page<NormalAssess> page, Wrapper<NormalAssess> wrapper) {
         page.setRecords(baseMapper.selectPage(page, wrapper.getEntity()));
         return page;

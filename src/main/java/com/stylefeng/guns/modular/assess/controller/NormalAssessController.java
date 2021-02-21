@@ -64,13 +64,23 @@ public class NormalAssessController extends BaseController {
     }
 
     /**
-     * 跳转到添加考核指标库
+     * 跳转到导入考核绩效
      */
     @RequestMapping("/normalAssess_import")
 //    @RequiresPermissions(value = {"/normalAssess/add"})
     public String normalAssessImport(String type,Model model) {
         model.addAttribute("type", type);
         return PREFIX + "normalAssess_import.html";
+    }
+
+    /**
+     * 跳转到导入现有考核绩效
+     */
+    @RequestMapping("/normal_importAssess")
+//    @RequiresPermissions(value = {"/normalAssess/add"})
+    public String normalImportAssess(String type,Model model) {
+        model.addAttribute("type", type);
+        return PREFIX + "normal_importAssess.html";
     }
 
     /**
@@ -163,6 +173,17 @@ public class NormalAssessController extends BaseController {
         normalAssessService.insert(normalAssess);
         return SUCCESS_TIP;
     }
+    /**
+     * 导入考核
+     */
+    @RequestMapping(value = "/importAssess")
+//    @RequiresPermissions(value = {"/normalAssess/add"})
+    @ResponseBody
+    public Object importAssess(NormalAssess normalAssess) {
+        normalAssessService.importAssess(normalAssess);
+        return SUCCESS_TIP;
+    }
+
 
     /**
      * 删除考核指标库

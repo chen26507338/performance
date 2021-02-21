@@ -47,9 +47,15 @@ public class NormalAssessDecorator extends BaseListDecorator<NormalAssess> {
         if (assessNorm != null) {
             normalAssess.putExpand("normCode", assessNorm.getCode());
             normalAssess.putExpand("normName", assessNorm.getContent());
+        }else {
+            normalAssess.putExpand("normName", normalAssess.getAssessName());
         }
-        Double mainPoint = normalAssess.getMainNormPoint() * normalAssess.getResult() * normalAssess.getCoePoint();
-        normalAssess.putExpand("mainPoint", mainPoint);
-        normalAssess.putExpand("collegePoint", NumberUtil.roundStr(mainPoint * (1 + normalAssess.getCollegeNormPoint()),2));
+
+        if (normalAssess.getResult() != null) {
+            double mainPoint = normalAssess.getMainNormPoint() * normalAssess.getResult() * normalAssess.getCoePoint();
+            normalAssess.setMainPoint(mainPoint);
+            normalAssess.putExpand("collegePoint", NumberUtil.roundStr(mainPoint * (1 + normalAssess.getCollegeNormPoint()), 2));
+        }
+
     }
 }

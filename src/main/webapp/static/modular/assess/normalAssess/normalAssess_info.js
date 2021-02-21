@@ -185,6 +185,31 @@ NormalAssessInfoDlg.importSubmit = function() {
 };
 
 /**
+ * 提交导入
+ */
+NormalAssessInfoDlg.importAssessSubmit = function() {
+
+    this.clearData();
+    this.collectData();
+    //
+    // if (!this.validate()) {
+    //     return;
+    // }
+    //
+    // //提交信息
+    var ajax = new $ax(Feng.ctxPath + "/normalAssess/importAssess", function(data){
+        Feng.success("导入成功!");
+        window.parent.NormalAssess.table.refresh();
+        NormalAssessInfoDlg.close();
+    },function(data){
+        Feng.error("导入失败!" + data.responseJSON.message + "!");
+    });
+    this.normalAssessInfoData['expand["fileName"]'] = $("#fileName").val();
+    ajax.set(this.normalAssessInfoData);
+    ajax.start();
+};
+
+/**
  * 审核
  */
 NormalAssessInfoDlg.auditSubmit = function(pass) {
