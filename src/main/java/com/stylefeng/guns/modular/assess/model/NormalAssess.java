@@ -101,7 +101,7 @@ public class NormalAssess extends BaseActEntity<NormalAssess> {
     private Double mainPoint;
 
     /**
-    * 考核项目
+    * 职工编号
     */
     @TableField(exist = false)
     private String account;

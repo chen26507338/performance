@@ -85,3 +85,23 @@ alter table normal_assess
 alter table normal_assess
     add main_point double null comment '校积分';
 
+create table rypz_assess
+(
+	id bigint null,
+	user_id bigint null comment '用户ID',
+	assess_name varchar(100) null comment '考核项目',
+	main_point double null comment '校积分',
+	year varchar(100) null comment '年度',
+	constraint rypz_assess_pk
+		primary key (id)
+)
+comment '人员配置考核';
+
+update sys_menu set url = '/rypzAssess' where id = 1226328464463880204;
+
+alter table assess_norm_point
+    add rypz_main double default 0 null comment '人员配置校级分';
+
+alter table assess_norm_point
+    add rypz_college double default 0 null comment '人员配置院级分';
+
