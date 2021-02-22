@@ -16,4 +16,10 @@ public interface IScientificProjectService extends IService<ScientificProject> {
     void addApply(List<ScientificProject> scientificProjects);
 
     void audit(ScientificProject scientificProject);
+
+    /**
+     * 导入现有绩效
+     * @param scientificProject
+     */
+    void importAssess(ScientificProject scientificProject);
 }

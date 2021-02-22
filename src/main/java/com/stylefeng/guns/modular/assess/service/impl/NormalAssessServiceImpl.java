@@ -252,10 +252,33 @@ public class NormalAssessServiceImpl extends ServiceImpl<NormalAssessMapper, Nor
         for (NormalAssess assess : normalAssesses) {
             assess.setCoePoint(assessCoefficient.getCoefficient());
             User user = userService.getByAccount(assess.getAccount());
+            if (user == null) {
+                throw new GunsException(StrUtil.format("职工编号 {} 不存在", assess.getAccount()));
+            }
+
             assess.setUserId(user.getId());
             assess.setStatus(YesNo.YES.getCode());
             assess.setCreateTime(new Date());
             assess.setType(normalAssess.getType());
+
+            AssessNormPoint assessNormPoint = new AssessNormPoint();
+            assessNormPoint.setUserId(assess.getUserId());
+            assessNormPoint.setYear(assess.getYear());
+            assessNormPoint = assessNormPointService.selectOne(new EntityWrapper<>(assessNormPoint));
+
+            if (assessNormPoint != null) {
+                Double mainPoint = (Double) ReflectUtil.getFieldValue(assessNormPoint, normalAssess.getType() + "Main");
+                mainPoint += assess.getMainPoint();
+                ReflectUtil.setFieldValue(assessNormPoint, normalAssess.getType() + "Main", mainPoint);
+            } else {
+                assessNormPoint = new AssessNormPoint();
+                double mainPoint = assess.getMainPoint();
+                ReflectUtil.setFieldValue(assessNormPoint, normalAssess.getType() + "Main", mainPoint);
+                assessNormPoint.setYear(assess.getYear());
+                assessNormPoint.setUserId(assess.getUserId());
+                assessNormPoint.setDeptId(user.getDeptId());
+            }
+            assessNormPointService.insertOrUpdate(assessNormPoint);
         }
         this.insertBatch(normalAssesses);
     }

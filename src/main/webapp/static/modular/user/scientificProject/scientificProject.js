@@ -14,13 +14,17 @@ var ScientificProject = {
 ScientificProject.initColumn = function () {
     return [
         {field: 'selectItem', radio: true}
+       ,{title: '职工编号', field:'expand.user.account', visible: true, align: 'center', valign: 'middle'}
+       ,{title: '职工姓名', field:'expand.user.name', visible: true, align: 'center', valign: 'middle'}
        ,{title: '课题名称', field:'name', visible: true, align: 'center', valign: 'middle'}
        ,{title: '课题性质', field:'nature', visible: true, align: 'center', valign: 'middle'}
-       ,{title: '课题项目类别', field:'type', visible: true, align: 'center', valign: 'middle'}
+       ,{title: '分类/级别', field:'type', visible: true, align: 'center', valign: 'middle'}
        ,{title: '开题时间', field:'startTime', visible: true, align: 'center', valign: 'middle'}
        ,{title: '结题时间', field:'endTime', visible: true, align: 'center', valign: 'middle'}
        ,{title: '到账经费', field:'expenditure', visible: true, align: 'center', valign: 'middle'}
-       ,{title: '排名', field:'rank', visible: true, align: 'center', valign: 'middle'}
+       ,{title: '期刊名称/排名', field:'rank', visible: true, align: 'center', valign: 'middle'}
+       ,{title: '年度', field:'year', visible: true, align: 'center', valign: 'middle'}
+       ,{title: '校级积分', field:'mainNormPoint', visible: true, align: 'center', valign: 'middle'}
     ];
 };
 
@@ -36,6 +40,21 @@ ScientificProject.check = function () {
         ScientificProject.seItem = selected[0];
         return true;
     }
+};
+
+
+/**
+ * 点击导入考核指标库
+ */
+ScientificProject.openImportAssess = function () {
+    this.layerIndex = layer.open({
+        type: 2,
+        title: '导入考核',
+        area: ['800px', '420px'], //宽高
+        fix: false, //不固定
+        maxmin: true,
+        content: Feng.ctxPath + '/scientificProject/scientificProject_import'
+    });
 };
 
 /**

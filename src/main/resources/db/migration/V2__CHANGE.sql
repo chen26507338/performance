@@ -105,3 +105,11 @@ alter table assess_norm_point
 alter table assess_norm_point
     add rypz_college double default 0 null comment '人员配置院级分';
 
+insert into assess_coefficient value ('rypz', '人员配置', 1);
+
+alter table scientific_project
+    add assess_name varchar(255) null comment '考核项目';
+
+INSERT INTO `sys_menu`(`id`, `code`, `pcode`, `pcodes`, `name`, `icon`, `url`, `num`, `levels`, `ismenu`, `tips`, `status`, `isopen`)
+VALUES (1226328464463880319, 'kykh', 'assess_norm', '[0],[assess_norm],', '科研考核', '', '/scientificProject/index', 230, 2, 1, NULL, 1, NULL);
+insert into sys_relation (`menuid`,`roleid`) values (1226328464463880319,1);

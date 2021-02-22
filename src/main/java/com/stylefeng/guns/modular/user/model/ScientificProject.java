@@ -58,6 +58,19 @@ public class ScientificProject extends BaseActEntity<ScientificProject> {
     private String startTime;
 
     /**
+    * 考核项目
+    */
+    @TableField("assess_name")
+    private String assessName;
+
+    /**
+     * 职工编号
+     */
+    @TableField(exist = false)
+    private String account;
+
+
+    /**
     * 结题时间
     */
     @TableField("end_time")

@@ -2,17 +2,18 @@ package com.stylefeng.guns.modular.user.service.impl;
 
 import cn.hutool.core.collection.CollUtil;
 import cn.hutool.core.util.StrUtil;
+import cn.hutool.poi.excel.ExcelReader;
+import cn.hutool.poi.excel.ExcelUtil;
 import com.alibaba.fastjson.JSON;
 import com.baomidou.mybatisplus.mapper.EntityWrapper;
 import com.stylefeng.guns.common.constant.state.YesNo;
 import com.stylefeng.guns.common.persistence.model.User;
+import com.stylefeng.guns.config.properties.GunsProperties;
 import com.stylefeng.guns.core.exception.GunsException;
 import com.stylefeng.guns.core.shiro.ShiroKit;
 import com.stylefeng.guns.modular.act.service.ActTaskService;
 import com.stylefeng.guns.modular.act.utils.ActUtils;
-import com.stylefeng.guns.modular.assess.model.AssessCoefficient;
-import com.stylefeng.guns.modular.assess.model.AssessNorm;
-import com.stylefeng.guns.modular.assess.model.AssessNormPoint;
+import com.stylefeng.guns.modular.assess.model.*;
 import com.stylefeng.guns.modular.assess.service.IAssessCoefficientService;
 import com.stylefeng.guns.modular.assess.service.IAssessNormPointService;
 import com.stylefeng.guns.modular.assess.service.IAssessNormService;
@@ -29,6 +30,7 @@ import com.stylefeng.guns.modular.user.dao.ScientificProjectMapper;
 import com.stylefeng.guns.modular.user.service.IScientificProjectService;
 import org.springframework.transaction.annotation.Transactional;
 
+import javax.annotation.Resource;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -53,6 +55,8 @@ public class ScientificProjectServiceImpl extends ServiceImpl<ScientificProjectM
     private IAssessCoefficientService assessCoefficientService;
     @Autowired
     private IAssessNormPointService assessNormPointService;
+    @Resource
+    private GunsProperties gunsProperties;
 
     @Override
     @Transactional
@@ -150,6 +154,57 @@ public class ScientificProjectServiceImpl extends ServiceImpl<ScientificProjectM
 
         actTaskService.complete(scientificProject.getAct().getTaskId(), scientificProject.getAct().getProcInsId(), comment.toString(), vars);
 
+    }
+
+    @Override
+    @Transactional
+    public void importAssess(ScientificProject scientificProject) {
+        ExcelReader reader = ExcelUtil.getReader(gunsProperties.getFileUploadPath() + scientificProject.getExpand().get("fileName"));
+        reader.addHeaderAlias("考核项目", "assessName");
+        reader.addHeaderAlias("校级积分", "mainNormPoint");
+        reader.addHeaderAlias("名称", "name");
+        reader.addHeaderAlias("期刊名称/排名", "rank");
+        reader.addHeaderAlias("分类/级别", "type");
+        reader.addHeaderAlias("积分归属年份", "year");
+        reader.addHeaderAlias("教师工号", "account");
+        List<ScientificProject> normalAssesses = reader.readAll(ScientificProject.class);
+        for (ScientificProject assess : normalAssesses) {
+            User user = userService.getByAccount(assess.getAccount());
+            if (user == null) {
+                throw new GunsException(StrUtil.format("职工编号 {} 不存在", assess.getAccount()));
+            }
+            assess.setUserId(user.getId());
+            assess.setStatus(YesNo.YES.getCode());
+
+            ScientificProject param = new ScientificProject();
+            param.setAccount(assess.getAccount());
+            param.setName(assess.getName());
+            param.setAssessName(assess.getAssessName());
+            if (this.selectCount(new EntityWrapper<>(param)) > 0) {
+                throw new GunsException(StrUtil.format("职工编号：{},考核项目：{},名称：{} 已存在",assess.getAccount(),
+                        assess.getAssessName(),assess.getName()));
+            }
+
+            AssessNormPoint assessNormPoint = new AssessNormPoint();
+            assessNormPoint.setUserId(assess.getUserId());
+            assessNormPoint.setYear(assess.getYear());
+            assessNormPoint = assessNormPointService.selectOne(new EntityWrapper<>(assessNormPoint));
+
+            if (assessNormPoint != null) {
+                Double mainPoint = assessNormPoint.getKygzMain();
+                mainPoint += assess.getMainNormPoint();
+                assessNormPoint.setKygzMain(mainPoint);
+            } else {
+                assessNormPoint = new AssessNormPoint();
+                double mainPoint = assess.getMainNormPoint();
+                assessNormPoint.setKygzMain(mainPoint);
+                assessNormPoint.setYear(assess.getYear());
+                assessNormPoint.setUserId(assess.getUserId());
+                assessNormPoint.setDeptId(user.getDeptId());
+            }
+            assessNormPointService.insertOrUpdate(assessNormPoint);
+        }
+        this.insertBatch(normalAssesses);
     }
 
     private void handList(List<ScientificProject> scientificProjects, boolean isImport) {

@@ -128,6 +128,30 @@ ScientificProjectInfoDlg.editSubmit = function() {
     ajax.start();
 };
 
+/**
+ * 提交导入
+ */
+ScientificProjectInfoDlg.importSubmit = function() {
+
+    this.clearData();
+    this.collectData();
+    //
+    // if (!this.validate()) {
+    //     return;
+    // }
+    //
+    // //提交信息
+    var ajax = new $ax(Feng.ctxPath + "/scientificProject/importAssess", function(data){
+        Feng.success("导入成功!");
+        window.parent.ScientificProject.table.refresh();
+        ScientificProjectInfoDlg.close();
+    },function(data){
+        Feng.error("导入失败!" + data.responseJSON.message + "!");
+    });
+    this.scientificProjectInfoData['expand["fileName"]'] = $("#fileName").val();
+    ajax.set(this.scientificProjectInfoData);
+    ajax.start();
+};
 
 /**
  * 审核
@@ -157,7 +181,6 @@ ScientificProjectInfoDlg.auditSubmit = function(pass) {
         ajax.start();
     });
 };
-
 
 /**
  * item获取新的id
