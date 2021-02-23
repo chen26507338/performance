@@ -1,6 +1,5 @@
 package com.stylefeng.guns;
 
-import com.alibaba.fastjson.support.spring.FastJsonHttpMessageConverter4;
 import com.stylefeng.guns.common.aop.TokenMethodArgumentResolver;
 import com.stylefeng.guns.config.properties.GunsProperties;
 import org.slf4j.Logger;
@@ -8,7 +7,6 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
-import org.springframework.http.converter.HttpMessageConverter;
 import org.springframework.scheduling.annotation.EnableScheduling;
 import org.springframework.web.method.support.HandlerMethodArgumentResolver;
 import org.springframework.web.servlet.config.annotation.ResourceHandlerRegistry;

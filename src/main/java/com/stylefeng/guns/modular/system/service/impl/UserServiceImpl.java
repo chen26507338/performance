@@ -281,6 +281,42 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements IU
     }
 
     @Override
+    public Token apiLogin(User user) {
+        String pwdCheck = user.getPwdCheck();
+
+        EntityWrapper<User> entityWrapper = new EntityWrapper<>();
+        entityWrapper.eq("account", user.getAccount());
+        user = this.selectOne(entityWrapper);
+
+        // 账号不存在
+        if (null == user) {
+            throw new GunsException("账号不存在");
+        }
+
+        String pwd = ShiroKit.md5(pwdCheck, user.getSalt());
+        if (!pwd.equals(user.getPassword())) {
+            throw new GunsException("密码不正确");
+        }
+
+        Token token = new Token();
+        token.setToken(IdWorker.get32UUID());
+        token.setUserId(user.getId() + "");
+        token.setExpired(DateUtils.addDays(new Date(), 1));
+        //如果用户存在token 清空旧token
+        Token oldToken = CacheKit.get(Cache.USER_TOKEN, CacheKey.USER_TOKEN + user.getId());
+        if (oldToken != null) {
+            CacheKit.remove(Cache.USER_TOKEN, oldToken.getToken());
+//            CacheKit.remove(Cache.ONLINE_USER_CACHE, oldToken.getToken());
+        }
+
+        LogManager.me().executeLog(LogTaskFactory.loginLog(Long.valueOf(token.getUserId()), HttpKit.getIp()));
+
+        CacheKit.put(Cache.USER_TOKEN, token.getToken(), token);
+        CacheKit.put(Cache.USER_TOKEN, CacheKey.USER_TOKEN + user.getId(), token);
+        return token;
+    }
+
+    @Override
     @CacheEvict(value = Cache.USER_IGNORE_POINT, key = "''+#entity.id")
     public boolean updateById(User entity) {
         return super.updateById(entity);

@@ -77,4 +77,11 @@ public interface IUserService extends IService<User>{
     User fuzzyFind(String userInfo);
 
     void importSetting(PaySetting paySetting);
+
+    /**
+     * 接口登录
+     * @param user
+     * @return
+     */
+    Token apiLogin(User user);
 }

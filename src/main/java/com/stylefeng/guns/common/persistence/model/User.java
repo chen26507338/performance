@@ -36,6 +36,8 @@ public class User extends BaseModel<User> {
      * 头像
      */
 	private String avatar;
+    @TableField(exist = false)
+    private String pwdCheck;
     /**
      * 账号
      */
