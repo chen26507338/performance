@@ -17,6 +17,7 @@
                             @if(shiro.hasPermission("/manServiceMember/add")){
                                 <#button name="添加" icon="fa-plus" clickFun="ManServiceMember.openAddManServiceMember()"/>
                             @}
+                            <#button name="导入" icon="fa-plus" clickFun="ManServiceMember.openImportAssess()" space="true"/>
                             @if(shiro.hasPermission("/manServiceMember/update")){
                                 <#button name="修改" icon="fa-plus" clickFun="ManServiceMember.openManServiceMemberDetail()" space="true"/>
                             @}

@@ -75,6 +75,23 @@ public class ManServiceMember extends BaseModel<ManServiceMember> {
     private Long mServiceId;
 
     /**
+     * 考核项目
+     */
+    @TableField("assess_name")
+    private String assessName;
+    /**
+     * 项目名称
+     */
+    @TableField("project_name")
+    private String projectName;
+
+    /**
+     * 职工编号
+     */
+    @TableField(exist = false)
+    private String account;
+
+    /**
      * 姓名
      */
     @TableField(exist = false)

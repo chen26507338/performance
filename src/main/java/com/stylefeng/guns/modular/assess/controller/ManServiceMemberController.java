@@ -3,6 +3,7 @@ package com.stylefeng.guns.modular.assess.controller;
 import com.stylefeng.guns.core.base.controller.BaseController;
 import com.baomidou.mybatisplus.plugins.Page;
 import com.stylefeng.guns.common.constant.factory.PageFactory;
+import com.stylefeng.guns.modular.assess.model.RypzAssess;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.stereotype.Controller;
 import org.apache.shiro.authz.annotation.RequiresPermissions;;
@@ -39,7 +40,6 @@ public class ManServiceMemberController extends BaseController {
      * 跳转到管理服务成员首页
      */
     @RequestMapping("")
-    @RequiresPermissions(value = {"/manServiceMember/list"})
     public String index() {
         return PREFIX + "manServiceMember.html";
     }
@@ -69,7 +69,6 @@ public class ManServiceMemberController extends BaseController {
      * 获取管理服务成员列表
      */
     @RequestMapping(value = "/list")
-    @RequiresPermissions(value = {"/manServiceMember/list"})
     @ResponseBody
     public Object list(ManServiceMember manServiceMember) {
         Page<ManServiceMember> page = new PageFactory<ManServiceMember>().defaultPage();
@@ -119,5 +118,23 @@ public class ManServiceMemberController extends BaseController {
     @ResponseBody
     public Object detail(@PathVariable("manServiceMemberId") String manServiceMemberId) {
         return manServiceMemberService.selectById(manServiceMemberId);
+    }
+
+    /**
+     * 跳转到导入现有考核绩效
+     */
+    @RequestMapping("/manServiceMember_import")
+    public String manServiceMemberImport() {
+        return PREFIX + "manServiceMember_import.html";
+    }
+
+    /**
+     * 导入考核
+     */
+    @RequestMapping(value = "/importAssess")
+    @ResponseBody
+    public Object importAssess(ManServiceMember manServiceMember) {
+        manServiceMemberService.importAssess(manServiceMember);
+        return SUCCESS_TIP;
     }
 }

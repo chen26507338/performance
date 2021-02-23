@@ -113,3 +113,11 @@ alter table scientific_project
 INSERT INTO `sys_menu`(`id`, `code`, `pcode`, `pcodes`, `name`, `icon`, `url`, `num`, `levels`, `ismenu`, `tips`, `status`, `isopen`)
 VALUES (1226328464463880319, 'kykh', 'assess_norm', '[0],[assess_norm],', '科研考核', '', '/scientificProject/index', 230, 2, 1, NULL, 1, NULL);
 insert into sys_relation (`menuid`,`roleid`) values (1226328464463880319,1);
+
+alter table man_service_member
+    add assess_name varchar(255) null comment '考核项目';
+
+alter table man_service_member
+    add project_name varchar(255) null comment '项目名称';
+
+update sys_menu set url = '/manServiceMember' where id = 1306513075398238210;

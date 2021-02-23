@@ -22,7 +22,7 @@ public class ManServiceMemberDecorator extends BaseListDecorator<ManServiceMembe
     protected void decorateTheEntity(ManServiceMember manServiceMember) {
         User user = userService.selectIgnorePointById(manServiceMember.getUserId());
         if (user != null) {
-            manServiceMember.setName(user.getName());
+            manServiceMember.putExpand("user",user);
         }
     }
 }

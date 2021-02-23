@@ -168,6 +168,7 @@ public class ScientificProjectServiceImpl extends ServiceImpl<ScientificProjectM
         reader.addHeaderAlias("积分归属年份", "year");
         reader.addHeaderAlias("教师工号", "account");
         List<ScientificProject> normalAssesses = reader.readAll(ScientificProject.class);
+        AssessCoefficient coefficient = assessCoefficientService.selectById(IAssessCoefficientService.TYPE_KYGZ);
         for (ScientificProject assess : normalAssesses) {
             User user = userService.getByAccount(assess.getAccount());
             if (user == null) {
@@ -175,9 +176,10 @@ public class ScientificProjectServiceImpl extends ServiceImpl<ScientificProjectM
             }
             assess.setUserId(user.getId());
             assess.setStatus(YesNo.YES.getCode());
+            assess.setCoePoint(coefficient.getCoefficient());
 
             ScientificProject param = new ScientificProject();
-            param.setAccount(assess.getAccount());
+            param.setUserId(user.getId());
             param.setName(assess.getName());
             param.setAssessName(assess.getAssessName());
             if (this.selectCount(new EntityWrapper<>(param)) > 0) {

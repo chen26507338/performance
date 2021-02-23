@@ -124,7 +124,6 @@ public class RypzAssessController extends BaseController {
      * 跳转到导入现有考核绩效
      */
     @RequestMapping("/rypzAssess_import")
-//    @RequiresPermissions(value = {"/normalAssess/add"})
     public String rypzAssessImport() {
         return PREFIX + "rypzAssess_import.html";
     }
@@ -133,7 +132,6 @@ public class RypzAssessController extends BaseController {
      * 导入考核
      */
     @RequestMapping(value = "/importAssess")
-//    @RequiresPermissions(value = {"/normalAssess/add"})
     @ResponseBody
     public Object importAssess(RypzAssess rypzAssess) {
         rypzAssessService.importAssess(rypzAssess);

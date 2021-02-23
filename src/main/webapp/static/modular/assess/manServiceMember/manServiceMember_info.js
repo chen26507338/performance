@@ -115,6 +115,32 @@ ManServiceMemberInfoDlg.editSubmit = function() {
     ajax.start();
 };
 
+/**
+ * 提交导入
+ */
+ManServiceMemberInfoDlg.importSubmit = function() {
+
+    this.clearData();
+    this.collectData();
+    //
+    // if (!this.validate()) {
+    //     return;
+    // }
+    //
+    // //提交信息
+    var ajax = new $ax(Feng.ctxPath + "/manServiceMember/importAssess", function(data){
+        Feng.success("导入成功!");
+        window.parent.ManServiceMember.table.refresh();
+        ManServiceMemberInfoDlg.close();
+    },function(data){
+        Feng.error("导入失败!" + data.responseJSON.message + "!");
+    });
+    this.manServiceMemberInfoData['expand["fileName"]'] = $("#fileName").val();
+    ajax.set(this.manServiceMemberInfoData);
+    ajax.start();
+};
+
+
 $(function() {
     Feng.initValidator("ManServiceMemberForm", ManServiceMemberInfoDlg.validateFields);
 

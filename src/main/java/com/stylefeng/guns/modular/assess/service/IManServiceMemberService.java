@@ -11,4 +11,5 @@ import com.stylefeng.guns.modular.assess.model.ManServiceMember;
  */
 public interface IManServiceMemberService extends IService<ManServiceMember> {
 
+    void importAssess(ManServiceMember manServiceMember);
 }

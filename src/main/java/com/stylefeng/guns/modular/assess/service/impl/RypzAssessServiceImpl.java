@@ -16,6 +16,7 @@ import com.stylefeng.guns.modular.assess.model.AssessNormPoint;
 import com.stylefeng.guns.modular.assess.model.NormalAssess;
 import com.stylefeng.guns.modular.assess.model.RypzAssess;
 import com.stylefeng.guns.modular.assess.service.IAssessNormPointService;
+import com.stylefeng.guns.modular.assess.service.IAssessCoefficientService;
 import com.stylefeng.guns.modular.assess.service.IRypzAssessService;
 import com.stylefeng.guns.modular.system.service.IUserService;
 import org.springframework.beans.factory.annotation.Autowired;
