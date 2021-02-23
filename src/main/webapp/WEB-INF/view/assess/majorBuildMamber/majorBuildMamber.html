@@ -17,6 +17,7 @@
                             @if(shiro.hasPermission("/majorBuildMember/add")){
                                 <#button name="添加" icon="fa-plus" clickFun="MajorBuildMember.openAddMajorBuildMember()"/>
                             @}
+                            <#button name="导入" icon="fa-plus" clickFun="MajorBuildMember.openImportAssess()" space="true"/>
                             @if(shiro.hasPermission("/majorBuildMember/update")){
                                 <#button name="修改" icon="fa-plus" clickFun="MajorBuildMember.openMajorBuildMemberDetail()" space="true"/>
                             @}
@@ -31,5 +32,5 @@
         </div>
     </div>
 </div>
-<script src="${ctxPath}/static/modular/assess/majorBuildMember/majorBuildMember.js"></script>
+<script src="${ctxPath}/static/modular/assess/majorBuildMamber/majorBuildMamber.js"></script>
 @}

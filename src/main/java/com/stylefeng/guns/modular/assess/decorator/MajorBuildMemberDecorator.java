@@ -22,7 +22,7 @@ public class MajorBuildMemberDecorator extends BaseListDecorator<MajorBuildMembe
     protected void decorateTheEntity(MajorBuildMember majorBuildMember) {
         User user = userService.selectIgnorePointById(majorBuildMember.getUserId());
         if (user != null) {
-            majorBuildMember.setName(user.getName());
+            majorBuildMember.putExpand("user",user);
         }
     }
 }

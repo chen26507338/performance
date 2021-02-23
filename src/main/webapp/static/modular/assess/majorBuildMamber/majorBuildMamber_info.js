@@ -113,6 +113,31 @@ MajorBuildMemberInfoDlg.editSubmit = function() {
     ajax.start();
 };
 
+/**
+ * 提交导入
+ */
+MajorBuildMemberInfoDlg.importSubmit = function() {
+
+    this.clearData();
+    this.collectData();
+    //
+    // if (!this.validate()) {
+    //     return;
+    // }
+    //
+    // //提交信息
+    var ajax = new $ax(Feng.ctxPath + "/MajorBuildMember/importAssess", function(data){
+        Feng.success("导入成功!");
+        window.parent.MajorBuildMember.table.refresh();
+        MajorBuildMemberInfoDlg.close();
+    },function(data){
+        Feng.error("导入失败!" + data.responseJSON.message + "!");
+    });
+    this.MajorBuildMemberInfoData['expand["fileName"]'] = $("#fileName").val();
+    ajax.set(this.MajorBuildMemberInfoData);
+    ajax.start();
+};
+
 $(function() {
     Feng.initValidator("MajorBuildMemberForm", MajorBuildMemberInfoDlg.validateFields);
 

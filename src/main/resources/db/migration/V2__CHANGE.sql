@@ -121,3 +121,29 @@ alter table man_service_member
     add project_name varchar(255) null comment '项目名称';
 
 update sys_menu set url = '/manServiceMember' where id = 1306513075398238210;
+
+alter table major_build_member
+    add assess_name varchar(255) null comment '考核项目';
+
+alter table major_build_member
+    add type varchar(255) null comment '分类';
+
+alter table major_build_member
+    add build_name varchar(255) null comment '名称';
+
+alter table major_build_member
+    add `rank` varchar(255) null comment '排名';
+
+alter table major_build_member
+    add start_time varchar(255) null comment '立项时间';
+
+alter table major_build_member
+    add build_time varchar(255) null comment '建设时间';
+
+alter table major_build_member modify
+    status varchar(255) default 0 null comment '状态';
+
+alter table major_build_member
+    add remark varchar(255) null comment '备注';
+
+update sys_menu set url = '/MajorBuildMember' where id = 1296001749282439169;

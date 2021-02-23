@@ -59,7 +59,7 @@ public class MajorBuildMember extends BaseModel<MajorBuildMember> {
     * 状态
     */
     @TableField("status")
-    private Integer status;
+    private String status;
 
     /**
     * 考核系数
@@ -74,9 +74,58 @@ public class MajorBuildMember extends BaseModel<MajorBuildMember> {
     private String year;
 
     /**
+    * 考核项目
+    */
+    @TableField("assess_name")
+    private String assessName;
+
+    /**
+    * 分类
+    */
+    @TableField("type")
+    private String type;
+
+    /**
+    * 名称
+    */
+    @TableField("build_name")
+    private String buildName;
+
+    /**
+    * 排名
+    */
+    @TableField("rank")
+    private String rank;
+
+    /**
+    * 立项时间
+    */
+    @TableField("start_time")
+    private String startTime;
+
+    /**
+    * 建设时间
+    */
+    @TableField("build_time")
+    private String buildTime;
+
+    /**
+    * 备注
+    */
+    @TableField("remark")
+    private String remark;
+
+    /**
     * 姓名
     */
     @TableField(exist = false)
     private String name;
+
+    /**
+     * 职工编号
+     */
+    @TableField(exist = false)
+    private String account;
+
 
 }

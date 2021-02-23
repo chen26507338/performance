@@ -61,7 +61,7 @@ public class MajorBuild extends BaseActEntity<MajorBuild> {
     * 状态
     */
     @TableField("status")
-    private Integer status;
+    private String status;
 
     /**
     * 人事经办ID

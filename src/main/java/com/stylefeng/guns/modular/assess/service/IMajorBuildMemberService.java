@@ -13,19 +13,25 @@ public interface IMajorBuildMemberService extends IService<MajorBuildMember> {
     /**
      * 待立项
      */
-    int STATS_APPROVAL_WAIT = 0;
+    String STATS_APPROVAL_WAIT = "0";
     /**
      * 已立项
      */
-    int STATS_APPROVAL_SUCCESS = 1;
+    String STATS_APPROVAL_SUCCESS = "1";
 
     /**
      * 待验收
      */
-    int STATS_CHECK_WAIT = 2;
+    String STATS_CHECK_WAIT = "2";
 
     /**
      * 验收合格
      */
-    int STATS_CHECK_SUCCESS = 3;
+    String STATS_CHECK_SUCCESS = "3";
+
+    /**
+     * 导入
+     * @param majorBuildMember
+     */
+    void importAssess(MajorBuildMember majorBuildMember);
 }
