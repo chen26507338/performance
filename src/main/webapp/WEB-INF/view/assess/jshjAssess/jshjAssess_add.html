@@ -1,0 +1,51 @@
+@layout("/common/_container.html"){
+<div class="ibox float-e-margins">
+    <div class="ibox-content">
+        <div class="form-horizontal" id="JshjAssessForm">
+
+            <input type="hidden" id="id" value="">
+
+            <div class="row">
+
+                <div class="col-sm-6 b-r">
+                    <#input id="type" name="竞赛类别" underline="true"/>
+                </div>
+                <div class="col-sm-6 b-r">
+                    <#input id="jsName" name="竞赛名称" underline="true"/>
+                </div>
+                <div class="col-sm-6 b-r">
+                    <#input id="sxName" name="赛项名称" underline="true"/>
+                </div>
+                <div class="col-sm-6 b-r">
+                    <#input id="jsLevel" name="竞赛级别" underline="true"/>
+                </div>
+                <div class="col-sm-6 b-r">
+                    <#input id="hjLevel" name="获奖等级" underline="true"/>
+                </div>
+                <div class="col-sm-6 b-r">
+                    <#input id="mainNormPoint" name="校级积分" underline="true"/>
+                </div>
+                <div class="col-sm-6 b-r">
+                    <#input id="jsType" name="参赛/指导/管理" underline="true"/>
+                </div>
+                <div class="col-sm-6 b-r">
+                    <#input id="year" name="年度" underline="true"/>
+                </div>
+                <div class="col-sm-6 b-r">
+                    <#input id="userId" name="用户id" underline="true"/>
+                </div>
+
+            </div>
+
+            <div class="row btn-group-m-t">
+                <div class="col-sm-10">
+                    <#button btnCss="info" name="提交" id="ensure" icon="fa-check" clickFun="JshjAssessInfoDlg.addSubmit()"/>
+                    <#button btnCss="danger" name="取消" id="cancel" icon="fa-eraser" clickFun="JshjAssessInfoDlg.close()"/>
+                </div>
+            </div>
+        </div>
+
+    </div>
+</div>
+<script src="${ctxPath}/static/modular/assess/jshjAssess/jshjAssess_info.js"></script>
+@}

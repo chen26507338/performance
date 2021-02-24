@@ -104,8 +104,14 @@ alter table assess_norm_point
 
 alter table assess_norm_point
     add rypz_college double default 0 null comment '人员配置院级分';
+alter table assess_norm_point
+    add jshj_main double default 0 null comment '竞赛获奖校积分';
+
+alter table assess_norm_point
+    add jshj_college double default 0 null comment '竞赛获奖院级分';
 
 insert into assess_coefficient value ('rypz', '人员配置', 1);
+insert into assess_coefficient value ('jshj', '竞赛获奖', 1);
 
 alter table scientific_project
     add assess_name varchar(255) null comment '考核项目';
@@ -147,3 +153,36 @@ alter table major_build_member
     add remark varchar(255) null comment '备注';
 
 update sys_menu set url = '/MajorBuildMember' where id = 1296001749282439169;
+
+create table jshj_assess
+(
+    id bigint null,
+    type varchar(255) null comment '竞赛类别',
+    js_name varchar(255) null comment '竞赛名称',
+    sx_name varchar(255) null comment '赛项名称',
+    js_level varchar(255) null comment '竞赛级别',
+    hj_level varchar(255) null comment '获奖等级',
+    main_norm_point double null comment '校级积分',
+    js_type varchar(255) null comment '参赛/指导/管理',
+    year varchar(255) null comment '年度',
+    user_id bigint null comment '用户id',
+    coe_point double null comment '考核系数',
+    constraint jshj_assess_pk
+        primary key (id)
+)
+    comment '竞赛获奖';
+
+delete from sys_menu where id = 1226328464463880207;
+
+INSERT INTO `sys_menu` (`id`, `code`, `pcode`, `pcodes`, `name`, `icon`, `url`, `num`, `levels`, `ismenu`, `tips`, `status`, `isopen`) VALUES ('1364450798255255553', 'jshjAssess', 'assess_norm', '[0],[assess_norm],', '竞赛获奖考核', '', '/jshjAssess', '70', '2', '1', NULL, '1', '0');
+INSERT INTO `sys_menu` (`id`, `code`, `pcode`, `pcodes`, `name`, `icon`, `url`, `num`, `levels`, `ismenu`, `tips`, `status`, `isopen`) VALUES ('1364450798255255554', 'jshjAssess_list', 'jshjAssess', '[0],[assess_norm],[jshjAssess],', '竞赛获奖列表', '', '/jshjAssess/list', '99', '3', '0', NULL, '1', '0');
+INSERT INTO `sys_menu` (`id`, `code`, `pcode`, `pcodes`, `name`, `icon`, `url`, `num`, `levels`, `ismenu`, `tips`, `status`, `isopen`) VALUES ('1364450798255255555', 'jshjAssess_add', 'jshjAssess', '[0],[assess_norm],[jshjAssess],', '竞赛获奖添加', '', '/jshjAssess/add', '99', '3', '0', NULL, '1', '0');
+INSERT INTO `sys_menu` (`id`, `code`, `pcode`, `pcodes`, `name`, `icon`, `url`, `num`, `levels`, `ismenu`, `tips`, `status`, `isopen`) VALUES ('1364450798255255556', 'jshjAssess_update', 'jshjAssess', '[0],[assess_norm],[jshjAssess],', '竞赛获奖更新', '', '/jshjAssess/update', '99', '3', '0', NULL, '1', '0');
+INSERT INTO `sys_menu` (`id`, `code`, `pcode`, `pcodes`, `name`, `icon`, `url`, `num`, `levels`, `ismenu`, `tips`, `status`, `isopen`) VALUES ('1364450798255255557', 'jshjAssess_delete', 'jshjAssess', '[0],[assess_norm],[jshjAssess],', '竞赛获奖删除', '', '/jshjAssess/delete', '99', '3', '0', NULL, '1', '0');
+INSERT INTO `sys_menu` (`id`, `code`, `pcode`, `pcodes`, `name`, `icon`, `url`, `num`, `levels`, `ismenu`, `tips`, `status`, `isopen`) VALUES ('1364450798255255558', 'jshjAssess_detail', 'jshjAssess', '[0],[assess_norm],[jshjAssess],', '竞赛获奖详情', '', '/jshjAssess/detail', '99', '3', '0', NULL, '1', '0');
+insert into sys_relation (`menuid`,`roleid`) values (1364450798255255553,1);
+insert into sys_relation (`menuid`,`roleid`) values (1364450798255255554,1);
+insert into sys_relation (`menuid`,`roleid`) values (1364450798255255555,1);
+insert into sys_relation (`menuid`,`roleid`) values (1364450798255255556,1);
+insert into sys_relation (`menuid`,`roleid`) values (1364450798255255557,1);
+insert into sys_relation (`menuid`,`roleid`) values (1364450798255255558,1);

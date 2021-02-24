@@ -20,7 +20,7 @@ spring:
     db-name: per
     filters: log4j,wall,mergeStat
 guns:
- file-upload-path: d:/tmp
+ file-upload-path: /tmp
  img-url-prefix: http://localhost:8081/kaptcha/
  admin-prefix:
  #是否允许多人同时登录

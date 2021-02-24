@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.stylefeng.guns.modular.assess.dao.JshjAssessMapper">
+
+	<!-- 通用查询映射结果 -->
+	<resultMap id="BaseResultMap" type="com.stylefeng.guns.modular.assess.model.JshjAssess">
+            <id column="id" property="id" />
+            <result column="type" property="type" />
+            <result column="js_name" property="jsName" />
+            <result column="sx_name" property="sxName" />
+            <result column="js_level" property="jsLevel" />
+            <result column="hj_level" property="hjLevel" />
+            <result column="main_norm_point" property="mainNormPoint" />
+            <result column="js_type" property="jsType" />
+            <result column="year" property="year" />
+            <result column="user_id" property="userId" />
+	</resultMap>
+
+    <!-- 通用查询结果列 -->
+    <sql id="Base_Column_List">
+	    id AS id,
+	    type AS type,
+	    js_name AS jsName,
+	    sx_name AS sxName,
+	    js_level AS jsLevel,
+	    hj_level AS hjLevel,
+	    main_norm_point AS mainNormPoint,
+	    js_type AS jsType,
+	    year AS year,
+	    user_id AS userId
+    </sql>
+
+</mapper>
