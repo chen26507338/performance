@@ -8,13 +8,20 @@
             <div class="row">
 
                 <div class="col-sm-6 b-r">
-                    <#input id="deptId" name="部门id" underline="true"/>
+                    <#select id="deptId" name="部门" items="${deptList}"
+                    itemLabel="name" itemValue="id"  underline="true"/>
                 </div>
                 <div class="col-sm-6 b-r">
-                    <#input id="postId" name="职务id" underline="true"/>
+                    <#select id="postId" name="职务" items="${postList}" underline="true">
+                    @for(post in postList){
+                    <option value="${post.id}">
+                    ${post.ldks} ${post.zj} ${post.zw}
+                    </option>
+                    @}
+                    </#select>
                 </div>
                 <div class="col-sm-6 b-r">
-                    <#input id="userId" name="用户id" underline="true"/>
+                    <#select id="userId" name="职工" underline="true"/>
                 </div>
                 <div class="col-sm-6 b-r">
                     <#select id="isDb" name="是否定编" items="${constant.getDictsByName('是否')}"

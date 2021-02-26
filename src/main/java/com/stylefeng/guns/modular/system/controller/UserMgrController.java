@@ -361,6 +361,17 @@ public class UserMgrController extends BaseController {
     }
 
     /**
+     * 部门用户列表
+     */
+    @RequestMapping("/dept/list/noPage")
+    @ResponseBody
+    public Object userDeptListNoPage(@RequestParam Long deptId) {
+        User user = new User();
+        user.setDeptId(deptId);
+        return userService.selectList(new EntityWrapper<>(user));
+    }
+
+    /**
      * 分配角色
      */
     @RequestMapping("/setRole")

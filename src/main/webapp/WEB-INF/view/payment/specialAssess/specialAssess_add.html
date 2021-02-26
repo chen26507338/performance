@@ -1,0 +1,64 @@
+@layout("/common/_container.html"){
+<div class="ibox float-e-margins">
+    <div class="ibox-content">
+        <div class="form-horizontal" id="SpecialAssessForm">
+
+            <input type="hidden" id="id" value="">
+
+            <div class="row">
+
+                <div class="col-sm-6 b-r">
+                    <#input id="deptId" name="部门ID" underline="true"/>
+                </div>
+                <div class="col-sm-6 b-r">
+                    <#input id="pointPercent" name="积分百分比" underline="true"/>
+                </div>
+                <div class="col-sm-6 b-r">
+                    <#input id="applyPoint" name="申请积分" underline="true"/>
+                </div>
+                <div class="col-sm-6 b-r">
+                    <#input id="addPoint" name="增加积分" underline="true"/>
+                </div>
+                <div class="col-sm-6 b-r">
+                    <#input id="remark" name="备注" underline="true"/>
+                </div>
+                <div class="col-sm-6 b-r">
+                    <#input id="createTime" name="申请时间" underline="true"
+                    type="text" dateType="date" format="yyyy-MM-dd"/>
+                </div>
+                <div class="col-sm-6 b-r">
+                    <#input id="isAllPoint" name="是否全年" underline="true"/>
+                </div>
+                <div class="col-sm-6 b-r">
+                    <#input id="status" name="状态" underline="true"/>
+                </div>
+                <div class="col-sm-6 b-r">
+                    <#input id="referencePoint" name="申请参考分" underline="true"/>
+                </div>
+                <div class="col-sm-6 b-r">
+                    <#input id="isJr" name="是否计入" underline="true"/>
+                </div>
+                <div class="col-sm-6 b-r">
+                    <#input id="isYjkh" name="是否记入部门优绩考核" underline="true"/>
+                </div>
+                <div class="col-sm-6 b-r">
+                    <#input id="projectContent" name="申请项目内容" underline="true"/>
+                </div>
+                <div class="col-sm-6 b-r">
+                    <#input id="zxNo" name="编号" underline="true"/>
+                </div>
+
+            </div>
+
+            <div class="row btn-group-m-t">
+                <div class="col-sm-10">
+                    <#button btnCss="info" name="提交" id="ensure" icon="fa-check" clickFun="SpecialAssessInfoDlg.addSubmit()"/>
+                    <#button btnCss="danger" name="取消" id="cancel" icon="fa-eraser" clickFun="SpecialAssessInfoDlg.close()"/>
+                </div>
+            </div>
+        </div>
+
+    </div>
+</div>
+<script src="${ctxPath}/static/modular/payment/specialAssess/specialAssess_info.js"></script>
+@}

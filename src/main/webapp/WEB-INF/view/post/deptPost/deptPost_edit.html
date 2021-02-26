@@ -8,21 +8,35 @@
             <div class="row">
 
                 <div class="col-sm-6 b-r">
-                    <#input id="deptId" name="部门id" value="${item.deptId}" underline="true"/>
+                    <#select id="deptId" name="部门" items="${deptList}"
+                    itemLabel="name" itemValue="id" value="${item.deptId}" underline="true"/>
+                </div>
+
+                <div class="col-sm-6 b-r">
+                    <#select id="postId" name="职务" items="${postList}" underline="true">
+                    @for(post in postList){
+                    <option value="${post.id}" ${post.id == item.postId ? "selected":""}>
+                    ${post.ldks} ${post.zj} ${post.zw}
+                    </option>
+                    @}
+                    </#select>
                 </div>
                 <div class="col-sm-6 b-r">
-                    <#input id="postId" name="职务id" value="${item.postId}" underline="true"/>
-                </div>
-                <div class="col-sm-6 b-r">
-                    <#input id="userId" name="用户id" value="${item.userId}" underline="true"/>
+                    <#select id="userId" name="职工" items="${userList}" underline="true">
+                    @for(user in userList){
+                    <option value="${user.id}" ${user.id == item.userId ? "selected":""}>
+                    ${user.name} ${user.account}
+                    </option>
+                    @}
+                    </#select>
                 </div>
                 <div class="col-sm-6 b-r">
                     <#select id="isDb" name="是否定编" items="${constant.getDictsByName('是否')}"
-                    itemLabel="name" itemValue="num" value="${item.isDb}" underline="true"/>
+                    itemLabel="name" itemValue="num" value="${item.isDb+''}" underline="true"/>
                 </div>
                 <div class="col-sm-6 b-r">
                     <#select id="isStar" name="是否星号" items="${constant.getDictsByName('是否')}"
-                    itemLabel="name" itemValue="num" value="${item.isStar}" underline="true"/>
+                    itemLabel="name" itemValue="num" value="${item.isStar+''}" underline="true"/>
                 </div>
             </div>
 

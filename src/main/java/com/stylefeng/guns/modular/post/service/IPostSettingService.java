@@ -2,6 +2,9 @@ package com.stylefeng.guns.modular.post.service;
 
 import com.baomidou.mybatisplus.service.IService;
 import com.stylefeng.guns.modular.post.model.PostSetting;
+import javafx.geometry.Pos;
+
+import java.util.List;
 
 /**
  * 职务设置服务类

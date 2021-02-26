@@ -142,4 +142,18 @@ DeptPostInfoDlg.importSubmit = function() {
 $(function() {
     Feng.initValidator("DeptPostForm", DeptPostInfoDlg.validateFields);
 
+    $('#deptId').change(function(){
+        //此处写状态改变要实现的功能
+        // var s=$('#deptId').children('option:selected').val();
+        var s=$('#deptId').val();
+        $.post(Feng.ctxPath + "/mgr/dept/list/noPage", {deptId: s}, function (data) {
+            var record = data;
+            var options = '';
+            for (var item in record) {
+                options += '<option value="'+record[item].id+'">'+record[item].name
+                    +' '+record[item].account+'</option>'
+            }
+            $('#userId').html(options);
+        });
+    });
 });

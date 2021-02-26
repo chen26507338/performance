@@ -4,6 +4,9 @@ import com.stylefeng.guns.common.persistence.model.User;
 import com.stylefeng.guns.core.base.controller.BaseController;
 import com.baomidou.mybatisplus.plugins.Page;
 import com.stylefeng.guns.common.constant.factory.PageFactory;
+import com.stylefeng.guns.modular.job.service.IDeptService;
+import com.stylefeng.guns.modular.post.service.IPostSettingService;
+import com.stylefeng.guns.modular.system.service.IUserService;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.stereotype.Controller;
 import org.apache.shiro.authz.annotation.RequiresPermissions;;
@@ -35,6 +38,12 @@ public class DeptPostController extends BaseController {
 
     @Autowired
     private IDeptPostService deptPostService;
+    @Autowired
+    private IDeptService deptService;
+    @Autowired
+    private IPostSettingService postSettingService;
+    @Autowired
+    private IUserService userService;
 
     /**
      * 跳转到机构职务配置首页
@@ -50,7 +59,9 @@ public class DeptPostController extends BaseController {
      */
     @RequestMapping("/deptPost_add")
     @RequiresPermissions(value = {"/deptPost/add"})
-    public String deptPostAdd() {
+    public String deptPostAdd(Model model) {
+        model.addAttribute("deptList", deptService.selectAllOn());
+        model.addAttribute("postList", postSettingService.selectList(new EntityWrapper<>()));
         return PREFIX + "deptPost_add.html";
     }
 
@@ -62,6 +73,11 @@ public class DeptPostController extends BaseController {
     public String deptPostUpdate(@PathVariable String deptPostId, Model model) {
         DeptPost deptPost = deptPostService.selectById(deptPostId);
         model.addAttribute("item",deptPost);
+        model.addAttribute("deptList", deptService.selectAllOn());
+        model.addAttribute("postList", postSettingService.selectList(new EntityWrapper<>()));
+        User param = new User();
+        param.setDeptId(deptPost.getDeptId());
+        model.addAttribute("userList", userService.selectList(new EntityWrapper<>(param)));
         LogObjectHolder.me().set(deptPost);
         return PREFIX + "deptPost_edit.html";
     }

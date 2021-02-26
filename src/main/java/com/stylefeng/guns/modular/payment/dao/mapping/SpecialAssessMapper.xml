@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.stylefeng.guns.modular.payment.dao.SpecialAssessMapper">
+
+	<!-- 通用查询映射结果 -->
+	<resultMap id="BaseResultMap" type="com.stylefeng.guns.modular.payment.model.SpecialAssess">
+            <id column="id" property="id" />
+            <result column="dept_id" property="deptId" />
+            <result column="point_percent" property="pointPercent" />
+            <result column="apply_point" property="applyPoint" />
+            <result column="add_point" property="addPoint" />
+            <result column="remark" property="remark" />
+            <result column="create_time" property="createTime" />
+            <result column="is_all_point" property="isAllPoint" />
+            <result column="status" property="status" />
+            <result column="reference_point" property="referencePoint" />
+            <result column="is_jr" property="isJr" />
+            <result column="is_yjkh" property="isYjkh" />
+            <result column="project_content" property="projectContent" />
+            <result column="zx_no" property="zxNo" />
+	</resultMap>
+
+    <!-- 通用查询结果列 -->
+    <sql id="Base_Column_List">
+	    id AS id,
+	    dept_id AS deptId,
+	    point_percent AS pointPercent,
+	    apply_point AS applyPoint,
+	    add_point AS addPoint,
+	    remark AS remark,
+	    create_time AS createTime,
+	    is_all_point AS isAllPoint,
+	    status AS status,
+	    reference_point AS referencePoint,
+	    is_jr AS isJr,
+	    is_yjkh AS isYjkh,
+	    project_content AS projectContent,
+	    zx_no AS zxNo
+    </sql>
+
+</mapper>
