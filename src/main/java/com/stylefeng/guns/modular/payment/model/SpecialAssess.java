@@ -99,6 +99,12 @@ public class SpecialAssess extends BaseModel<SpecialAssess> {
     private Integer isYjkh;
 
     /**
+    * 是否导入
+    */
+    @TableField("is_import")
+    private Integer isImport;
+
+    /**
     * 申请项目内容
     */
     @TableField("project_content")

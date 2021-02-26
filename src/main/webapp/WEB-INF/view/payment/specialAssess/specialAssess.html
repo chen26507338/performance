@@ -18,6 +18,9 @@
                                 <#button name="添加" icon="fa-plus" clickFun="SpecialAssess.openAddSpecialAssess()"/>
                                 <#button name="导入项目" icon="fa-plus" clickFun="SpecialAssess.openImportProject()" space="true"/>
                             @}
+                            @if(shiro.hasPermission("/specialAssess/importAssess")){
+                                <#button name="导入考核" icon="fa-plus" clickFun="SpecialAssess.openImportAssess()" space="true"/>
+                            @}
                             @if(shiro.hasPermission("/specialAssess/update")){
                                 <#button name="修改" icon="fa-plus" clickFun="SpecialAssess.openSpecialAssessDetail()" space="true"/>
                             @}

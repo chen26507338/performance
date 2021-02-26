@@ -3,6 +3,7 @@ package com.stylefeng.guns.modular.payment.controller;
 import com.stylefeng.guns.core.base.controller.BaseController;
 import com.baomidou.mybatisplus.plugins.Page;
 import com.stylefeng.guns.common.constant.factory.PageFactory;
+import com.stylefeng.guns.modular.assess.service.ISpecialAssessMemberService;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.stereotype.Controller;
 import org.apache.shiro.authz.annotation.RequiresPermissions;;
@@ -34,6 +35,8 @@ public class SpecialAssessController extends BaseController {
 
     @Autowired
     private ISpecialAssessService specialAssessService;
+    @Autowired
+    private ISpecialAssessMemberService specialAssessMemberService;
 
     /**
      * 跳转到专项工作奖项目列表首页
@@ -126,7 +129,7 @@ public class SpecialAssessController extends BaseController {
      * 跳转到导入考核项目
      */
     @RequestMapping("/specialProject_import")
-    public String specialAssessImport() {
+    public String specialProjectImport() {
         return PREFIX + "specialProject_import.html";
     }
 
@@ -137,6 +140,25 @@ public class SpecialAssessController extends BaseController {
     @ResponseBody
     public Object importProject(SpecialAssess specialAssess) {
         specialAssessService.importProject(specialAssess);
+        return SUCCESS_TIP;
+    }
+
+    /**
+     * 跳转到导入考核
+     */
+    @RequestMapping("/specialAssess_import")
+    public String specialAssessImport(String id,Model model) {
+        model.addAttribute("id", id);
+        return PREFIX + "specialAssess_import.html";
+    }
+
+    /**
+     * 导入考核
+     */
+    @RequestMapping(value = "/importAssess")
+    @ResponseBody
+    public Object importAssess(SpecialAssess specialAssess) {
+        specialAssessService.importAssess(specialAssess);
         return SUCCESS_TIP;
     }
 }

@@ -145,6 +145,30 @@ SpecialAssessInfoDlg.importProject = function() {
     ajax.set(this.specialAssessInfoData);
     ajax.start();
 };
+/**
+ * 提交导入
+ */
+SpecialAssessInfoDlg.importAssess = function() {
+
+    this.clearData();
+    this.collectData();
+    //
+    // if (!this.validate()) {
+    //     return;
+    // }
+    //
+    // //提交信息
+    var ajax = new $ax(Feng.ctxPath + "/specialAssess/importAssess", function(data){
+        Feng.success("导入成功!");
+        window.parent.SpecialAssess.table.refresh();
+        SpecialAssessInfoDlg.close();
+    },function(data){
+        Feng.error("导入失败!" + data.responseJSON.message + "!");
+    });
+    this.specialAssessInfoData['expand["fileName"]'] = $("#fileName").val();
+    ajax.set(this.specialAssessInfoData);
+    ajax.start();
+};
 
 
 $(function() {

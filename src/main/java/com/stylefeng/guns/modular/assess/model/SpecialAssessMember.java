@@ -56,4 +56,15 @@ public class SpecialAssessMember extends BaseModel<SpecialAssessMember> {
     @TableField("money")
     private Double money;
 
+    /**
+     * 考核系数
+     */
+    @TableField("coe_point")
+    private Double coePoint;
+
+    /**
+     * 年份
+     */
+    @TableField("year")
+    private String year;
 }

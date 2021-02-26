@@ -20,6 +20,7 @@ public class SpecialAssessDecorator extends BaseListDecorator<SpecialAssess> {
     protected void decorateTheEntity(SpecialAssess specialAssess) {
         specialAssess.putExpand("isJrDict", ConstantFactory.me().getDictsByName("是否",specialAssess.getIsJr()));
         specialAssess.putExpand("isYjkhDict", ConstantFactory.me().getDictsByName("是否",specialAssess.getIsYjkh()));
+        specialAssess.putExpand("isImportDict", ConstantFactory.me().getDictsByName("是否",specialAssess.getIsImport()));
         specialAssess.putExpand("dept", deptService.selectById(specialAssess.getDeptId()));
     }
 }

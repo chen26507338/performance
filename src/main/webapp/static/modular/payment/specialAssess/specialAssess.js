@@ -22,6 +22,7 @@ SpecialAssess.initColumn = function () {
        ,{title: '申请项目内容', field:'projectContent', visible: true, align: 'center', valign: 'middle'}
         ,{title: '是否计入', field:'isJr', visible: true, align: 'center', valign: 'middle',formatter:function(value, row, index){return row.expand.isJrDict;}}
         ,{title: '是否记入部门优绩考核', field:'isYjkh', visible: true, align: 'center', valign: 'middle',formatter:function(value, row, index){return row.expand.isYjkhDict;}}
+        ,{title: '是否导入', field:'isImport', visible: true, align: 'center', valign: 'middle',formatter:function(value, row, index){return row.expand.isImportDict;}}
     ];
 };
 
@@ -75,6 +76,22 @@ SpecialAssess.openImportProject = function () {
         maxmin: true,
         content: Feng.ctxPath + '/specialAssess/specialProject_import'
     });
+};
+
+/**
+ * 点击导入考核指标库
+ */
+SpecialAssess.openImportAssess = function () {
+    if (this.check()) {
+        this.layerIndex = layer.open({
+            type: 2,
+            title: '导入考核',
+            area: ['800px', '420px'], //宽高
+            fix: false, //不固定
+            maxmin: true,
+            content: Feng.ctxPath + '/specialAssess/specialAssess_import?id=' + SpecialAssess.seItem.id
+        });
+    }
 };
 
 

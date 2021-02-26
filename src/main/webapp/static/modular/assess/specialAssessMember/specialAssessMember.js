@@ -14,8 +14,10 @@ var SpecialAssessMember = {
 SpecialAssessMember.initColumn = function () {
     return [
         {field: 'selectItem', radio: true}
-       ,{title: '用户id', field:'userId', visible: true, align: 'center', valign: 'middle'}
-       ,{title: '专项项目id', field:'saId', visible: true, align: 'center', valign: 'middle'}
+        ,{title: '职工编号', field:'expand.user.account', visible: true, align: 'center', valign: 'middle'}
+        ,{title: '职工姓名', field:'expand.user.name', visible: true, align: 'center', valign: 'middle'}
+        ,{title: '项目编号', field:'expand.sp.zxNo', visible: true, align: 'center', valign: 'middle'}
+        ,{title: '申请项目内容', field:'expand.sp.projectContent', visible: true, align: 'center', valign: 'middle'}
        ,{title: '积分', field:'point', visible: true, align: 'center', valign: 'middle'}
        ,{title: '薪酬', field:'money', visible: true, align: 'center', valign: 'middle'}
     ];
