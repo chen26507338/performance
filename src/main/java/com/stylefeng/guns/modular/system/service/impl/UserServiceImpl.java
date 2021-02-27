@@ -266,7 +266,7 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements IU
         for (Map map : users) {
             User u = this.getByAccount(map.get("account") + "");
             if (u == null) {
-                throw new GunsException(StrUtil.format("职工编号 {} 不存在", (String) map.get("account")));
+                throw new GunsException(StrUtil.format("职工编号 {} 不存在", map.get("account")));
             }
             PaySetting setting = paySettingService.getByName((String) map.get("name"));
             if (setting == null) {

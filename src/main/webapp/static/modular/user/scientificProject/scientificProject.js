@@ -17,10 +17,8 @@ ScientificProject.initColumn = function () {
        ,{title: '职工编号', field:'expand.user.account', visible: true, align: 'center', valign: 'middle'}
        ,{title: '职工姓名', field:'expand.user.name', visible: true, align: 'center', valign: 'middle'}
        ,{title: '课题名称', field:'name', visible: true, align: 'center', valign: 'middle'}
-       ,{title: '课题性质', field:'nature', visible: true, align: 'center', valign: 'middle'}
+       ,{title: '科研项目', field:'assessName', visible: true, align: 'center', valign: 'middle'}
        ,{title: '分类/级别', field:'type', visible: true, align: 'center', valign: 'middle'}
-       ,{title: '开题时间', field:'startTime', visible: true, align: 'center', valign: 'middle'}
-       ,{title: '结题时间', field:'endTime', visible: true, align: 'center', valign: 'middle'}
        ,{title: '到账经费', field:'expenditure', visible: true, align: 'center', valign: 'middle'}
        ,{title: '期刊名称/排名', field:'rank', visible: true, align: 'center', valign: 'middle'}
        ,{title: '年度', field:'year', visible: true, align: 'center', valign: 'middle'}

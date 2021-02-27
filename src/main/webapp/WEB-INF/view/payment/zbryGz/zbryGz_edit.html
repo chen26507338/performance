@@ -1,0 +1,87 @@
+@layout("/common/_container.html"){
+<div class="ibox float-e-margins">
+    <div class="ibox-content">
+        <div class="form-horizontal" id="ZbryGzForm">
+
+            <input type="hidden" id="id" value="${item.id}">
+
+            <div class="row">
+
+                <div class="col-sm-6 b-r">
+                    <#input id="userId" name="用户id" value="${item.userId}" underline="true"/>
+                </div>
+                <div class="col-sm-6 b-r">
+                        <#input id="inTime" name="时间" underline="true" value="${item.inTime}"
+                        type="text" dateType="date" format="yyyy-MM-dd"/>
+                </div>
+                <div class="col-sm-6 b-r">
+                    <#input id="gwgz" name="岗位工资" value="${item.gwgz}" underline="true"/>
+                </div>
+                <div class="col-sm-6 b-r">
+                    <#input id="xjgz" name="薪级工资" value="${item.xjgz}" underline="true"/>
+                </div>
+                <div class="col-sm-6 b-r">
+                    <#input id="gwjt" name="岗位津贴" value="${item.gwjt}" underline="true"/>
+                </div>
+                <div class="col-sm-6 b-r">
+                    <#input id="shbt" name="生活补贴" value="${item.shbt}" underline="true"/>
+                </div>
+                <div class="col-sm-6 b-r">
+                    <#input id="tsbt" name="特殊补贴" value="${item.tsbt}" underline="true"/>
+                </div>
+                <div class="col-sm-6 b-r">
+                    <#input id="tz" name="提租" value="${item.tz}" underline="true"/>
+                </div>
+                <div class="col-sm-6 b-r">
+                    <#input id="bf" name="补发" value="${item.bf}" underline="true"/>
+                </div>
+                <div class="col-sm-6 b-r">
+                    <#input id="yfs" name="应发数" value="${item.yfs}" underline="true"/>
+                </div>
+                <div class="col-sm-6 b-r">
+                    <#input id="kk" name="扣款" value="${item.kk}" underline="true"/>
+                </div>
+                <div class="col-sm-6 b-r">
+                    <#input id="tzglbxj" name="调整各类保险金" value="${item.tzglbxj}" underline="true"/>
+                </div>
+                <div class="col-sm-6 b-r">
+                    <#input id="gjj" name="公积金" value="${item.gjj}" underline="true"/>
+                </div>
+                <div class="col-sm-6 b-r">
+                    <#input id="yb" name="医保" value="${item.yb}" underline="true"/>
+                </div>
+                <div class="col-sm-6 b-r">
+                    <#input id="ylj" name="养老金" value="${item.ylj}" underline="true"/>
+                </div>
+                <div class="col-sm-6 b-r">
+                    <#input id="zynj" name="职业年金" value="${item.zynj}" underline="true"/>
+                </div>
+                <div class="col-sm-6 b-r">
+                    <#input id="syj" name="失业金" value="${item.syj}" underline="true"/>
+                </div>
+                <div class="col-sm-6 b-r">
+                    <#input id="hyf" name="会员费" value="${item.hyf}" underline="true"/>
+                </div>
+                <div class="col-sm-6 b-r">
+                    <#input id="fsf" name="房水费" value="${item.fsf}" underline="true"/>
+                </div>
+                <div class="col-sm-6 b-r">
+                    <#input id="sds" name="所得税" value="${item.sds}" underline="true"/>
+                </div>
+                <div class="col-sm-6 b-r">
+                    <#input id="sfs" name="实发数" value="${item.sfs}" underline="true"/>
+                </div>
+            </div>
+
+            <div class="row btn-group-m-t">
+                <div class="col-sm-10">
+                    <#button btnCss="info" name="提交" id="ensure" icon="fa-check" clickFun="ZbryGzInfoDlg.editSubmit()"/>
+                    <#button btnCss="danger" name="取消" id="cancel" icon="fa-eraser" clickFun="ZbryGzInfoDlg.close()"/>
+                </div>
+            </div>
+        </div>
+
+    </div>
+</div>
+<script src="${ctxPath}/static/modular/payment/zbryGz/zbryGz_info.js"></script>
+@}

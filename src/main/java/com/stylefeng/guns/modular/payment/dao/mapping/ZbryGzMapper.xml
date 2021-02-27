@@ -1,0 +1,57 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.stylefeng.guns.modular.payment.dao.ZbryGzMapper">
+
+	<!-- 通用查询映射结果 -->
+	<resultMap id="BaseResultMap" type="com.stylefeng.guns.modular.payment.model.ZbryGz">
+            <id column="id" property="id" />
+            <result column="user_id" property="userId" />
+            <result column="in_time" property="inTime" />
+            <result column="gwgz" property="gwgz" />
+            <result column="xjgz" property="xjgz" />
+            <result column="gwjt" property="gwjt" />
+            <result column="shbt" property="shbt" />
+            <result column="tsbt" property="tsbt" />
+            <result column="tz" property="tz" />
+            <result column="bf" property="bf" />
+            <result column="yfs" property="yfs" />
+            <result column="kk" property="kk" />
+            <result column="tzglbxj" property="tzglbxj" />
+            <result column="gjj" property="gjj" />
+            <result column="yb" property="yb" />
+            <result column="ylj" property="ylj" />
+            <result column="zynj" property="zynj" />
+            <result column="syj" property="syj" />
+            <result column="hyf" property="hyf" />
+            <result column="fsf" property="fsf" />
+            <result column="sds" property="sds" />
+            <result column="sfs" property="sfs" />
+	</resultMap>
+
+    <!-- 通用查询结果列 -->
+    <sql id="Base_Column_List">
+	    id AS id,
+	    user_id AS userId,
+	    in_time AS inTime,
+	    gwgz AS gwgz,
+	    xjgz AS xjgz,
+	    gwjt AS gwjt,
+	    shbt AS shbt,
+	    tsbt AS tsbt,
+	    tz AS tz,
+	    bf AS bf,
+	    yfs AS yfs,
+	    kk AS kk,
+	    tzglbxj AS tzglbxj,
+	    gjj AS gjj,
+	    yb AS yb,
+	    ylj AS ylj,
+	    zynj AS zynj,
+	    syj AS syj,
+	    hyf AS hyf,
+	    fsf AS fsf,
+	    sds AS sds,
+	    sfs AS sfs
+    </sql>
+
+</mapper>
