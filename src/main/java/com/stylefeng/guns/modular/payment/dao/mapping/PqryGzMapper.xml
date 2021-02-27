@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.stylefeng.guns.modular.payment.dao.PqryGzMapper">
+
+	<!-- 通用查询映射结果 -->
+	<resultMap id="BaseResultMap" type="com.stylefeng.guns.modular.payment.model.PqryGz">
+            <id column="id" property="id" />
+            <result column="user_id" property="userId" />
+            <result column="in_time" property="inTime" />
+            <result column="gz" property="gz" />
+            <result column="bfgzce" property="bfgzce" />
+            <result column="kcj" property="kcj" />
+            <result column="yfgz" property="yfgz" />
+            <result column="ylsyjs" property="ylsyjs" />
+            <result column="ybsyjs" property="ybsyjs" />
+            <result column="gjjjs" property="gjjjs" />
+            <result column="gsjs" property="gsjs" />
+            <result column="yl" property="yl" />
+            <result column="sy" property="sy" />
+            <result column="yb" property="yb" />
+            <result column="gjj" property="gjj" />
+            <result column="hj" property="hj" />
+            <result column="sfgz" property="sfgz" />
+	</resultMap>
+
+    <!-- 通用查询结果列 -->
+    <sql id="Base_Column_List">
+	    id AS id,
+	    user_id AS userId,
+	    in_time AS inTime,
+	    gz AS gz,
+	    bfgzce AS bfgzce,
+	    kcj AS kcj,
+	    yfgz AS yfgz,
+	    ylsyjs AS ylsyjs,
+	    ybsyjs AS ybsyjs,
+	    gjjjs AS gjjjs,
+	    gsjs AS gsjs,
+	    yl AS yl,
+	    sy AS sy,
+	    yb AS yb,
+	    gjj AS gjj,
+	    hj AS hj,
+	    sfgz AS sfgz
+    </sql>
+
+</mapper>

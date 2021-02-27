@@ -1,0 +1,73 @@
+@layout("/common/_container.html"){
+<div class="ibox float-e-margins">
+    <div class="ibox-content">
+        <div class="form-horizontal" id="PqryGzForm">
+
+            <input type="hidden" id="id" value="">
+
+            <div class="row">
+
+                <div class="col-sm-6 b-r">
+                    <#input id="userId" name="用户id" underline="true"/>
+                </div>
+                <div class="col-sm-6 b-r">
+                    <#input id="inTime" name="时间" underline="true"
+                    type="text" dateType="date" format="yyyy-MM-dd"/>
+                </div>
+                <div class="col-sm-6 b-r">
+                    <#input id="gz" name="工资" underline="true"/>
+                </div>
+                <div class="col-sm-6 b-r">
+                    <#input id="bfgzce" name="补发工资差额" underline="true"/>
+                </div>
+                <div class="col-sm-6 b-r">
+                    <#input id="kcj" name="扣产假" underline="true"/>
+                </div>
+                <div class="col-sm-6 b-r">
+                    <#input id="yfgz" name="应发工资" underline="true"/>
+                </div>
+                <div class="col-sm-6 b-r">
+                    <#input id="ylsyjs" name="养老失业基数" underline="true"/>
+                </div>
+                <div class="col-sm-6 b-r">
+                    <#input id="ybsyjs" name="医保生育基数" underline="true"/>
+                </div>
+                <div class="col-sm-6 b-r">
+                    <#input id="gjjjs" name="公积金基数" underline="true"/>
+                </div>
+                <div class="col-sm-6 b-r">
+                    <#input id="gsjs" name="工伤基数" underline="true"/>
+                </div>
+                <div class="col-sm-6 b-r">
+                    <#input id="yl" name="养老" underline="true"/>
+                </div>
+                <div class="col-sm-6 b-r">
+                    <#input id="sy" name="失业" underline="true"/>
+                </div>
+                <div class="col-sm-6 b-r">
+                    <#input id="yb" name="医保" underline="true"/>
+                </div>
+                <div class="col-sm-6 b-r">
+                    <#input id="gjj" name="公积金" underline="true"/>
+                </div>
+                <div class="col-sm-6 b-r">
+                    <#input id="hj" name="合计" underline="true"/>
+                </div>
+                <div class="col-sm-6 b-r">
+                    <#input id="sfgz" name="实发工资" underline="true"/>
+                </div>
+
+            </div>
+
+            <div class="row btn-group-m-t">
+                <div class="col-sm-10">
+                    <#button btnCss="info" name="提交" id="ensure" icon="fa-check" clickFun="PqryGzInfoDlg.addSubmit()"/>
+                    <#button btnCss="danger" name="取消" id="cancel" icon="fa-eraser" clickFun="PqryGzInfoDlg.close()"/>
+                </div>
+            </div>
+        </div>
+
+    </div>
+</div>
+<script src="${ctxPath}/static/modular/payment/pqryGz/pqryGz_info.js"></script>
+@}

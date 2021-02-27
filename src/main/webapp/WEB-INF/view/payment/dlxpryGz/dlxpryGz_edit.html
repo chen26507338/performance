@@ -1,0 +1,63 @@
+@layout("/common/_container.html"){
+<div class="ibox float-e-margins">
+    <div class="ibox-content">
+        <div class="form-horizontal" id="DlxpryGzForm">
+
+            <input type="hidden" id="id" value="${item.id}">
+
+            <div class="row">
+
+                <div class="col-sm-6 b-r">
+                    <#input id="userId" name="用户id" value="${item.userId}" underline="true"/>
+                </div>
+                <div class="col-sm-6 b-r">
+                        <#input id="time" name="时间" underline="true" value="${item.time}"
+                        type="text" dateType="date" format="yyyy-MM-dd"/>
+                </div>
+                <div class="col-sm-6 b-r">
+                    <#input id="jbgz" name="基本工资" value="${item.jbgz}" underline="true"/>
+                </div>
+                <div class="col-sm-6 b-r">
+                    <#input id="jcxjx" name="基础性绩效" value="${item.jcxjx}" underline="true"/>
+                </div>
+                <div class="col-sm-6 b-r">
+                    <#input id="bfgzd" name="补发工资等" value="${item.bfgzd}" underline="true"/>
+                </div>
+                <div class="col-sm-6 b-r">
+                    <#input id="yfgz" name="应发工资" value="${item.yfgz}" underline="true"/>
+                </div>
+                <div class="col-sm-6 b-r">
+                    <#input id="ylbx" name="养老保险" value="${item.ylbx}" underline="true"/>
+                </div>
+                <div class="col-sm-6 b-r">
+                    <#input id="yl" name="医疗保险" value="${item.yl}" underline="true"/>
+                </div>
+                <div class="col-sm-6 b-r">
+                    <#input id="sybx" name="失业保险" value="${item.sybx}" underline="true"/>
+                </div>
+                <div class="col-sm-6 b-r">
+                    <#input id="gjj" name="公积金" value="${item.gjj}" underline="true"/>
+                </div>
+                <div class="col-sm-6 b-r">
+                    <#input id="ghf" name="工会费" value="${item.ghf}" underline="true"/>
+                </div>
+                <div class="col-sm-6 b-r">
+                    <#input id="qtkk" name="其他扣款" value="${item.qtkk}" underline="true"/>
+                </div>
+                <div class="col-sm-6 b-r">
+                    <#input id="sfs" name="实发数" value="${item.sfs}" underline="true"/>
+                </div>
+            </div>
+
+            <div class="row btn-group-m-t">
+                <div class="col-sm-10">
+                    <#button btnCss="info" name="提交" id="ensure" icon="fa-check" clickFun="DlxpryGzInfoDlg.editSubmit()"/>
+                    <#button btnCss="danger" name="取消" id="cancel" icon="fa-eraser" clickFun="DlxpryGzInfoDlg.close()"/>
+                </div>
+            </div>
+        </div>
+
+    </div>
+</div>
+<script src="${ctxPath}/static/modular/payment/dlxpryGz/dlxpryGz_info.js"></script>
+@}
