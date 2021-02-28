@@ -1,34 +1,4 @@
-/**
- * 考核指标库管理初始化
- */
-var NormalAssess = {
-    id: "NormalAssessTable",	//表格id
-    seItem: null,		//选中的条目
-    table: null,
-    layerIndex: -1
-};
 
-/**
- * 初始化表格的列
- */
-NormalAssess.initColumn = function () {
-    return [
-        {field: 'selectItem', check: true}
-        ,{title: '职工编号', field:'expand.account', visible: true, align: 'center', valign: 'middle'}
-        ,{title: '职工姓名', field:'expand.userName', visible: true, align: 'center', valign: 'middle'}
-       ,{title: '部门', field:'expand.deptName', visible: true, align: 'center', valign: 'middle'}
-       ,{title: '指标', field:'expand.normName', visible: true, align: 'center', valign: 'middle'}
-       ,{title: '考核系数', field:'coePoint', visible: true, align: 'center', valign: 'middle'}
-       ,{title: '校级标准分', field:'mainNormPoint', visible: true, align: 'center', valign: 'middle'}
-       ,{title: '院级浮动值', field:'collegeNormPoint', visible: true, align: 'center', valign: 'middle'}
-       ,{title: '考核结果', field:'result', visible: true, align: 'center', valign: 'middle'}
-       ,{title: '校级分', field:'mainPoint', visible: true, align: 'center', valign: 'middle'}
-       ,{title: '院级分', field:'expand.collegePoint', visible: true, align: 'center', valign: 'middle'}
-       ,{title: '年度', field:'year', visible: true, align: 'center', valign: 'middle'}
-       ,{title: '创建时间', field:'createTime', visible: true, align: 'center', valign: 'middle'}
-       ,{title: '状态', field:'status', visible: true, align: 'center', valign: 'middle',formatter:function(value, row, index){return row.expand.statusDict;}}
-    ];
-};
 
 /**
  * 检查是否选中

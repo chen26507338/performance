@@ -75,6 +75,17 @@ public class NormalAssess extends BaseActEntity<NormalAssess> {
     */
     @TableField("year")
     private String year;
+    /**
+    * 级别
+    */
+    @TableField("jb")
+    private String jb;
+
+    /**
+    * 等次
+    */
+    @TableField("dc")
+    private String dc;
 
     /**
     * 指标ID

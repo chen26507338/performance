@@ -152,9 +152,8 @@ public class JobPriceMonthController extends BaseController {
     /**
      * 考核申请
      */
-    @RequestMapping("/import")
-    public String jobPriceImport(JobPriceMonth jobPriceMonth) {
-        jobPriceMonthService.importData(jobPriceMonth);
+    @RequestMapping("/import_data")
+    public String jobPriceImport() {
         return PREFIX + "jobPriceMonth_importdata.html";
     }
 
@@ -162,8 +161,10 @@ public class JobPriceMonthController extends BaseController {
      *
      */
     @RequestMapping("/importData")
-    public Object importData() {
-        return ShiroKit.getSession().getAttribute("jobPriceMonthData");
+    @ResponseBody
+    public Object importData(JobPriceMonth jobPriceMonth) {
+        jobPriceMonthService.importData(jobPriceMonth);
+        return SUCCESS_TIP;
     }
 
     /**

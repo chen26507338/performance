@@ -224,8 +224,51 @@ public class JobPriceMonthServiceImpl extends ServiceImpl<JobPriceMonthMapper, J
     @Override
     @Transactional
     public void importData(JobPriceMonth jobPriceMonth) {
+        ExcelReader reader = ExcelUtil.getReader(gunsProperties.getFileUploadPath() + jobPriceMonth.getExpand().get("fileName"));
+        reader.addHeaderAlias("时间", "time");
+        reader.addHeaderAlias("基本岗位责任奖", "basePrice");
+        reader.addHeaderAlias("管理服务工作奖", "mgrPrice");
+        reader.addHeaderAlias("补发、其他等", "retroactivePrice");
+        reader.addHeaderAlias("应发数", "shouldPrice");
+        reader.addHeaderAlias("扣款", "garnishedPrice");
+        reader.addHeaderAlias("实发数", "resultPrice");
+        reader.addHeaderAlias("代码", "account");
+        List<Map> normalAssesses = reader.readAll(Map.class);
+        List<JobPriceMonth> months = new ArrayList<>();
+        for (Map map : normalAssesses) {
+            User user = userService.getByAccount(map.get("account")+"");
+            if (user == null) {
+                throw new GunsException(StrUtil.format("职工编号 {} 不存在", map.get("account")+""));
+            }
+            String[] times = (map.get("time") + "").split("\\.");
+            JobPriceMonth params = new JobPriceMonth();
+            params.setYear(times[0]);
+            params.setMonth(Integer.valueOf(times[1]) + "");
+            params.setUserId(user.getId());
+            if (this.selectCount(new EntityWrapper<>(params)) > 0) {
+                throw new GunsException(StrUtil.format("职工编号 {} {}年度{}月份已导入",
+                        user.getAccount(), params.getYear(), params.getMonth()));
+            }
+            JobPriceMonth month = BeanUtil.mapToBean(map, JobPriceMonth.class, true);
+            month.setYear(params.getYear());
+            month.setMonth(params.getMonth());
+            month.setStatus(YesNo.YES.getCode());
+            month.setUserId(user.getId());
+            months.add(month);
 
-
-//        ShiroKit.getSession().setAttribute("jobPriceMonthData", jobPriceMonths);
+            JobPriceYear jobPriceYear = new JobPriceYear();
+            jobPriceYear.setUserId(params.getUserId());
+            jobPriceYear.setYear(params.getYear());
+            jobPriceYear = jobPriceYearService.selectOne(new EntityWrapper<>(jobPriceYear));
+            if (jobPriceYear == null) {
+                jobPriceYear = new JobPriceYear();
+                jobPriceYear.setUserId(params.getUserId());
+                jobPriceYear.setYear(params.getYear());
+            }
+            String monthFieldName = "month" + params.getMonth();
+            ReflectUtil.setFieldValue(jobPriceYear, monthFieldName, month.getResultPrice());
+            jobPriceYearService.insertOrUpdate(jobPriceYear);
+        }
+        this.insertBatch(months);
     }
 }

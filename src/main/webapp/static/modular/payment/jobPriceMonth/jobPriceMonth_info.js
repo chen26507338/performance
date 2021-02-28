@@ -49,6 +49,30 @@ JobPriceMonthInfoDlg.importSubmit = function() {
     ajax.set(this.jobPriceMonthInfoData);
     ajax.start();
 };
+/**
+ * 提交导入
+ */
+JobPriceMonthInfoDlg.importData = function() {
+
+    this.clearData();
+    this.collectData();
+    //
+    // if (!this.validate()) {
+    //     return;
+    // }
+    //
+    // //提交信息
+    var ajax = new $ax(Feng.ctxPath + "/jobPriceMonth/importData", function(data){
+        Feng.success("导入成功!");
+        window.parent.JobPriceMonth.table.refresh();
+        JobPriceMonthInfoDlg.close();
+    },function(data){
+        Feng.error("导入失败!" + data.responseJSON.message + "!");
+    });
+    this.jobPriceMonthInfoData['expand["fileName"]'] = $("#fileName").val();
+    ajax.set(this.jobPriceMonthInfoData);
+    ajax.start();
+};
 
 
 /**

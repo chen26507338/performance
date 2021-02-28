@@ -114,3 +114,9 @@ insert into sys_relation (`menuid`,`roleid`) values (1365651888125607941,1);
 insert into sys_relation (`menuid`,`roleid`) values (1365651888129802241,1);
 insert into sys_relation (`menuid`,`roleid`) values (1365651888129802242,1);
 
+alter table normal_assess
+    add jb varchar(255) null comment '级别';
+
+alter table normal_assess
+    add dc varchar(255) null comment '等次';
+

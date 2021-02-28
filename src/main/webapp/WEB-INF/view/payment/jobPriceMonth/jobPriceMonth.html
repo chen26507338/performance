@@ -30,12 +30,13 @@
                             </div>
                         </div>
                         <div class="hidden-xs" id="JobPriceMonthTableToolbar" role="group">
-                            <#button name="导入数据" icon="fa-plus" clickFun="JobPriceMonth.openImportNormalAssess()"/>
-                            <#button name="导出数据" icon="fa-plus" clickFun="JobPriceMonth.exportJobPrice()"/>
 
                             @if(shiro.hasPermission("/jobPriceMonth/add")){
                                 <#button name="添加" icon="fa-plus" clickFun="JobPriceMonth.openAddJobPriceMonth()"/>
                             @}
+                            <#button name="导入数据" icon="fa-plus" clickFun="JobPriceMonth.openImportNormalAssess()" space="true"/>
+                            <#button name="导出数据" icon="fa-plus" clickFun="JobPriceMonth.exportJobPrice()" space="true"/>
+                            <#button name="导入现有数据" icon="fa-plus" clickFun="JobPriceMonth.openImportData()" space="true"/>
                             @if(shiro.hasPermission("/jobPriceMonth/update")){
                                 <#button name="修改" icon="fa-plus" clickFun="JobPriceMonth.openJobPriceMonthDetail()" space="true"/>
                             @}

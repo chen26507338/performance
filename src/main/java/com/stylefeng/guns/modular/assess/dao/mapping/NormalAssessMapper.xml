@@ -21,6 +21,8 @@
 	    na.dept_id AS deptId,
 	    user_id AS userId,
 	    norm_id AS normId,
+	    jb,
+	    dc,
 	    result AS result,
 	    coe_point AS coePoint,
 	    main_norm_point AS mainNormPoint,
