@@ -14,7 +14,11 @@ var DzbWorkAssess = {
 DzbWorkAssess.initColumn = function () {
     return [
         {field: 'selectItem', radio: true}
-       ,{title: '指标代码', field:'expand.normCode', visible: true, align: 'center', valign: 'middle'}
+        ,{title: '职工编号', field:'expand.user.account', visible: true, align: 'center', valign: 'middle'}
+        ,{title: '职工姓名', field:'expand.user.name', visible: true, align: 'center', valign: 'middle'}
+        ,{title: '名称', field:'name', visible: true, align: 'center', valign: 'middle'}
+        ,{title: '支部得分', field:'zbdf', visible: true, align: 'center', valign: 'middle'}
+        ,{title: '指标代码', field:'expand.normCode', visible: true, align: 'center', valign: 'middle'}
        ,{title: 'II级指标', field:'expand.normContent', visible: true, align: 'center', valign: 'middle'}
        // ,{title: '考核结果', field:'result', visible: true, align: 'center', valign: 'middle'}
        ,{title: '考核年度', field:'year', visible: true, align: 'center', valign: 'middle'}
@@ -46,6 +50,20 @@ DzbWorkAssess.check = function () {
 DzbWorkAssess.formParams = function() {
     var queryData = {};
     return queryData;
+};
+
+/**
+ * 点击导入考核指标库
+ */
+DzbWorkAssess.openImportAssess = function () {
+    this.layerIndex = layer.open({
+        type: 2,
+        title: '导入考核',
+        area: ['800px', '420px'], //宽高
+        fix: false, //不固定
+        maxmin: true,
+        content: Feng.ctxPath + '/dzbWorkAssess/dzbWorkAssess_import'
+    });
 };
 
 

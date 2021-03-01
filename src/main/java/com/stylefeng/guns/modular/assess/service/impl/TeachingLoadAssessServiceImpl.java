@@ -2,11 +2,15 @@ package com.stylefeng.guns.modular.assess.service.impl;
 
 import cn.hutool.core.collection.CollUtil;
 import cn.hutool.core.util.ReflectUtil;
+import cn.hutool.core.util.StrUtil;
+import cn.hutool.poi.excel.ExcelReader;
+import cn.hutool.poi.excel.ExcelUtil;
 import com.alibaba.fastjson.JSON;
 import com.baomidou.mybatisplus.annotations.TableField;
 import com.baomidou.mybatisplus.mapper.EntityWrapper;
 import com.stylefeng.guns.common.constant.state.YesNo;
 import com.stylefeng.guns.common.persistence.model.User;
+import com.stylefeng.guns.config.properties.GunsProperties;
 import com.stylefeng.guns.core.exception.GunsException;
 import com.stylefeng.guns.core.shiro.ShiroKit;
 import com.stylefeng.guns.modular.act.service.ActTaskService;
@@ -52,6 +56,8 @@ public class TeachingLoadAssessServiceImpl extends ServiceImpl<TeachingLoadAsses
     private ActTaskService actTaskService;
     @Autowired
     private IAssessCoefficientService assessCoefficientService;
+    @Resource
+    private GunsProperties gunsProperties;
 
     @Autowired
     private IAssessNormPointService assessNormPointService;
@@ -212,5 +218,48 @@ public class TeachingLoadAssessServiceImpl extends ServiceImpl<TeachingLoadAsses
             }
         }
         actTaskService.complete(teachingLoadAssess.getAct().getTaskId(), teachingLoadAssess.getAct().getProcInsId(), comment.toString(), vars);
+    }
+
+    @Override
+    @Transactional
+    public void importAssess(TeachingLoadAssess teachingLoadAssess) {
+        ExcelReader reader = ExcelUtil.getReader(gunsProperties.getFileUploadPath() + teachingLoadAssess.getExpand().get("fileName"));
+        reader.addHeaderAlias("考核项目", "assessName");
+        reader.addHeaderAlias("校级积分", "mainNormPoint");
+        reader.addHeaderAlias("课程类别", "courseType");
+        reader.addHeaderAlias("课时数", "courseTimes");
+        reader.addHeaderAlias("积分归属年份", "year");
+        reader.addHeaderAlias("教师工号", "account");
+        List<TeachingLoadAssess> normalAssesses = reader.readAll(TeachingLoadAssess.class);
+        AssessCoefficient coefficient = assessCoefficientService.selectById(IAssessCoefficientService.TYPE_JXGZ);
+        for (TeachingLoadAssess assess : normalAssesses) {
+            User user = userService.getByAccount(assess.getAccount());
+            if (user == null) {
+                throw new GunsException(StrUtil.format("职工编号 {} 不存在", assess.getAccount()));
+            }
+            assess.setUserId(user.getId());
+            assess.setStatus(YesNo.YES.getCode());
+            assess.setCoePoint(coefficient.getCoefficient());
+
+            AssessNormPoint assessNormPoint = new AssessNormPoint();
+            assessNormPoint.setUserId(assess.getUserId());
+            assessNormPoint.setYear(assess.getYear());
+            assessNormPoint = assessNormPointService.selectOne(new EntityWrapper<>(assessNormPoint));
+
+            if (assessNormPoint != null) {
+                Double mainPoint = assessNormPoint.getJxgzMain();
+                mainPoint += assess.getMainNormPoint();
+                assessNormPoint.setJxgzMain(mainPoint);
+            } else {
+                assessNormPoint = new AssessNormPoint();
+                double mainPoint = assess.getMainNormPoint();
+                assessNormPoint.setJxgzMain(mainPoint);
+                assessNormPoint.setYear(assess.getYear());
+                assessNormPoint.setUserId(assess.getUserId());
+                assessNormPoint.setDeptId(user.getDeptId());
+            }
+            assessNormPointService.insertOrUpdate(assessNormPoint);
+        }
+        this.insertBatch(normalAssesses);
     }
 }

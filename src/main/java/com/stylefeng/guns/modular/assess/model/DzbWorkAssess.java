@@ -28,6 +28,23 @@ public class DzbWorkAssess extends BaseActEntity<DzbWorkAssess> {
     }
 
     /**
+     * 考核系数
+     */
+    @TableField("coe_point")
+    private Double coePoint;
+
+    /**
+     * 用户ID
+     */
+    @TableField("user_id")
+    private Long userId;
+    /**
+     * 职工编号
+     */
+    @TableField(exist = false)
+    private String account;
+
+    /**
     * 
     */
     @TableId("id")
@@ -68,6 +85,11 @@ public class DzbWorkAssess extends BaseActEntity<DzbWorkAssess> {
     */
     @TableField("year")
     private String year;
+    /**
+    * 名称
+    */
+    @TableField("name")
+    private String name;
 
     /**
     * 组织部部长ID
@@ -92,6 +114,12 @@ public class DzbWorkAssess extends BaseActEntity<DzbWorkAssess> {
     */
     @TableField("college_norm_point")
     private Double collegeNormPoint;
+
+    /**
+    * 支部得分
+    */
+    @TableField("zbdf")
+    private Double zbdf;
 
     /**
     * 部门ID

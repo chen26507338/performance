@@ -17,4 +17,6 @@ public interface IDzbWorkAssessService extends IService<DzbWorkAssess> {
     void audit(DzbWorkAssess dzbWorkAssess);
 
     void doAllocation(DzbWorkAssess dzbWorkAssess);
+
+    void importAssess(DzbWorkAssess dzbWorkAssess);
 }

@@ -7,7 +7,6 @@ import com.stylefeng.guns.common.constant.state.YesNo;
 import com.stylefeng.guns.core.base.controller.BaseController;
 import com.stylefeng.guns.core.log.LogObjectHolder;
 import com.stylefeng.guns.modular.assess.decorator.TeachingLoadAssessDecorator;
-import com.stylefeng.guns.modular.assess.model.AssessNorm;
 import com.stylefeng.guns.modular.assess.model.TeachingLoadAssess;
 import com.stylefeng.guns.modular.assess.service.IAssessNormService;
 import com.stylefeng.guns.modular.assess.service.ITeachingLoadAssessService;
@@ -118,6 +117,25 @@ public class TeachingLoadAssessController extends BaseController {
     @ResponseBody
     public Object update(TeachingLoadAssess teachingLoadAssess) {
         teachingLoadAssessService.updateById(teachingLoadAssess);
+        return SUCCESS_TIP;
+    }
+
+
+    /**
+     * 跳转到导入现有考核绩效
+     */
+    @RequestMapping("/teachingLoadAssess_import")
+    public String teachingLoadAssessImport() {
+        return PREFIX + "teachingLoadAssess_import.html";
+    }
+
+    /**
+     * 导入考核
+     */
+    @RequestMapping(value = "/importAssess")
+    @ResponseBody
+    public Object importAssess(TeachingLoadAssess teachingLoadAssess) {
+        teachingLoadAssessService.importAssess(teachingLoadAssess);
         return SUCCESS_TIP;
     }
 

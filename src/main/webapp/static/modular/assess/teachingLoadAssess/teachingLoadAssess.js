@@ -14,14 +14,15 @@ var TeachingLoadAssess = {
 TeachingLoadAssess.initColumn = function () {
     return [
         {field: 'selectItem', radio: true}
-        , {title: '状态', field: 'status', visible: true, align: 'center', valign: 'middle'}
-        , {title: '指标ID', field: 'normId', visible: true, align: 'center', valign: 'middle'}
+        ,{title: '职工编号', field:'expand.user.account', visible: true, align: 'center', valign: 'middle'}
+        ,{title: '职工姓名', field:'expand.user.name', visible: true, align: 'center', valign: 'middle'}
+        , {title: '课时数', field: 'courseTimes', visible: true, align: 'center', valign: 'middle'}
+        , {title: '课程类型', field: 'courseType', visible: true, align: 'center', valign: 'middle'}
         , {title: '考核结果', field: 'result', visible: true, align: 'center', valign: 'middle'}
         , {title: '考核年度', field: 'year', visible: true, align: 'center', valign: 'middle'}
         , {title: '考核系数', field: 'coePoint', visible: true, align: 'center', valign: 'middle'}
         , {title: '校级指标分', field: 'mainNormPoint', visible: true, align: 'center', valign: 'middle'}
         , {title: '院级浮动值', field: 'collegeNormPoint', visible: true, align: 'center', valign: 'middle'}
-        , {title: '用户ID', field: 'userId', visible: true, align: 'center', valign: 'middle'}
     ];
 };
 
@@ -46,6 +47,20 @@ TeachingLoadAssess.check = function () {
 TeachingLoadAssess.formParams = function () {
     var queryData = {};
     return queryData;
+};
+
+/**
+ * 点击导入考核指标库
+ */
+TeachingLoadAssess.openImportAssess = function () {
+    this.layerIndex = layer.open({
+        type: 2,
+        title: '导入考核',
+        area: ['800px', '420px'], //宽高
+        fix: false, //不固定
+        maxmin: true,
+        content: Feng.ctxPath + '/teachingLoadAssess/teachingLoadAssess_import'
+    });
 };
 
 

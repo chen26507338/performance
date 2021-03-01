@@ -119,4 +119,25 @@ alter table normal_assess
 
 alter table normal_assess
     add dc varchar(255) null comment '等次';
+alter table teaching_load_assess
+    add course_type varchar(255) null comment '课程类型';
+
+alter table teaching_load_assess
+    add course_times int default 0 null comment '课时数';
+
+INSERT INTO `per`.`sys_menu`(`id`, `code`, `pcode`, `pcodes`, `name`, `icon`, `url`, `num`, `levels`, `ismenu`, `tips`, `status`, `isopen`)
+ VALUES (1307583248381219820, 'teachingLoadAssess_import', 'teachingLoadAssess', '[0],[assess_norm],[teachingLoadAssess],', '教学考核导入', '', '/teachingLoadAssess/import', 99, 3, 0, NULL, 1, 0);
+insert into sys_relation (`menuid`,`roleid`) values (1307583248381219820,1);
+INSERT INTO `per`.`sys_menu`(`id`, `code`, `pcode`, `pcodes`, `name`, `icon`, `url`, `num`, `levels`, `ismenu`, `tips`, `status`, `isopen`)
+VALUES (1308993140152364481, 'dzbWorkAssess_import', 'dzbWorkAssess', '[0],[assess_norm],[dzbWorkAssess],', '党支部工作考核导入', '', '/dzbWorkAssess/import', 99, 3, 0, NULL, 1, 0);
+insert into sys_relation (`menuid`,`roleid`) values (1308993140152364481,1);
+alter table dzb_work_assess
+    add name varchar(255) null comment '名称';
+
+alter table dzb_work_assess
+    add zbdf double default 0 null comment '支部得分';
+alter table dzb_work_assess
+    add user_id bigint null comment '用户id';
+alter table dzb_work_assess
+    add coe_point double default 0 null comment '考核系数';
 

@@ -14,4 +14,6 @@ public interface ITeachingLoadAssessService extends IService<TeachingLoadAssess>
     void apply(TeachingLoadAssess teachingLoadAssess);
 
     void audit(TeachingLoadAssess teachingLoadAssess);
+
+    void importAssess(TeachingLoadAssess teachingLoadAssess);
 }

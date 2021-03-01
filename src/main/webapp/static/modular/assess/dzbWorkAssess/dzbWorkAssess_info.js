@@ -89,6 +89,31 @@ DzbWorkAssessInfoDlg.validate = function () {
 };
 
 /**
+ * 提交导入
+ */
+DzbWorkAssessInfoDlg.importSubmit = function() {
+
+    this.clearData();
+    this.collectData();
+    //
+    // if (!this.validate()) {
+    //     return;
+    // }
+    //
+    // //提交信息
+    var ajax = new $ax(Feng.ctxPath + "/dzbWorkAssess/importAssess", function(data){
+        Feng.success("导入成功!");
+        window.parent.DzbWorkAssess.table.refresh();
+        DzbWorkAssessInfoDlg.close();
+    },function(data){
+        Feng.error("导入失败!" + data.responseJSON.message + "!");
+    });
+    this.dzbWorkAssessInfoData['expand["fileName"]'] = $("#fileName").val();
+    ajax.set(this.dzbWorkAssessInfoData);
+    ajax.start();
+};
+
+/**
  * 提交添加
  */
 DzbWorkAssessInfoDlg.addSubmit = function() {

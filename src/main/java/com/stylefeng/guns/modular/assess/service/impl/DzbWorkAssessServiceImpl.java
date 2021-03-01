@@ -258,4 +258,47 @@ public class DzbWorkAssessServiceImpl extends ServiceImpl<DzbWorkAssessMapper, D
 
         allocationPointLog.insert();
     }
+
+    @Override
+    @Transactional
+    public void importAssess(DzbWorkAssess dzbWorkAssess) {
+        ExcelReader reader = ExcelUtil.getReader(gunsProperties.getFileUploadPath() + dzbWorkAssess.getExpand().get("fileName"));
+        reader.addHeaderAlias("考核项目", "assessName");
+        reader.addHeaderAlias("校级积分", "mainNormPoint");
+        reader.addHeaderAlias("名称", "name");
+        reader.addHeaderAlias("支部得分", "zbdf");
+        reader.addHeaderAlias("积分归属年份", "year");
+        reader.addHeaderAlias("教师工号", "account");
+        List<DzbWorkAssess> normalAssesses = reader.readAll(DzbWorkAssess.class);
+        AssessCoefficient coefficient = assessCoefficientService.selectById(IAssessCoefficientService.TYPE_DZBGZ);
+        for (DzbWorkAssess assess : normalAssesses) {
+            User user = userService.getByAccount(assess.getAccount());
+            if (user == null) {
+                throw new GunsException(StrUtil.format("职工编号 {} 不存在", assess.getAccount()));
+            }
+            assess.setUserId(user.getId());
+            assess.setStatus(YesNo.YES.getCode());
+            assess.setCoePoint(coefficient.getCoefficient());
+
+            AssessNormPoint assessNormPoint = new AssessNormPoint();
+            assessNormPoint.setUserId(assess.getUserId());
+            assessNormPoint.setYear(assess.getYear());
+            assessNormPoint = assessNormPointService.selectOne(new EntityWrapper<>(assessNormPoint));
+
+            if (assessNormPoint != null) {
+                Double mainPoint = assessNormPoint.getDzbgzMain();
+                mainPoint += assess.getMainNormPoint();
+                assessNormPoint.setDzbgzMain(mainPoint);
+            } else {
+                assessNormPoint = new AssessNormPoint();
+                double mainPoint = assess.getMainNormPoint();
+                assessNormPoint.setDzbgzMain(mainPoint);
+                assessNormPoint.setYear(assess.getYear());
+                assessNormPoint.setUserId(assess.getUserId());
+                assessNormPoint.setDeptId(user.getDeptId());
+            }
+            assessNormPointService.insertOrUpdate(assessNormPoint);
+        }
+        this.insertBatch(normalAssesses);
+    }
 }

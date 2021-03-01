@@ -22,8 +22,7 @@ public class TeachingLoadAssessDecorator extends BaseListDecorator<TeachingLoadA
     protected void decorateTheEntity(TeachingLoadAssess teachingLoadAssess) {
         User user = userService.selectIgnorePointById(teachingLoadAssess.getUserId());
         if (user != null) {
-            teachingLoadAssess.putExpand("account", user.getAccount());
-            teachingLoadAssess.putExpand("name", user.getName());
+            teachingLoadAssess.putExpand("user", user);
         }
     }
 }

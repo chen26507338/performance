@@ -1,6 +1,7 @@
 package com.stylefeng.guns.modular.assess.decorator;
 
 import com.stylefeng.guns.common.constant.factory.ConstantFactory;
+import com.stylefeng.guns.common.persistence.model.User;
 import com.stylefeng.guns.core.base.BaseListDecorator;
 import com.stylefeng.guns.core.util.SpringContextHolder;
 import com.stylefeng.guns.modular.assess.model.AssessNorm;
@@ -10,6 +11,7 @@ import com.stylefeng.guns.modular.assess.service.IAssessNormService;
 import com.stylefeng.guns.modular.assess.service.INormalAssessService;
 import com.stylefeng.guns.modular.job.model.Dept;
 import com.stylefeng.guns.modular.job.service.IDeptService;
+import com.stylefeng.guns.modular.system.service.IUserService;
 import com.stylefeng.guns.modular.user.model.ScientificProject;
 
 import java.util.List;
@@ -19,10 +21,12 @@ public class DzbWorkAssessDecorator extends BaseListDecorator<DzbWorkAssess> {
 
     private final IDeptService deptService;
     private final IAssessNormService assessNormService;
+    private final IUserService userService;
     public DzbWorkAssessDecorator(List<DzbWorkAssess> list) {
         super(list);
         deptService = SpringContextHolder.getBean(IDeptService.class);
         assessNormService = SpringContextHolder.getBean(IAssessNormService.class);
+        userService = SpringContextHolder.getBean(IUserService.class);
     }
 
     @Override
@@ -31,7 +35,10 @@ public class DzbWorkAssessDecorator extends BaseListDecorator<DzbWorkAssess> {
         if (dept != null) {
             dzbWorkAssess.putExpand("deptName", dept.getName());
         }
-
+        User user = userService.selectIgnorePointById(dzbWorkAssess.getUserId());
+        if (user != null) {
+            dzbWorkAssess.putExpand("user",user);
+        }
         AssessNorm norm = assessNormService.selectById(dzbWorkAssess.getNormId());
         if (norm != null) {
             dzbWorkAssess.putExpand("normCode", norm.getCode());

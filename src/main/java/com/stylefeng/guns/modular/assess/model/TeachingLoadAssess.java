@@ -34,6 +34,12 @@ public class TeachingLoadAssess extends BaseActEntity<TeachingLoadAssess> {
     private Long id;
 
     /**
+     * 职工编号
+     */
+    @TableField(exist = false)
+    private String account;
+
+    /**
     * 流程实例ID
     */
     @TableField("proc_ins_id")
@@ -123,4 +129,15 @@ public class TeachingLoadAssess extends BaseActEntity<TeachingLoadAssess> {
     @TableField("user_id")
     private Long userId;
 
+    /**
+     * 课程类型
+     */
+    @TableField("course_type")
+    private String courseType;
+
+    /**
+     * 课时时数
+     */
+    @TableField("course_times")
+    private Integer courseTimes;
 }

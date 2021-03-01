@@ -121,6 +121,30 @@ TeachingLoadAssessInfoDlg.editSubmit = function() {
     ajax.set(this.teachingLoadAssessInfoData);
     ajax.start();
 };
+/**
+ * 提交导入
+ */
+TeachingLoadAssessInfoDlg.importSubmit = function() {
+
+    this.clearData();
+    this.collectData();
+    //
+    // if (!this.validate()) {
+    //     return;
+    // }
+    //
+    // //提交信息
+    var ajax = new $ax(Feng.ctxPath + "/teachingLoadAssess/importAssess", function(data){
+        Feng.success("导入成功!");
+        window.parent.TeachingLoadAssess.table.refresh();
+        TeachingLoadAssessInfoDlg.close();
+    },function(data){
+        Feng.error("导入失败!" + data.responseJSON.message + "!");
+    });
+    this.teachingLoadAssessInfoData['expand["fileName"]'] = $("#fileName").val();
+    ajax.set(this.teachingLoadAssessInfoData);
+    ajax.start();
+};
 
 
 /**
