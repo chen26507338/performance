@@ -141,3 +141,40 @@ alter table dzb_work_assess
 alter table dzb_work_assess
     add coe_point double default 0 null comment '考核系数';
 
+create table shpxgz_assess
+(
+    id bigint null,
+    user_id bigint null comment '用户id',
+    assess_name varchar(255) null comment '考核项目',
+    name varchar(255) null comment '名称',
+    num int default 0 null comment '数量',
+    main_norm_point double null comment '校积分',
+    coe_point double null comment '考核系数',
+    year varchar(255) null comment '年度',
+    constraint shpxgz_assess_pk
+        primary key (id)
+)
+    comment '社会培训工作考核';
+
+insert into assess_coefficient value ('shpxgz', '社会培训工作', 1);
+INSERT INTO `sys_menu` (`id`, `code`, `pcode`, `pcodes`, `name`, `icon`, `url`, `num`, `levels`, `ismenu`, `tips`, `status`, `isopen`) VALUES ('1366412161358848002', 'shpxgzAssess', 'assess_norm', '[0],[assess_norm],', '社会培训工作考核', '', '/shpxgzAssess', '110', '2', '1', NULL, '1', '0');
+INSERT INTO `sys_menu` (`id`, `code`, `pcode`, `pcodes`, `name`, `icon`, `url`, `num`, `levels`, `ismenu`, `tips`, `status`, `isopen`) VALUES ('1366412161363042305', 'shpxgzAssess_list', 'shpxgzAssess', '[0],[assess_norm],[shpxgzAssess],', '社会培训工作考核列表', '', '/shpxgzAssess/list', '99', '3', '0', NULL, '1', '0');
+INSERT INTO `sys_menu` (`id`, `code`, `pcode`, `pcodes`, `name`, `icon`, `url`, `num`, `levels`, `ismenu`, `tips`, `status`, `isopen`) VALUES ('1366412161363042306', 'shpxgzAssess_add', 'shpxgzAssess', '[0],[assess_norm],[shpxgzAssess],', '社会培训工作考核添加', '', '/shpxgzAssess/add', '99', '3', '0', NULL, '1', '0');
+INSERT INTO `sys_menu` (`id`, `code`, `pcode`, `pcodes`, `name`, `icon`, `url`, `num`, `levels`, `ismenu`, `tips`, `status`, `isopen`) VALUES ('1366412161363042307', 'shpxgzAssess_update', 'shpxgzAssess', '[0],[assess_norm],[shpxgzAssess],', '社会培训工作考核更新', '', '/shpxgzAssess/update', '99', '3', '0', NULL, '1', '0');
+INSERT INTO `sys_menu` (`id`, `code`, `pcode`, `pcodes`, `name`, `icon`, `url`, `num`, `levels`, `ismenu`, `tips`, `status`, `isopen`) VALUES ('1366412161363042308', 'shpxgzAssess_delete', 'shpxgzAssess', '[0],[assess_norm],[shpxgzAssess],', '社会培训工作考核删除', '', '/shpxgzAssess/delete', '99', '3', '0', NULL, '1', '0');
+INSERT INTO `sys_menu` (`id`, `code`, `pcode`, `pcodes`, `name`, `icon`, `url`, `num`, `levels`, `ismenu`, `tips`, `status`, `isopen`) VALUES ('1366412161363042309', 'shpxgzAssess_detail', 'shpxgzAssess', '[0],[assess_norm],[shpxgzAssess],', '社会培训工作考核详情', '', '/shpxgzAssess/detail', '99', '3', '0', NULL, '1', '0');
+INSERT INTO `sys_menu` (`id`, `code`, `pcode`, `pcodes`, `name`, `icon`, `url`, `num`, `levels`, `ismenu`, `tips`, `status`, `isopen`) VALUES ('1366412161363042310', 'shpxgzAssess_import', 'shpxgzAssess', '[0],[assess_norm],[shpxgzAssess],', '社会培训工作考核导入', '', '/shpxgzAssess/import', '99', '3', '0', NULL, '1', '0');
+insert into sys_relation (`menuid`,`roleid`) values (1366412161358848002,1);
+insert into sys_relation (`menuid`,`roleid`) values (1366412161363042305,1);
+insert into sys_relation (`menuid`,`roleid`) values (1366412161363042306,1);
+insert into sys_relation (`menuid`,`roleid`) values (1366412161363042307,1);
+insert into sys_relation (`menuid`,`roleid`) values (1366412161363042308,1);
+insert into sys_relation (`menuid`,`roleid`) values (1366412161363042309,1);
+insert into sys_relation (`menuid`,`roleid`) values (1366412161363042310,1);
+delete from sys_menu where id = 1226328464463880212;
+
+alter table assess_norm_point
+    add shpxgz_main double default 0 null comment '社会培训工作校积分';
+
+alter table assess_norm_point
+    add shpxgz_college double default 0 null comment '社会培训工作院级分';

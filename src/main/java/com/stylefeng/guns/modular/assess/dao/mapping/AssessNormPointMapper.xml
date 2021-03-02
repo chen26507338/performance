@@ -69,6 +69,8 @@
 	    rypz_college AS rypzCollege,
 	    jshj_main AS jshjMain,
 	    jshj_college AS jshjCollege,
+	    shpxgz_main AS shpxgzMain,
+	    shpxgz_college AS shpxgzCollege,
 	    anp.dept_id AS deptId
     </sql>
     <select id="selectPage" resultType="com.stylefeng.guns.modular.assess.model.AssessNormPoint">
