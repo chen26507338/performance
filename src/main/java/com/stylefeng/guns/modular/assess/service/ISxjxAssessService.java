@@ -18,4 +18,6 @@ public interface ISxjxAssessService extends IService<SxjxAssess> {
     void apply(SxjxAssess sxjxAssess);
 
     void audit(SxjxAssess sxjxAssess);
+
+    void importAssess(SxjxAssess sxjxAssess);
 }

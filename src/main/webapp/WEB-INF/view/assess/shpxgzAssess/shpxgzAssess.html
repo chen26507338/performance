@@ -19,7 +19,7 @@
                             @}
 
                             @if(shiro.hasPermission("/shpxgzAssess/import")){
-                            <#button name="导入" icon="fa-plus" clickFun="ShpxgzAssess.openImportAssess()" space="true"/>
+                                <#button name="导入" icon="fa-plus" clickFun="ShpxgzAssess.openImportAssess()" space="true"/>
                             @}
                             @if(shiro.hasPermission("/shpxgzAssess/update")){
                                 <#button name="修改" icon="fa-plus" clickFun="ShpxgzAssess.openShpxgzAssessDetail()" space="true"/>

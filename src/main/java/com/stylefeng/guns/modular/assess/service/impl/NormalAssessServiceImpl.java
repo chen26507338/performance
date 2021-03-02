@@ -247,6 +247,7 @@ public class NormalAssessServiceImpl extends ServiceImpl<NormalAssessMapper, Nor
         reader.addHeaderAlias("校级积分", "mainPoint");
         reader.addHeaderAlias("级别", "jb");
         reader.addHeaderAlias("等次", "dc");
+        reader.addHeaderAlias("次数", "result");
         reader.addHeaderAlias("积分归属年份", "year");
         reader.addHeaderAlias("教师工号", "account");
         List<NormalAssess> normalAssesses = reader.readAll(NormalAssess.class);
@@ -261,6 +262,7 @@ public class NormalAssessServiceImpl extends ServiceImpl<NormalAssessMapper, Nor
             assess.setUserId(user.getId());
             assess.setStatus(YesNo.YES.getCode());
             assess.setCreateTime(new Date());
+            assess.setDeptId(user.getDeptId());
             assess.setType(normalAssess.getType());
 
             AssessNormPoint assessNormPoint = new AssessNormPoint();

@@ -68,6 +68,33 @@ StuWorkMemberInfoDlg.validate = function () {
 };
 
 /**
+ * 提交导入
+ */
+StuWorkMemberInfoDlg.importSubmit = function() {
+
+    this.clearData();
+    this.collectData();
+    //
+    // if (!this.validate()) {
+    //     return;
+    // }
+    //
+    // //提交信息
+    var ajax = new $ax(Feng.ctxPath + "/stuWorkMember/importAssess", function(data){
+        Feng.success("导入成功!");
+        window.parent.StuWorkMember.table.refresh();
+        StuWorkMemberInfoDlg.close();
+    },function(data){
+        Feng.error("导入失败!" + data.responseJSON.message + "!");
+    });
+    this.stuWorkMemberInfoData['expand["fileName"]'] = $("#fileName").val();
+    ajax.set(this.stuWorkMemberInfoData)
+    ;
+    ajax.start();
+};
+
+
+/**
  * 提交添加
  */
 StuWorkMemberInfoDlg.addSubmit = function() {

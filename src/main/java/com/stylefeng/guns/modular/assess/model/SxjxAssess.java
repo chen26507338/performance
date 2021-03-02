@@ -44,6 +44,20 @@ public class SxjxAssess extends BaseActEntity<SxjxAssess> {
     @TableField("proc_ins_id")
     private String procInsId;
 
+
+    /**
+     * 职工编号
+     */
+    @TableField(exist = false)
+    private String account;
+
+
+    /**
+     * 用户id
+     */
+    @TableField("user_id")
+    private Long userId;
+
     /**
     * 状态
     */
@@ -121,6 +135,12 @@ public class SxjxAssess extends BaseActEntity<SxjxAssess> {
     */
     @TableField("result_url")
     private String resultUrl;
+
+    /**
+    * 中心名称
+    */
+    @TableField("zxmc")
+    private String zxmc;
 
     /**
     * 考核系数

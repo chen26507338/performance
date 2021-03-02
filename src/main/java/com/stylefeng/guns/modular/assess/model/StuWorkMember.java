@@ -69,6 +69,23 @@ public class StuWorkMember extends BaseModel<StuWorkMember> {
     private String year;
 
     /**
+    * 考核项目
+    */
+    @TableField("assess_name")
+    private String assessName;
+
+    /**
+    * 参赛项目名称/团队名称/类别/百分率
+    */
+    @TableField("mixture")
+    private String mixture;
+    /**
+    * 人数/次数
+    */
+    @TableField("result")
+    private Integer result;
+
+    /**
     * 学生工作ID
     */
     @TableField("s_work_id")
@@ -79,4 +96,10 @@ public class StuWorkMember extends BaseModel<StuWorkMember> {
      */
     @TableField(exist = false)
     private String name;
+
+    /**
+     * 职工编号
+     */
+    @TableField(exist = false)
+    private String account;
 }

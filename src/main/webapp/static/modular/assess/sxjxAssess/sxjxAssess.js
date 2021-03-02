@@ -14,7 +14,8 @@ var SxjxAssess = {
 SxjxAssess.initColumn = function () {
     return [
         {field: 'selectItem', radio: true}
-       ,{title: '状态', field:'status', visible: true, align: 'center', valign: 'middle',formatter:function(value, row, index){return row.expand.statusDict;}}
+        ,{title: '职工编号', field:'expand.user.account', visible: true, align: 'center', valign: 'middle'}
+        ,{title: '职工姓名', field:'expand.user.name', visible: true, align: 'center', valign: 'middle'}
        ,{title: '考核内容', field:'content', visible: true, align: 'center', valign: 'middle'}
        ,{title: '考核问题图片', field: 'problemUrl', visible: true, align: 'center', valign: 'middle',width:100,
             formatter: function(value,row,index){
@@ -38,6 +39,7 @@ SxjxAssess.initColumn = function () {
             }
             return '<img src='+src+' class="img-rounded"  width="60%" height="50">';}}
        ,{title: '考核系数', field:'coePoint', visible: true, align: 'center', valign: 'middle'}
+        ,{title: '状态', field:'status', visible: true, align: 'center', valign: 'middle',formatter:function(value, row, index){return row.expand.statusDict;}}
     ];
 };
 
@@ -62,6 +64,21 @@ SxjxAssess.check = function () {
 SxjxAssess.formParams = function() {
     var queryData = {};
     return queryData;
+};
+
+
+/**
+ * 点击导入考核指标库
+ */
+SxjxAssess.openImportAssess = function () {
+    this.layerIndex = layer.open({
+        type: 2,
+        title: '导入考核',
+        area: ['800px', '420px'], //宽高
+        fix: false, //不固定
+        maxmin: true,
+        content: Feng.ctxPath + '/sxjxAssess/sxjxAssess_import'
+    });
 };
 
 

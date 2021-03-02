@@ -2,6 +2,8 @@ package com.stylefeng.guns.modular.assess.service.impl;
 
 import cn.hutool.core.collection.CollUtil;
 import cn.hutool.core.util.StrUtil;
+import cn.hutool.poi.excel.ExcelReader;
+import cn.hutool.poi.excel.ExcelUtil;
 import com.alibaba.fastjson.JSON;
 import com.baomidou.mybatisplus.mapper.EntityWrapper;
 import com.stylefeng.guns.common.constant.state.YesNo;
@@ -183,5 +185,48 @@ public class SxjxAssessServiceImpl extends ServiceImpl<SxjxAssessMapper, SxjxAss
             sxjxAssess.updateById();
         }
         actTaskService.complete(sxjxAssess.getAct().getTaskId(), sxjxAssess.getAct().getProcInsId(), comment.toString(), vars);
+    }
+
+    @Override
+    @Transactional
+    public void importAssess(SxjxAssess sxjxAssess) {
+        ExcelReader reader = ExcelUtil.getReader(gunsProperties.getFileUploadPath() + sxjxAssess.getExpand().get("fileName"));
+        reader.addHeaderAlias("考核项目", "content");
+        reader.addHeaderAlias("考核结果", "result");
+        reader.addHeaderAlias("校级积分", "mainNormPoint");
+        reader.addHeaderAlias("中心名称", "zxmc");
+        reader.addHeaderAlias("教师工号", "account");
+        reader.addHeaderAlias("积分归属年份", "year");
+        List<SxjxAssess> normalAssesses = reader.readAll(SxjxAssess.class);
+        AssessCoefficient coefficient = assessCoefficientService.selectById(IAssessCoefficientService.TYPE_SXJX);
+        for (SxjxAssess assess : normalAssesses) {
+            User user = userService.getByAccount(assess.getAccount());
+            if (user == null) {
+                throw new GunsException(StrUtil.format("职工编号 {} 不存在", assess.getAccount()));
+            }
+            assess.setUserId(user.getId());
+            assess.setStatus(YesNo.YES.getCode());
+            assess.setCoePoint(coefficient.getCoefficient());
+
+            AssessNormPoint assessNormPoint = new AssessNormPoint();
+            assessNormPoint.setUserId(assess.getUserId());
+            assessNormPoint.setYear(assess.getYear());
+            assessNormPoint = assessNormPointService.selectOne(new EntityWrapper<>(assessNormPoint));
+
+            if (assessNormPoint != null) {
+                Double mainPoint = assessNormPoint.getSxjxMain();
+                mainPoint += assess.getMainNormPoint();
+                assessNormPoint.setSxjxMain(mainPoint);
+            } else {
+                assessNormPoint = new AssessNormPoint();
+                double mainPoint = assess.getMainNormPoint();
+                assessNormPoint.setSxjxMain(mainPoint);
+                assessNormPoint.setYear(assess.getYear());
+                assessNormPoint.setUserId(assess.getUserId());
+                assessNormPoint.setDeptId(user.getDeptId());
+            }
+            assessNormPointService.insertOrUpdate(assessNormPoint);
+        }
+        this.insertBatch(normalAssesses);
     }
 }

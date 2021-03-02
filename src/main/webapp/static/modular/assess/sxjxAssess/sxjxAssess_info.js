@@ -119,6 +119,29 @@ SxjxAssessInfoDlg.validate = function () {
     return $("#SxjxAssessForm").data('bootstrapValidator').isValid();
 };
 
+SxjxAssessInfoDlg.importSubmit = function() {
+
+    this.clearData();
+    this.collectData();
+    //
+    // if (!this.validate()) {
+    //     return;
+    // }
+    //
+    // //提交信息
+    var ajax = new $ax(Feng.ctxPath + "/sxjxAssess/importAssess", function(data){
+        Feng.success("导入成功!");
+        window.parent.SxjxAssess.table.refresh();
+        SxjxAssessInfoDlg.close();
+    },function(data){
+        Feng.error("导入失败!" + data.responseJSON.message + "!");
+    });
+    this.sxjxAssessInfoData['expand["fileName"]'] = $("#fileName").val();
+    ajax.set(this.sxjxAssessInfoData)
+    ;
+    ajax.start();
+}
+
 /**
  * 提交添加
  */

@@ -1,8 +1,8 @@
 /**
- * 学生工作成员管理初始化
+ * 经费完成情况考核管理初始化
  */
-var StuWorkMember = {
-    id: "StuWorkMemberTable",	//表格id
+var JfwcqkAssess = {
+    id: "JfwcqkAssessTable",	//表格id
     seItem: null,		//选中的条目
     table: null,
     layerIndex: -1
@@ -11,29 +11,29 @@ var StuWorkMember = {
 /**
  * 初始化表格的列
  */
-StuWorkMember.initColumn = function () {
+JfwcqkAssess.initColumn = function () {
     return [
         {field: 'selectItem', radio: true}
         ,{title: '职工编号', field:'expand.user.account', visible: true, align: 'center', valign: 'middle'}
         ,{title: '职工姓名', field:'expand.user.name', visible: true, align: 'center', valign: 'middle'}
-        ,{title: '校级指标分', field:'mainNormPoint', visible: true, align: 'center', valign: 'middle'}
-       ,{title: '院级浮动值', field:'collegeNormPoint', visible: true, align: 'center', valign: 'middle'}
-       ,{title: '状态', field:'status', visible: true, align: 'center', valign: 'middle'}
+        ,{title: '经费项目', field:'assessName', visible: true, align: 'center', valign: 'middle'}
+       ,{title: '经费完成费', field:'jfwcf', visible: true, align: 'center', valign: 'middle'}
+       ,{title: '校级分', field:'mainNormPoint', visible: true, align: 'center', valign: 'middle'}
+       ,{title: '年度', field:'year', visible: true, align: 'center', valign: 'middle'}
        ,{title: '考核系数', field:'coePoint', visible: true, align: 'center', valign: 'middle'}
-       ,{title: '年份', field:'year', visible: true, align: 'center', valign: 'middle'}
     ];
 };
 
 /**
  * 检查是否选中
  */
-StuWorkMember.check = function () {
+JfwcqkAssess.check = function () {
     var selected = $('#' + this.id).bootstrapTable('getSelections');
     if(selected.length == 0){
         Feng.info("请先选中表格中的某一记录！");
         return false;
     }else{
-        StuWorkMember.seItem = selected[0];
+        JfwcqkAssess.seItem = selected[0];
         return true;
     }
 };
@@ -42,7 +42,7 @@ StuWorkMember.check = function () {
  * 查询表单提交参数对象
  * @returns {{}}
  */
-StuWorkMember.formParams = function() {
+JfwcqkAssess.formParams = function() {
     var queryData = {};
     return queryData;
 };
@@ -50,81 +50,81 @@ StuWorkMember.formParams = function() {
 /**
  * 点击导入考核指标库
  */
-StuWorkMember.openImportAssess = function () {
+JfwcqkAssess.openImportAssess = function () {
     this.layerIndex = layer.open({
         type: 2,
         title: '导入考核',
         area: ['800px', '420px'], //宽高
         fix: false, //不固定
         maxmin: true,
-        content: Feng.ctxPath + '/stuWorkMember/stuWorkMember_import'
+        content: Feng.ctxPath + '/jfwcqkAssess/jfwcqkAssess_import'
     });
 };
 
 
 /**
- * 点击添加学生工作成员
+ * 点击添加经费完成情况考核
  */
-StuWorkMember.openAddStuWorkMember = function () {
+JfwcqkAssess.openAddJfwcqkAssess = function () {
     this.layerIndex = layer.open({
         type: 2,
-        title: '添加学生工作成员',
+        title: '添加经费完成情况考核',
         area: ['800px', '420px'], //宽高
         fix: false, //不固定
         maxmin: true,
-        content: Feng.ctxPath + '/stuWorkMember/stuWorkMember_add'
+        content: Feng.ctxPath + '/jfwcqkAssess/jfwcqkAssess_add'
     });
 };
 
 /**
- * 打开查看学生工作成员详情
+ * 打开查看经费完成情况考核详情
  */
-StuWorkMember.openStuWorkMemberDetail = function () {
+JfwcqkAssess.openJfwcqkAssessDetail = function () {
     if (this.check()) {
         this.layerIndex = layer.open({
             type: 2,
-            title: '学生工作成员详情',
+            title: '经费完成情况考核详情',
             area: ['800px', '420px'], //宽高
             fix: false, //不固定
             maxmin: true,
-            content: Feng.ctxPath + '/stuWorkMember/stuWorkMember_update/' + StuWorkMember.seItem.id
+            content: Feng.ctxPath + '/jfwcqkAssess/jfwcqkAssess_update/' + JfwcqkAssess.seItem.id
         });
     }
 };
 
 /**
- * 删除学生工作成员
+ * 删除经费完成情况考核
  */
-StuWorkMember.delete = function () {
+JfwcqkAssess.delete = function () {
     if (this.check()) {
         var that = this;
-        Feng.confirm("是否要删除学生工作成员", function () {
-            var ajax = new $ax(Feng.ctxPath + "/stuWorkMember/delete", function (data) {
+        Feng.confirm("是否要删除经费完成情况考核", function () {
+            var ajax = new $ax(Feng.ctxPath + "/jfwcqkAssess/delete", function (data) {
                 Feng.success("删除成功!");
-                StuWorkMember.table.refresh();
+                JfwcqkAssess.table.refresh();
             }, function (data) {
                 Feng.error("删除失败!" + data.responseJSON.message + "!");
             });
-            ajax.set("stuWorkMemberId",that.seItem.id);
+            ajax.set("jfwcqkAssessId",that.seItem.id);
             ajax.start();
         });
     }
 };
 
 /**
- * 查询学生工作成员列表
+ * 查询经费完成情况考核列表
  */
-StuWorkMember.search = function () {
-    StuWorkMember.table.refresh({query: StuWorkMember.formParams()});
+JfwcqkAssess.search = function () {
+    JfwcqkAssess.table.refresh({query: JfwcqkAssess.formParams()});
 };
 
 var layer;
 $(function () {
-    var defaultColunms = StuWorkMember.initColumn();
-    var table = new BSTable(StuWorkMember.id, "/stuWorkMember/list", defaultColunms);
+    var defaultColunms = JfwcqkAssess.initColumn();
+    var table = new BSTable(JfwcqkAssess.id, "/jfwcqkAssess/list", defaultColunms);
     table.setPaginationType("server");
-    table.setQueryParams(StuWorkMember.formParams());
-    StuWorkMember.table = table.init();
+    table.setQueryParams(JfwcqkAssess.formParams());
+    JfwcqkAssess.table = table.init();
 
     layui.use('layer', function(){
         layer = layui.layer;

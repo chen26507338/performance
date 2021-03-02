@@ -111,7 +111,8 @@ ShpxgzAssessInfoDlg.importSubmit = function() {
         Feng.error("导入失败!" + data.responseJSON.message + "!");
     });
     this.shpxgzAssessInfoData['expand["fileName"]'] = $("#fileName").val();
-    ajax.set(this.shpxgzAssessInfoData);
+    ajax.set(this.shpxgzAssessInfoData)
+    ;
     ajax.start();
 };
 

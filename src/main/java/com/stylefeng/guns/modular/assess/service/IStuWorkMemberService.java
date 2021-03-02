@@ -11,4 +11,5 @@ import com.stylefeng.guns.modular.assess.model.StuWorkMember;
  */
 public interface IStuWorkMemberService extends IService<StuWorkMember> {
 
+    void importAssess(StuWorkMember stuWorkMember);
 }

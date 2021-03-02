@@ -1,24 +1,24 @@
 package com.stylefeng.guns.modular.assess.controller;
 
-import com.stylefeng.guns.core.base.controller.BaseController;
+import com.baomidou.mybatisplus.mapper.EntityWrapper;
 import com.baomidou.mybatisplus.plugins.Page;
 import com.stylefeng.guns.common.constant.factory.PageFactory;
-import org.apache.commons.lang3.StringUtils;
-import org.springframework.stereotype.Controller;
-import org.apache.shiro.authz.annotation.RequiresPermissions;;
-import org.springframework.web.bind.annotation.RequestMapping;
-import com.baomidou.mybatisplus.mapper.EntityWrapper;;
-import org.springframework.web.bind.annotation.ResponseBody;
-import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.beans.factory.annotation.Autowired;
-import com.stylefeng.guns.core.util.ToolUtil;
+import com.stylefeng.guns.core.base.controller.BaseController;
 import com.stylefeng.guns.core.log.LogObjectHolder;
-import org.springframework.web.bind.annotation.RequestParam;
-import java.util.*;
+import com.stylefeng.guns.modular.assess.decorator.StuWorkMemberDecorator;
 import com.stylefeng.guns.modular.assess.model.StuWorkMember;
 import com.stylefeng.guns.modular.assess.service.IStuWorkMemberService;
-import com.stylefeng.guns.modular.assess.decorator.StuWorkMemberDecorator;
+import org.apache.shiro.authz.annotation.RequiresPermissions;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.ResponseBody;
+
+;
+;
 
 /**
  * 学生工作成员控制器
@@ -78,6 +78,26 @@ public class StuWorkMemberController extends BaseController {
         page.setRecords(new StuWorkMemberDecorator(page.getRecords()).decorate());
         return packForBT(page);
     }
+
+
+    /**
+     * 跳转到导入现有考核绩效
+     */
+    @RequestMapping("/stuWorkMember_import")
+    public String stuWorkMemberImport() {
+        return PREFIX + "stuWorkMember_import.html";
+    }
+
+    /**
+     * 导入考核
+     */
+    @RequestMapping(value = "/importAssess")
+    @ResponseBody
+    public Object importAssess(StuWorkMember stuWorkMember) {
+        stuWorkMemberService.importAssess(stuWorkMember);
+        return SUCCESS_TIP;
+    }
+
 
     /**
      * 新增学生工作成员

@@ -49,9 +49,13 @@ public interface IAssessCoefficientService extends IService<AssessCoefficient> {
      */
     String TYPE_DZBGZ = "dzbgz";
     /**
-     * 类型：党支部工作
+     * 类型：社会培训工作
      */
     String TYPE_SHPXGZ = "shpxgz";
+    /**
+     * 类型：经费完成情况
+     */
+    String TYPE_JFWCQK = "jfwcqk";
     /**
      * 类型：实训绩效
      */

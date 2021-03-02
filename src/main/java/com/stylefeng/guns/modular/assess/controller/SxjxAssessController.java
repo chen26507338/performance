@@ -1,36 +1,34 @@
 package com.stylefeng.guns.modular.assess.controller;
 
+import com.baomidou.mybatisplus.mapper.EntityWrapper;
+import com.baomidou.mybatisplus.plugins.Page;
+import com.stylefeng.guns.common.constant.factory.PageFactory;
 import com.stylefeng.guns.common.constant.state.YesNo;
 import com.stylefeng.guns.common.persistence.model.User;
 import com.stylefeng.guns.core.base.controller.BaseController;
-import com.baomidou.mybatisplus.plugins.Page;
-import com.stylefeng.guns.common.constant.factory.PageFactory;
+import com.stylefeng.guns.core.log.LogObjectHolder;
 import com.stylefeng.guns.core.shiro.ShiroKit;
 import com.stylefeng.guns.core.util.KaptchaUtil;
 import com.stylefeng.guns.modular.assess.decorator.SxjxAssessDecorator;
 import com.stylefeng.guns.modular.assess.model.SxjxAssess;
 import com.stylefeng.guns.modular.assess.service.ISxjxAssessService;
 import com.stylefeng.guns.modular.job.service.IDeptService;
-import com.stylefeng.guns.modular.system.model.OtherInfo;
 import com.stylefeng.guns.modular.system.service.IUserService;
-import org.apache.commons.lang3.StringUtils;
+import org.apache.shiro.authz.annotation.RequiresPermissions;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
-import org.apache.shiro.authz.annotation.RequiresPermissions;;
-import org.springframework.web.bind.annotation.RequestMapping;
-import com.baomidou.mybatisplus.mapper.EntityWrapper;;
-import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.beans.factory.annotation.Autowired;
-import com.stylefeng.guns.core.util.ToolUtil;
-import com.stylefeng.guns.core.log.LogObjectHolder;
+import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.ResponseBody;
 
-import java.util.*;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
-import com.stylefeng.guns.modular.assess.model.SxjxAssess;
-import com.stylefeng.guns.modular.assess.service.ISxjxAssessService;
-import com.stylefeng.guns.modular.assess.decorator.SxjxAssessDecorator;
+;
+;
 
 /**
  * 实训绩效考核控制器
@@ -82,6 +80,25 @@ public class SxjxAssessController extends BaseController {
         return PREFIX + "sxjxAssess_edit.html";
     }
 
+
+    /**
+     * 跳转到导入现有考核绩效
+     */
+    @RequestMapping("/sxjxAssess_import")
+    public String sxjxAssessImport() {
+        return PREFIX + "sxjxAssess_import.html";
+    }
+
+    /**
+     * 导入考核
+     */
+    @RequestMapping(value = "/importAssess")
+    @ResponseBody
+    public Object importAssess(SxjxAssess sxjxAssess) {
+        sxjxAssessService.importAssess(sxjxAssess);
+        return SUCCESS_TIP;
+    }
+    
     /**
      * 获取实训绩效考核列表
      */

@@ -4,14 +4,13 @@ import cn.hutool.core.util.StrUtil;
 import cn.hutool.poi.excel.ExcelReader;
 import cn.hutool.poi.excel.ExcelUtil;
 import com.baomidou.mybatisplus.mapper.EntityWrapper;
-import com.stylefeng.guns.common.constant.state.YesNo;
 import com.stylefeng.guns.common.persistence.model.User;
 import com.stylefeng.guns.config.properties.GunsProperties;
 import com.stylefeng.guns.core.exception.GunsException;
 import com.stylefeng.guns.modular.act.service.ActTaskService;
 import com.stylefeng.guns.modular.assess.model.AssessCoefficient;
 import com.stylefeng.guns.modular.assess.model.AssessNormPoint;
-import com.stylefeng.guns.modular.assess.model.JfwcqkAssess;
+import com.stylefeng.guns.modular.assess.model.ShpxgzAssess;
 import com.stylefeng.guns.modular.assess.service.IAssessCoefficientService;
 import com.stylefeng.guns.modular.assess.service.IAssessNormPointService;
 import com.stylefeng.guns.modular.assess.service.IAssessNormService;
@@ -19,22 +18,22 @@ import com.stylefeng.guns.modular.system.service.IUserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import com.baomidou.mybatisplus.service.impl.ServiceImpl;
-import com.stylefeng.guns.modular.assess.model.StuWorkMember;
-import com.stylefeng.guns.modular.assess.dao.StuWorkMemberMapper;
-import com.stylefeng.guns.modular.assess.service.IStuWorkMemberService;
+import com.stylefeng.guns.modular.assess.model.JfwcqkAssess;
+import com.stylefeng.guns.modular.assess.dao.JfwcqkAssessMapper;
+import com.stylefeng.guns.modular.assess.service.IJfwcqkAssessService;
 import org.springframework.transaction.annotation.Transactional;
 
 import javax.annotation.Resource;
 import java.util.List;
 
 /**
- * 学生工作成员服务实现类
+ * 经费完成情况考核服务实现类
  *
- * @author cp
- * @Date 2020-09-16 15:26:17
+ * @author
+ * @Date 2021-03-02 15:27:56
  */
 @Service
-public class StuWorkMemberServiceImpl extends ServiceImpl<StuWorkMemberMapper, StuWorkMember> implements IStuWorkMemberService {
+public class JfwcqkAssessServiceImpl extends ServiceImpl<JfwcqkAssessMapper, JfwcqkAssess> implements IJfwcqkAssessService {
 
 
     @Resource
@@ -52,27 +51,22 @@ public class StuWorkMemberServiceImpl extends ServiceImpl<StuWorkMemberMapper, S
 
     @Override
     @Transactional
-    public void importAssess(StuWorkMember stuWorkMember) {
-        ExcelReader reader = ExcelUtil.getReader(gunsProperties.getFileUploadPath() + stuWorkMember.getExpand().get("fileName"));
-        reader.addHeaderAlias("考核项目", "assessName");
+    public void importAssess(JfwcqkAssess jfwcqkAssess) {
+        ExcelReader reader = ExcelUtil.getReader(gunsProperties.getFileUploadPath() + jfwcqkAssess.getExpand().get("fileName"));
+        reader.addHeaderAlias("经费项目", "assessName");
         reader.addHeaderAlias("校级积分", "mainNormPoint");
-        reader.addHeaderAlias("人数/次数", "result");
-        reader.addHeaderAlias("参赛项目名称/团队名称/类别/百分率", "mixture");
+        reader.addHeaderAlias("经费完成费", "jfwcf");
         reader.addHeaderAlias("教师工号", "account");
         reader.addHeaderAlias("积分归属年份", "year");
-        List<StuWorkMember> normalAssesses = reader.readAll(StuWorkMember.class);
-        AssessCoefficient coefficient = assessCoefficientService.selectById(IAssessCoefficientService.TYPE_XSGZ);
-        for (StuWorkMember assess : normalAssesses) {
-            if (assess.getMainNormPoint() == null) {
-                throw new GunsException(StrUtil.format("职工编号{} 考核项目{}校级积分不能为空"
-                        , assess.getAccount(), assess.getAssessName()));
-            }
+        List<JfwcqkAssess> normalAssesses = reader.readAll(JfwcqkAssess.class);
+        AssessCoefficient coefficient = assessCoefficientService.selectById(IAssessCoefficientService.TYPE_JFWCQK);
+        for (JfwcqkAssess assess : normalAssesses) {
             User user = userService.getByAccount(assess.getAccount());
             if (user == null) {
                 throw new GunsException(StrUtil.format("职工编号 {} 不存在", assess.getAccount()));
             }
             assess.setUserId(user.getId());
-            assess.setStatus(YesNo.YES.getCode());
+//            assess.setStatus(YesNo.YES.getCode());
             assess.setCoePoint(coefficient.getCoefficient());
 
             AssessNormPoint assessNormPoint = new AssessNormPoint();
@@ -81,13 +75,13 @@ public class StuWorkMemberServiceImpl extends ServiceImpl<StuWorkMemberMapper, S
             assessNormPoint = assessNormPointService.selectOne(new EntityWrapper<>(assessNormPoint));
 
             if (assessNormPoint != null) {
-                Double mainPoint = assessNormPoint.getXsgzMain();
+                Double mainPoint = assessNormPoint.getJfwcqkMain();
                 mainPoint += assess.getMainNormPoint();
-                assessNormPoint.setXsgzMain(mainPoint);
+                assessNormPoint.setJfwcqkMain(mainPoint);
             } else {
                 assessNormPoint = new AssessNormPoint();
                 double mainPoint = assess.getMainNormPoint();
-                assessNormPoint.setXsgzMain(mainPoint);
+                assessNormPoint.setJfwcqkMain(mainPoint);
                 assessNormPoint.setYear(assess.getYear());
                 assessNormPoint.setUserId(assess.getUserId());
                 assessNormPoint.setDeptId(user.getDeptId());

@@ -157,6 +157,7 @@ create table shpxgz_assess
     comment '社会培训工作考核';
 
 insert into assess_coefficient value ('shpxgz', '社会培训工作', 1);
+insert into assess_coefficient value ('jfwcqk', '经费完成情况', 1);
 INSERT INTO `sys_menu` (`id`, `code`, `pcode`, `pcodes`, `name`, `icon`, `url`, `num`, `levels`, `ismenu`, `tips`, `status`, `isopen`) VALUES ('1366412161358848002', 'shpxgzAssess', 'assess_norm', '[0],[assess_norm],', '社会培训工作考核', '', '/shpxgzAssess', '110', '2', '1', NULL, '1', '0');
 INSERT INTO `sys_menu` (`id`, `code`, `pcode`, `pcodes`, `name`, `icon`, `url`, `num`, `levels`, `ismenu`, `tips`, `status`, `isopen`) VALUES ('1366412161363042305', 'shpxgzAssess_list', 'shpxgzAssess', '[0],[assess_norm],[shpxgzAssess],', '社会培训工作考核列表', '', '/shpxgzAssess/list', '99', '3', '0', NULL, '1', '0');
 INSERT INTO `sys_menu` (`id`, `code`, `pcode`, `pcodes`, `name`, `icon`, `url`, `num`, `levels`, `ismenu`, `tips`, `status`, `isopen`) VALUES ('1366412161363042306', 'shpxgzAssess_add', 'shpxgzAssess', '[0],[assess_norm],[shpxgzAssess],', '社会培训工作考核添加', '', '/shpxgzAssess/add', '99', '3', '0', NULL, '1', '0');
@@ -178,3 +179,66 @@ alter table assess_norm_point
 
 alter table assess_norm_point
     add shpxgz_college double default 0 null comment '社会培训工作院级分';
+alter table assess_norm_point
+    add jfwcqk_main double default 0 null comment '经费完成情况校积分';
+alter table assess_norm_point
+    add jfwcqk_college double default 0 null comment '经费完成情况院级分';
+
+create table jfwcqk_assess
+(
+    id bigint null,
+    user_id bigint null comment '用户id',
+    assess_name varchar(255) null comment '经费项目',
+    jfwcf varchar(255) null comment '经费完成费',
+    main_norm_point double null comment '校级分',
+    year varchar(255) null comment '年度',
+    coe_point double default 1 null comment '考核系数',
+    constraint jfwcqk_assess_pk
+        primary key (id)
+)
+    comment '经费完成情况考核';
+INSERT INTO `sys_menu` (`id`, `code`, `pcode`, `pcodes`, `name`, `icon`, `url`, `num`, `levels`, `ismenu`, `tips`, `status`, `isopen`) VALUES ('1366650837900738561', 'jfwcqkAssess', 'assess_norm', '[0],[assess_norm],', '经费完成情况考核', '', '/jfwcqkAssess', '100', '2', '1', NULL, '1', '0');
+INSERT INTO `sys_menu` (`id`, `code`, `pcode`, `pcodes`, `name`, `icon`, `url`, `num`, `levels`, `ismenu`, `tips`, `status`, `isopen`) VALUES ('1366650837900738562', 'jfwcqkAssess_list', 'jfwcqkAssess', '[0],[assess_norm],[jfwcqkAssess],', '经费完成情况考核列表', '', '/jfwcqkAssess/list', '99', '3', '0', NULL, '1', '0');
+INSERT INTO `sys_menu` (`id`, `code`, `pcode`, `pcodes`, `name`, `icon`, `url`, `num`, `levels`, `ismenu`, `tips`, `status`, `isopen`) VALUES ('1366650837900738563', 'jfwcqkAssess_add', 'jfwcqkAssess', '[0],[assess_norm],[jfwcqkAssess],', '经费完成情况考核添加', '', '/jfwcqkAssess/add', '99', '3', '0', NULL, '1', '0');
+INSERT INTO `sys_menu` (`id`, `code`, `pcode`, `pcodes`, `name`, `icon`, `url`, `num`, `levels`, `ismenu`, `tips`, `status`, `isopen`) VALUES ('1366650837900738564', 'jfwcqkAssess_update', 'jfwcqkAssess', '[0],[assess_norm],[jfwcqkAssess],', '经费完成情况考核更新', '', '/jfwcqkAssess/update', '99', '3', '0', NULL, '1', '0');
+INSERT INTO `sys_menu` (`id`, `code`, `pcode`, `pcodes`, `name`, `icon`, `url`, `num`, `levels`, `ismenu`, `tips`, `status`, `isopen`) VALUES ('1366650837900738565', 'jfwcqkAssess_delete', 'jfwcqkAssess', '[0],[assess_norm],[jfwcqkAssess],', '经费完成情况考核删除', '', '/jfwcqkAssess/delete', '99', '3', '0', NULL, '1', '0');
+INSERT INTO `sys_menu` (`id`, `code`, `pcode`, `pcodes`, `name`, `icon`, `url`, `num`, `levels`, `ismenu`, `tips`, `status`, `isopen`) VALUES ('1366650837900738566', 'jfwcqkAssess_detail', 'jfwcqkAssess', '[0],[assess_norm],[jfwcqkAssess],', '经费完成情况考核详情', '', '/jfwcqkAssess/detail', '99', '3', '0', NULL, '1', '0');
+INSERT INTO `sys_menu` (`id`, `code`, `pcode`, `pcodes`, `name`, `icon`, `url`, `num`, `levels`, `ismenu`, `tips`, `status`, `isopen`) VALUES ('1366650837900738567', 'jfwcqkAssess_import', 'jfwcqkAssess', '[0],[assess_norm],[jfwcqkAssess],', '经费完成情况考核详情', '', '/jfwcqkAssess/import', '99', '3', '0', NULL, '1', '0');
+insert into sys_relation (`menuid`,`roleid`) values (1366650837900738561,1);
+insert into sys_relation (`menuid`,`roleid`) values (1366650837900738562,1);
+insert into sys_relation (`menuid`,`roleid`) values (1366650837900738563,1);
+insert into sys_relation (`menuid`,`roleid`) values (1366650837900738564,1);
+insert into sys_relation (`menuid`,`roleid`) values (1366650837900738565,1);
+insert into sys_relation (`menuid`,`roleid`) values (1366650837900738566,1);
+insert into sys_relation (`menuid`,`roleid`) values (1366650837900738567,1);
+delete from sys_menu where id = 1226328464463880214;
+alter table sxjx_assess
+    add zxmc varchar(255) null comment '中心名称';
+INSERT INTO `sys_menu`(`id`, `code`, `pcode`, `pcodes`, `name`, `icon`, `url`, `num`, `levels`, `ismenu`, `tips`, `status`, `isopen`)
+VALUES (1314774586021253127, 'sxjxAssess_import', 'sxjxAssess', '[0],[assess_norm],[sxjxAssess],', '实训绩效考核导入', '', '/sxjxAssess/import', 99, 3, 0, NULL, 1, 0);
+insert into sys_relation (`menuid`,`roleid`) values (1314774586021253127,1);
+alter table sxjx_assess
+    add user_id bigint null comment '用户id';
+alter table stu_work_member
+    add assess_name varchar(255) null comment '考核项目';
+
+alter table stu_work_member
+    add result int null comment '人数/次数';
+
+alter table stu_work_member
+    add mixture varchar(255) null comment '参赛项目名称/团队名称/类别/百分率';
+delete from sys_relation where id = 14450;
+INSERT INTO `sys_menu` (`id`, `code`, `pcode`, `pcodes`, `name`, `icon`, `url`, `num`, `levels`, `ismenu`, `tips`, `status`, `isopen`) VALUES ('1366707068409487362', 'stuWorkMember', 'assess_norm', '[0],[assess_norm],', '学生工作考核', '', '/stuWorkMember', '50', '2', '1', NULL, '1', '0');
+INSERT INTO `sys_menu` (`id`, `code`, `pcode`, `pcodes`, `name`, `icon`, `url`, `num`, `levels`, `ismenu`, `tips`, `status`, `isopen`) VALUES ('1366707068413681666', 'stuWorkMember_list', 'stuWorkMember', '[0],[assess_norm],[stuWorkMember],', '学生工作成员列表', '', '/stuWorkMember/list', '99', '3', '0', NULL, '1', '0');
+INSERT INTO `sys_menu` (`id`, `code`, `pcode`, `pcodes`, `name`, `icon`, `url`, `num`, `levels`, `ismenu`, `tips`, `status`, `isopen`) VALUES ('1366707068413681667', 'stuWorkMember_add', 'stuWorkMember', '[0],[assess_norm],[stuWorkMember],', '学生工作成员添加', '', '/stuWorkMember/add', '99', '3', '0', NULL, '1', '0');
+INSERT INTO `sys_menu` (`id`, `code`, `pcode`, `pcodes`, `name`, `icon`, `url`, `num`, `levels`, `ismenu`, `tips`, `status`, `isopen`) VALUES ('1366707068413681668', 'stuWorkMember_update', 'stuWorkMember', '[0],[assess_norm],[stuWorkMember],', '学生工作成员更新', '', '/stuWorkMember/update', '99', '3', '0', NULL, '1', '0');
+INSERT INTO `sys_menu` (`id`, `code`, `pcode`, `pcodes`, `name`, `icon`, `url`, `num`, `levels`, `ismenu`, `tips`, `status`, `isopen`) VALUES ('1366707068413681669', 'stuWorkMember_delete', 'stuWorkMember', '[0],[assess_norm],[stuWorkMember],', '学生工作成员删除', '', '/stuWorkMember/delete', '99', '3', '0', NULL, '1', '0');
+INSERT INTO `sys_menu` (`id`, `code`, `pcode`, `pcodes`, `name`, `icon`, `url`, `num`, `levels`, `ismenu`, `tips`, `status`, `isopen`) VALUES ('1366707068413681670', 'stuWorkMember_detail', 'stuWorkMember', '[0],[assess_norm],[stuWorkMember],', '学生工作成员详情', '', '/stuWorkMember/detail', '99', '3', '0', NULL, '1', '0');
+INSERT INTO `sys_menu` (`id`, `code`, `pcode`, `pcodes`, `name`, `icon`, `url`, `num`, `levels`, `ismenu`, `tips`, `status`, `isopen`) VALUES ('1366707068413681671', 'stuWorkMember_import', 'stuWorkMember', '[0],[assess_norm],[stuWorkMember],', '学生工作成员导入', '', '/stuWorkMember/import', '99', '3', '0', NULL, '1', '0');
+insert into sys_relation (`menuid`,`roleid`) values (1366707068409487362,1);
+insert into sys_relation (`menuid`,`roleid`) values (1366707068413681666,1);
+insert into sys_relation (`menuid`,`roleid`) values (1366707068413681667,1);
+insert into sys_relation (`menuid`,`roleid`) values (1366707068413681668,1);
+insert into sys_relation (`menuid`,`roleid`) values (1366707068413681669,1);
+insert into sys_relation (`menuid`,`roleid`) values (1366707068413681670,1);
+insert into sys_relation (`menuid`,`roleid`) values (1366707068413681671,1);
