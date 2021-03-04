@@ -242,3 +242,55 @@ insert into sys_relation (`menuid`,`roleid`) values (1366707068413681668,1);
 insert into sys_relation (`menuid`,`roleid`) values (1366707068413681669,1);
 insert into sys_relation (`menuid`,`roleid`) values (1366707068413681670,1);
 insert into sys_relation (`menuid`,`roleid`) values (1366707068413681671,1);
+INSERT INTO `sys_menu`(`id`, `code`, `pcode`, `pcodes`, `name`, `icon`, `url`, `num`, `levels`, `ismenu`, `tips`, `status`, `isopen`) VALUES (1360783475540607978, 'ryjsj', 'emp_money', '[0],[emp_money],', '荣誉（竞赛）奖', '', '#', 98, 2, 1, NULL, 1, 0);
+insert into sys_relation (`menuid`,`roleid`) values (1360783475540607978,1);
+create table js_award
+(
+    id bigint null,
+    user_id bigint null comment '用户id',
+    yrxs varchar(255) null comment '用人形式',
+    project varchar(255) null comment '项目',
+    hjlb varchar(255) null comment '获奖类别',
+    hjdj varchar(255) null comment '获奖等级',
+    money varchar(255) null comment '金额',
+    year varchar(255) null comment '年度',
+    type varchar(255) null comment '类型',
+    constraint js_award_pk
+        primary key (id)
+)
+    comment '竞赛奖励';
+INSERT INTO `sys_menu` (`id`, `code`, `pcode`, `pcodes`, `name`, `icon`, `url`, `num`, `levels`, `ismenu`, `tips`, `status`, `isopen`) VALUES ('1367426210234109954', 'jsAward', 'ryjsj', '[0],[emp_money],[ryjsj],', '竞赛奖励', '', '/jsAward?type=jsjl', '1', '2', '1', NULL, '1', '0');
+INSERT INTO `sys_menu` (`id`, `code`, `pcode`, `pcodes`, `name`, `icon`, `url`, `num`, `levels`, `ismenu`, `tips`, `status`, `isopen`) VALUES ('1367426210234109955', 'ryjl', 'ryjsj', '[0],[emp_money],[ryjsj],', '荣誉奖励', '', '/jsAward?type=ryjl', '2', '2', '1', NULL, '1', '0');
+INSERT INTO `sys_menu` (`id`, `code`, `pcode`, `pcodes`, `name`, `icon`, `url`, `num`, `levels`, `ismenu`, `tips`, `status`, `isopen`) VALUES ('1367426210234109956', 'tcgxjl', 'ryjsj', '[0],[emp_money],[ryjsj],', '突出贡献奖励', '', '/jsAward?type=tcgxjl', '3', '2', '1', NULL, '1', '0');
+INSERT INTO `sys_menu` (`id`, `code`, `pcode`, `pcodes`, `name`, `icon`, `url`, `num`, `levels`, `ismenu`, `tips`, `status`, `isopen`) VALUES ('1367426210234109957', 'shfwj', 'emp_money', '[0],[emp_money],', '社会服务奖', '', '/jsAward?type=shfwj', 100, 2, 1, NULL, 1, 0);
+INSERT INTO `sys_menu` (`id`, `code`, `pcode`, `pcodes`, `name`, `icon`, `url`, `num`, `levels`, `ismenu`, `tips`, `status`, `isopen`) VALUES ('1367426210234109958', 'zxgzj', 'emp_money', '[0],[emp_money],', '专项工作奖', '', '/jsAward?type=zxgzj', 101, 2, 1, NULL, 1, 0);
+INSERT INTO `sys_menu` (`id`, `code`, `pcode`, `pcodes`, `name`, `icon`, `url`, `num`, `levels`, `ismenu`, `tips`, `status`, `isopen`) VALUES ('1367426210234109959', 'ndyjkhj', 'emp_money', '[0],[emp_money],', '年度优绩考核奖', '', '#', 102, 2, 1, NULL, 1, 0);
+INSERT INTO `sys_menu` (`id`, `code`, `pcode`, `pcodes`, `name`, `icon`, `url`, `num`, `levels`, `ismenu`, `tips`, `status`, `isopen`) VALUES ('1367426210234109960', 'gryjkhj', 'ndyjkhj', '[0],[emp_money],', '个人优绩考核奖', '', '/jsAward?type=gryjkhj', 1, 2, 1, NULL, 1, 0);
+INSERT INTO `sys_menu` (`id`, `code`, `pcode`, `pcodes`, `name`, `icon`, `url`, `num`, `levels`, `ismenu`, `tips`, `status`, `isopen`) VALUES ('1367426210234109961', 'bmyjkhj', 'ndyjkhj', '[0],[emp_money],', '部门优绩考核奖', '', '/jsAward?type=bmyjkhj', 2, 2, 1, NULL, 1, 0);
+INSERT INTO `sys_menu` (`id`, `code`, `pcode`, `pcodes`, `name`, `icon`, `url`, `num`, `levels`, `ismenu`, `tips`, `status`, `isopen`) VALUES ('1367426210234109962', 'tsjl', 'emp_money', '[0],[emp_money],', '特殊奖励', '', '#', 103, 2, 1, NULL, 1, 0);
+INSERT INTO `sys_menu` (`id`, `code`, `pcode`, `pcodes`, `name`, `icon`, `url`, `num`, `levels`, `ismenu`, `tips`, `status`, `isopen`) VALUES ('1367426210234109963', 'zzszjsbt', 'tsjl', '[0],[emp_money],', '专职思政教师补贴', '', '/jsAward?type=zzszjsbt', 1, 2, 1, NULL, 1, 0);
+INSERT INTO `sys_menu` (`id`, `code`, `pcode`, `pcodes`, `name`, `icon`, `url`, `num`, `levels`, `ismenu`, `tips`, `status`, `isopen`) VALUES ('1367426210234109964', 'zzfdybt', 'tsjl', '[0],[emp_money],', '专职辅导员补贴', '', '/jsAward?type=zzfdybt', 2, 2, 1, NULL, 1, 0);
+INSERT INTO `sys_menu` (`id`, `code`, `pcode`, `pcodes`, `name`, `icon`, `url`, `num`, `levels`, `ismenu`, `tips`, `status`, `isopen`) VALUES ('1367426210234109965', 'jxwxc', 'emp_money', '[0],[emp_money],', '绩效外薪酬', '', '/jsAward?type=jxwxc', 104, 2, 1, NULL, 1, 0);
+INSERT INTO `sys_menu` (`id`, `code`, `pcode`, `pcodes`, `name`, `icon`, `url`, `num`, `levels`, `ismenu`, `tips`, `status`, `isopen`) VALUES ('1367426210238304257', 'jsAward_list', 'jsAward', '[0],[emp_money],[ryjsj],[jsAward],', '竞赛奖励列表', '', '/jsAward/list', '99', '3', '0', NULL, '1', '0');
+INSERT INTO `sys_menu` (`id`, `code`, `pcode`, `pcodes`, `name`, `icon`, `url`, `num`, `levels`, `ismenu`, `tips`, `status`, `isopen`) VALUES ('1367426210238304258', 'jsAward_add', 'jsAward', '[0],[emp_money],[ryjsj],[jsAward],', '竞赛奖励添加', '', '/jsAward/add', '99', '3', '0', NULL, '1', '0');
+INSERT INTO `sys_menu` (`id`, `code`, `pcode`, `pcodes`, `name`, `icon`, `url`, `num`, `levels`, `ismenu`, `tips`, `status`, `isopen`) VALUES ('1367426210238304259', 'jsAward_update', 'jsAward', '[0],[emp_money],[ryjsj],[jsAward],', '竞赛奖励更新', '', '/jsAward/update', '99', '3', '0', NULL, '1', '0');
+INSERT INTO `sys_menu` (`id`, `code`, `pcode`, `pcodes`, `name`, `icon`, `url`, `num`, `levels`, `ismenu`, `tips`, `status`, `isopen`) VALUES ('1367426210238304260', 'jsAward_delete', 'jsAward', '[0],[emp_money],[ryjsj],[jsAward],', '竞赛奖励删除', '', '/jsAward/delete', '99', '3', '0', NULL, '1', '0');
+INSERT INTO `sys_menu` (`id`, `code`, `pcode`, `pcodes`, `name`, `icon`, `url`, `num`, `levels`, `ismenu`, `tips`, `status`, `isopen`) VALUES ('1367426210238304261', 'jsAward_detail', 'jsAward', '[0],[emp_money],[ryjsj],[jsAward],', '竞赛奖励详情', '', '/jsAward/detail', '99', '3', '0', NULL, '1', '0');
+insert into sys_relation (`menuid`,`roleid`) values (1367426210234109954,1);
+insert into sys_relation (`menuid`,`roleid`) values (1367426210234109955,1);
+insert into sys_relation (`menuid`,`roleid`) values (1367426210234109956,1);
+insert into sys_relation (`menuid`,`roleid`) values (1367426210234109957,1);
+insert into sys_relation (`menuid`,`roleid`) values (1367426210234109958,1);
+insert into sys_relation (`menuid`,`roleid`) values (1367426210234109959,1);
+insert into sys_relation (`menuid`,`roleid`) values (1367426210234109960,1);
+insert into sys_relation (`menuid`,`roleid`) values (1367426210234109961,1);
+insert into sys_relation (`menuid`,`roleid`) values (1367426210234109962,1);
+insert into sys_relation (`menuid`,`roleid`) values (1367426210234109963,1);
+insert into sys_relation (`menuid`,`roleid`) values (1367426210234109964,1);
+insert into sys_relation (`menuid`,`roleid`) values (1367426210234109965,1);
+insert into sys_relation (`menuid`,`roleid`) values (1367426210238304257,1);
+insert into sys_relation (`menuid`,`roleid`) values (1367426210238304258,1);
+insert into sys_relation (`menuid`,`roleid`) values (1367426210238304259,1);
+insert into sys_relation (`menuid`,`roleid`) values (1367426210238304260,1);
+insert into sys_relation (`menuid`,`roleid`) values (1367426210238304261,1);
+

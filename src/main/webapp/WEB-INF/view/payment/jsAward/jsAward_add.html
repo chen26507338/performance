@@ -1,0 +1,45 @@
+@layout("/common/_container.html"){
+<div class="ibox float-e-margins">
+    <div class="ibox-content">
+        <div class="form-horizontal" id="JsAwardForm">
+
+            <input type="hidden" id="id" value="">
+
+            <div class="row">
+
+                <div class="col-sm-6 b-r">
+                    <#input id="userId" name="用户id" underline="true"/>
+                </div>
+                <div class="col-sm-6 b-r">
+                    <#input id="yrxs" name="用人形式" underline="true"/>
+                </div>
+                <div class="col-sm-6 b-r">
+                    <#input id="project" name="项目" underline="true"/>
+                </div>
+                <div class="col-sm-6 b-r">
+                    <#input id="hjlb" name="获奖类别" underline="true"/>
+                </div>
+                <div class="col-sm-6 b-r">
+                    <#input id="hjdj" name="获奖等级" underline="true"/>
+                </div>
+                <div class="col-sm-6 b-r">
+                    <#input id="money" name="金额" underline="true"/>
+                </div>
+                <div class="col-sm-6 b-r">
+                    <#input id="year" name="年度" underline="true"/>
+                </div>
+
+            </div>
+
+            <div class="row btn-group-m-t">
+                <div class="col-sm-10">
+                    <#button btnCss="info" name="提交" id="ensure" icon="fa-check" clickFun="JsAwardInfoDlg.addSubmit()"/>
+                    <#button btnCss="danger" name="取消" id="cancel" icon="fa-eraser" clickFun="JsAwardInfoDlg.close()"/>
+                </div>
+            </div>
+        </div>
+
+    </div>
+</div>
+<script src="${ctxPath}/static/modular/payment/jsAward/jsAward_info.js"></script>
+@}
