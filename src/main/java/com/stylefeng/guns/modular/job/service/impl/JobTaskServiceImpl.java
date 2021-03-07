@@ -2,6 +2,7 @@ package com.stylefeng.guns.modular.job.service.impl;
 
 import cn.hutool.core.collection.CollUtil;
 import cn.hutool.core.util.ArrayUtil;
+import cn.hutool.core.util.StrUtil;
 import com.baomidou.mybatisplus.mapper.EntityWrapper;
 import com.stylefeng.guns.common.constant.state.YesNo;
 import com.stylefeng.guns.common.persistence.model.User;
@@ -11,6 +12,7 @@ import com.stylefeng.guns.core.util.ToolUtil;
 import com.stylefeng.guns.modular.act.service.ActTaskService;
 import com.stylefeng.guns.modular.act.utils.ActUtils;
 import com.stylefeng.guns.modular.job.dao.JobTaskPointMapper;
+import com.stylefeng.guns.modular.job.model.JobDuties;
 import com.stylefeng.guns.modular.job.model.JobTaskApply;
 import com.stylefeng.guns.modular.job.model.JobTaskPoint;
 import com.stylefeng.guns.modular.job.service.IJobTaskPointService;
@@ -57,6 +59,14 @@ public class JobTaskServiceImpl extends ServiceImpl<JobTaskMapper, JobTask> impl
             vars.put("appoint_user", entity.getAppointUserId());
         } else {
             vars.put("hasAppoint", 0);
+        }
+        User user = userService.selectById(entity.getUserId());
+        JobDuties dutiesParams = new JobDuties();
+        dutiesParams.setJobId(user.getJobId());
+        dutiesParams.setDes(entity.getDuties());
+        if (dutiesParams.selectCount(new EntityWrapper<>(dutiesParams)) == 0) {
+            dutiesParams.setPoint(entity.getPoint());
+            dutiesParams.insert();
         }
         actTaskService.startProcess(ActUtils.PD_TASK_APPOINT[ActUtils.PD_TASK_ID], ActUtils.PD_TASK_APPOINT[ActUtils.PD_TASK_TABLE],
                 entity.getId() + "", entity.getDes(), vars);
@@ -197,6 +207,7 @@ public class JobTaskServiceImpl extends ServiceImpl<JobTaskMapper, JobTask> impl
             default:
                 entity.updateById();
         }
+        comment = StrUtil.isBlank(comment) ? "同意" : comment;
         actTaskService.complete(entity.getAct().getTaskId(), entity.getAct().getProcInsId(), comment, vars);
         return true;
     }

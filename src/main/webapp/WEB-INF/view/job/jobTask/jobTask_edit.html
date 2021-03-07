@@ -16,7 +16,7 @@
                     <#input id="point" name="任务分" value="${item.point}" underline="true" readonly="true"/>
                 </div>
                 <div class="col-sm-6 b-r">
-                    <#input id="des" name="任务描述" value="${item.des}" underline="true" readonly="true"/>
+                    <#input id="des" name="任务描述" value="${item.des}" type="textarea" underline="true" readonly="true"/>
                 </div>
                 @select(act.taskDefKey){
                 @   case "user_confirm":

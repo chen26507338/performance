@@ -17,6 +17,7 @@ JobDuties.initColumn = function () {
        ,{title: '描述', field:'des', visible: true, align: 'center', valign: 'middle'}
        ,{title: '得分', field:'point', visible: true, align: 'center', valign: 'middle'}
        ,{title: '岗位', field:'jobId', visible: true, align: 'center', valign: 'middle',formatter:function(value, row, index){return row.expand.jobIdDict;}}
+       ,{title: '部门', field:'expand.dept.name', visible: true, align: 'center', valign: 'middle'}
     ];
 };
 

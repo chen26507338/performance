@@ -1,5 +1,4 @@
-INSERT INTO `sys_menu`(`id`, `code`, `pcode`, `pcodes`, `name`, `icon`, `url`, `num`, `levels`, `ismenu`, `tips`, `status`, `isopen`)
-VALUES (1360783475540607977, 'gongzi', 'emp_money', '[0],[emp_money],', '工资', '', '#', 99, 2, 1, NULL, 1, 0);
+INSERT INTO `sys_menu`(`id`, `code`, `pcode`, `pcodes`, `name`, `icon`, `url`, `num`, `levels`, `ismenu`, `tips`, `status`, `isopen`) VALUES (1360783475540607977, 'gongzi', 'emp_money', '[0],[emp_money],', '工资', '', '#', 99, 2, 1, NULL, 1, 0);
 insert into sys_relation (`menuid`,`roleid`) values (1360783475540607977,1);
 create table zbry_gz
 (
@@ -125,10 +124,10 @@ alter table teaching_load_assess
 alter table teaching_load_assess
     add course_times int default 0 null comment '课时数';
 
-INSERT INTO `per`.`sys_menu`(`id`, `code`, `pcode`, `pcodes`, `name`, `icon`, `url`, `num`, `levels`, `ismenu`, `tips`, `status`, `isopen`)
+INSERT INTO `sys_menu`(`id`, `code`, `pcode`, `pcodes`, `name`, `icon`, `url`, `num`, `levels`, `ismenu`, `tips`, `status`, `isopen`)
  VALUES (1307583248381219820, 'teachingLoadAssess_import', 'teachingLoadAssess', '[0],[assess_norm],[teachingLoadAssess],', '教学考核导入', '', '/teachingLoadAssess/import', 99, 3, 0, NULL, 1, 0);
 insert into sys_relation (`menuid`,`roleid`) values (1307583248381219820,1);
-INSERT INTO `per`.`sys_menu`(`id`, `code`, `pcode`, `pcodes`, `name`, `icon`, `url`, `num`, `levels`, `ismenu`, `tips`, `status`, `isopen`)
+INSERT INTO `sys_menu`(`id`, `code`, `pcode`, `pcodes`, `name`, `icon`, `url`, `num`, `levels`, `ismenu`, `tips`, `status`, `isopen`)
 VALUES (1308993140152364481, 'dzbWorkAssess_import', 'dzbWorkAssess', '[0],[assess_norm],[dzbWorkAssess],', '党支部工作考核导入', '', '/dzbWorkAssess/import', 99, 3, 0, NULL, 1, 0);
 insert into sys_relation (`menuid`,`roleid`) values (1308993140152364481,1);
 alter table dzb_work_assess
@@ -214,8 +213,7 @@ insert into sys_relation (`menuid`,`roleid`) values (1366650837900738567,1);
 delete from sys_menu where id = 1226328464463880214;
 alter table sxjx_assess
     add zxmc varchar(255) null comment '中心名称';
-INSERT INTO `sys_menu`(`id`, `code`, `pcode`, `pcodes`, `name`, `icon`, `url`, `num`, `levels`, `ismenu`, `tips`, `status`, `isopen`)
-VALUES (1314774586021253127, 'sxjxAssess_import', 'sxjxAssess', '[0],[assess_norm],[sxjxAssess],', '实训绩效考核导入', '', '/sxjxAssess/import', 99, 3, 0, NULL, 1, 0);
+INSERT INTO `sys_menu`(`id`, `code`, `pcode`, `pcodes`, `name`, `icon`, `url`, `num`, `levels`, `ismenu`, `tips`, `status`, `isopen`) VALUES (1314774586021253127, 'sxjxAssess_import', 'sxjxAssess', '[0],[assess_norm],[sxjxAssess],', '实训绩效考核导入', '', '/sxjxAssess/import', 99, 3, 0, NULL, 1, 0);
 insert into sys_relation (`menuid`,`roleid`) values (1314774586021253127,1);
 alter table sxjx_assess
     add user_id bigint null comment '用户id';
