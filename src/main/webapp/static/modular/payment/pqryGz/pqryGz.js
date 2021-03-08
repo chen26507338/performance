@@ -16,7 +16,8 @@ PqryGz.initColumn = function () {
         {field: 'selectItem', radio: true}
         ,{title: '职工编号', field:'expand.user.account', visible: true, align: 'center', valign: 'middle'}
         ,{title: '职工姓名', field:'expand.user.name', visible: true, align: 'center', valign: 'middle'}
-        ,{title: '时间', field:'expand.time', visible: true, align: 'center', valign: 'middle'}
+        ,{title: '年份', field:'year', visible: true, align: 'center', valign: 'middle'}
+        ,{title: '月份', field:'month', visible: true, align: 'center', valign: 'middle'}
         ,{title: '工资', field:'gz', visible: true, align: 'center', valign: 'middle'}
        ,{title: '补发工资差额', field:'bfgzce', visible: true, align: 'center', valign: 'middle'}
        ,{title: '扣产假', field:'kcj', visible: true, align: 'center', valign: 'middle'}

@@ -33,10 +33,16 @@ public class DlxpryGz extends BaseModel<DlxpryGz> {
     private Long id;
 
     /**
-     * 时间
+     * 年度
      */
-    @TableField("in_time")
-    private Date inTime;
+    @TableField("year")
+    private Integer year;
+
+    /**
+     * 月份
+     */
+    @TableField("month")
+    private Integer month;
 
 
     /**

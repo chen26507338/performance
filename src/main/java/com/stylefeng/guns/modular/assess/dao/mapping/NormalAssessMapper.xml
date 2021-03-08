@@ -21,6 +21,7 @@
 	    na.dept_id AS deptId,
 	    user_id AS userId,
 	    norm_id AS normId,
+	    in_time AS inTime,
 	    jb,
 	    dc,
 	    result AS result,

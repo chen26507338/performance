@@ -39,10 +39,16 @@ public class PqryGz extends BaseModel<PqryGz> {
     private Long userId;
 
     /**
-    * 时间
-    */
-    @TableField("in_time")
-    private Date inTime;
+     * 年度
+     */
+    @TableField("year")
+    private Integer year;
+
+    /**
+     * 月份
+     */
+    @TableField("month")
+    private Integer month;
 
     /**
     * 工资

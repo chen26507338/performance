@@ -61,9 +61,10 @@ public class DlxpryGzServiceImpl extends ServiceImpl<DlxpryGzMapper, DlxpryGz> i
             if (u == null) {
                 throw new GunsException(StrUtil.format("职工编号 {} 不存在", map.get("account")));
             }
-            Date date = DateUtils.parse(map.get("time") + "", "yyyy.MM");
+            String[] times = (map.get("time") + "").split("\\.");
             DlxpryGz gz = BeanUtil.mapToBean(map, DlxpryGz.class, true);
-            gz.setInTime(date);
+            gz.setYear(Integer.parseInt(times[0]));
+            gz.setMonth(Integer.parseInt(times[1]));
             gz.setUserId(u.getId());
             gzs.add(gz);
         }

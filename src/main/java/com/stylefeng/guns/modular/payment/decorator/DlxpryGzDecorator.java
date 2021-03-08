@@ -23,7 +23,5 @@ public class DlxpryGzDecorator extends BaseListDecorator<DlxpryGz> {
     protected void decorateTheEntity(DlxpryGz dlxpryGz) {
         User user = userService.selectIgnorePointById(dlxpryGz.getUserId());
         dlxpryGz.putExpand("user", user);
-        dlxpryGz.putExpand("time", DateUtil.format(dlxpryGz.getInTime(), "yyyy.MM"));
-
     }
 }

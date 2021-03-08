@@ -245,6 +245,7 @@ public class NormalAssessServiceImpl extends ServiceImpl<NormalAssessMapper, Nor
         ExcelReader reader = ExcelUtil.getReader(gunsProperties.getFileUploadPath() + normalAssess.getExpand().get("fileName"));
         reader.addHeaderAlias("考核项目", "assessName");
         reader.addHeaderAlias("校级积分", "mainPoint");
+        reader.addHeaderAlias("时间", "inTime");
         reader.addHeaderAlias("级别", "jb");
         reader.addHeaderAlias("等次", "dc");
         reader.addHeaderAlias("次数", "result");

@@ -18,8 +18,8 @@ JsAward.initColumn = function () {
         ,{title: '职工姓名', field:'expand.user.name', visible: true, align: 'center', valign: 'middle'}
         ,{title: '用人形式', field:'yrxs', visible: true, align: 'center', valign: 'middle'}
        ,{title: '项目', field:'project', visible: true, align: 'center', valign: 'middle'}
-       ,{title: '获奖类别', field:'hjlb', visible: true, align: 'center', valign: 'middle'}
-       ,{title: '获奖等级', field:'hjdj', visible: true, align: 'center', valign: 'middle'}
+       ,{title: '类别', field:'hjlb', visible: true, align: 'center', valign: 'middle'}
+       ,{title: '等级', field:'hjdj', visible: true, align: 'center', valign: 'middle'}
        ,{title: '金额', field:'money', visible: true, align: 'center', valign: 'middle'}
        ,{title: '年度', field:'year', visible: true, align: 'center', valign: 'middle'}
     ];

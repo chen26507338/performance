@@ -71,6 +71,12 @@ public class NormalAssess extends BaseActEntity<NormalAssess> {
     private Integer result;
 
     /**
+    * 时间
+    */
+    @TableField("in_time")
+    private String inTime;
+
+    /**
     * 年度
     */
     @TableField("year")

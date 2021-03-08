@@ -79,6 +79,9 @@
             @if(type == "jxdd"){
             ,{title: '等次', field:'dc', visible: true, align: 'center', valign: 'middle'}
             ,{title: '级别', field:'jb', visible: true, align: 'center', valign: 'middle'}
+            @}sx
+            @if(type == "ldjl"){
+            ,{title: '时间', field:'inTime', visible: true, align: 'center', valign: 'middle'}
             @}
             ,{title: '考核系数', field:'coePoint', visible: true, align: 'center', valign: 'middle'}
             ,{title: '校级标准分', field:'mainNormPoint', visible: true, align: 'center', valign: 'middle'}
@@ -87,7 +90,9 @@
             ,{title: '校级分', field:'mainPoint', visible: true, align: 'center', valign: 'middle'}
             ,{title: '院级分', field:'expand.collegePoint', visible: true, align: 'center', valign: 'middle'}
             ,{title: '年度', field:'year', visible: true, align: 'center', valign: 'middle'}
+            @if(type != "ldjl"){
             ,{title: '创建时间', field:'createTime', visible: true, align: 'center', valign: 'middle'}
+            @}
             ,{title: '状态', field:'status', visible: true, align: 'center', valign: 'middle',formatter:function(value, row, index){return row.expand.statusDict;}}
         ];
     };

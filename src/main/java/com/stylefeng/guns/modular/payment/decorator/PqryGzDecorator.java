@@ -22,6 +22,5 @@ public class PqryGzDecorator extends BaseListDecorator<PqryGz> {
     protected void decorateTheEntity(PqryGz pqryGz) {
         User user = userService.selectIgnorePointById(pqryGz.getUserId());
         pqryGz.putExpand("user", user);
-        pqryGz.putExpand("time", DateUtil.format(pqryGz.getInTime(), "yyyy.MM"));
     }
 }

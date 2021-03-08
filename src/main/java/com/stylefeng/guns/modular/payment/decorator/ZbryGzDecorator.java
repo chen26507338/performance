@@ -23,6 +23,6 @@ public class ZbryGzDecorator extends BaseListDecorator<ZbryGz> {
     protected void decorateTheEntity(ZbryGz zbryGz) {
         User user = userService.selectIgnorePointById(zbryGz.getUserId());
         zbryGz.putExpand("user", user);
-        zbryGz.putExpand("time", DateUtil.format(zbryGz.getInTime(), "yyyy.MM"));
+//        zbryGz.putExpand("time", DateUtil.format(zbryGz.getInTime(), "yyyy.MM"));
     }
 }

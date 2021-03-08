@@ -24,5 +24,6 @@ public class StuWorkMemberDecorator extends BaseListDecorator<StuWorkMember> {
             stuWorkMember.setName(user.getName());
             stuWorkMember.putExpand("user", user);
         }
+        stuWorkMember.putExpand("statusDict", ConstantFactory.me().getDictsByName("考核状态",stuWorkMember.getStatus()));
     }
 }

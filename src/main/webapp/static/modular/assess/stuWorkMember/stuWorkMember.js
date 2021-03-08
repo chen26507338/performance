@@ -16,11 +16,13 @@ StuWorkMember.initColumn = function () {
         {field: 'selectItem', radio: true}
         ,{title: '职工编号', field:'expand.user.account', visible: true, align: 'center', valign: 'middle'}
         ,{title: '职工姓名', field:'expand.user.name', visible: true, align: 'center', valign: 'middle'}
+        ,{title: '考核项目', field:'assessName', visible: true, align: 'center', valign: 'middle'}
+        ,{title: '参赛项目名称/团队名称/类别/百分率', field:'mixture', visible: true, align: 'center', valign: 'middle'}
         ,{title: '校级指标分', field:'mainNormPoint', visible: true, align: 'center', valign: 'middle'}
        ,{title: '院级浮动值', field:'collegeNormPoint', visible: true, align: 'center', valign: 'middle'}
-       ,{title: '状态', field:'status', visible: true, align: 'center', valign: 'middle'}
        ,{title: '考核系数', field:'coePoint', visible: true, align: 'center', valign: 'middle'}
        ,{title: '年份', field:'year', visible: true, align: 'center', valign: 'middle'}
+        ,{title: '状态', field:'status', visible: true, align: 'center', valign: 'middle',formatter:function(value, row, index){return row.expand.statusDict;}}
     ];
 };
 

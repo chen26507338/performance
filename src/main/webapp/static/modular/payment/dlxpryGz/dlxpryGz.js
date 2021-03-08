@@ -16,7 +16,8 @@ DlxpryGz.initColumn = function () {
         {field: 'selectItem', radio: true}
         ,{title: '职工编号', field:'expand.user.account', visible: true, align: 'center', valign: 'middle'}
         ,{title: '职工姓名', field:'expand.user.name', visible: true, align: 'center', valign: 'middle'}
-        ,{title: '时间', field:'expand.time', visible: true, align: 'center', valign: 'middle'}
+        ,{title: '年份', field:'year', visible: true, align: 'center', valign: 'middle'}
+        ,{title: '月份', field:'month', visible: true, align: 'center', valign: 'middle'}
         ,{title: '基本工资', field:'jbgz', visible: true, align: 'center', valign: 'middle'}
        ,{title: '基础性绩效', field:'jcxjx', visible: true, align: 'center', valign: 'middle'}
        ,{title: '补发工资等', field:'bfgzd', visible: true, align: 'center', valign: 'middle'}

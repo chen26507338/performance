@@ -65,9 +65,10 @@ public class PqryGzServiceImpl extends ServiceImpl<PqryGzMapper, PqryGz> impleme
             if (u == null) {
                 throw new GunsException(StrUtil.format("职工编号 {} 不存在", map.get("account")));
             }
-            Date date = DateUtils.parse(map.get("time") + "", "yyyy.MM");
+            String[] times = (map.get("time") + "").split("\\.");
             PqryGz gz = BeanUtil.mapToBean(map, PqryGz.class, true);
-            gz.setInTime(date);
+            gz.setYear(Integer.parseInt(times[0]));
+            gz.setMonth(Integer.parseInt(times[1]));
             gz.setUserId(u.getId());
             gzs.add(gz);
         }

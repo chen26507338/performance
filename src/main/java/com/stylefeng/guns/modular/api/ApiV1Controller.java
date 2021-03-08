@@ -2,6 +2,7 @@ package com.stylefeng.guns.modular.api;
 
 import com.baomidou.mybatisplus.mapper.EntityWrapper;
 import com.stylefeng.guns.common.annotion.NoRepeatSubmit;
+import com.stylefeng.guns.common.constant.state.YesNo;
 import com.stylefeng.guns.common.persistence.model.User;
 import com.stylefeng.guns.core.base.Token;
 import com.stylefeng.guns.core.base.tips.ErrorTip;
@@ -9,6 +10,10 @@ import com.stylefeng.guns.core.base.tips.SuccessTip;
 import com.stylefeng.guns.core.exception.GunsException;
 import com.stylefeng.guns.modular.assess.model.AssessNormPoint;
 import com.stylefeng.guns.modular.assess.service.IAssessNormPointService;
+import com.stylefeng.guns.modular.payment.model.DlxpryGz;
+import com.stylefeng.guns.modular.payment.model.JsAward;
+import com.stylefeng.guns.modular.payment.model.PqryGz;
+import com.stylefeng.guns.modular.payment.model.ZbryGz;
 import com.stylefeng.guns.modular.system.service.IUserService;
 import io.swagger.annotations.*;
 import org.slf4j.Logger;
@@ -17,6 +22,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 import springfox.documentation.annotations.ApiIgnore;
+
+import java.time.Year;
 
 /**
  * 接口V1版
@@ -75,6 +82,58 @@ public class ApiV1Controller {
         AssessNormPoint params = new AssessNormPoint();
         params.setUserId(Long.valueOf(token.getUserId()));
         return new SuccessTip(assessNormPointService.selectOne(new EntityWrapper<>(params)));
+    }
+
+    @ApiOperation(value = "在编人员工资")
+    @ApiImplicitParams({
+            @ApiImplicitParam(value = "用户凭证", name = "token", dataType = "string", paramType = "query", required = true)
+    })
+    @PostMapping("user/payment/zbry")
+    public Object userPaymentZbry(Integer year,Integer month,@ApiIgnore Token token) {
+        ZbryGz params = new ZbryGz();
+        params.setYear(year);
+        params.setMonth(month);
+        params.setUserId(Long.valueOf(token.getUserId()));
+        return new SuccessTip(params.selectList(new EntityWrapper<>(params)));
+    }
+
+    @ApiOperation(value = "派遣人员工资")
+    @ApiImplicitParams({
+            @ApiImplicitParam(value = "用户凭证", name = "token", dataType = "string", paramType = "query", required = true)
+    })
+    @PostMapping("user/payment/pqry")
+    public Object userPaymentPqry(Integer year,Integer month,@ApiIgnore Token token) {
+        PqryGz params = new PqryGz();
+        params.setYear(year);
+        params.setMonth(month);
+        params.setUserId(Long.valueOf(token.getUserId()));
+        return new SuccessTip(params.selectList(new EntityWrapper<>(params)));
+    }
+
+    @ApiOperation(value = "代理校聘人员工资")
+    @ApiImplicitParams({
+            @ApiImplicitParam(value = "用户凭证", name = "token", dataType = "string", paramType = "query", required = true)
+    })
+    @PostMapping("user/payment/dlxp")
+    public Object userPaymentDlxp(Integer year,Integer month,@ApiIgnore Token token) {
+        DlxpryGz params = new DlxpryGz();
+        params.setYear(year);
+        params.setMonth(month);
+        params.setUserId(Long.valueOf(token.getUserId()));
+        return new SuccessTip(params.selectList(new EntityWrapper<>(params)));
+    }
+
+    @ApiOperation(value = "薪酬工资")
+    @ApiImplicitParams({
+            @ApiImplicitParam(value = "用户凭证", name = "token", dataType = "string", paramType = "query", required = true)
+    })
+    @PostMapping("user/payment/xc")
+    public Object userPaymentXc(String year, String type, @ApiIgnore Token token) {
+        JsAward params = new JsAward();
+        params.setYear(year);
+        params.setType(type);
+        params.setUserId(Long.valueOf(token.getUserId()));
+        return new SuccessTip(params.selectList(new EntityWrapper<>(params)));
     }
 
 }
