@@ -16,6 +16,7 @@ JobPriceYear.initColumn = function () {
         {field: 'selectItem', radio: true}
        ,{title: '职工编号', field:'expand.account', visible: true, align: 'center', valign: 'middle'}
        ,{title: '职工姓名', field:'expand.name', visible: true, align: 'center', valign: 'middle'}
+       ,{title: '年度', field:'year', visible: true, align: 'center', valign: 'middle'}
        ,{title: '一月', field:'month1', visible: true, align: 'center', valign: 'middle'}
        ,{title: '二月', field:'month2', visible: true, align: 'center', valign: 'middle'}
        ,{title: '三月', field:'month3', visible: true, align: 'center', valign: 'middle'}
