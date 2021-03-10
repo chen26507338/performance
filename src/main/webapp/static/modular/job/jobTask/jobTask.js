@@ -21,6 +21,7 @@ JobTask.initColumn = function () {
        ,{title: '委派协助人', field:'appointUserId', visible: true, align: 'center', valign: 'middle',formatter:function(value, row, index){return row.expand.appointUserName;}}
        ,{title: '经办协作人', field:'applyUserId', visible: true, align: 'center', valign: 'middle',formatter:function(value, row, index){return row.expand.applyUserName;}}
        ,{title: '任务分', field:'point', visible: true, align: 'center', valign: 'middle'}
+       ,{title: '经办人得分', field:'userPoint', visible: true, align: 'center', valign: 'middle'}
        ,{title: '任务描述', field:'des', visible: true, align: 'center', valign: 'middle'}
        // ,{title: '经办人处理结果', field:'userDes', visible: true, align: 'center', valign: 'middle'}
        // ,{title: '委派协助人办理结果', field:'appointUserDes', visible: true, align: 'center', valign: 'middle'}

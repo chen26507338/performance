@@ -52,6 +52,12 @@ public class JobTask extends BaseActEntity<JobTask> {
     private Long userId;
 
     /**
+    * 经办人得分
+    */
+    @TableField("user_point")
+    private Double userPoint;
+
+    /**
     * 委派协助人ID
     */
     @TableField("appoint_user_id")

@@ -59,7 +59,7 @@ insert into assess_coefficient value ('zxgz', '专项工作', 1);
 
 create table special_assess_member
 (
-	id bigint null,
+	id bigint not null,
 	user_id bigint null comment '用户id',
 	sa_id bigint null comment '专项项目id',
 	point double null comment '积分',

@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.stylefeng.guns.modular.operation.dao.BannerMapper">
+
+	<!-- 通用查询映射结果 -->
+	<resultMap id="BaseResultMap" type="com.stylefeng.guns.modular.operation.model.Banner">
+		<id column="ID" property="id" />
+		<result column="BANNER_NAME" property="bannerName" />
+		<result column="BANNER_IMGURL" property="bannerImgurl" />
+		<result column="CONTENT" property="content" />
+		<result column="BANNER_ORDER" property="bannerOrder" />
+		<result column="IS_GO" property="isGo" />
+		<result column="STATUS" property="status" />
+		<result column="BANNER_PLACE" property="bannerPlace" />
+		<result column="CREATE_TIME" property="createTime" />
+		<result column="URL" property="url" />
+	</resultMap>
+
+    <!-- 通用查询结果列 -->
+    <sql id="Base_Column_List">
+        ID AS id, BANNER_NAME AS bannerName, BANNER_IMGURL AS bannerImgurl, CONTENT AS content, BANNER_ORDER AS bannerOrder, IS_GO AS isGo, STATUS AS status, BANNER_PLACE AS bannerPlace, CREATE_TIME AS createTime, URL AS url
+    </sql>
+
+</mapper>

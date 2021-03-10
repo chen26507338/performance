@@ -2,7 +2,7 @@ INSERT INTO `sys_menu`(`id`, `code`, `pcode`, `pcodes`, `name`, `icon`, `url`, `
 insert into sys_relation (`menuid`,`roleid`) values (1360783475540607977,1);
 create table zbry_gz
 (
-    id bigint null,
+    id bigint not null,
     user_id bigint null comment '用户id',
     in_time datetime null comment '时间',
     gwgz double default 0 null comment '岗位工资',
@@ -44,7 +44,7 @@ insert into sys_relation (`menuid`,`roleid`) values (1365537042939875334,1);
 
 create table pqry_gz
 (
-    id bigint null,
+    id bigint not null,
     user_id bigint null comment '用户id',
     in_time datetime null comment '时间',
     gz double default 0 null comment '工资',
@@ -81,7 +81,7 @@ insert into sys_relation (`menuid`,`roleid`) values (1365646782848139270,1);
 
 create table dlxpry_gz
 (
-    id bigint null,
+    id bigint not null,
     user_id bigint null comment '用户id',
     in_time datetime null comment '时间',
     jbgz double default 0 null comment '基本工资',
@@ -142,7 +142,7 @@ alter table dzb_work_assess
 
 create table shpxgz_assess
 (
-    id bigint null,
+    id bigint not null,
     user_id bigint null comment '用户id',
     assess_name varchar(255) null comment '考核项目',
     name varchar(255) null comment '名称',
@@ -185,7 +185,7 @@ alter table assess_norm_point
 
 create table jfwcqk_assess
 (
-    id bigint null,
+    id bigint not null,
     user_id bigint null comment '用户id',
     assess_name varchar(255) null comment '经费项目',
     jfwcf varchar(255) null comment '经费完成费',
@@ -244,7 +244,7 @@ INSERT INTO `sys_menu`(`id`, `code`, `pcode`, `pcodes`, `name`, `icon`, `url`, `
 insert into sys_relation (`menuid`,`roleid`) values (1360783475540607978,1);
 create table js_award
 (
-    id bigint null,
+    id bigint not null,
     user_id bigint null comment '用户id',
     yrxs varchar(255) null comment '用人形式',
     project varchar(255) null comment '项目',

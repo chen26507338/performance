@@ -220,6 +220,7 @@ JobTaskInfoDlg.editSubmit = function(pass) {
 var duties;
 $(function() {
     Feng.initValidator("JobTaskForm", JobTaskInfoDlg.validateFields);
+    $('#comment').attr('placeholder',"同意");
 
     var s = $('#userId').val();
     if ($("#dutiesId").length) {

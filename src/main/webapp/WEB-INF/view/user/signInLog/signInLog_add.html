@@ -1,0 +1,43 @@
+@layout("/common/_container.html"){
+<div class="ibox float-e-margins">
+    <div class="ibox-content">
+        <div class="form-horizontal" id="SignInLogForm">
+
+            <input type="hidden" id="id" value="">
+
+            <div class="row">
+
+                <div class="col-sm-6 b-r">
+                    <#input id="userId" name="用户ID" underline="true"/>
+                </div>
+                <div class="col-sm-6 b-r">
+                    <#input id="location" name="位置信息" underline="true"/>
+                </div>
+                <div class="col-sm-6 b-r">
+                    <#input id="longitude" name="经度" underline="true"/>
+                </div>
+                <div class="col-sm-6 b-r">
+                    <#input id="latitude" name="纬度" underline="true"/>
+                </div>
+                <div class="col-sm-6 b-r">
+                    <#input id="createTime" name="打卡时间" underline="true"
+                    type="text" dateType="date" format="yyyy-MM-dd"/>
+                </div>
+                <div class="col-sm-6 b-r">
+                    <#input id="type" name="打卡类型" underline="true"/>
+                </div>
+
+            </div>
+
+            <div class="row btn-group-m-t">
+                <div class="col-sm-10">
+                    <#button btnCss="info" name="提交" id="ensure" icon="fa-check" clickFun="SignInLogInfoDlg.addSubmit()"/>
+                    <#button btnCss="danger" name="取消" id="cancel" icon="fa-eraser" clickFun="SignInLogInfoDlg.close()"/>
+                </div>
+            </div>
+        </div>
+
+    </div>
+</div>
+<script src="${ctxPath}/static/modular/user/signInLog/signInLog_info.js"></script>
+@}

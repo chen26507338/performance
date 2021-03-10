@@ -1,6 +1,6 @@
 create table pay_setting
 (
-	id bigint null,
+	id bigint not null,
 	name varchar(255) null comment '名称',
 	money double null comment '薪酬',
 	constraint pay_setting_pk
@@ -13,7 +13,7 @@ alter table sys_user
 
 create table post_setting
 (
-	id bigint null,
+	id bigint not null,
 	ldks varchar(255) null comment '领导科室',
 	zj varchar(255) null comment '职级',
 	zw varchar(255) null comment '职务',
@@ -24,7 +24,7 @@ comment '职务设置';
 
 create table dept_post
 (
-	id bigint null,
+	id bigint not null,
 	dept_id bigint null comment '部门id',
 	post_id bigint null comment '职务id',
 	user_id bigint null comment '用户id',
@@ -87,7 +87,7 @@ alter table normal_assess
 
 create table rypz_assess
 (
-	id bigint null,
+	id bigint not null,
 	user_id bigint null comment '用户ID',
 	assess_name varchar(100) null comment '考核项目',
 	main_point double null comment '校积分',
@@ -156,7 +156,7 @@ update sys_menu set url = '/MajorBuildMember' where id = 1296001749282439169;
 
 create table jshj_assess
 (
-    id bigint null,
+    id bigint not null,
     type varchar(255) null comment '竞赛类别',
     js_name varchar(255) null comment '竞赛名称',
     sx_name varchar(255) null comment '赛项名称',

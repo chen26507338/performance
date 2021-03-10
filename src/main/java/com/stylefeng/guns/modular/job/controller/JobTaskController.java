@@ -285,8 +285,8 @@ public class JobTaskController extends BaseController {
         JobTaskPoint taskPointParams = new JobTaskPoint();
         taskPointParams.setTaskId(jobTask.getId());
         taskPointParams.setUserId(jobTask.getUserId());
-        JobTaskPoint userPoint = jobTaskPointService.selectOne(new EntityWrapper<>(taskPointParams));
-        model.addAttribute("userPoint", userPoint);
+//        JobTaskPoint userPoint = jobTaskPointService.selectOne(new EntityWrapper<>(taskPointParams));
+//        model.addAttribute("userPoint", userPoint);
         model.addAttribute("item", jobTask);
         if (jobTask.getType() == IJobTaskService.TYPE_APPOINT) {
             return "";

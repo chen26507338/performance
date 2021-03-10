@@ -17,6 +17,7 @@
         this.height = 665;						//默认表格高度665
         this.data = {};
         this.sortName = {};
+        this.sortOrder = "desc";
         this.queryParams = {}; // 向后台传递的自定义参数
     };
 
@@ -41,7 +42,7 @@
                     pagination: true,     		//是否显示分页（*）
                     sortable: true,      		//是否启用排序
                     sortName: this.sortName,
-                    sortOrder: "desc",     		//排序方式
+                    sortOrder: this.sortOrder,     		//排序方式
                     pageNumber: 1,      			//初始化加载第一页，默认第一页
                     pageSize: 14,      			//每页的记录行数（*）
                     pageList: [14, 50, 100],  	//可供选择的每页的行数（*）
@@ -70,6 +71,9 @@
         },
         setSortName:function (sortName) {
             this.sortName = sortName;
+        },
+        setSortOrder:function (sortOrder) {
+            this.sortOrder = sortOrder;
         },
         /**
          * 向后台传递的自定义参数

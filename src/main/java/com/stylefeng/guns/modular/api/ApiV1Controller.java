@@ -1,7 +1,9 @@
 package com.stylefeng.guns.modular.api;
 
 import com.baomidou.mybatisplus.mapper.EntityWrapper;
+import com.baomidou.mybatisplus.plugins.Page;
 import com.stylefeng.guns.common.annotion.NoRepeatSubmit;
+import com.stylefeng.guns.common.constant.factory.PageFactory;
 import com.stylefeng.guns.common.constant.state.YesNo;
 import com.stylefeng.guns.common.persistence.model.User;
 import com.stylefeng.guns.core.base.Token;
@@ -10,11 +12,11 @@ import com.stylefeng.guns.core.base.tips.SuccessTip;
 import com.stylefeng.guns.core.exception.GunsException;
 import com.stylefeng.guns.modular.assess.model.AssessNormPoint;
 import com.stylefeng.guns.modular.assess.service.IAssessNormPointService;
-import com.stylefeng.guns.modular.payment.model.DlxpryGz;
-import com.stylefeng.guns.modular.payment.model.JsAward;
-import com.stylefeng.guns.modular.payment.model.PqryGz;
-import com.stylefeng.guns.modular.payment.model.ZbryGz;
+import com.stylefeng.guns.modular.operation.service.IBannerService;
+import com.stylefeng.guns.modular.payment.model.*;
+import com.stylefeng.guns.modular.payment.service.IJobPriceYearService;
 import com.stylefeng.guns.modular.system.service.IUserService;
+import com.stylefeng.guns.modular.user.model.SignInLog;
 import io.swagger.annotations.*;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -24,6 +26,7 @@ import org.springframework.web.bind.annotation.*;
 import springfox.documentation.annotations.ApiIgnore;
 
 import java.time.Year;
+import java.util.Date;
 
 /**
  * 接口V1版
@@ -39,6 +42,10 @@ public class ApiV1Controller {
     private IUserService userService;
     @Autowired
     private IAssessNormPointService assessNormPointService;
+    @Autowired
+    private IBannerService bannerService;
+    @Autowired
+    private IJobPriceYearService jobPriceYearService;
 
     @ExceptionHandler(GunsException.class)
     @ResponseStatus(HttpStatus.OK)
@@ -123,6 +130,18 @@ public class ApiV1Controller {
         return new SuccessTip(params.selectList(new EntityWrapper<>(params)));
     }
 
+    @ApiOperation(value = "年度岗位责任奖")
+    @ApiImplicitParams({
+            @ApiImplicitParam(value = "用户凭证", name = "token", dataType = "string", paramType = "query", required = true)
+    })
+    @PostMapping("user/payment/ndgw")
+    public Object userPaymentNdgw(String year,@ApiIgnore Token token) {
+        JobPriceYear params = new JobPriceYear();
+        params.setYear(year);
+        params.setUserId(Long.valueOf(token.getUserId()));
+        return new SuccessTip(params.selectList(new EntityWrapper<>(params)));
+    }
+
     @ApiOperation(value = "薪酬工资")
     @ApiImplicitParams({
             @ApiImplicitParam(value = "用户凭证", name = "token", dataType = "string", paramType = "query", required = true)
@@ -134,6 +153,49 @@ public class ApiV1Controller {
         params.setType(type);
         params.setUserId(Long.valueOf(token.getUserId()));
         return new SuccessTip(params.selectList(new EntityWrapper<>(params)));
+    }
+
+    @ApiOperation(value = "签到")
+    @ApiImplicitParams({
+            @ApiImplicitParam(value = "用户凭证", name = "token", dataType = "string", paramType = "query", required = true)
+    })
+    @PostMapping("user/sign/in")
+    public Object userSignIn(String location,Double longitude,Double latitude,Date time, Integer type, @ApiIgnore Token token) {
+        SignInLog signInLog = new SignInLog();
+        signInLog.setCreateTime(time);
+        signInLog.setType(type);
+        signInLog.setUserId(Long.valueOf(token.getUserId()));
+        signInLog.setLocation(location);
+        signInLog.setLatitude(latitude);
+        signInLog.setLongitude(longitude);
+        signInLog.insert();
+        return new SuccessTip();
+    }
+
+    @ApiOperation(value = "签到列表")
+    @ApiImplicitParams({
+            @ApiImplicitParam(value = "页码", name = "pageNo", dataType = "string", paramType = "query",defaultValue ="1", required = true),
+            @ApiImplicitParam(value = "页数", name = "pageSize", dataType = "string", paramType = "query",defaultValue ="10", required = true),
+            @ApiImplicitParam(value = "用户凭证", name = "token", dataType = "string", paramType = "query", required = true)
+    })
+    @PostMapping("user/sign/list")
+    public Object userSignList(Integer type, @ApiIgnore Token token) {
+        Page<SignInLog> page = new PageFactory<SignInLog>().apiPage();
+        SignInLog params = new SignInLog();
+        params.setType(type);
+        params.setUserId(Long.valueOf(token.getUserId()));
+        EntityWrapper<SignInLog> wrapper = new EntityWrapper<>(params);
+        wrapper.orderBy("createTime", false);
+        return new SuccessTip(params.selectPage(page, wrapper).getRecords());
+    }
+
+    @ApiOperation(value = "广告列表")
+    @ApiImplicitParams({
+            @ApiImplicitParam(value = "语言", name = "lang", dataType = "string", paramType = "query")
+    })
+    @PostMapping("banner/list")
+    public Object bannerList(@RequestParam @ApiParam(value = "广告类型", required = true) Integer place) {
+        return new SuccessTip(bannerService.selectByPlace(place));
     }
 
 }

@@ -184,6 +184,8 @@ public class JobTaskServiceImpl extends ServiceImpl<JobTaskMapper, JobTask> impl
                 }
 
                 JobTask jobTask = this.selectById(entity.getId());
+                jobTask.setUserPoint(userPoint);
+                jobTask.updateById();
                 JobTaskPoint userTaskPoint = new JobTaskPoint();
                 userTaskPoint.setUserId(jobTask.getUserId());
                 userTaskPoint.setCreateTime(new Date());
@@ -233,7 +235,7 @@ public class JobTaskServiceImpl extends ServiceImpl<JobTaskMapper, JobTask> impl
     @Transactional
     public void handleReport(JobTask entity) {
         String pass = (String) entity.getExpand().get("pass");
-        StringBuilder comment = new StringBuilder(pass.equals(YesNo.YES.getCode() + "") ? "【通过】" : "【驳回】");
+        StringBuilder comment = new StringBuilder(pass.equals(YesNo.YES.getCode() + "") ? "【同意】" : "【驳回】");
         if (entity.getExpand().get("comment") != null) {
             comment.append(entity.getExpand().get("comment"));
         }

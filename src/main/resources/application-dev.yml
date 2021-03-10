@@ -33,3 +33,5 @@ logging:
     com.stylefeng.guns: debug
   path: logs/
   file: guns.log
+response-bean:
+  encryption: false

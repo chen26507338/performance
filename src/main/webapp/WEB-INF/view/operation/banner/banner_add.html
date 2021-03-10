@@ -1,0 +1,140 @@
+@layout("/common/_container.html"){
+<div class="ibox float-e-margins">
+    <div class="ibox-content">
+        <div class="form-horizontal" id="BannerForm">
+
+            <input type="hidden" id="id" value="">
+
+            <div class="row">
+
+                <div class="col-sm-6 b-r">
+                    <#input id="bannerName" name="名称" underline="true"/>
+                </div>
+                <div class="col-sm-6 b-r">
+                    <#input id="bannerNameEN" name="名称（英文）" underline="true"/>
+                </div>
+                <div class="col-sm-6 b-r">
+                    <#input id="bannerNameID" name="名称（印尼）" underline="true"/>
+                </div>
+                <div class="col-sm-6 b-r">
+                    <#input id="bannerNameMY" name="名称（马来）" underline="true"/>
+                </div>
+                <div class="col-sm-6 b-r">
+                    <#input id="bannerNameVI" name="名称（越南）" underline="true"/>
+                </div>
+                <div class="col-sm-6 b-r">
+                    <#input id="bannerNameTC" name="名称（繁体）" underline="true"/>
+                </div>
+                <div class="col-sm-6 b-r">
+                    <#avatar id="bannerImgurl" name="图片" underline="true"/>
+                </div>
+                <div class="col-sm-6 b-r">
+                    <#avatar id="bannerImgurlEN" name="图片（英文）" underline="true"/>
+                </div>
+                <div class="col-sm-6 b-r">
+                    <#avatar id="bannerImgurlMY" name="图片（马来）" underline="true"/>
+                </div>
+                <div class="col-sm-6 b-r">
+                    <#avatar id="bannerImgurlID" name="图片（印尼）" underline="true"/>
+                </div>
+                <div class="col-sm-6 b-r">
+                    <#avatar id="bannerImgurlVI" name="图片（越南）" underline="true"/>
+                </div>
+                <div class="col-sm-6 b-r">
+                    <#avatar id="bannerImgurlTC" name="图片（繁体）" underline="true"/>
+                </div>
+                <div class="col-sm-6 b-r">
+                    <#select id="isGo" name="是否跳转" items="${constant.getDictsByName('是否')}"
+                    itemLabel="name" itemValue="num" underline="true"/>
+                </div>
+                <div class="col-sm-6 b-r">
+                    <#select id="bannerPlace" name="类型" items="${constant.getDictsByName('广告资讯类型')}"
+                    itemLabel="name" itemValue="num" underline="true"/>
+                </div>
+                <div class="col-sm-12">
+                    <label for="content">内容</label>
+                    <textarea id="content" style="display: none;"></textarea>
+                    <script>
+                        layui.use('layedit', function () {
+                            layedit = layui.layedit;
+                            contentEdit = layedit.build('content', {
+                                uploadImage: {url: Feng.ctxPath + '/mgr/richTextUpload/', type: 'post'}
+                            });
+                        });
+                    </script>
+                </div>
+                <div class="col-sm-12">
+                    <label for="content">内容（英文）</label>
+                    <textarea id="contentEN" style="display: none;"></textarea>
+                    <script>
+                        layui.use('layedit', function () {
+                            layedit = layui.layedit;
+                            contentENEdit = layedit.build('contentEN', {
+                                uploadImage: {url: Feng.ctxPath + '/mgr/richTextUpload/', type: 'post'}
+                            });
+                        });
+                    </script>
+                </div>
+                <div class="col-sm-12">
+                    <label for="content">内容（马来）</label>
+                    <textarea id="contentMY" style="display: none;"></textarea>
+                    <script>
+                        layui.use('layedit', function () {
+                            layedit = layui.layedit;
+                            contentMYEdit = layedit.build('contentMY', {
+                                uploadImage: {url: Feng.ctxPath + '/mgr/richTextUpload/', type: 'post'}
+                            });
+                        });
+                    </script>
+                </div>
+                <div class="col-sm-12">
+                    <label for="content">内容（印尼）</label>
+                    <textarea id="contentID" style="display: none;"></textarea>
+                    <script>
+                        layui.use('layedit', function () {
+                            layedit = layui.layedit;
+                            contentIDEdit = layedit.build('contentID', {
+                                uploadImage: {url: Feng.ctxPath + '/mgr/richTextUpload/', type: 'post'}
+                            });
+                        });
+                    </script>
+                </div>
+                <div class="col-sm-12">
+                    <label for="content">内容（越南）</label>
+                    <textarea id="contentVI" style="display: none;"></textarea>
+                    <script>
+                        layui.use('layedit', function () {
+                            layedit = layui.layedit;
+                            contentVIEdit = layedit.build('contentVI', {
+                                uploadImage: {url: Feng.ctxPath + '/mgr/richTextUpload/', type: 'post'}
+                            });
+                        });
+                    </script>
+                </div>
+                <div class="col-sm-12">
+                    <label for="content">内容（繁体）</label>
+                    <textarea id="contentTC" style="display: none;"></textarea>
+                    <script>
+                        layui.use('layedit', function () {
+                            layedit = layui.layedit;
+                            contentTCEdit = layedit.build('contentTC', {
+                                uploadImage: {url: Feng.ctxPath + '/mgr/richTextUpload/', type: 'post'}
+                            });
+                        });
+                    </script>
+                </div>
+
+            </div>
+
+            <div class="row btn-group-m-t">
+                <div class="col-sm-10">
+                    <#button btnCss="info" name="提交" id="ensure" icon="fa-check" clickFun="BannerInfoDlg.addSubmit()"/>
+                    <#button btnCss="danger" name="取消" id="cancel" icon="fa-eraser" clickFun="BannerInfoDlg.close()"/>
+                </div>
+            </div>
+        </div>
+
+    </div>
+</div>
+<script src="${ctxPath}/static/modular/operation/banner/banner_info.js"></script>
+@}
