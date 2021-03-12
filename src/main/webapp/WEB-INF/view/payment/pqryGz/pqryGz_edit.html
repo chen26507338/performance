@@ -6,16 +6,14 @@
             <input type="hidden" id="id" value="${item.id}">
 
             <div class="row">
-
-                <div class="col-sm-6 b-r">
-                    <#input id="userId" name="用户id" value="${item.userId}" underline="true"/>
-                </div>
-                <div class="col-sm-6 b-r">
-                        <#input id="inTime" name="时间" underline="true" value="${item.inTime}"
-                        type="text" dateType="date" format="yyyy-MM-dd"/>
-                </div>
                 <div class="col-sm-6 b-r">
                     <#input id="gz" name="工资" value="${item.gz}" underline="true"/>
+                </div>
+                <div class="col-sm-6 b-r">
+                    <#input id="year" name="年度" value="${item.year}" underline="true"/>
+                </div>
+                <div class="col-sm-6 b-r">
+                    <#input id="month" name="月份" value="${item.month}" underline="true"/>
                 </div>
                 <div class="col-sm-6 b-r">
                     <#input id="bfgzce" name="补发工资差额" value="${item.bfgzce}" underline="true"/>

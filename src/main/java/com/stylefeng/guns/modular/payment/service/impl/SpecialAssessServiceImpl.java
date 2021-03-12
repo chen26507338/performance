@@ -103,6 +103,7 @@ public class SpecialAssessServiceImpl extends ServiceImpl<SpecialAssessMapper, S
         reader.addHeaderAlias("积分", "point");
         List<Map> normalAssesses = reader.readAll(Map.class);
         AssessCoefficient coefficient = assessCoefficientService.selectById(IAssessCoefficientService.TYPE_ZXGZ);
+        double totalPoint = 0;
         for (Map map : normalAssesses) {
             User user = userService.getByAccount(map.get("account") + "");
             if (user == null) {
@@ -132,6 +133,10 @@ public class SpecialAssessServiceImpl extends ServiceImpl<SpecialAssessMapper, S
             }
             assessNormPointService.insertOrUpdate(assessNormPoint);
             assess.insert();
+            totalPoint += assess.getPoint();
+        }
+        if (totalPoint > project.getApplyPoint()) {
+            throw new GunsException("分配分数超过申请积分");
         }
         project.setIsImport(YesNo.YES.getCode());
         project.updateById();

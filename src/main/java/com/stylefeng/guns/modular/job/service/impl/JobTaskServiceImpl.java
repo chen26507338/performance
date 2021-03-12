@@ -184,7 +184,7 @@ public class JobTaskServiceImpl extends ServiceImpl<JobTaskMapper, JobTask> impl
                 }
 
                 JobTask jobTask = this.selectById(entity.getId());
-                jobTask.setUserPoint(userPoint);
+//                jobTask.setUserPoint(userPoint);
                 jobTask.updateById();
                 JobTaskPoint userTaskPoint = new JobTaskPoint();
                 userTaskPoint.setUserId(jobTask.getUserId());
@@ -279,6 +279,7 @@ public class JobTaskServiceImpl extends ServiceImpl<JobTaskMapper, JobTask> impl
                     userTaskPoint.setTaskId(entity.getId());
                     userTaskPoint.setType(IJobTaskPointService.TYPE_MAIN_HANDLE);
                     userTaskPoint.insert();
+                    newData.setUserPoint(entity.getPoint());
                     newData.setStatus(YesNo.YES.getCode());
                     newData.setEndTime(new Date());
                     newData.updateById();

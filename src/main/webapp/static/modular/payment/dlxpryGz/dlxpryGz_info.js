@@ -49,7 +49,8 @@ DlxpryGzInfoDlg.collectData = function() {
     this
     .set('id')
     .set('userId')
-    .set('time')
+    .set('year')
+    .set('month')
     .set('jbgz')
     .set('jcxjx')
     .set('bfgzd')

@@ -46,7 +46,7 @@ public class EducationExperienceController extends BaseController {
     private IUserService userService;
 
     /**
-     * 跳转到学历培训首页e'x
+     * 跳转到学历培训首页
      */
     @RequestMapping("")
     @RequiresPermissions(value = {"/educationExperience/list"})

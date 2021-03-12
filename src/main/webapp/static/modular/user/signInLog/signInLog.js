@@ -14,8 +14,9 @@ var SignInLog = {
 SignInLog.initColumn = function () {
     return [
         {field: 'selectItem', radio: true}
-       ,{title: '用户ID', field:'userId', visible: true, align: 'center', valign: 'middle'}
-       ,{title: '位置信息', field:'location', visible: true, align: 'center', valign: 'middle'}
+        ,{title: '职工编号', field:'expand.user.account', visible: true, align: 'center', valign: 'middle'}
+        ,{title: '职工姓名', field:'expand.user.name', visible: true, align: 'center', valign: 'middle'}
+        ,{title: '位置信息', field:'location', visible: true, align: 'center', valign: 'middle'}
        ,{title: '打卡时间', field:'createTime', visible: true, align: 'center', valign: 'middle'}
        ,{title: '打卡类型', field:'type', visible: true, align: 'center', valign: 'middle',formatter:function(value, row, index){return row.expand.typeDict;}}
     ];

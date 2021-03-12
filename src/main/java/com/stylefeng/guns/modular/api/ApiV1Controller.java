@@ -1,5 +1,6 @@
 package com.stylefeng.guns.modular.api;
 
+import cn.hutool.core.bean.BeanUtil;
 import com.baomidou.mybatisplus.mapper.EntityWrapper;
 import com.baomidou.mybatisplus.plugins.Page;
 import com.stylefeng.guns.common.annotion.NoRepeatSubmit;
@@ -12,6 +13,7 @@ import com.stylefeng.guns.core.base.tips.SuccessTip;
 import com.stylefeng.guns.core.exception.GunsException;
 import com.stylefeng.guns.modular.assess.model.AssessNormPoint;
 import com.stylefeng.guns.modular.assess.service.IAssessNormPointService;
+import com.stylefeng.guns.modular.job.service.IDeptService;
 import com.stylefeng.guns.modular.operation.service.IBannerService;
 import com.stylefeng.guns.modular.payment.model.*;
 import com.stylefeng.guns.modular.payment.service.IJobPriceYearService;
@@ -27,6 +29,7 @@ import springfox.documentation.annotations.ApiIgnore;
 
 import java.time.Year;
 import java.util.Date;
+import java.util.Map;
 
 /**
  * 接口V1版
@@ -45,7 +48,7 @@ public class ApiV1Controller {
     @Autowired
     private IBannerService bannerService;
     @Autowired
-    private IJobPriceYearService jobPriceYearService;
+    private IDeptService deptService;
 
     @ExceptionHandler(GunsException.class)
     @ResponseStatus(HttpStatus.OK)
@@ -77,17 +80,21 @@ public class ApiV1Controller {
     @PostMapping("user/details")
     public Object userDetail(@ApiIgnore Token token) {
         User user = userService.selectIgnorePointById(token.getUserId());
-        return new SuccessTip(user);
+        Map<String, Object> data = BeanUtil.beanToMap(user);
+        data.put("dept", deptService.selectById(user.getDeptId()).getName());
+        return new SuccessTip(data);
     }
 
     @ApiOperation(value = "用户积分")
     @ApiImplicitParams({
+            @ApiImplicitParam(value = "年度", name = "year", dataType = "string", paramType = "query"),
             @ApiImplicitParam(value = "用户凭证", name = "token", dataType = "string", paramType = "query", required = true)
     })
     @PostMapping("user/assess/point")
-    public Object userAssessPoint(@ApiIgnore Token token) {
+    public Object userAssessPoint(String year,@ApiIgnore Token token) {
         AssessNormPoint params = new AssessNormPoint();
         params.setUserId(Long.valueOf(token.getUserId()));
+        params.setYear(year);
         return new SuccessTip(assessNormPointService.selectOne(new EntityWrapper<>(params)));
     }
 
@@ -157,6 +164,11 @@ public class ApiV1Controller {
 
     @ApiOperation(value = "签到")
     @ApiImplicitParams({
+            @ApiImplicitParam(value = "地址", name = "location", dataType = "string", paramType = "query"),
+            @ApiImplicitParam(value = "经度", name = "longitude", dataType = "string", paramType = "query"),
+            @ApiImplicitParam(value = "纬度", name = "latitude", dataType = "string", paramType = "query"),
+            @ApiImplicitParam(value = "类型", name = "type", dataType = "string", paramType = "query",defaultValue = "1"),
+            @ApiImplicitParam(value = "时间", name = "time", dataType = "string", paramType = "query",defaultValue ="2021-03-01 10:00:00"),
             @ApiImplicitParam(value = "用户凭证", name = "token", dataType = "string", paramType = "query", required = true)
     })
     @PostMapping("user/sign/in")

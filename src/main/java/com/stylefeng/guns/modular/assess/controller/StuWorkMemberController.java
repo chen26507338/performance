@@ -3,11 +3,14 @@ package com.stylefeng.guns.modular.assess.controller;
 import com.baomidou.mybatisplus.mapper.EntityWrapper;
 import com.baomidou.mybatisplus.plugins.Page;
 import com.stylefeng.guns.common.constant.factory.PageFactory;
+import com.stylefeng.guns.common.persistence.model.User;
 import com.stylefeng.guns.core.base.controller.BaseController;
 import com.stylefeng.guns.core.log.LogObjectHolder;
+import com.stylefeng.guns.core.util.ToolUtil;
 import com.stylefeng.guns.modular.assess.decorator.StuWorkMemberDecorator;
 import com.stylefeng.guns.modular.assess.model.StuWorkMember;
 import com.stylefeng.guns.modular.assess.service.IStuWorkMemberService;
+import com.stylefeng.guns.modular.system.service.IUserService;
 import org.apache.shiro.authz.annotation.RequiresPermissions;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -34,6 +37,8 @@ public class StuWorkMemberController extends BaseController {
 
     @Autowired
     private IStuWorkMemberService stuWorkMemberService;
+    @Autowired
+    private IUserService userService;
 
     /**
      * 跳转到学生工作成员首页
@@ -74,6 +79,15 @@ public class StuWorkMemberController extends BaseController {
     public Object list(StuWorkMember stuWorkMember) {
         Page<StuWorkMember> page = new PageFactory<StuWorkMember>().defaultPage();
         EntityWrapper< StuWorkMember> wrapper = new EntityWrapper<>();
+
+        if (ToolUtil.isNotEmpty(stuWorkMember.getExpand().get("user"))) {
+            User user = userService.fuzzyFind((String) stuWorkMember.getExpand().get("user"));
+            if (user != null) {
+                wrapper.eq("user_id", user.getId());
+            } else {
+                return packForBT(new PageFactory<User>().defaultPage());
+            }
+        }
         stuWorkMemberService.selectPage(page,wrapper);
         page.setRecords(new StuWorkMemberDecorator(page.getRecords()).decorate());
         return packForBT(page);

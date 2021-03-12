@@ -49,7 +49,8 @@ ZbryGzInfoDlg.collectData = function() {
     this
     .set('id')
     .set('userId')
-    .set('inTime')
+    .set('year')
+    .set('month')
     .set('gwgz')
     .set('xjgz')
     .set('gwjt')

@@ -254,6 +254,7 @@ public class JobPriceMonthServiceImpl extends ServiceImpl<JobPriceMonthMapper, J
             month.setMonth(params.getMonth());
             month.setStatus(YesNo.YES.getCode());
             month.setUserId(user.getId());
+            month.setDeptId(user.getDeptId());
             months.add(month);
 
             JobPriceYear jobPriceYear = new JobPriceYear();

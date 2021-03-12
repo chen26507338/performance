@@ -49,7 +49,8 @@ PqryGzInfoDlg.collectData = function() {
     this
     .set('id')
     .set('userId')
-    .set('inTime')
+    .set('year')
+    .set('month')
     .set('gz')
     .set('bfgzce')
     .set('kcj')

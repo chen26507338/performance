@@ -25,7 +25,8 @@ JobPriceMonth.initColumn = function () {
        ,{title: '备注', field:'remark', visible: true, align: 'center', valign: 'middle'}
        ,{title: '年度', field:'year', visible: true, align: 'center', valign: 'middle'}
        ,{title: '部门', field:'expand.deptName', visible: true, align: 'center', valign: 'middle'}
-       ,{title: ' 月份', field:'month', visible: true, align: 'center', valign: 'middle'}
+       ,{title: '月份', field:'month', visible: true, align: 'center', valign: 'middle'}
+       ,{title: '年度', field:'year', visible: true, align: 'center', valign: 'middle'}
         ,{title: '状态', field:'status', visible: true, align: 'center', valign: 'middle',formatter:function(value, row, index){return row.expand.statusDict;}}
     ];
 };

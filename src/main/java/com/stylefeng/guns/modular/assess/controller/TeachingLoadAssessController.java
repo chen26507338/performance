@@ -4,12 +4,15 @@ import com.baomidou.mybatisplus.mapper.EntityWrapper;
 import com.baomidou.mybatisplus.plugins.Page;
 import com.stylefeng.guns.common.constant.factory.PageFactory;
 import com.stylefeng.guns.common.constant.state.YesNo;
+import com.stylefeng.guns.common.persistence.model.User;
 import com.stylefeng.guns.core.base.controller.BaseController;
 import com.stylefeng.guns.core.log.LogObjectHolder;
+import com.stylefeng.guns.core.util.ToolUtil;
 import com.stylefeng.guns.modular.assess.decorator.TeachingLoadAssessDecorator;
 import com.stylefeng.guns.modular.assess.model.TeachingLoadAssess;
 import com.stylefeng.guns.modular.assess.service.IAssessNormService;
 import com.stylefeng.guns.modular.assess.service.ITeachingLoadAssessService;
+import com.stylefeng.guns.modular.system.service.IUserService;
 import org.apache.shiro.authz.annotation.RequiresPermissions;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -37,7 +40,8 @@ import java.util.Map;
 public class TeachingLoadAssessController extends BaseController {
 
     private String PREFIX = "/assess/teachingLoadAssess/";
-
+    @Autowired
+    private IUserService userService;
     @Autowired
     private ITeachingLoadAssessService teachingLoadAssessService;
     @Autowired
@@ -82,6 +86,14 @@ public class TeachingLoadAssessController extends BaseController {
     public Object list(TeachingLoadAssess teachingLoadAssess) {
         Page<TeachingLoadAssess> page = new PageFactory<TeachingLoadAssess>().defaultPage();
         EntityWrapper< TeachingLoadAssess> wrapper = new EntityWrapper<>();
+        if (ToolUtil.isNotEmpty(teachingLoadAssess.getExpand().get("user"))) {
+            User user = userService.fuzzyFind((String) teachingLoadAssess.getExpand().get("user"));
+            if (user != null) {
+                wrapper.eq("user_id", user.getId());
+            } else {
+                return packForBT(new PageFactory<User>().defaultPage());
+            }
+        }
         teachingLoadAssessService.selectPage(page,wrapper);
         page.setRecords(new TeachingLoadAssessDecorator(page.getRecords()).decorate());
         return packForBT(page);

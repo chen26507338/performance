@@ -46,6 +46,7 @@ StuWorkMember.check = function () {
  */
 StuWorkMember.formParams = function() {
     var queryData = {};
+    queryData['expand["user"]'] = $("#user").val();
     return queryData;
 };
 

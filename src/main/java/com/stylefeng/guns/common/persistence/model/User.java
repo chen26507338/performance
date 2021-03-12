@@ -244,7 +244,7 @@ public class User extends BaseModel<User> {
     @TableField("gw_type")
     private String gwType;
     /**
-     * 岗位类别
+     * 到校工作时间
      */
     @TableField("dx_sj")
     private String dxSj;
