@@ -9,6 +9,7 @@ import com.stylefeng.guns.core.base.controller.BaseController;
 import com.stylefeng.guns.core.log.LogObjectHolder;
 import com.stylefeng.guns.core.shiro.ShiroKit;
 import com.stylefeng.guns.core.util.KaptchaUtil;
+import com.stylefeng.guns.core.util.ToolUtil;
 import com.stylefeng.guns.modular.assess.decorator.SxjxAssessDecorator;
 import com.stylefeng.guns.modular.assess.model.SxjxAssess;
 import com.stylefeng.guns.modular.assess.service.ISxjxAssessService;
@@ -108,6 +109,14 @@ public class SxjxAssessController extends BaseController {
     public Object list(SxjxAssess sxjxAssess) {
         Page<SxjxAssess> page = new PageFactory<SxjxAssess>().defaultPage();
         EntityWrapper<SxjxAssess> wrapper = new EntityWrapper<>();
+        if (ToolUtil.isNotEmpty(sxjxAssess.getExpand().get("user"))) {
+            User user = userService.fuzzyFind((String) sxjxAssess.getExpand().get("user"));
+            if (user != null) {
+                wrapper.eq("user_id", user.getId());
+            } else {
+                return packForBT(new PageFactory<User>().defaultPage());
+            }
+        }
         sxjxAssessService.selectPage(page, wrapper);
         page.setRecords(new SxjxAssessDecorator(page.getRecords()).decorate());
         return packForBT(page);

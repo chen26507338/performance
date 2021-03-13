@@ -51,8 +51,16 @@ MajorBuildMemberInfoDlg.collectData = function() {
     .set('buildId')
     .set('mainNormPoint')
     .set('collegeNormPoint')
+    .set('year')
     .set('status')
     .set('coePoint')
+    .set('assessName')
+    .set('type')
+    .set('buildName')
+    .set('rank')
+    .set('startTime')
+    .set('buildTime')
+    .set('remark')
     ;
 };
 
@@ -78,7 +86,7 @@ MajorBuildMemberInfoDlg.addSubmit = function() {
     }
 
     //提交信息
-    var ajax = new $ax(Feng.ctxPath + "/MajorBuildMember/add", function(data){
+    var ajax = new $ax(Feng.ctxPath + "/majorBuildMember/add", function(data){
         Feng.success("添加成功!");
         window.parent.MajorBuildMember.table.refresh();
         MajorBuildMemberInfoDlg.close();
@@ -102,7 +110,7 @@ MajorBuildMemberInfoDlg.editSubmit = function() {
     }
 
     //提交信息
-    var ajax = new $ax(Feng.ctxPath + "/MajorBuildMember/update", function(data){
+    var ajax = new $ax(Feng.ctxPath + "/majorBuildMember/update", function(data){
         Feng.success("修改成功!");
         window.parent.MajorBuildMember.table.refresh();
         MajorBuildMemberInfoDlg.close();
@@ -126,7 +134,7 @@ MajorBuildMemberInfoDlg.importSubmit = function() {
     // }
     //
     // //提交信息
-    var ajax = new $ax(Feng.ctxPath + "/MajorBuildMember/importAssess", function(data){
+    var ajax = new $ax(Feng.ctxPath + "/majorBuildMember/importAssess", function(data){
         Feng.success("导入成功!");
         window.parent.MajorBuildMember.table.refresh();
         MajorBuildMemberInfoDlg.close();

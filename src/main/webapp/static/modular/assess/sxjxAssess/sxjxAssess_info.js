@@ -100,6 +100,8 @@ SxjxAssessInfoDlg.collectData = function() {
     .set('hrLeaderId')
     .set('sxsglUser')
     .set('resultUrl')
+    .set('year')
+    .set('zxmc')
     .set('coePoint')
     ;
     

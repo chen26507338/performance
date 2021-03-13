@@ -51,6 +51,7 @@ MajorBuildMember.check = function () {
  */
 MajorBuildMember.formParams = function() {
     var queryData = {};
+    queryData['expand["user"]'] = $("#user").val();
     return queryData;
 };
 
@@ -64,7 +65,7 @@ MajorBuildMember.openImportAssess = function () {
         area: ['800px', '420px'], //宽高
         fix: false, //不固定
         maxmin: true,
-        content: Feng.ctxPath + '/MajorBuildMember/majorBuildMember_import'
+        content: Feng.ctxPath + '/majorBuildMember/majorBuildMember_import'
     });
 };
 
@@ -79,7 +80,7 @@ MajorBuildMember.openAddMajorBuildMember = function () {
         area: ['800px', '420px'], //宽高
         fix: false, //不固定
         maxmin: true,
-        content: Feng.ctxPath + '/MajorBuildMember/MajorBuildMember_add'
+        content: Feng.ctxPath + '/majorBuildMember/majorBuildMember_add'
     });
 };
 
@@ -94,7 +95,7 @@ MajorBuildMember.openMajorBuildMemberDetail = function () {
             area: ['800px', '420px'], //宽高
             fix: false, //不固定
             maxmin: true,
-            content: Feng.ctxPath + '/MajorBuildMember/MajorBuildMember_update/' + MajorBuildMember.seItem.id
+            content: Feng.ctxPath + '/majorBuildMember/majorBuildMember_update/' + MajorBuildMember.seItem.id
         });
     }
 };
@@ -106,13 +107,13 @@ MajorBuildMember.delete = function () {
     if (this.check()) {
         var that = this;
         Feng.confirm("是否要删除专业建设项目成员", function () {
-            var ajax = new $ax(Feng.ctxPath + "/MajorBuildMember/delete", function (data) {
+            var ajax = new $ax(Feng.ctxPath + "/majorBuildMember/delete", function (data) {
                 Feng.success("删除成功!");
                 MajorBuildMember.table.refresh();
             }, function (data) {
                 Feng.error("删除失败!" + data.responseJSON.message + "!");
             });
-            ajax.set("MajorBuildMemberId",that.seItem.id);
+            ajax.set("majorBuildMemberId",that.seItem.id);
             ajax.start();
         });
     }
@@ -128,7 +129,7 @@ MajorBuildMember.search = function () {
 var layer;
 $(function () {
     var defaultColunms = MajorBuildMember.initColumn();
-    var table = new BSTable(MajorBuildMember.id, "/MajorBuildMember/list", defaultColunms);
+    var table = new BSTable(MajorBuildMember.id, "/majorBuildMember/list", defaultColunms);
     table.setPaginationType("server");
     table.setQueryParams(MajorBuildMember.formParams());
     MajorBuildMember.table = table.init();

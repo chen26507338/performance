@@ -30,6 +30,7 @@ import com.stylefeng.guns.modular.assess.dao.TeachingLoadAssessMapper;
 import org.springframework.transaction.annotation.Transactional;
 
 import javax.annotation.Resource;
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -61,6 +62,33 @@ public class TeachingLoadAssessServiceImpl extends ServiceImpl<TeachingLoadAsses
 
     @Autowired
     private IAssessNormPointService assessNormPointService;
+
+    @Override
+    @Transactional
+    public boolean updateById(TeachingLoadAssess entity) {
+        TeachingLoadAssess oldAssess = this.selectById(entity.getId());
+        AssessNormPoint params = new AssessNormPoint();
+        params.setUserId(oldAssess.getUserId());
+        params.setYear(oldAssess.getYear());
+        AssessNormPoint point = assessNormPointService.selectOne(new EntityWrapper<>(params));
+        point.setJxgzMain(point.getJxgzMain() - oldAssess.getMainNormPoint());
+        point.setJxgzMain(point.getJxgzMain() + entity.getMainNormPoint());
+        point.updateById();
+        return super.updateById(entity);
+    }
+
+    @Override
+    @Transactional
+    public boolean deleteById(Serializable id) {
+        TeachingLoadAssess oldAssess = this.selectById(id);
+        AssessNormPoint params = new AssessNormPoint();
+        params.setUserId(oldAssess.getUserId());
+        params.setYear(oldAssess.getYear());
+        AssessNormPoint point = assessNormPointService.selectOne(new EntityWrapper<>(params));
+        point.setJxgzMain(point.getJxgzMain() - oldAssess.getMainNormPoint());
+        point.updateById();
+        return super.deleteById(id);
+    }
 
     @Override
     @Transactional

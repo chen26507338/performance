@@ -8,10 +8,7 @@ import com.stylefeng.guns.common.constant.state.YesNo;
 import com.stylefeng.guns.common.persistence.model.User;
 import com.stylefeng.guns.config.properties.GunsProperties;
 import com.stylefeng.guns.core.exception.GunsException;
-import com.stylefeng.guns.modular.assess.model.AssessCoefficient;
-import com.stylefeng.guns.modular.assess.model.AssessNormPoint;
-import com.stylefeng.guns.modular.assess.model.MajorBuildMember;
-import com.stylefeng.guns.modular.assess.model.ManServiceMember;
+import com.stylefeng.guns.modular.assess.model.*;
 import com.stylefeng.guns.modular.assess.service.IAssessCoefficientService;
 import com.stylefeng.guns.modular.assess.service.IAssessNormPointService;
 import com.stylefeng.guns.modular.system.service.IUserService;
@@ -23,6 +20,7 @@ import com.stylefeng.guns.modular.assess.service.IMajorBuildMemberService;
 import org.springframework.transaction.annotation.Transactional;
 
 import javax.annotation.Resource;
+import java.io.Serializable;
 import java.util.List;
 
 /**
@@ -42,6 +40,34 @@ public class MajorBuildMemberServiceImpl extends ServiceImpl<MajorBuildMemberMap
     private GunsProperties gunsProperties;
     @Autowired
     private IUserService userService;
+
+    @Override
+    @Transactional
+    public boolean updateById(MajorBuildMember entity) {
+        MajorBuildMember oldAssess = this.selectById(entity.getId());
+        AssessNormPoint params = new AssessNormPoint();
+        params.setUserId(oldAssess.getUserId());
+        params.setYear(oldAssess.getYear());
+        AssessNormPoint point = assessNormPointService.selectOne(new EntityWrapper<>(params));
+        point.setZyjsMain(point.getZyjsMain() - oldAssess.getMainNormPoint());
+        point.setZyjsMain(point.getZyjsMain() + entity.getMainNormPoint());
+        point.updateById();
+        return super.updateById(entity);
+    }
+
+    @Override
+    @Transactional
+    public boolean deleteById(Serializable id) {
+        MajorBuildMember oldAssess = this.selectById(id);
+        AssessNormPoint params = new AssessNormPoint();
+        params.setUserId(oldAssess.getUserId());
+        params.setYear(oldAssess.getYear());
+        AssessNormPoint point = assessNormPointService.selectOne(new EntityWrapper<>(params));
+        point.setZyjsMain(point.getZyjsMain() - oldAssess.getMainNormPoint());
+        point.updateById();
+        return super.deleteById(id);
+    }
+
 
     @Override
     @Transactional

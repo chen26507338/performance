@@ -3,11 +3,14 @@ package com.stylefeng.guns.modular.assess.controller;
 import com.baomidou.mybatisplus.mapper.EntityWrapper;
 import com.baomidou.mybatisplus.plugins.Page;
 import com.stylefeng.guns.common.constant.factory.PageFactory;
+import com.stylefeng.guns.common.persistence.model.User;
 import com.stylefeng.guns.core.base.controller.BaseController;
 import com.stylefeng.guns.core.log.LogObjectHolder;
+import com.stylefeng.guns.core.util.ToolUtil;
 import com.stylefeng.guns.modular.assess.decorator.MajorBuildMemberDecorator;
 import com.stylefeng.guns.modular.assess.model.MajorBuildMember;
 import com.stylefeng.guns.modular.assess.service.IMajorBuildMemberService;
+import com.stylefeng.guns.modular.system.service.IUserService;
 import org.apache.shiro.authz.annotation.RequiresPermissions;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -27,41 +30,43 @@ import org.springframework.web.bind.annotation.ResponseBody;
  * @Date 2020-08-19 16:35:13
  */
 @Controller
-@RequestMapping("${guns.admin-prefix}/MajorBuildMember")
+@RequestMapping("${guns.admin-prefix}/majorBuildMember")
 public class MajorBuildMemberController extends BaseController {
 
-    private String PREFIX = "/assess/majorBuildMamber/";
+    private String PREFIX = "/assess/majorBuildMember/";
 
     @Autowired
     private IMajorBuildMemberService majorBuildMemberService;
+    @Autowired
+    private IUserService userService;
 
     /**
      * 跳转到专业建设项目成员首页
      */
     @RequestMapping("")
     public String index() {
-        return PREFIX + "majorBuildMamber.html";
+        return PREFIX + "majorBuildMember.html";
     }
 
     /**
      * 跳转到添加专业建设项目成员
      */
-    @RequestMapping("/MajorBuildMember_add")
-    @RequiresPermissions(value = {"/MajorBuildMember/add"})
-    public String MajorBuildMemberAdd() {
-        return PREFIX + "MajorBuildMember_add.html";
+    @RequestMapping("/majorBuildMember_add")
+    @RequiresPermissions(value = {"/majorBuildMember/add"})
+    public String majorBuildMemberAdd() {
+        return PREFIX + "majorBuildMember_add.html";
     }
 
     /**
      * 跳转到修改专业建设项目成员
      */
-    @RequestMapping("/MajorBuildMember_update/{MajorBuildMemberId}")
-    @RequiresPermissions(value = {"/MajorBuildMember/update"})
-    public String MajorBuildMemberUpdate(@PathVariable String MajorBuildMemberId, Model model) {
-        MajorBuildMember MajorBuildMember = majorBuildMemberService.selectById(MajorBuildMemberId);
-        model.addAttribute("item",MajorBuildMember);
-        LogObjectHolder.me().set(MajorBuildMember);
-        return PREFIX + "MajorBuildMember_edit.html";
+    @RequestMapping("/majorBuildMember_update/{majorBuildMemberId}")
+    @RequiresPermissions(value = {"/majorBuildMember/update"})
+    public String majorBuildMemberUpdate(@PathVariable String majorBuildMemberId, Model model) {
+        MajorBuildMember majorBuildMember = majorBuildMemberService.selectById(majorBuildMemberId);
+        model.addAttribute("item",majorBuildMember);
+        LogObjectHolder.me().set(majorBuildMember);
+        return PREFIX + "majorBuildMember_edit.html";
     }
 
     /**
@@ -69,9 +74,17 @@ public class MajorBuildMemberController extends BaseController {
      */
     @RequestMapping(value = "/list")
     @ResponseBody
-    public Object list(MajorBuildMember MajorBuildMember) {
+    public Object list(MajorBuildMember majorBuildMember) {
         Page<MajorBuildMember> page = new PageFactory<MajorBuildMember>().defaultPage();
         EntityWrapper< MajorBuildMember> wrapper = new EntityWrapper<>();
+        if (ToolUtil.isNotEmpty(majorBuildMember.getExpand().get("user"))) {
+            User user = userService.fuzzyFind((String) majorBuildMember.getExpand().get("user"));
+            if (user != null) {
+                wrapper.eq("user_id", user.getId());
+            } else {
+                return packForBT(new PageFactory<User>().defaultPage());
+            }
+        }
         majorBuildMemberService.selectPage(page,wrapper);
         page.setRecords(new MajorBuildMemberDecorator(page.getRecords()).decorate());
         return packForBT(page);
@@ -81,10 +94,10 @@ public class MajorBuildMemberController extends BaseController {
      * 新增专业建设项目成员
      */
     @RequestMapping(value = "/add")
-    @RequiresPermissions(value = {"/MajorBuildMember/add"})
+    @RequiresPermissions(value = {"/majorBuildMember/add"})
     @ResponseBody
-    public Object add(MajorBuildMember MajorBuildMember) {
-        majorBuildMemberService.insert(MajorBuildMember);
+    public Object add(MajorBuildMember majorBuildMember) {
+        majorBuildMemberService.insert(majorBuildMember);
         return SUCCESS_TIP;
     }
 
@@ -92,10 +105,10 @@ public class MajorBuildMemberController extends BaseController {
      * 删除专业建设项目成员
      */
     @RequestMapping(value = "/delete")
-    @RequiresPermissions(value = {"/MajorBuildMember/delete"})
+    @RequiresPermissions(value = {"/majorBuildMember/delete"})
     @ResponseBody
-    public Object delete(@RequestParam Long MajorBuildMemberId) {
-        majorBuildMemberService.deleteById(MajorBuildMemberId);
+    public Object delete(@RequestParam Long majorBuildMemberId) {
+        majorBuildMemberService.deleteById(majorBuildMemberId);
         return SUCCESS_TIP;
     }
 
@@ -103,20 +116,20 @@ public class MajorBuildMemberController extends BaseController {
      * 修改专业建设项目成员
      */
     @RequestMapping(value = "/update")
-    @RequiresPermissions(value = {"/MajorBuildMember/update"})
+    @RequiresPermissions(value = {"/majorBuildMember/update"})
     @ResponseBody
-    public Object update(MajorBuildMember MajorBuildMember) {
-        majorBuildMemberService.updateById(MajorBuildMember);
+    public Object update(MajorBuildMember majorBuildMember) {
+        majorBuildMemberService.updateById(majorBuildMember);
         return SUCCESS_TIP;
     }
 
     /**
      * 专业建设项目成员详情
      */
-    @RequestMapping(value = "/detail/{MajorBuildMemberId}")
+    @RequestMapping(value = "/detail/{majorBuildMemberId}")
     @ResponseBody
-    public Object detail(@PathVariable("MajorBuildMemberId") String MajorBuildMemberId) {
-        return majorBuildMemberService.selectById(MajorBuildMemberId);
+    public Object detail(@PathVariable("majorBuildMemberId") String majorBuildMemberId) {
+        return majorBuildMemberService.selectById(majorBuildMemberId);
     }
 
 
@@ -125,7 +138,7 @@ public class MajorBuildMemberController extends BaseController {
      */
     @RequestMapping("/majorBuildMember_import")
     public String majorBuildMemberImport() {
-        return PREFIX + "majorBuildMamber_import.html";
+        return PREFIX + "majorBuildMember_import.html";
     }
 
     /**

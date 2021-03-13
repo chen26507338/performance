@@ -32,6 +32,7 @@ import com.stylefeng.guns.modular.assess.service.ISxjxAssessService;
 import org.springframework.transaction.annotation.Transactional;
 
 import javax.annotation.Resource;
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -61,6 +62,33 @@ public class SxjxAssessServiceImpl extends ServiceImpl<SxjxAssessMapper, SxjxAss
     @Autowired
     private IAssessCoefficientService assessCoefficientService;
 
+    @Override
+    @Transactional
+    public boolean updateById(SxjxAssess entity) {
+        SxjxAssess oldAssess = this.selectById(entity.getId());
+        AssessNormPoint params = new AssessNormPoint();
+        params.setUserId(oldAssess.getUserId());
+        params.setYear(oldAssess.getYear());
+        AssessNormPoint point = assessNormPointService.selectOne(new EntityWrapper<>(params));
+        point.setSxjxMain(point.getSxjxMain() - oldAssess.getMainNormPoint());
+        point.setSxjxMain(point.getSxjxMain() + entity.getMainNormPoint());
+        point.updateById();
+        return super.updateById(entity);
+    }
+
+    @Override
+    @Transactional
+    public boolean deleteById(Serializable id) {
+        SxjxAssess oldAssess = this.selectById(id);
+        AssessNormPoint params = new AssessNormPoint();
+        params.setUserId(oldAssess.getUserId());
+        params.setYear(oldAssess.getYear());
+        AssessNormPoint point = assessNormPointService.selectOne(new EntityWrapper<>(params));
+        point.setSxjxMain(point.getSxjxMain() - oldAssess.getMainNormPoint());
+        point.updateById();
+        return super.deleteById(id);
+    }
+    
     @Override
     @Transactional
     public void doAllocation(SxjxAssess sxjxAssess) {

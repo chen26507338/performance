@@ -54,6 +54,8 @@ TeachingLoadAssessInfoDlg.collectData = function() {
     .set('deanOfficeLeaderId')
     .set('normId')
     .set('result')
+    .set('courseTimes')
+    .set('courseType')
     .set('year')
     .set('deanUserId')
     .set('deptTeachingId')
