@@ -30,6 +30,7 @@ import com.stylefeng.guns.modular.assess.dao.DzbWorkAssessMapper;
 import org.springframework.transaction.annotation.Transactional;
 
 import javax.annotation.Resource;
+import java.io.Serializable;
 import java.util.*;
 
 /**
@@ -56,6 +57,34 @@ public class DzbWorkAssessServiceImpl extends ServiceImpl<DzbWorkAssessMapper, D
     @Autowired
     private IAssessCoefficientService assessCoefficientService;
 
+
+    @Override
+    @Transactional
+    public boolean updateById(DzbWorkAssess entity) {
+        DzbWorkAssess oldAssess = this.selectById(entity.getId());
+        AssessNormPoint params = new AssessNormPoint();
+        params.setUserId(oldAssess.getUserId());
+        params.setYear(oldAssess.getYear());
+        AssessNormPoint point = assessNormPointService.selectOne(new EntityWrapper<>(params));
+        point.setDzbgzMain(point.getDzbgzMain() - oldAssess.getMainNormPoint());
+        point.setDzbgzMain(point.getDzbgzMain() + entity.getMainNormPoint());
+        point.updateById();
+        return super.updateById(entity);
+    }
+
+    @Override
+    @Transactional
+    public boolean deleteById(Serializable id) {
+        DzbWorkAssess oldAssess = this.selectById(id);
+        AssessNormPoint params = new AssessNormPoint();
+        params.setUserId(oldAssess.getUserId());
+        params.setYear(oldAssess.getYear());
+        AssessNormPoint point = assessNormPointService.selectOne(new EntityWrapper<>(params));
+        point.setDzbgzMain(point.getDzbgzMain() - oldAssess.getMainNormPoint());
+        point.updateById();
+        return super.deleteById(id);
+    }
+    
     @Override
     @Transactional
     public void apply(DzbWorkAssess entity) {
@@ -278,6 +307,7 @@ public class DzbWorkAssessServiceImpl extends ServiceImpl<DzbWorkAssessMapper, D
             }
             assess.setUserId(user.getId());
             assess.setStatus(YesNo.YES.getCode());
+            assess.setDeptId(user.getDeptId());
             assess.setCoePoint(coefficient.getCoefficient());
 
             AssessNormPoint assessNormPoint = new AssessNormPoint();

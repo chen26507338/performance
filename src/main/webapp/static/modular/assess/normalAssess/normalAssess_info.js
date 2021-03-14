@@ -80,6 +80,10 @@ NormalAssessInfoDlg.collectData = function() {
         .set('result')
         .set('year')
         .set('createTime')
+        .set('mainPoint')
+        .set('inTime')
+        .set('dc')
+        .set('jb')
         .set('type')
         .set('status')
         .set('procInsId')
@@ -156,6 +160,29 @@ NormalAssessInfoDlg.addSubmit = function() {
     param['data'] = this.data;
     param['type'] = this.normalAssessInfoData.type;
     ajax.setData(JSON.stringify(param));
+    ajax.start();
+};
+/**
+ * 提交修改
+ */
+NormalAssessInfoDlg.editSubmit = function() {
+
+    this.clearData();
+    this.collectData();
+
+    if (!this.validate()) {
+        return;
+    }
+
+    //提交信息
+    var ajax = new $ax(Feng.ctxPath + "/normalAssess/update", function(data){
+        Feng.success("修改成功!");
+        window.parent.NormalAssess.table.refresh();
+        NormalAssessInfoDlg.close();
+    },function(data){
+        Feng.error("修改失败!" + data.responseJSON.message + "!");
+    });
+    ajax.set(this.normalAssessInfoData);
     ajax.start();
 };
 

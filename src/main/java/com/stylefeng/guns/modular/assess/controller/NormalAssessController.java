@@ -60,7 +60,7 @@ public class NormalAssessController extends BaseController {
         model.addAttribute("account", normalAssess.getExpand().get("account"));
         model.addAttribute("year", normalAssess.getYear());
         model.addAttribute("deptList", deptService.selectAllOn());
-        return PREFIX + "normalAssess.html";
+        return PREFIX + "normalAssess_list.html";
     }
 
     /**
@@ -91,6 +91,16 @@ public class NormalAssessController extends BaseController {
     public String normalAssessAdd(String type,Model model) {
         model.addAttribute("type", type);
         return PREFIX + "normalAssess_add.html";
+    }
+    /**
+     * 跳转到添加考核指标库
+     */
+    @RequestMapping("/normalAssess_edit/{id}")
+//    @RequiresPermissions(value = {"/normalAssess/add"})
+    public String normalAssessEdit(@PathVariable Long id,Model model) {
+        NormalAssess normalAssess = normalAssessService.selectById(id);
+        model.addAttribute("item", normalAssess);
+        return PREFIX + "normalAssess_edit.html";
     }
 
     /**
@@ -130,8 +140,6 @@ public class NormalAssessController extends BaseController {
         result.put("data", datas);
         return result;
     }
-
-
 
     /**
      * 获取考核指标库列表

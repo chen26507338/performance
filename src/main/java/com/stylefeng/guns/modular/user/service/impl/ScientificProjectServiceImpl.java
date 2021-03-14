@@ -31,6 +31,7 @@ import com.stylefeng.guns.modular.user.service.IScientificProjectService;
 import org.springframework.transaction.annotation.Transactional;
 
 import javax.annotation.Resource;
+import java.io.Serializable;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -57,6 +58,34 @@ public class ScientificProjectServiceImpl extends ServiceImpl<ScientificProjectM
     private IAssessNormPointService assessNormPointService;
     @Resource
     private GunsProperties gunsProperties;
+
+
+    @Override
+    @Transactional
+    public boolean updateById(ScientificProject entity) {
+        ScientificProject oldAssess = this.selectById(entity.getId());
+        AssessNormPoint params = new AssessNormPoint();
+        params.setUserId(oldAssess.getUserId());
+        params.setYear(oldAssess.getYear());
+        AssessNormPoint point = assessNormPointService.selectOne(new EntityWrapper<>(params));
+        point.setKygzMain(point.getKygzMain() - oldAssess.getMainNormPoint());
+        point.setKygzMain(point.getKygzMain() + entity.getMainNormPoint());
+        point.updateById();
+        return super.updateById(entity);
+    }
+
+    @Override
+    @Transactional
+    public boolean deleteById(Serializable id) {
+        ScientificProject oldAssess = this.selectById(id);
+        AssessNormPoint params = new AssessNormPoint();
+        params.setUserId(oldAssess.getUserId());
+        params.setYear(oldAssess.getYear());
+        AssessNormPoint point = assessNormPointService.selectOne(new EntityWrapper<>(params));
+        point.setKygzMain(point.getKygzMain() - oldAssess.getMainNormPoint());
+        point.updateById();
+        return super.deleteById(id);
+    }
 
     @Override
     @Transactional

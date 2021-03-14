@@ -44,6 +44,7 @@ JfwcqkAssess.check = function () {
  */
 JfwcqkAssess.formParams = function() {
     var queryData = {};
+    queryData['expand["user"]'] = $("#user").val();
     return queryData;
 };
 

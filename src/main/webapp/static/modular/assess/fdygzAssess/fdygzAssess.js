@@ -41,6 +41,7 @@ FdygzAssess.check = function () {
  */
 FdygzAssess.formParams = function() {
     var queryData = {};
+    queryData['expand["user"]'] = $("#user").val();
     return queryData;
 };
 

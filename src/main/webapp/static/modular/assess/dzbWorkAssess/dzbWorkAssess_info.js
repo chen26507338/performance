@@ -64,6 +64,8 @@ DzbWorkAssessInfoDlg.collectData = function() {
     .set('normId')
     .set('result')
     .set('year')
+    .set('name')
+    .set('zbdf')
     .set('zzbLeaderId')
     .set('dzbCommissioner')
     .set('mainNormPoint')

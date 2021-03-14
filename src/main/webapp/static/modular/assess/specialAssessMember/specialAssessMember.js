@@ -43,6 +43,7 @@ SpecialAssessMember.check = function () {
  */
 SpecialAssessMember.formParams = function() {
     var queryData = {};
+    queryData['expand["user"]'] = $("#user").val();
     return queryData;
 };
 

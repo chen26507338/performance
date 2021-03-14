@@ -8,6 +8,7 @@ import com.stylefeng.guns.common.persistence.model.User;
 import com.stylefeng.guns.core.base.controller.BaseController;
 import com.stylefeng.guns.core.log.LogObjectHolder;
 import com.stylefeng.guns.core.shiro.ShiroKit;
+import com.stylefeng.guns.core.util.ToolUtil;
 import com.stylefeng.guns.modular.assess.decorator.DzbWorkAssessDecorator;
 import com.stylefeng.guns.modular.assess.model.DzbWorkAssess;
 import com.stylefeng.guns.modular.assess.service.IDzbWorkAssessService;
@@ -91,6 +92,15 @@ public class DzbWorkAssessController extends BaseController {
     public Object list(DzbWorkAssess dzbWorkAssess) {
         Page<DzbWorkAssess> page = new PageFactory<DzbWorkAssess>().defaultPage();
         EntityWrapper< DzbWorkAssess> wrapper = new EntityWrapper<>();
+
+        if (ToolUtil.isNotEmpty(dzbWorkAssess.getExpand().get("user"))) {
+            User user = userService.fuzzyFind((String) dzbWorkAssess.getExpand().get("user"));
+            if (user != null) {
+                wrapper.eq("user_id", user.getId());
+            } else {
+                return packForBT(new PageFactory<User>().defaultPage());
+            }
+        }
         dzbWorkAssessService.selectPage(page,wrapper);
         page.setRecords(new DzbWorkAssessDecorator(page.getRecords()).decorate());
         return packForBT(page);

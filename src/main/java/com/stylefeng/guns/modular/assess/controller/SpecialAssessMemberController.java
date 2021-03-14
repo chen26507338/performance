@@ -1,8 +1,10 @@
 package com.stylefeng.guns.modular.assess.controller;
 
+import com.stylefeng.guns.common.persistence.model.User;
 import com.stylefeng.guns.core.base.controller.BaseController;
 import com.baomidou.mybatisplus.plugins.Page;
 import com.stylefeng.guns.common.constant.factory.PageFactory;
+import com.stylefeng.guns.modular.system.service.IUserService;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.stereotype.Controller;
 import org.apache.shiro.authz.annotation.RequiresPermissions;;
@@ -34,6 +36,8 @@ public class SpecialAssessMemberController extends BaseController {
 
     @Autowired
     private ISpecialAssessMemberService specialAssessMemberService;
+    @Autowired
+    private IUserService userService;
 
     /**
      * 跳转到专项工作考核首页
@@ -74,6 +78,14 @@ public class SpecialAssessMemberController extends BaseController {
     public Object list(SpecialAssessMember specialAssessMember) {
         Page<SpecialAssessMember> page = new PageFactory<SpecialAssessMember>().defaultPage();
         EntityWrapper< SpecialAssessMember> wrapper = new EntityWrapper<>();
+        if (ToolUtil.isNotEmpty(specialAssessMember.getExpand().get("user"))) {
+            User user = userService.fuzzyFind((String) specialAssessMember.getExpand().get("user"));
+            if (user != null) {
+                wrapper.eq("user_id", user.getId());
+            } else {
+                return packForBT(new PageFactory<User>().defaultPage());
+            }
+        }
         specialAssessMemberService.selectPage(page,wrapper);
         page.setRecords(new SpecialAssessMemberDecorator(page.getRecords()).decorate());
         return packForBT(page);

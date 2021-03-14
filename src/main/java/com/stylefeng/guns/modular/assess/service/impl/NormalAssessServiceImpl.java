@@ -19,9 +19,7 @@ import com.stylefeng.guns.core.shiro.ShiroKit;
 import com.stylefeng.guns.core.util.JsonMapper;
 import com.stylefeng.guns.modular.act.service.ActTaskService;
 import com.stylefeng.guns.modular.act.utils.ActUtils;
-import com.stylefeng.guns.modular.assess.model.AssessCoefficient;
-import com.stylefeng.guns.modular.assess.model.AssessNorm;
-import com.stylefeng.guns.modular.assess.model.AssessNormPoint;
+import com.stylefeng.guns.modular.assess.model.*;
 import com.stylefeng.guns.modular.assess.service.IAssessCoefficientService;
 import com.stylefeng.guns.modular.assess.service.IAssessNormPointService;
 import com.stylefeng.guns.modular.assess.service.IAssessNormService;
@@ -32,12 +30,12 @@ import com.stylefeng.guns.modular.system.service.IUserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import com.baomidou.mybatisplus.service.impl.ServiceImpl;
-import com.stylefeng.guns.modular.assess.model.NormalAssess;
 import com.stylefeng.guns.modular.assess.dao.NormalAssessMapper;
 import com.stylefeng.guns.modular.assess.service.INormalAssessService;
 import org.springframework.transaction.annotation.Transactional;
 
 import javax.annotation.Resource;
+import java.io.Serializable;
 import java.util.*;
 
 /**
@@ -63,6 +61,34 @@ public class NormalAssessServiceImpl extends ServiceImpl<NormalAssessMapper, Nor
     @Autowired
     private IAssessCoefficientService assessCoefficientService;
 
+
+    @Override
+    @Transactional
+    public boolean updateById(NormalAssess entity) {
+        NormalAssess oldAssess = this.selectById(entity.getId());
+        AssessNormPoint params = new AssessNormPoint();
+        params.setUserId(oldAssess.getUserId());
+        params.setYear(oldAssess.getYear());
+        AssessNormPoint point = assessNormPointService.selectOne(new EntityWrapper<>(params));
+        double mainPoint = (double) ReflectUtil.getFieldValue(point, entity.getType() + "Main") - oldAssess.getMainPoint();
+        ReflectUtil.setFieldValue(point, entity.getType() + "Main", mainPoint+entity.getMainPoint());
+        point.updateById();
+        return super.updateById(entity);
+    }
+
+    @Override
+    @Transactional
+    public boolean deleteById(Serializable id) {
+        NormalAssess oldAssess = this.selectById(id);
+        AssessNormPoint params = new AssessNormPoint();
+        params.setUserId(oldAssess.getUserId());
+        params.setYear(oldAssess.getYear());
+        AssessNormPoint point = assessNormPointService.selectOne(new EntityWrapper<>(params));
+        double mainPoint = (double) ReflectUtil.getFieldValue(point, oldAssess.getType() + "Main") - oldAssess.getMainPoint();
+        ReflectUtil.setFieldValue(point, oldAssess.getType() + "Main", mainPoint);
+        point.updateById();
+        return super.deleteById(id);
+    }
 
     @Override
     @Transactional(rollbackFor = Exception.class)

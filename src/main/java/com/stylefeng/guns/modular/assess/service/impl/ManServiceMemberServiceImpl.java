@@ -10,6 +10,7 @@ import com.stylefeng.guns.config.properties.GunsProperties;
 import com.stylefeng.guns.core.exception.GunsException;
 import com.stylefeng.guns.modular.assess.model.AssessCoefficient;
 import com.stylefeng.guns.modular.assess.model.AssessNormPoint;
+import com.stylefeng.guns.modular.assess.model.ManServiceMember;
 import com.stylefeng.guns.modular.assess.service.IAssessCoefficientService;
 import com.stylefeng.guns.modular.assess.service.IAssessNormPointService;
 import com.stylefeng.guns.modular.system.service.IUserService;
@@ -23,6 +24,7 @@ import com.stylefeng.guns.modular.assess.service.IManServiceMemberService;
 import org.springframework.transaction.annotation.Transactional;
 
 import javax.annotation.Resource;
+import java.io.Serializable;
 import java.util.List;
 
 /**
@@ -43,6 +45,33 @@ public class ManServiceMemberServiceImpl extends ServiceImpl<ManServiceMemberMap
     @Autowired
     private IUserService userService;
 
+
+    @Override
+    @Transactional
+    public boolean updateById(ManServiceMember entity) {
+        ManServiceMember oldAssess = this.selectById(entity.getId());
+        AssessNormPoint params = new AssessNormPoint();
+        params.setUserId(oldAssess.getUserId());
+        params.setYear(oldAssess.getYear());
+        AssessNormPoint point = assessNormPointService.selectOne(new EntityWrapper<>(params));
+        point.setGlfwMain(point.getGlfwMain() - oldAssess.getMainNormPoint());
+        point.setGlfwMain(point.getGlfwMain() + entity.getMainNormPoint());
+        point.updateById();
+        return super.updateById(entity);
+    }
+
+    @Override
+    @Transactional
+    public boolean deleteById(Serializable id) {
+        ManServiceMember oldAssess = this.selectById(id);
+        AssessNormPoint params = new AssessNormPoint();
+        params.setUserId(oldAssess.getUserId());
+        params.setYear(oldAssess.getYear());
+        AssessNormPoint point = assessNormPointService.selectOne(new EntityWrapper<>(params));
+        point.setGlfwMain(point.getGlfwMain() - oldAssess.getMainNormPoint());
+        point.updateById();
+        return super.deleteById(id);
+    }
     @Override
     @Transactional
     public void importAssess(ManServiceMember manServiceMember) {

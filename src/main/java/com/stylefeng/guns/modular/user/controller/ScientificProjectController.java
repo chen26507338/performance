@@ -99,6 +99,14 @@ public class ScientificProjectController extends BaseController {
         if (scientificProject.getUserId() != null) {
             wrapper.eq("user_id", scientificProject.getUserId());
         }
+        if (ToolUtil.isNotEmpty(scientificProject.getExpand().get("user"))) {
+            User user = userService.fuzzyFind((String) scientificProject.getExpand().get("user"));
+            if (user != null) {
+                wrapper.eq("user_id", user.getId());
+            } else {
+                return packForBT(new PageFactory<User>().defaultPage());
+            }
+        }
         scientificProjectService.selectPage(page,wrapper);
         page.setRecords(new ScientificProjectDecorator(page.getRecords()).decorate());
         return packForBT(page);

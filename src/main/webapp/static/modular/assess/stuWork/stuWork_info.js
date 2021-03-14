@@ -66,6 +66,8 @@ StuWorkInfoDlg.collectData = function() {
     .set('stuWorkCommissioner')
     .set('normId')
     .set('normCode')
+    .set('assessName')
+    .set('mixture')
     .set('result')
     .set('year')
     .set('studentsOfficeLeaderId')

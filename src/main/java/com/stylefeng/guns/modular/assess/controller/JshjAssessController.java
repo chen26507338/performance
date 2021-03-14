@@ -3,11 +3,14 @@ package com.stylefeng.guns.modular.assess.controller;
 import com.baomidou.mybatisplus.mapper.EntityWrapper;
 import com.baomidou.mybatisplus.plugins.Page;
 import com.stylefeng.guns.common.constant.factory.PageFactory;
+import com.stylefeng.guns.common.persistence.model.User;
 import com.stylefeng.guns.core.base.controller.BaseController;
 import com.stylefeng.guns.core.log.LogObjectHolder;
+import com.stylefeng.guns.core.util.ToolUtil;
 import com.stylefeng.guns.modular.assess.decorator.JshjAssessDecorator;
 import com.stylefeng.guns.modular.assess.model.JshjAssess;
 import com.stylefeng.guns.modular.assess.service.IJshjAssessService;
+import com.stylefeng.guns.modular.system.service.IUserService;
 import org.apache.shiro.authz.annotation.RequiresPermissions;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -34,6 +37,8 @@ public class JshjAssessController extends BaseController {
 
     @Autowired
     private IJshjAssessService jshjAssessService;
+    @Autowired
+    private IUserService userService;
 
     /**
      * 跳转到竞赛获奖首页
@@ -74,6 +79,15 @@ public class JshjAssessController extends BaseController {
     public Object list(JshjAssess jshjAssess) {
         Page<JshjAssess> page = new PageFactory<JshjAssess>().defaultPage();
         EntityWrapper< JshjAssess> wrapper = new EntityWrapper<>();
+
+        if (ToolUtil.isNotEmpty(jshjAssess.getExpand().get("user"))) {
+            User user = userService.fuzzyFind((String) jshjAssess.getExpand().get("user"));
+            if (user != null) {
+                wrapper.eq("user_id", user.getId());
+            } else {
+                return packForBT(new PageFactory<User>().defaultPage());
+            }
+        }
         jshjAssessService.selectPage(page,wrapper);
         page.setRecords(new JshjAssessDecorator(page.getRecords()).decorate());
         return packForBT(page);

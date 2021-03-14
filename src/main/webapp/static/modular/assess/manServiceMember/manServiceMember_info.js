@@ -53,6 +53,8 @@ ManServiceMemberInfoDlg.collectData = function() {
     .set('collegeNormPoint')
     .set('status')
     .set('coePoint')
+    .set('projectName')
+    .set('assessName')
     .set('year')
     .set('mServiceId')
     ;

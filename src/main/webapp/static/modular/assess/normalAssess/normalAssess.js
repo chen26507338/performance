@@ -85,7 +85,7 @@ NormalAssess.openNormalAssessDetail = function () {
             area: ['800px', '420px'], //宽高
             fix: false, //不固定
             maxmin: true,
-            content: Feng.ctxPath + '/normalAssess/normalAssess_update/' + NormalAssess.seItem.id
+            content: Feng.ctxPath + '/normalAssess/normalAssess_edit/' + NormalAssess.seItem.id
         });
     }
 };

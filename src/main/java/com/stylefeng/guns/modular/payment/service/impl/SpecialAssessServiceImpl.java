@@ -19,6 +19,7 @@ import com.stylefeng.guns.modular.job.model.Dept;
 import com.stylefeng.guns.modular.job.service.IDeptService;
 import com.stylefeng.guns.modular.system.service.IUserService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.cache.annotation.CacheEvict;
 import org.springframework.cache.annotation.Cacheable;
 import org.springframework.stereotype.Service;
 import com.baomidou.mybatisplus.service.impl.ServiceImpl;
@@ -57,6 +58,18 @@ public class SpecialAssessServiceImpl extends ServiceImpl<SpecialAssessMapper, S
     @Cacheable(value = CACHE_NAME,key = "'"+CACHE_ENTITY+"'+#id")
     public SpecialAssess selectById(Serializable id) {
         return super.selectById(id);
+    }
+
+    @Override
+    @CacheEvict(value = CACHE_NAME,allEntries = true)
+    public boolean updateById(SpecialAssess entity) {
+        return super.updateById(entity);
+    }
+
+    @Override
+    @CacheEvict(value = CACHE_NAME,allEntries = true)
+    public boolean deleteById(Serializable id) {
+        return super.deleteById(id);
     }
 
     @Override

@@ -3,11 +3,14 @@ package com.stylefeng.guns.modular.assess.controller;
 import com.baomidou.mybatisplus.mapper.EntityWrapper;
 import com.baomidou.mybatisplus.plugins.Page;
 import com.stylefeng.guns.common.constant.factory.PageFactory;
+import com.stylefeng.guns.common.persistence.model.User;
 import com.stylefeng.guns.core.base.controller.BaseController;
 import com.stylefeng.guns.core.log.LogObjectHolder;
+import com.stylefeng.guns.core.util.ToolUtil;
 import com.stylefeng.guns.modular.assess.decorator.JfwcqkAssessDecorator;
 import com.stylefeng.guns.modular.assess.model.JfwcqkAssess;
 import com.stylefeng.guns.modular.assess.service.IJfwcqkAssessService;
+import com.stylefeng.guns.modular.system.service.IUserService;
 import org.apache.shiro.authz.annotation.RequiresPermissions;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -34,6 +37,8 @@ public class JfwcqkAssessController extends BaseController {
 
     @Autowired
     private IJfwcqkAssessService jfwcqkAssessService;
+    @Autowired
+    private IUserService userService;
 
     /**
      * 跳转到经费完成情况考核首页
@@ -74,6 +79,15 @@ public class JfwcqkAssessController extends BaseController {
     public Object list(JfwcqkAssess jfwcqkAssess) {
         Page<JfwcqkAssess> page = new PageFactory<JfwcqkAssess>().defaultPage();
         EntityWrapper< JfwcqkAssess> wrapper = new EntityWrapper<>();
+
+        if (ToolUtil.isNotEmpty(jfwcqkAssess.getExpand().get("user"))) {
+            User user = userService.fuzzyFind((String) jfwcqkAssess.getExpand().get("user"));
+            if (user != null) {
+                wrapper.eq("user_id", user.getId());
+            } else {
+                return packForBT(new PageFactory<User>().defaultPage());
+            }
+        }
         jfwcqkAssessService.selectPage(page,wrapper);
         page.setRecords(new JfwcqkAssessDecorator(page.getRecords()).decorate());
         return packForBT(page);

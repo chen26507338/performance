@@ -4,17 +4,12 @@
         <div class="form-horizontal" id="NormalAssessForm">
 
             <input type="hidden" id="id" value="${item.id}">
+            <input type="hidden" id="type" value="${item.type}">
 
             <div class="row">
 
                 <div class="col-sm-6 b-r">
-                    <#input id="deptId" name="部门ID" value="${item.deptId}" underline="true"/>
-                </div>
-                <div class="col-sm-6 b-r">
-                    <#input id="userId" name="用户ID" value="${item.userId}" underline="true"/>
-                </div>
-                <div class="col-sm-6 b-r">
-                    <#input id="normId" name="指标ID" value="${item.normId}" underline="true"/>
+                    <#input id="mainPoint" name="校级分" value="${item.mainPoint}" underline="true"/>
                 </div>
                 <div class="col-sm-6 b-r">
                     <#input id="result" name="考核结果" value="${item.result}" underline="true"/>
@@ -22,17 +17,19 @@
                 <div class="col-sm-6 b-r">
                     <#input id="year" name="年度" value="${item.year}" underline="true"/>
                 </div>
+                @select(item.type){
+                @case "jxdd":
                 <div class="col-sm-6 b-r">
-                        <#input id="createTime" name="创建时间" underline="true" value="${item.createTime}"
-                        type="text" dateType="date" format="yyyy-MM-dd"/>
+                    <#input id="dc" name="等次" value="${item.dc}" underline="true"/>
                 </div>
                 <div class="col-sm-6 b-r">
-                    <#select id="status" name="状态" items="${constant.getDictsByName('考核状态')}"
-                    itemLabel="name" itemValue="num" value="${item.status}" underline="true"/>
+                    <#input id="jb" name="级别" value="${item.jb}" underline="true"/>
                 </div>
+                @case "ldjl":
                 <div class="col-sm-6 b-r">
-                    <#input id="procInsId" name="流程实例ID" value="${item.procInsId}" underline="true"/>
+                    <#input id="inTime" name="时间" value="${item.inTime}" underline="true"/>
                 </div>
+                @}
             </div>
 
             <div class="row btn-group-m-t">

@@ -3,11 +3,15 @@ package com.stylefeng.guns.modular.assess.controller;
 import com.baomidou.mybatisplus.mapper.EntityWrapper;
 import com.baomidou.mybatisplus.plugins.Page;
 import com.stylefeng.guns.common.constant.factory.PageFactory;
+import com.stylefeng.guns.common.persistence.model.User;
 import com.stylefeng.guns.core.base.controller.BaseController;
 import com.stylefeng.guns.core.log.LogObjectHolder;
+import com.stylefeng.guns.core.util.ToolUtil;
 import com.stylefeng.guns.modular.assess.decorator.ShpxgzAssessDecorator;
 import com.stylefeng.guns.modular.assess.model.ShpxgzAssess;
 import com.stylefeng.guns.modular.assess.service.IShpxgzAssessService;
+import com.stylefeng.guns.modular.system.service.IUserService;
+import net.bytebuddy.asm.Advice;
 import org.apache.shiro.authz.annotation.RequiresPermissions;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -34,6 +38,8 @@ public class ShpxgzAssessController extends BaseController {
 
     @Autowired
     private IShpxgzAssessService shpxgzAssessService;
+    @Autowired
+    private IUserService userService;
 
     /**
      * 跳转到社会培训工作考核首页
@@ -74,6 +80,15 @@ public class ShpxgzAssessController extends BaseController {
     public Object list(ShpxgzAssess shpxgzAssess) {
         Page<ShpxgzAssess> page = new PageFactory<ShpxgzAssess>().defaultPage();
         EntityWrapper< ShpxgzAssess> wrapper = new EntityWrapper<>();
+
+        if (ToolUtil.isNotEmpty(shpxgzAssess.getExpand().get("user"))) {
+            User user = userService.fuzzyFind((String) shpxgzAssess.getExpand().get("user"));
+            if (user != null) {
+                wrapper.eq("user_id", user.getId());
+            } else {
+                return packForBT(new PageFactory<User>().defaultPage());
+            }
+        }
         shpxgzAssessService.selectPage(page,wrapper);
         page.setRecords(new ShpxgzAssessDecorator(page.getRecords()).decorate());
         return packForBT(page);

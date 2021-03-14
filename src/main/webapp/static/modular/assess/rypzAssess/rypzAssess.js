@@ -17,7 +17,7 @@ RypzAssess.initColumn = function () {
        ,{title: '职工编号', field:'expand.user.account', visible: true, align: 'center', valign: 'middle'}
        ,{title: '职工姓名', field:'expand.user.name', visible: true, align: 'center', valign: 'middle'}
        ,{title: '考核项目', field:'assessName', visible: true, align: 'center', valign: 'middle'}
-       ,{title: '校积分', field:'mainPoint', visible: true, align: 'center', valign: 'middle'}
+       ,{title: '校级分', field:'mainPoint', visible: true, align: 'center', valign: 'middle'}
        ,{title: '年度', field:'year', visible: true, align: 'center', valign: 'middle'}
     ];
 };

@@ -63,6 +63,8 @@ ScientificProjectInfoDlg.collectData = function() {
     .set('type')
     .set('startTime')
     .set('endTime')
+    .set('assessName')
+    .set('mainNormPoint')
     .set('expenditure')
     .set('rank')
     .set('userId')

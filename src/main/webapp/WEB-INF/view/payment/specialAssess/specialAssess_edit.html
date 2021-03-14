@@ -6,9 +6,8 @@
             <input type="hidden" id="id" value="${item.id}">
 
             <div class="row">
-
                 <div class="col-sm-6 b-r">
-                    <#input id="deptId" name="部门ID" value="${item.deptId}" underline="true"/>
+                    <#input id="zxNo" name="编号" value="${item.zxNo}" underline="true"/>
                 </div>
                 <div class="col-sm-6 b-r">
                     <#input id="pointPercent" name="积分百分比" value="${item.pointPercent}" underline="true"/>
@@ -30,22 +29,18 @@
                     <#input id="isAllPoint" name="是否全年" value="${item.isAllPoint}" underline="true"/>
                 </div>
                 <div class="col-sm-6 b-r">
-                    <#input id="status" name="状态" value="${item.status}" underline="true"/>
-                </div>
-                <div class="col-sm-6 b-r">
                     <#input id="referencePoint" name="申请参考分" value="${item.referencePoint}" underline="true"/>
                 </div>
                 <div class="col-sm-6 b-r">
-                    <#input id="isJr" name="是否计入" value="${item.isJr}" underline="true"/>
+                    <#select id="isJr" name="是否计入" items="${constant.getDictsByName('是否')}"
+                    itemLabel="name" itemValue="num" value="${item.isJr+''}" underline="true"/>
                 </div>
                 <div class="col-sm-6 b-r">
-                    <#input id="isYjkh" name="是否记入部门优绩考核" value="${item.isYjkh}" underline="true"/>
+                    <#select id="isYjkh" name="是否记入部门优绩考核" items="${constant.getDictsByName('是否')}"
+                    itemLabel="name" itemValue="num" value="${item.isYjkh+''}" underline="true"/>
                 </div>
                 <div class="col-sm-6 b-r">
                     <#input id="projectContent" name="申请项目内容" value="${item.projectContent}" underline="true"/>
-                </div>
-                <div class="col-sm-6 b-r">
-                    <#input id="zxNo" name="编号" value="${item.zxNo}" underline="true"/>
                 </div>
             </div>
 

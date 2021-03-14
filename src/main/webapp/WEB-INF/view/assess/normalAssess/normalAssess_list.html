@@ -1,0 +1,101 @@
+@layout("/common/_container.html"){
+<div class="row">
+    <div class="col-sm-12">
+        <div class="ibox float-e-margins">
+            <div class="ibox-title">
+                <h5>考核管理</h5>
+            </div>
+            <div class="ibox-content">
+                <div class="row row-lg">
+                    <div class="col-sm-12">
+                        <div class="row">
+                            <div class="col-sm-3">
+                                <#NameCon id="account" name="职工编号" value="${account!}"/>
+                            </div>
+                            <div class="col-sm-3">
+                                <#NameCon id="name" name="职工姓名"/>
+                            </div>
+                            <div class="col-sm-3">
+                                <#NameCon id="year" name="年度" value="${year!}"/>
+                            </div>
+                            <div class=col-sm-3>
+                                <#SelectCon id="deptId" name="部门" items="${deptList}"
+                                itemLabel="name" itemValue="id" />
+                            </div>
+                            <div class=col-sm-2>
+                                <#SelectCon id="status" name="状态" items="${constant.getDictsByName('考核状态')}"
+                                itemLabel="name" itemValue="num" />
+                            </div>
+                            <div class=col-sm-3>
+                                <#TimeCon id="createTime" name="创建时间" isTime="true" pattern="yyyy/MM/dd HH:mm:ss" />
+                            </div>
+                            <div class="col-sm-2">
+                                <#button name="搜索" icon="fa-search" clickFun="NormalAssess.search()"/>
+                            </div>
+                        </div>
+                        <div class="hidden-xs" id="NormalAssessTableToolbar" role="group">
+
+                            <#button name="添加" icon="fa-plus" clickFun="NormalAssess.openAddNormalAssess()"/>
+                            <#button name="导入绩效数据" icon="fa-plus" clickFun="NormalAssess.openImportNormalAssess()" space="true"/>
+                            <#button name="导入现有绩效数据" icon="fa-plus" clickFun="NormalAssess.openImportAssess()" space="true"/>
+                            @if(shiro.hasPermission("/normalAssess/add")){
+                            @}
+                            @if(shiro.hasPermission("/normalAssess/update")){
+                                <#button name="修改" icon="fa-plus" clickFun="NormalAssess.openNormalAssessDetail()" space="true"/>
+                            @}
+                            @if(shiro.hasPermission("/normalAssess/delete")){
+                                <#button name="删除" icon="fa-plus" clickFun="NormalAssess.delete()" space="true"/>
+                            @}
+                        </div>
+                        <#table id="NormalAssessTable"/>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<script>
+    var type = '${type}';
+    /**
+     * 考核指标库管理初始化
+     */
+    var NormalAssess = {
+        id: "NormalAssessTable",	//表格id
+        seItem: null,		//选中的条目
+        table: null,
+        layerIndex: -1
+    };
+
+    /**
+     * 初始化表格的列
+     */
+    NormalAssess.initColumn = function () {
+        return [
+            {field: 'selectItem', radio: true}
+            ,{title: '职工编号', field:'expand.account', visible: true, align: 'center', valign: 'middle'}
+            ,{title: '职工姓名', field:'expand.userName', visible: true, align: 'center', valign: 'middle'}
+            ,{title: '部门', field:'expand.deptName', visible: true, align: 'center', valign: 'middle'}
+            ,{title: '指标', field:'expand.normName', visible: true, align: 'center', valign: 'middle'}
+            @if(type == "jxdd"){
+            ,{title: '等次', field:'dc', visible: true, align: 'center', valign: 'middle'}
+            ,{title: '级别', field:'jb', visible: true, align: 'center', valign: 'middle'}
+            @}
+            @if(type == "ldjl"){
+            ,{title: '时间', field:'inTime', visible: true, align: 'center', valign: 'middle'}
+            @}
+            ,{title: '考核系数', field:'coePoint', visible: true, align: 'center', valign: 'middle'}
+            ,{title: '校级标准分', field:'mainNormPoint', visible: true, align: 'center', valign: 'middle'}
+            ,{title: '院级浮动值', field:'collegeNormPoint', visible: true, align: 'center', valign: 'middle'}
+            ,{title: '考核结果', field:'result', visible: true, align: 'center', valign: 'middle'}
+            ,{title: '校级分', field:'mainPoint', visible: true, align: 'center', valign: 'middle'}
+            ,{title: '院级分', field:'expand.collegePoint', visible: true, align: 'center', valign: 'middle'}
+            ,{title: '年度', field:'year', visible: true, align: 'center', valign: 'middle'}
+            @if(type != "ldjl"){
+            ,{title: '创建时间', field:'createTime', visible: true, align: 'center', valign: 'middle'}
+            @}
+            ,{title: '状态', field:'status', visible: true, align: 'center', valign: 'middle',formatter:function(value, row, index){return row.expand.statusDict;}}
+        ];
+    };
+</script>
+<script src="${ctxPath}/static/modular/assess/normalAssess/normalAssess.js"></script>
+@}

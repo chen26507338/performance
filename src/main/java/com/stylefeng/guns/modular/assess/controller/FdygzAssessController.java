@@ -1,6 +1,7 @@
 package com.stylefeng.guns.modular.assess.controller;
 
 import com.stylefeng.guns.common.constant.state.YesNo;
+import com.stylefeng.guns.common.persistence.model.User;
 import com.stylefeng.guns.core.base.controller.BaseController;
 import com.baomidou.mybatisplus.plugins.Page;
 import com.stylefeng.guns.common.constant.factory.PageFactory;
@@ -8,6 +9,7 @@ import com.stylefeng.guns.modular.assess.decorator.FdygzAssessDecorator;
 import com.stylefeng.guns.modular.assess.decorator.FdygzAssessMemberDecorator;
 import com.stylefeng.guns.modular.assess.model.FdygzAssess;
 import com.stylefeng.guns.modular.assess.model.FdygzAssessMember;
+import com.stylefeng.guns.modular.system.service.IUserService;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.stereotype.Controller;
 import org.apache.shiro.authz.annotation.RequiresPermissions;;
@@ -39,6 +41,8 @@ public class FdygzAssessController extends BaseController {
 
     @Autowired
     private IFdygzAssessService fdygzAssessService;
+    @Autowired
+    private IUserService userService;
 
     /**
      * 跳转到辅导员工作考核首页
@@ -79,6 +83,15 @@ public class FdygzAssessController extends BaseController {
     public Object list(FdygzAssess fdygzAssess) {
         Page<FdygzAssess> page = new PageFactory<FdygzAssess>().defaultPage();
         EntityWrapper< FdygzAssess> wrapper = new EntityWrapper<>();
+
+        if (ToolUtil.isNotEmpty(fdygzAssess.getExpand().get("user"))) {
+            User user = userService.fuzzyFind((String) fdygzAssess.getExpand().get("user"));
+            if (user != null) {
+                wrapper.eq("user_id", user.getId());
+            } else {
+                return packForBT(new PageFactory<User>().defaultPage());
+            }
+        }
         fdygzAssessService.selectPage(page,wrapper);
         page.setRecords(new FdygzAssessDecorator(page.getRecords()).decorate());
         return packForBT(page);

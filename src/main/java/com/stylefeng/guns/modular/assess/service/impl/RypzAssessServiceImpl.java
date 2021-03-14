@@ -11,10 +11,7 @@ import com.stylefeng.guns.common.persistence.model.User;
 import com.stylefeng.guns.config.properties.GunsProperties;
 import com.stylefeng.guns.core.exception.GunsException;
 import com.stylefeng.guns.modular.assess.dao.RypzAssessMapper;
-import com.stylefeng.guns.modular.assess.model.AssessCoefficient;
-import com.stylefeng.guns.modular.assess.model.AssessNormPoint;
-import com.stylefeng.guns.modular.assess.model.NormalAssess;
-import com.stylefeng.guns.modular.assess.model.RypzAssess;
+import com.stylefeng.guns.modular.assess.model.*;
 import com.stylefeng.guns.modular.assess.service.IAssessNormPointService;
 import com.stylefeng.guns.modular.assess.service.IAssessCoefficientService;
 import com.stylefeng.guns.modular.assess.service.IRypzAssessService;
@@ -24,6 +21,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import javax.annotation.Resource;
+import java.io.Serializable;
 import java.util.Date;
 import java.util.List;
 
@@ -43,6 +41,34 @@ public class RypzAssessServiceImpl extends ServiceImpl<RypzAssessMapper, RypzAss
     @Autowired
     private IAssessNormPointService assessNormPointService;
 
+
+    @Override
+    @Transactional
+    public boolean updateById(RypzAssess entity) {
+        RypzAssess oldAssess = this.selectById(entity.getId());
+        AssessNormPoint params = new AssessNormPoint();
+        params.setUserId(oldAssess.getUserId());
+        params.setYear(oldAssess.getYear());
+        AssessNormPoint point = assessNormPointService.selectOne(new EntityWrapper<>(params));
+        point.setRypzMain(point.getRypzMain() - oldAssess.getMainPoint());
+        point.setRypzMain(point.getRypzMain() + entity.getMainPoint());
+        point.updateById();
+        return super.updateById(entity);
+    }
+
+    @Override
+    @Transactional
+    public boolean deleteById(Serializable id) {
+        RypzAssess oldAssess = this.selectById(id);
+        AssessNormPoint params = new AssessNormPoint();
+        params.setUserId(oldAssess.getUserId());
+        params.setYear(oldAssess.getYear());
+        AssessNormPoint point = assessNormPointService.selectOne(new EntityWrapper<>(params));
+        point.setRypzMain(point.getRypzMain() - oldAssess.getMainPoint());
+        point.updateById();
+        return super.deleteById(id);
+    }
+    
     @Override
     @Transactional
     public void importAssess(RypzAssess rypzAssess) {

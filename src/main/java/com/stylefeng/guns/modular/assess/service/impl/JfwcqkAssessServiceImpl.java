@@ -8,9 +8,7 @@ import com.stylefeng.guns.common.persistence.model.User;
 import com.stylefeng.guns.config.properties.GunsProperties;
 import com.stylefeng.guns.core.exception.GunsException;
 import com.stylefeng.guns.modular.act.service.ActTaskService;
-import com.stylefeng.guns.modular.assess.model.AssessCoefficient;
-import com.stylefeng.guns.modular.assess.model.AssessNormPoint;
-import com.stylefeng.guns.modular.assess.model.ShpxgzAssess;
+import com.stylefeng.guns.modular.assess.model.*;
 import com.stylefeng.guns.modular.assess.service.IAssessCoefficientService;
 import com.stylefeng.guns.modular.assess.service.IAssessNormPointService;
 import com.stylefeng.guns.modular.assess.service.IAssessNormService;
@@ -18,12 +16,12 @@ import com.stylefeng.guns.modular.system.service.IUserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import com.baomidou.mybatisplus.service.impl.ServiceImpl;
-import com.stylefeng.guns.modular.assess.model.JfwcqkAssess;
 import com.stylefeng.guns.modular.assess.dao.JfwcqkAssessMapper;
 import com.stylefeng.guns.modular.assess.service.IJfwcqkAssessService;
 import org.springframework.transaction.annotation.Transactional;
 
 import javax.annotation.Resource;
+import java.io.Serializable;
 import java.util.List;
 
 /**
@@ -48,6 +46,33 @@ public class JfwcqkAssessServiceImpl extends ServiceImpl<JfwcqkAssessMapper, Jfw
     private IAssessNormPointService assessNormPointService;
     @Autowired
     private IAssessCoefficientService assessCoefficientService;
+
+    @Override
+    @Transactional
+    public boolean updateById(JfwcqkAssess entity) {
+        JfwcqkAssess oldAssess = this.selectById(entity.getId());
+        AssessNormPoint params = new AssessNormPoint();
+        params.setUserId(oldAssess.getUserId());
+        params.setYear(oldAssess.getYear());
+        AssessNormPoint point = assessNormPointService.selectOne(new EntityWrapper<>(params));
+        point.setJfwcqkMain(point.getJfwcqkMain() - oldAssess.getMainNormPoint());
+        point.setJfwcqkMain(point.getJfwcqkMain() + entity.getMainNormPoint());
+        point.updateById();
+        return super.updateById(entity);
+    }
+
+    @Override
+    @Transactional
+    public boolean deleteById(Serializable id) {
+        JfwcqkAssess oldAssess = this.selectById(id);
+        AssessNormPoint params = new AssessNormPoint();
+        params.setUserId(oldAssess.getUserId());
+        params.setYear(oldAssess.getYear());
+        AssessNormPoint point = assessNormPointService.selectOne(new EntityWrapper<>(params));
+        point.setJfwcqkMain(point.getJfwcqkMain() - oldAssess.getMainNormPoint());
+        point.updateById();
+        return super.deleteById(id);
+    }
 
     @Override
     @Transactional

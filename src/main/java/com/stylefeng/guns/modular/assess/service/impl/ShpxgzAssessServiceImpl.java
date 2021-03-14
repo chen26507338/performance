@@ -11,7 +11,7 @@ import com.stylefeng.guns.core.exception.GunsException;
 import com.stylefeng.guns.modular.act.service.ActTaskService;
 import com.stylefeng.guns.modular.assess.model.AssessCoefficient;
 import com.stylefeng.guns.modular.assess.model.AssessNormPoint;
-import com.stylefeng.guns.modular.assess.model.DzbWorkAssess;
+import com.stylefeng.guns.modular.assess.model.ShpxgzAssess;
 import com.stylefeng.guns.modular.assess.service.IAssessCoefficientService;
 import com.stylefeng.guns.modular.assess.service.IAssessNormPointService;
 import com.stylefeng.guns.modular.assess.service.IAssessNormService;
@@ -25,6 +25,7 @@ import com.stylefeng.guns.modular.assess.service.IShpxgzAssessService;
 import org.springframework.transaction.annotation.Transactional;
 
 import javax.annotation.Resource;
+import java.io.Serializable;
 import java.util.List;
 
 /**
@@ -49,6 +50,32 @@ public class ShpxgzAssessServiceImpl extends ServiceImpl<ShpxgzAssessMapper, Shp
     @Autowired
     private IAssessCoefficientService assessCoefficientService;
 
+    @Override
+    @Transactional
+    public boolean updateById(ShpxgzAssess entity) {
+        ShpxgzAssess oldAssess = this.selectById(entity.getId());
+        AssessNormPoint params = new AssessNormPoint();
+        params.setUserId(oldAssess.getUserId());
+        params.setYear(oldAssess.getYear());
+        AssessNormPoint point = assessNormPointService.selectOne(new EntityWrapper<>(params));
+        point.setShpxgzMain(point.getShpxgzMain() - oldAssess.getMainNormPoint());
+        point.setShpxgzMain(point.getShpxgzMain() + entity.getMainNormPoint());
+        point.updateById();
+        return super.updateById(entity);
+    }
+
+    @Override
+    @Transactional
+    public boolean deleteById(Serializable id) {
+        ShpxgzAssess oldAssess = this.selectById(id);
+        AssessNormPoint params = new AssessNormPoint();
+        params.setUserId(oldAssess.getUserId());
+        params.setYear(oldAssess.getYear());
+        AssessNormPoint point = assessNormPointService.selectOne(new EntityWrapper<>(params));
+        point.setShpxgzMain(point.getShpxgzMain() - oldAssess.getMainNormPoint());
+        point.updateById();
+        return super.deleteById(id);
+    }
     @Override
     @Transactional
     public void importAssess(ShpxgzAssess shpxgzAssess) {

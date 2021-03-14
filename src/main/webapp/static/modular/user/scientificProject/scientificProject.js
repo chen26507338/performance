@@ -62,6 +62,7 @@ ScientificProject.openImportAssess = function () {
 ScientificProject.formParams = function() {
     var queryData = {};
     queryData['userId'] = $("#userId").val();
+    queryData['expand["user"]'] = $("#user").val();
     queryData['status'] = $("#status").val();
     return queryData;
 };
