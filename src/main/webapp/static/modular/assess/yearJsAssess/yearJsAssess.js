@@ -48,6 +48,8 @@ YearJsAssess.formParams = function() {
     var queryData = {};
     queryData['type'] = $("#type").val();
     queryData['level'] = $("#level").val();
+    queryData['year'] = $("#year").val();
+    queryData['status'] = $("#status").val();
     queryData['expand["userInfo"]'] = $("#userInfo").val();
     return queryData;
 };

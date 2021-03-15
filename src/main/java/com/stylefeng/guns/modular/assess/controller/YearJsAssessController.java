@@ -131,6 +131,12 @@ public class YearJsAssessController extends BaseController {
         if (StrUtil.isNotBlank(yearJsAssess.getLevel())) {
             wrapper.eq("level", yearJsAssess.getLevel());
         }
+        if (StrUtil.isNotBlank(yearJsAssess.getYear())) {
+            wrapper.eq("year", yearJsAssess.getYear());
+        }
+        if (yearJsAssess.getStatus() != null) {
+            wrapper.eq("status", yearJsAssess.getStatus());
+        }
         String userInfo = (String) yearJsAssess.getExpand().get("userInfo");
         if (StrUtil.isNotBlank(userInfo)) {
             User user = userService.fuzzyFind(userInfo);

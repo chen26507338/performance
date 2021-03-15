@@ -12,6 +12,9 @@
                             <div class="col-lg-3 col-sm-12">
                                 <#NameCon id="userInfo" name="职工信息" placeholder="职工编号/姓名"/>
                             </div>
+                            <div class="col-lg-3 col-sm-12">
+                                <#NameCon id="year" name="年度"/>
+                            </div>
                             <div class="col-sm-3">
                                 <#SelectCon id="level" name="考核等次" >
                                 <option value="优秀">优秀</option>
@@ -20,6 +23,10 @@
                                 <option value="基本合格">基本合格</option>
                                 <option value="不合格">不合格</option>
                                 </#SelectCon>
+                            </div>
+                            <div class=col-sm-2>
+                                <#SelectCon id="status" name="状态" items="${constant.getDictsByName('年度考核状态')}"
+                                itemLabel="name" itemValue="num" />
                             </div>
                             <div class="col-sm-2">
                                 <#button name="搜索" icon="fa-search" clickFun="YearJsAssess.search()"/>
