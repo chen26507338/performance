@@ -92,6 +92,9 @@
             <if test="expand.name != null and expand.name != ''">
                 and su.name = #{expand.name}
             </if>
+            <if test="userId != null ">
+                and anp.user_id = #{userId}
+            </if>
             <if test="expand.dept != null">
                 and anp.dept_id = #{expand.deptId}
             </if>

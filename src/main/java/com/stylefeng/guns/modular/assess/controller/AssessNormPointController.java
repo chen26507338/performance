@@ -3,6 +3,7 @@ package com.stylefeng.guns.modular.assess.controller;
 import com.stylefeng.guns.core.base.controller.BaseController;
 import com.baomidou.mybatisplus.plugins.Page;
 import com.stylefeng.guns.common.constant.factory.PageFactory;
+import com.stylefeng.guns.core.shiro.ShiroKit;
 import com.stylefeng.guns.modular.assess.service.IAssessCoefficientService;
 import com.stylefeng.guns.modular.job.service.IDeptService;
 import net.bytebuddy.asm.Advice;
@@ -84,6 +85,9 @@ public class AssessNormPointController extends BaseController {
     public Object list(AssessNormPoint assessNormPoint) {
         Page<AssessNormPoint> page = new PageFactory<AssessNormPoint>().defaultPage();
         EntityWrapper< AssessNormPoint> wrapper = new EntityWrapper<>(assessNormPoint);
+        if (!ShiroKit.hasPermission("/assessNormPoint/update")) {
+            assessNormPoint.setUserId(ShiroKit.getUser().id);
+        }
         assessNormPointService.selectPage(page,wrapper);
         page.setRecords(new AssessNormPointDecorator(page.getRecords(),(String)assessNormPoint.getExpand().get("type")).decorate());
         return packForBT(page);

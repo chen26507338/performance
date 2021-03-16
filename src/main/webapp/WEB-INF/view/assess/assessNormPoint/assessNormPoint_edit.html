@@ -6,10 +6,6 @@
             <input type="hidden" id="id" value="${item.id}">
 
             <div class="row">
-
-                <div class="col-sm-6 b-r">
-                    <#input id="userId" name="用户ID" value="${item.userId}" underline="true"/>
-                </div>
                 <div class="col-sm-6 b-r">
                     <#input id="year" name="年度" value="${item.year}" underline="true"/>
                 </div>
@@ -56,8 +52,100 @@
                     <#input id="ldjlCollege" name="劳动纪律院级分" value="${item.ldjlCollege}" underline="true"/>
                 </div>
                 <div class="col-sm-6 b-r">
-                    <#select id="deptId" name="部门ID" items="${constant.getDictsByName('')}"
-                    itemLabel="name" itemValue="num" value="${item.deptId}" underline="true"/>
+                    <#input id="kygzMain" name="科研工作校级分" value="${item.kygzMain}" underline="true"/>
+                </div>
+                <div class="col-sm-6 b-r">
+                    <#input id="kygzCollege" name="科研工作院级分" value="${item.kygzCollege}" underline="true"/>
+                </div>
+                <div class="col-sm-6 b-r">
+                    <#input id="zyjsMain" name="专业建设校级分" value="${item.zyjsMain}" underline="true"/>
+                </div>
+                <div class="col-sm-6 b-r">
+                    <#input id="zyjsCollege" name="专业建设院级分" value="${item.zyjsCollege}" underline="true"/>
+                </div>
+                <div class="col-sm-6 b-r">
+                    <#input id="xsgzMain" name="学生工作校级分" value="${item.xsgzMain}" underline="true"/>
+                </div>
+                <div class="col-sm-6 b-r">
+                    <#input id="xsgzCollege" name="学生工作院级分" value="${item.xsgzCollege}" underline="true"/>
+                </div>
+                <div class="col-sm-6 b-r">
+                    <#input id="glfwMain" name="管理服务校级分" value="${item.glfwMain}" underline="true"/>
+                </div>
+                <div class="col-sm-6 b-r">
+                    <#input id="glfwCollege" name="管理服务院级分" value="${item.glfwCollege}" underline="true"/>
+                </div>
+                <div class="col-sm-6 b-r">
+                    <#input id="jxgzMain" name="教学工作校级分" value="${item.jxgzMain}" underline="true"/>
+                </div>
+                <div class="col-sm-6 b-r">
+                    <#input id="jxgzCollege" name="教学工作院级分" value="${item.jxgzCollege}" underline="true"/>
+                </div>
+                <div class="col-sm-6 b-r">
+                    <#input id="dzbgzMain" name="党支部工作校级分" value="${item.dzbgzMain}" underline="true"/>
+                </div>
+                <div class="col-sm-6 b-r">
+                    <#input id="dzbgzCollege" name="党支部工作院级分" value="${item.dzbgzCollege}" underline="true"/>
+                </div>
+                <div class="col-sm-6 b-r">
+                    <#input id="fdyszgzMain" name="辅导员思政工作校级分" value="${item.fdyszgzMain}" underline="true"/>
+                </div>
+                <div class="col-sm-6 b-r">
+                    <#input id="fdyszgzCollege" name="辅导员思政工作院级分" value="${item.fdyszgzCollege}" underline="true"/>
+                </div>
+                <div class="col-sm-6 b-r">
+                    <#input id="szjsszgzMain" name="思政教师思政工作校级分" value="${item.szjsszgzMain}" underline="true"/>
+                </div>
+                <div class="col-sm-6 b-r">
+                    <#input id="szjsszgzCollege" name="思政教师思政工作院级分" value="${item.szjsszgzCollege}" underline="true"/>
+                </div>
+                <div class="col-sm-6 b-r">
+                    <#input id="bzryMain" name="表彰荣誉校级分" value="${item.bzryMain}" underline="true"/>
+                </div>
+                <div class="col-sm-6 b-r">
+                    <#input id="bzryCollege" name="表彰荣誉院级分" value="${item.bzryCollege}" underline="true"/>
+                </div>
+                <div class="col-sm-6 b-r">
+                    <#input id="fdyrcgzMain" name="辅导员日常工作校级分" value="${item.fdyrcgzMain}" underline="true"/>
+                </div>
+                <div class="col-sm-6 b-r">
+                    <#input id="fdyrcgzCollege" name="辅导员日常工作院级分" value="${item.fdyrcgzCollege}" underline="true"/>
+                </div>
+                <div class="col-sm-6 b-r">
+                    <#input id="sxjxMain" name="实训绩效校级分" value="${item.sxjxMain}" underline="true"/>
+                </div>
+                <div class="col-sm-6 b-r">
+                    <#input id="sxjxCollege" name="实训绩效院级分" value="${item.sxjxCollege}" underline="true"/>
+                </div>
+                <div class="col-sm-6 b-r">
+                    <#input id="rypzMain" name="人员配置校级分" value="${item.rypzMain}" underline="true"/>
+                </div>
+                <div class="col-sm-6 b-r">
+                    <#input id="rypzCollege" name="人员配置院级分" value="${item.rypzCollege}" underline="true"/>
+                </div>
+                <div class="col-sm-6 b-r">
+                    <#input id="jshjMain" name="竞赛获奖校积分" value="${item.jshjMain}" underline="true"/>
+                </div>
+                <div class="col-sm-6 b-r">
+                    <#input id="jshjCollege" name="竞赛获奖院级分" value="${item.jshjCollege}" underline="true"/>
+                </div>
+                <div class="col-sm-6 b-r">
+                    <#input id="zxgzMain" name="专项工作校积分" value="${item.zxgzMain}" underline="true"/>
+                </div>
+                <div class="col-sm-6 b-r">
+                    <#input id="zxgzCollege" name="专项工作院级分" value="${item.zxgzCollege}" underline="true"/>
+                </div>
+                <div class="col-sm-6 b-r">
+                    <#input id="shpxgzMain" name="社会培训工作校积分" value="${item.shpxgzMain}" underline="true"/>
+                </div>
+                <div class="col-sm-6 b-r">
+                    <#input id="shpxgzCollege" name="社会培训工作院级分" value="${item.shpxgzCollege}" underline="true"/>
+                </div>
+                <div class="col-sm-6 b-r">
+                    <#input id="jfwcqkMain" name="经费完成情况校积分" value="${item.jfwcqkMain}" underline="true"/>
+                </div>
+                <div class="col-sm-6 b-r">
+                    <#input id="jfwcqkCollege" name="经费完成情况院级分" value="${item.jfwcqkCollege}" underline="true"/>
                 </div>
             </div>
 
